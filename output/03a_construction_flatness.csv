@@ -1,0 +1,7 @@
+opp_bucket,n,mean_raw_resid,mean_norm_resid,sd_norm_resid,mechanism,high_low_ratio
+low  (5-8),432,2.254,0.632,0.534,A_power_law,0.959
+mid  (9-13),423,3.196,0.667,0.5,A_power_law,0.959
+high (14+),827,3.927,0.606,0.483,A_power_law,0.959
+low  (5-8),432,2.254,0.552,0.467,B_local_conformal,1.156
+mid  (9-13),423,3.196,0.656,0.503,B_local_conformal,1.156
+high (14+),827,3.927,0.638,0.517,B_local_conformal,1.156

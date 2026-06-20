@@ -1,0 +1,186 @@
+
+── Step 3A-v2: Nested-Walk-Forward-Tuned LightGBM ──────────────────────────────
+ℹ Grid: 18 combos per component per fold (eff and vol tuned separately)
+ℹ Inner split: last 20% season-weeks as RMSE holdout (same as cal split)
+ℹ Construction: FROZEN Mechanism A power-law (identical to 3A/3B)
+ℹ Rubric: FROZEN (unchanged veto, decision rule, folds)
+✔ Feature table: 1966 rows | Fold map: 31 folds
+
+── Walk-forward fold loop (31 folds x 18 combos x 2 components) ────────────────
+ℹ Fold 01 [2023-W06]: 49 rows | eff: leaves=7 minnode=50 lr=0.05 rds=10 | vol: leaves=15 minnode=20 lr=0.05 rds=45 | 0s
+ℹ Fold 02 [2023-W07]: 46 rows | eff: leaves=7 minnode=50 lr=0.02 rds=30 | vol: leaves=7 minnode=50 lr=0.02 rds=97 | 0s
+ℹ Fold 03 [2023-W08]: 60 rows | eff: leaves=7 minnode=100 lr=0.05 rds=35 | vol: leaves=7 minnode=100 lr=0.02 rds=385 | 0s
+ℹ Fold 04 [2023-W09]: 48 rows | eff: leaves=7 minnode=100 lr=0.02 rds=10 | vol: leaves=7 minnode=100 lr=0.02 rds=400 | 0s
+ℹ Fold 05 [2023-W10]: 50 rows | eff: leaves=7 minnode=100 lr=0.05 rds=10 | vol: leaves=7 minnode=50 lr=0.02 rds=90 | 0s
+ℹ Fold 06 [2023-W11]: 52 rows | eff: leaves=7 minnode=100 lr=0.05 rds=14 | vol: leaves=7 minnode=50 lr=0.05 rds=39 | 0s
+ℹ Fold 07 [2023-W12]: 57 rows | eff: leaves=31 minnode=20 lr=0.02 rds=25 | vol: leaves=7 minnode=50 lr=0.05 rds=39 | 0s
+ℹ Fold 08 [2023-W13]: 46 rows | eff: leaves=31 minnode=20 lr=0.05 rds=10 | vol: leaves=7 minnode=20 lr=0.02 rds=98 | 0s
+ℹ Fold 09 [2023-W14]: 54 rows | eff: leaves=7 minnode=50 lr=0.02 rds=10 | vol: leaves=15 minnode=20 lr=0.05 rds=45 | 0s
+ℹ Fold 10 [2023-W15]: 67 rows | eff: leaves=7 minnode=50 lr=0.02 rds=55 | vol: leaves=31 minnode=20 lr=0.05 rds=44 | 1s
+ℹ Fold 11 [2023-W16]: 58 rows | eff: leaves=7 minnode=50 lr=0.05 rds=16 | vol: leaves=7 minnode=20 lr=0.05 rds=41 | 0s
+ℹ Fold 12 [2023-W17]: 59 rows | eff: leaves=7 minnode=100 lr=0.05 rds=35 | vol: leaves=7 minnode=20 lr=0.05 rds=54 | 1s
+ℹ Fold 13 [2023-W18]: 56 rows | eff: leaves=15 minnode=50 lr=0.05 rds=10 | vol: leaves=15 minnode=50 lr=0.05 rds=57 | 0s
+ℹ Fold 14 [2024-W01]: 53 rows | eff: leaves=7 minnode=100 lr=0.05 rds=10 | vol: leaves=7 minnode=100 lr=0.05 rds=79 | 1s
+ℹ Fold 15 [2024-W02]: 58 rows | eff: leaves=7 minnode=100 lr=0.02 rds=37 | vol: leaves=7 minnode=100 lr=0.02 rds=133 | 0s
+ℹ Fold 16 [2024-W03]: 57 rows | eff: leaves=7 minnode=100 lr=0.02 rds=46 | vol: leaves=7 minnode=100 lr=0.02 rds=189 | 1s
+ℹ Fold 17 [2024-W04]: 64 rows | eff: leaves=7 minnode=100 lr=0.05 rds=18 | vol: leaves=7 minnode=50 lr=0.05 rds=69 | 1s
+ℹ Fold 18 [2024-W05]: 53 rows | eff: leaves=7 minnode=50 lr=0.05 rds=16 | vol: leaves=7 minnode=50 lr=0.02 rds=240 | 1s
+ℹ Fold 19 [2024-W06]: 55 rows | eff: leaves=7 minnode=20 lr=0.05 rds=70 | vol: leaves=7 minnode=50 lr=0.02 rds=135 | 1s
+ℹ Fold 20 [2024-W07]: 56 rows | eff: leaves=7 minnode=20 lr=0.05 rds=42 | vol: leaves=7 minnode=20 lr=0.02 rds=118 | 1s
+ℹ Fold 21 [2024-W08]: 55 rows | eff: leaves=15 minnode=20 lr=0.05 rds=23 | vol: leaves=7 minnode=20 lr=0.02 rds=118 | 1s
+ℹ Fold 22 [2024-W09]: 59 rows | eff: leaves=7 minnode=20 lr=0.05 rds=16 | vol: leaves=31 minnode=50 lr=0.02 rds=153 | 1s
+ℹ Fold 23 [2024-W10]: 44 rows | eff: leaves=31 minnode=50 lr=0.02 rds=135 | vol: leaves=7 minnode=50 lr=0.02 rds=208 | 1s
+ℹ Fold 24 [2024-W11]: 49 rows | eff: leaves=7 minnode=100 lr=0.02 rds=186 | vol: leaves=7 minnode=100 lr=0.02 rds=285 | 1s
+ℹ Fold 25 [2024-W12]: 43 rows | eff: leaves=31 minnode=50 lr=0.05 rds=24 | vol: leaves=15 minnode=100 lr=0.02 rds=211 | 1s
+ℹ Fold 26 [2024-W13]: 58 rows | eff: leaves=7 minnode=100 lr=0.05 rds=27 | vol: leaves=15 minnode=100 lr=0.02 rds=212 | 1s
+ℹ Fold 27 [2024-W14]: 46 rows | eff: leaves=7 minnode=100 lr=0.05 rds=48 | vol: leaves=7 minnode=100 lr=0.05 rds=101 | 1s
+ℹ Fold 28 [2024-W15]: 60 rows | eff: leaves=15 minnode=50 lr=0.05 rds=10 | vol: leaves=7 minnode=100 lr=0.02 rds=235 | 1s
+ℹ Fold 29 [2024-W16]: 55 rows | eff: leaves=15 minnode=20 lr=0.05 rds=10 | vol: leaves=7 minnode=20 lr=0.02 rds=230 | 1s
+ℹ Fold 30 [2024-W17]: 57 rows | eff: leaves=15 minnode=100 lr=0.05 rds=12 | vol: leaves=7 minnode=20 lr=0.05 rds=69 | 1s
+ℹ Fold 31 [2024-W18]: 58 rows | eff: leaves=15 minnode=100 lr=0.05 rds=12 | vol: leaves=7 minnode=20 lr=0.02 rds=190 | 1s
+
+── Harness Integrity Report ────────────────────────────────────────────────────
+✔ All 31 folds completed
+✔ Row count: 1682 / 1682
+✔ Zero NA predictions
+✔ Inner tuning: all 18 combos per component per fold scored on inner holdout only
+✔ Outer test: each fold scored exactly once after param selection
+ℹ alpha_fold range [0.2, 0.9] | median 0.562
+
+── Selected Hyperparameters (tuning audit) ─────────────────────────────────────
+# A tibble: 31 × 11
+    fold eff_num_leaves eff_lr eff_min_node eff_rounds eff_inner_rmse
+   <int>          <int>  <dbl>        <int>      <int>          <dbl>
+ 1     1              7   0.05           50          8          0.331
+ 2     2              7   0.02           50         30          0.263
+ 3     3              7   0.05          100         35          0.245
+ 4     4              7   0.02          100          1          0.224
+ 5     5              7   0.05          100          8          0.341
+ 6     6              7   0.05          100         14          0.301
+ 7     7             31   0.02           20         25          0.273
+ 8     8             31   0.05           20          1          0.279
+ 9     9              7   0.02           50          1          0.245
+10    10              7   0.02           50         55          0.242
+11    11              7   0.05           50         16          0.300
+12    12              7   0.05          100         35          0.309
+13    13             15   0.05           50         10          0.335
+14    14              7   0.05          100         10          0.316
+15    15              7   0.02          100         37          0.324
+16    16              7   0.02          100         46          0.322
+17    17              7   0.05          100         18          0.320
+18    18              7   0.05           50         16          0.348
+19    19              7   0.05           20         70          0.348
+20    20              7   0.05           20         42          0.353
+21    21             15   0.05           20         23          0.363
+22    22              7   0.05           20         16          0.349
+23    23             31   0.02           50        135          0.325
+24    24              7   0.02          100        186          0.316
+25    25             31   0.05           50         24          0.315
+26    26              7   0.05          100         27          0.319
+27    27              7   0.05          100         48          0.297
+28    28             15   0.05           50          3          0.310
+29    29             15   0.05           20          5          0.331
+30    30             15   0.05          100         12          0.339
+31    31             15   0.05          100         12          0.331
+# ℹ 5 more variables: vol_num_leaves <int>, vol_lr <dbl>, vol_min_node <int>,
+#   vol_rounds <int>, vol_inner_rmse <dbl>
+
+── Summary across 31 folds ──
+
+ℹ --- EFFICIENCY ---
+ℹ   num_leaves: mode=7 | counts: 7=21 | 15=6 | 31=4
+ℹ   min_data_in_leaf: mode=100 | counts: 20=7 | 50=10 | 100=14
+ℹ   lr: counts: 0.02=9 | 0.05=22
+ℹ   rounds (refit): median=180 | range [10, 1860]
+ℹ --- VOLUME ---
+ℹ   num_leaves: mode=7 | counts: 7=24 | 15=5 | 31=2
+ℹ   min_data_in_leaf: mode=20 | counts: 20=11 | 50=10 | 100=10
+ℹ   lr: counts: 0.02=19 | 0.05=12
+ℹ   rounds (refit): median=1180 | range [390, 4000]
+
+── Default (3A) vs data-chosen (3A-v2) ──
+
+ℹ 3A used: num_leaves=31, min_data_in_leaf=20, lr=0.05, rounds=200 (fixed)
+ℹ 3A-v2 efficiency modal: leaves=7 | minnode=100 | lr_mode=0.05
+ℹ 3A-v2 volume modal:     leaves=7 | minnode=20 | lr_mode=0.02
+
+── 3A-v2 Pooled Coverage (all 1682 test rows) ──────────────────────────────────
+# A tibble: 9 × 6
+  component  stratum nominal empirical     delta sharpness
+  <chr>      <chr>     <dbl>     <dbl>     <dbl>     <dbl>
+1 efficiency pooled      0.5     0.514  0.0143       0.390
+2 efficiency pooled      0.8     0.803  0.00262      0.727
+3 efficiency pooled      0.9     0.891 -0.00939      0.955
+4 volume     pooled      0.5     0.511  0.0107       7.24 
+5 volume     pooled      0.8     0.797 -0.00333     13.2  
+6 volume     pooled      0.9     0.899 -0.00107     17.9  
+7 combined   pooled      0.5     0.507  0.00713      5.00 
+8 combined   pooled      0.8     0.796 -0.00392      9.41 
+9 combined   pooled      0.9     0.900  0.000119    12.5  
+
+── 3A-v2 Low-Usage Bucket (opp 5-8) ────────────────────────────────────────────
+ℹ Low-usage rows: 432
+# A tibble: 9 × 6
+  component  stratum     nominal empirical    delta sharpness
+  <chr>      <chr>         <dbl>     <dbl>    <dbl>     <dbl>
+1 efficiency low_opp_5_8     0.5     0.407 -0.0926      0.390
+2 efficiency low_opp_5_8     0.8     0.678 -0.122       0.730
+3 efficiency low_opp_5_8     0.9     0.806 -0.0944      0.959
+4 volume     low_opp_5_8     0.5     0.447 -0.0532      7.23 
+5 volume     low_opp_5_8     0.8     0.799 -0.00139    13.2  
+6 volume     low_opp_5_8     0.9     0.898 -0.00185    17.9  
+7 combined   low_opp_5_8     0.5     0.537  0.0370      3.25 
+8 combined   low_opp_5_8     0.8     0.806  0.00556     6.16 
+9 combined   low_opp_5_8     0.9     0.889 -0.0111      8.17 
+
+── Stratified combined coverage at 80% (sharpness honesty check) ──
+
+# A tibble: 3 × 6
+  stratum         n empirical    delta sharpness delta_pp
+  <fct>       <int>     <dbl>    <dbl>     <dbl> <chr>   
+1 low  (5-8)    432     0.806  0.00556      6.16 +0.6pp  
+2 mid  (9-13)   423     0.785 -0.0151       8.27 -1.5pp  
+3 high (14+)    827     0.797 -0.00314     11.7  -0.3pp  
+── Comparison: 3A-v2 vs 3A vs 3B (partial; 3D follows when TabPFN is ready) ────
+
+── Rubric table (pooled + low-usage combined) ──
+
+ℹ model                    | stratum | 80% delta | 80% width | veto
+ℹ     3A-LightGBM(default) | low_opp_5_8 | +1.9pp | 7.287 | pass
+ℹ    3A-v2-LightGBM(tuned) | low_opp_5_8 | +0.6pp | 6.159 | pass
+ℹ      3B-RF               | low_opp_5_8 | +1.9pp | 6.921 | pass
+ℹ     3A-LightGBM(default) |  pooled | +1.3pp | 10.792 | pass
+ℹ    3A-v2-LightGBM(tuned) |  pooled | -0.4pp | 9.413 | pass
+ℹ      3B-RF               |  pooled | +0.6pp | 10.153 | pass
+
+── Sharpness head-to-head (contested axis) -- combined, pooled ──
+
+ℹ A sharpness gain is real only if coverage holds per stratum:
+ℹ model                    | stratum | n   | 80% delta | 80% width
+ℹ     3A-LightGBM(default) | high (14+) |  827 | +2.0pp | 13.227
+ℹ    3A-v2-LightGBM(tuned) | high (14+) |  827 | -0.3pp | 11.698
+ℹ      3B-RF               | high (14+) |  827 | +0.7pp | 12.379
+ℹ     3A-LightGBM(default) | low  (5-8) |  432 | +1.9pp | 7.287
+ℹ    3A-v2-LightGBM(tuned) | low  (5-8) |  432 | +0.6pp | 6.159
+ℹ      3B-RF               | low  (5-8) |  432 | +1.9pp | 6.921
+ℹ     3A-LightGBM(default) | mid  (9-13) |  423 | -0.8pp | 9.611
+ℹ    3A-v2-LightGBM(tuned) | mid  (9-13) |  423 | -1.5pp | 8.268
+ℹ      3B-RF               | mid  (9-13) |  423 | -0.8pp | 9.101
+
+── Low-opp efficiency 80% -- how much of 3A's -8.7pp was tuning vs family? ──
+
+ℹ     3A-LightGBM(default): delta=-8.7pp | width=0.812
+ℹ      3B-RF              : delta=-10.8pp | width=0.782
+ℹ    3A-v2-LightGBM(tuned): delta=-12.2pp | width=0.73
+
+── Rubric Decision: 3A-v2 vs current leader (3B) ───────────────────────────────
+✔ 3A-v2 veto passed: +0.6pp
+✔ Both within +-2pp; 3A-v2 narrower (tiebreak): 3A-v2 WINS -- tuned booster beats RF
+
+── Save outputs ────────────────────────────────────────────────────────────────
+✔ output/03a_v2_lgbm_fold_predictions.csv  (1682 rows)
+✔ output/03a_v2_lgbm_pooled_coverage.csv
+✔ output/03a_v2_lgbm_low_usage_coverage.csv
+✔ output/03a_v2_lgbm_tune_log.csv  (full per-fold param audit)
+
+── Step 3A-v2 complete -- 3D (TabPFN) follows when TABPFN_TOKEN is set ─────────

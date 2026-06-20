@@ -1,0 +1,2455 @@
+
+── RB Feature Layer v1.5 | Seasons 2014, 2015, 2016, 2017, 2018, 2019, 2020, 202
+
+── Step 1: Pull raw data ───────────────────────────────────────────────────────
+ℹ PBP seasons 2013-2014-2015-2016-2017-2018-2019-2020-2021-2022-2023-2024-2025
+ℹ Rosters seasons 2013-2014-2015-2016-2017-2018-2019-2020-2021-2022-2023-2024-2025
+ℹ Draft picks (all available seasons)
+ℹ Snap counts seasons 2014-2015-2016-2017-2018-2019-2020-2021-2022-2023-2024-2025
+
+── Step 2: Column inventory ────────────────────────────────────────────────────
+ℹ PBP (372 cols): play_id, game_id, old_game_id, home_team, away_team, season_type, week, posteam, posteam_type, defteam, side_of_field, yardline_100, game_date, quarter_seconds_remaining, half_seconds_remaining, game_seconds_remaining, game_half, quarter_end, drive, sp, qtr, down, goal_to_go, time, yrdln, ydstogo, ydsnet, desc, play_type, yards_gained, shotgun, no_huddle, qb_dropback, qb_kneel, qb_spike, qb_scramble, pass_length, pass_location, air_yards, yards_after_catch, run_location, run_gap, field_goal_result, kick_distance, extra_point_result, two_point_conv_result, home_timeouts_remaining, away_timeouts_remaining, timeout, timeout_team, td_team, td_player_name, td_player_id, posteam_timeouts_remaining, defteam_timeouts_remaining, total_home_score, total_away_score, posteam_score, defteam_score, score_differential, posteam_score_post, defteam_score_post, score_differential_post, no_score_prob, opp_fg_prob, opp_safety_prob, opp_td_prob, fg_prob, safety_prob, td_prob, extra_point_prob, two_point_conversion_prob, ep, epa, total_home_epa, total_away_epa, total_home_rush_epa, total_away_rush_epa, total_home_pass_epa, total_away_pass_epa, air_epa, yac_epa, comp_air_epa, comp_yac_epa, total_home_comp_air_epa, total_away_comp_air_epa, total_home_comp_yac_epa, total_away_comp_yac_epa, total_home_raw_air_epa, total_away_raw_air_epa, total_home_raw_yac_epa, total_away_raw_yac_epa, wp, def_wp, home_wp, away_wp, wpa, vegas_wpa, vegas_home_wpa, home_wp_post, away_wp_post, vegas_wp, vegas_home_wp, total_home_rush_wpa, total_away_rush_wpa, total_home_pass_wpa, total_away_pass_wpa, air_wpa, yac_wpa, comp_air_wpa, comp_yac_wpa, total_home_comp_air_wpa, total_away_comp_air_wpa, total_home_comp_yac_wpa, total_away_comp_yac_wpa, total_home_raw_air_wpa, total_away_raw_air_wpa, total_home_raw_yac_wpa, total_away_raw_yac_wpa, punt_blocked, first_down_rush, first_down_pass, first_down_penalty, third_down_converted, third_down_failed, fourth_down_converted, fourth_down_failed, incomplete_pass, touchback, interception, punt_inside_twenty, punt_in_endzone, punt_out_of_bounds, punt_downed, punt_fair_catch, kickoff_inside_twenty, kickoff_in_endzone, kickoff_out_of_bounds, kickoff_downed, kickoff_fair_catch, fumble_forced, fumble_not_forced, fumble_out_of_bounds, solo_tackle, safety, penalty, tackled_for_loss, fumble_lost, own_kickoff_recovery, own_kickoff_recovery_td, qb_hit, rush_attempt, pass_attempt, sack, touchdown, pass_touchdown, rush_touchdown, return_touchdown, extra_point_attempt, two_point_attempt, field_goal_attempt, kickoff_attempt, punt_attempt, fumble, complete_pass, assist_tackle, lateral_reception, lateral_rush, lateral_return, lateral_recovery, passer_player_id, passer_player_name, passing_yards, receiver_player_id, receiver_player_name, receiving_yards, rusher_player_id, rusher_player_name, rushing_yards, lateral_receiver_player_id, lateral_receiver_player_name, lateral_receiving_yards, lateral_rusher_player_id, lateral_rusher_player_name, lateral_rushing_yards, lateral_sack_player_id, lateral_sack_player_name, interception_player_id, interception_player_name, lateral_interception_player_id, lateral_interception_player_name, punt_returner_player_id, punt_returner_player_name, lateral_punt_returner_player_id, lateral_punt_returner_player_name, kickoff_returner_player_name, kickoff_returner_player_id, lateral_kickoff_returner_player_id, lateral_kickoff_returner_player_name, punter_player_id, punter_player_name, kicker_player_name, kicker_player_id, own_kickoff_recovery_player_id, own_kickoff_recovery_player_name, blocked_player_id, blocked_player_name, tackle_for_loss_1_player_id, tackle_for_loss_1_player_name, tackle_for_loss_2_player_id, tackle_for_loss_2_player_name, qb_hit_1_player_id, qb_hit_1_player_name, qb_hit_2_player_id, qb_hit_2_player_name, forced_fumble_player_1_team, forced_fumble_player_1_player_id, forced_fumble_player_1_player_name, forced_fumble_player_2_team, forced_fumble_player_2_player_id, forced_fumble_player_2_player_name, solo_tackle_1_team, solo_tackle_2_team, solo_tackle_1_player_id, solo_tackle_2_player_id, solo_tackle_1_player_name, solo_tackle_2_player_name, assist_tackle_1_player_id, assist_tackle_1_player_name, assist_tackle_1_team, assist_tackle_2_player_id, assist_tackle_2_player_name, assist_tackle_2_team, assist_tackle_3_player_id, assist_tackle_3_player_name, assist_tackle_3_team, assist_tackle_4_player_id, assist_tackle_4_player_name, assist_tackle_4_team, tackle_with_assist, tackle_with_assist_1_player_id, tackle_with_assist_1_player_name, tackle_with_assist_1_team, tackle_with_assist_2_player_id, tackle_with_assist_2_player_name, tackle_with_assist_2_team, pass_defense_1_player_id, pass_defense_1_player_name, pass_defense_2_player_id, pass_defense_2_player_name, fumbled_1_team, fumbled_1_player_id, fumbled_1_player_name, fumbled_2_player_id, fumbled_2_player_name, fumbled_2_team, fumble_recovery_1_team, fumble_recovery_1_yards, fumble_recovery_1_player_id, fumble_recovery_1_player_name, fumble_recovery_2_team, fumble_recovery_2_yards, fumble_recovery_2_player_id, fumble_recovery_2_player_name, sack_player_id, sack_player_name, half_sack_1_player_id, half_sack_1_player_name, half_sack_2_player_id, half_sack_2_player_name, return_team, return_yards, penalty_team, penalty_player_id, penalty_player_name, penalty_yards, replay_or_challenge, replay_or_challenge_result, penalty_type, defensive_two_point_attempt, defensive_two_point_conv, defensive_extra_point_attempt, defensive_extra_point_conv, safety_player_name, safety_player_id, season, cp, cpoe, series, series_success, series_result, order_sequence, start_time, time_of_day, stadium, weather, nfl_api_id, play_clock, play_deleted, play_type_nfl, special_teams_play, st_play_type, end_clock_time, end_yard_line, fixed_drive, fixed_drive_result, drive_real_start_time, drive_play_count, drive_time_of_possession, drive_first_downs, drive_inside20, drive_ended_with_score, drive_quarter_start, drive_quarter_end, drive_yards_penalized, drive_start_transition, drive_end_transition, drive_game_clock_start, drive_game_clock_end, drive_start_yard_line, drive_end_yard_line, drive_play_id_started, drive_play_id_ended, away_score, home_score, location, result, total, spread_line, total_line, div_game, roof, surface, temp, wind, home_coach, away_coach, stadium_id, game_stadium, aborted_play, success, passer, passer_jersey_number, rusher, rusher_jersey_number, receiver, receiver_jersey_number, pass, rush, first_down, special, play, passer_id, rusher_id, receiver_id, name, jersey_number, id, fantasy_player_name, fantasy_player_id, fantasy, fantasy_id, out_of_bounds, home_opening_kickoff, qb_epa, xyac_epa, xyac_mean_yardage, xyac_median_yardage, xyac_success, xyac_fd, xpass, pass_oe
+ℹ Rosters (36 cols): season, team, position, depth_chart_position, jersey_number, status, full_name, first_name, last_name, birth_date, height, weight, college, gsis_id, espn_id, sportradar_id, yahoo_id, rotowire_id, pff_id, pfr_id, fantasy_data_id, sleeper_id, years_exp, headshot_url, ngs_position, week, game_type, status_description_abbr, football_name, esb_id, gsis_it_id, smart_id, entry_year, rookie_year, draft_club, draft_number
+ℹ Draft (36 cols): season, round, pick, team, gsis_id, pfr_player_id, cfb_player_id, pfr_player_name, hof, position, category, side, college, age, to, allpro, probowls, seasons_started, w_av, car_av, dr_av, games, pass_completions, pass_attempts, pass_yards, pass_tds, pass_ints, rush_atts, rush_yards, rush_tds, receptions, rec_yards, rec_tds, def_solo_tackles, def_ints, def_sacks
+ℹ Snaps (16 cols): game_id, pfr_game_id, season, game_type, week, player, pfr_player_id, position, team, opponent, offense_snaps, offense_pct, defense_snaps, defense_pct, st_snaps, st_pct
+✔ All required PBP columns present
+
+── Step 3: Build lookup tables ─────────────────────────────────────────────────
+ℹ 885 unique RB gsis_ids across all seasons
+
+── Step 4: Filter PBP to RB plays ──────────────────────────────────────────────
+✔ RB plays: 195859 total (151226 rush, 44633 targets), all seasons
+
+── Step 5: Build observed outcome table ────────────────────────────────────────
+✔ Outcome table: 17458 player-game rows (seasons 2014+2015+2016+2017+2018+2019+2020+2021+2022+2023+2024+2025)
+ℹ target_share_obs NAs remaining: 0
+
+── Step 6: Efficiency prior features ───────────────────────────────────────────
+ℹ Position prior EPA/opp: 2014=-0.073 | 2015=-0.082 | 2016=-0.067 | 2017=-0.052 | 2018=-0.07 | 2019=-0.073 | 2020=-0.082 | 2021=-0.052 | 2022=-0.053 | 2023=-0.058 | 2024=-0.093 | 2025=-0.071
+✔ Efficiency prior: 4688 cold-start rows (26.9%)
+
+── Step 7: Volume features ─────────────────────────────────────────────────────
+✔ Volume features built
+
+── Step 8: Snap share features ─────────────────────────────────────────────────
+ℹ Snap counts: 19603 player-game records, 436 unique players
+ℹ wt_snap_share: 14123 non-NA of 17458 rows (80.9%)
+
+── Step 9: Defensive component vector ──────────────────────────────────────────
+ℹ League avg off EPA/play: deep_pass=0.26 | rush=-0.093 | short_pass=0.006
+ℹ League avg def EPA/play (anchor seasons): rush=-0.092, short=0.006, deep=0.258
+✔ Defensive vector built; 1152 fallback rows
+
+── Step 10: Assemble feature table ─────────────────────────────────────────────
+ℹ MIN_OPPORTUNITIES=5: dropping 5540 rows, keeping 11918
+ℹ Dropped opp distribution: 2014/1/148 | 2014/2/122 | 2014/3/109 | 2014/4/100 | 2015/1/173 | 2015/2/126 | 2015/3/103 | 2015/4/99 | 2016/1/172 | 2016/2/127 | 2016/3/104 | 2016/4/95 | 2017/1/182 | 2017/2/99 | 2017/3/80 | 2017/4/81 | 2018/1/184 | 2018/2/100 | 2018/3/84 | 2018/4/63 | 2019/1/159 | 2019/2/103 | 2019/3/97 | 2019/4/83 | 2020/1/174 | 2020/2/122 | 2020/3/101 | 2020/4/80 | 2021/1/173 | 2021/2/131 | 2021/3/81 | 2021/4/78 | 2022/1/181 | 2022/2/118 | 2022/3/105 | 2022/4/79 | 2023/1/147 | 2023/2/115 | 2023/3/96 | 2023/4/93 | 2024/1/126 | 2024/2/124 | 2024/3/106 | 2024/4/76 | 2025/1/143 | 2025/2/120 | 2025/3/96 | 2025/4/82
+✔ Feature table: 11918 rows x 30 columns
+
+── Step 11: Save outputs ───────────────────────────────────────────────────────
+✔ data/rb_feature_table.rds
+✔ output/rb_feature_table_v1.csv
+
+── Step 12: Validation summary ─────────────────────────────────────────────────
+ℹ Rows:                  11918
+ℹ Unique players:        457
+ℹ Season-weeks:          209
+ℹ Seasons present:       2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025
+ℹ Cold-start rows:       21.3%
+ℹ Def fallback rows:     18.2%
+ℹ EPA recon max err:     1.776357e-15
+ℹ EPA recon mean err:    1.928561e-17
+✔ efficiency x volume reconstructs total_epa -- PASS
+
+── Per-column NA audit ─────────────────────────────────────────────────────────
+ℹ   prior_epa_per_opp: 2540 NA (21.3%)
+ℹ   wt_snap_share: 1795 NA (15.1%)
+ℹ   rolling_epa_per_opp: 992 NA (8.3%)
+ℹ   form_residual: 992 NA (8.3%)
+ℹ   wt_carry_share: 992 NA (8.3%)
+ℹ   wt_target_share: 992 NA (8.3%)
+ℹ   wt_team_total_plays: 720 NA (6%)
+ℹ   player_name: 93 NA (0.8%)
+
+── Done -- feature layer v2.0 frozen ───────────────────────────────────────────
+
+── Step 2: Lock bake-off rubric ────────────────────────────────────────────────
+✔ Frozen table: 11918 rows | seasons 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025
+
+── Step 2a: Walk-forward fold map ──────────────────────────────────────────────
+ℹ Season-weeks: 209 | MIN_TRAIN_WEEKS: 5 | Test folds: 204
+ℹ First test fold: 2014-W06
+ℹ Last  test fold: 2025-W18
+
+── Full fold map ───────────────────────────────────────────────────────────────
+# A tibble: 204 × 7
+     fold test     train_through n_train_sw n_train_rows n_test_rows note       
+    <int> <chr>    <chr>              <int>        <int>       <int> <chr>      
+  1     1 2014-W06 2014-W05               5          297          63 ""         
+  2     2 2014-W07 2014-W06               6          360          58 ""         
+  3     3 2014-W08 2014-W07               7          418          57 ""         
+  4     4 2014-W09 2014-W08               8          475          53 ""         
+  5     5 2014-W10 2014-W09               9          528          53 ""         
+  6     6 2014-W11 2014-W10              10          581          51 ""         
+  7     7 2014-W12 2014-W11              11          632          60 ""         
+  8     8 2014-W13 2014-W12              12          692          61 ""         
+  9     9 2014-W14 2014-W13              13          753          58 ""         
+ 10    10 2014-W15 2014-W14              14          811          64 ""         
+ 11    11 2014-W16 2014-W15              15          875          62 ""         
+ 12    12 2014-W17 2014-W16              16          937          70 ""         
+ 13    13 2015-W01 2014-W17              17         1007          60 "<-- seaso…
+ 14    14 2015-W02 2015-W01              18         1067          60 ""         
+ 15    15 2015-W03 2015-W02              19         1127          67 ""         
+ 16    16 2015-W04 2015-W03              20         1194          57 ""         
+ 17    17 2015-W05 2015-W04              21         1251          59 ""         
+ 18    18 2015-W06 2015-W05              22         1310          55 ""         
+ 19    19 2015-W07 2015-W06              23         1365          59 ""         
+ 20    20 2015-W08 2015-W07              24         1424          49 ""         
+ 21    21 2015-W09 2015-W08              25         1473          45 ""         
+ 22    22 2015-W10 2015-W09              26         1518          51 ""         
+ 23    23 2015-W11 2015-W10              27         1569          55 ""         
+ 24    24 2015-W12 2015-W11              28         1624          61 ""         
+ 25    25 2015-W13 2015-W12              29         1685          68 ""         
+ 26    26 2015-W14 2015-W13              30         1753          64 ""         
+ 27    27 2015-W15 2015-W14              31         1817          64 ""         
+ 28    28 2015-W16 2015-W15              32         1881          70 ""         
+ 29    29 2015-W17 2015-W16              33         1951          68 ""         
+ 30    30 2016-W01 2015-W17              34         2019          54 "<-- seaso…
+ 31    31 2016-W02 2016-W01              35         2073          60 ""         
+ 32    32 2016-W03 2016-W02              36         2133          62 ""         
+ 33    33 2016-W04 2016-W03              37         2195          56 ""         
+ 34    34 2016-W05 2016-W04              38         2251          52 ""         
+ 35    35 2016-W06 2016-W05              39         2303          57 ""         
+ 36    36 2016-W07 2016-W06              40         2360          55 ""         
+ 37    37 2016-W08 2016-W07              41         2415          47 ""         
+ 38    38 2016-W09 2016-W08              42         2462          47 ""         
+ 39    39 2016-W10 2016-W09              43         2509          53 ""         
+ 40    40 2016-W11 2016-W10              44         2562          50 ""         
+ 41    41 2016-W12 2016-W11              45         2612          59 ""         
+ 42    42 2016-W13 2016-W12              46         2671          56 ""         
+ 43    43 2016-W14 2016-W13              47         2727          56 ""         
+ 44    44 2016-W15 2016-W14              48         2783          61 ""         
+ 45    45 2016-W16 2016-W15              49         2844          61 ""         
+ 46    46 2016-W17 2016-W16              50         2905          66 ""         
+ 47    47 2017-W01 2016-W17              51         2971          63 "<-- seaso…
+ 48    48 2017-W02 2017-W01              52         3034          68 ""         
+ 49    49 2017-W03 2017-W02              53         3102          64 ""         
+ 50    50 2017-W04 2017-W03              54         3166          67 ""         
+ 51    51 2017-W05 2017-W04              55         3233          56 ""         
+ 52    52 2017-W06 2017-W05              56         3289          53 ""         
+ 53    53 2017-W07 2017-W06              57         3342          60 ""         
+ 54    54 2017-W08 2017-W07              58         3402          52 ""         
+ 55    55 2017-W09 2017-W08              59         3454          56 ""         
+ 56    56 2017-W10 2017-W09              60         3510          60 ""         
+ 57    57 2017-W11 2017-W10              61         3570          59 ""         
+ 58    58 2017-W12 2017-W11              62         3629          64 ""         
+ 59    59 2017-W13 2017-W12              63         3693          64 ""         
+ 60    60 2017-W14 2017-W13              64         3757          62 ""         
+ 61    61 2017-W15 2017-W14              65         3819          68 ""         
+ 62    62 2017-W16 2017-W15              66         3887          63 ""         
+ 63    63 2017-W17 2017-W16              67         3950          63 ""         
+ 64    64 2018-W01 2017-W17              68         4013          61 "<-- seaso…
+ 65    65 2018-W02 2018-W01              69         4074          64 ""         
+ 66    66 2018-W03 2018-W02              70         4138          60 ""         
+ 67    67 2018-W04 2018-W03              71         4198          59 ""         
+ 68    68 2018-W05 2018-W04              72         4257          56 ""         
+ 69    69 2018-W06 2018-W05              73         4313          57 ""         
+ 70    70 2018-W07 2018-W06              74         4370          54 ""         
+ 71    71 2018-W08 2018-W07              75         4424          49 ""         
+ 72    72 2018-W09 2018-W08              76         4473          53 ""         
+ 73    73 2018-W10 2018-W09              77         4526          54 ""         
+ 74    74 2018-W11 2018-W10              78         4580          46 ""         
+ 75    75 2018-W12 2018-W11              79         4626          56 ""         
+ 76    76 2018-W13 2018-W12              80         4682          64 ""         
+ 77    77 2018-W14 2018-W13              81         4746          60 ""         
+ 78    78 2018-W15 2018-W14              82         4806          60 ""         
+ 79    79 2018-W16 2018-W15              83         4866          62 ""         
+ 80    80 2018-W17 2018-W16              84         4928          64 ""         
+ 81    81 2019-W01 2018-W17              85         4992          63 "<-- seaso…
+ 82    82 2019-W02 2019-W01              86         5055          61 ""         
+ 83    83 2019-W03 2019-W02              87         5116          59 ""         
+ 84    84 2019-W04 2019-W03              88         5175          57 ""         
+ 85    85 2019-W05 2019-W04              89         5232          57 ""         
+ 86    86 2019-W06 2019-W05              90         5289          50 ""         
+ 87    87 2019-W07 2019-W06              91         5339          51 ""         
+ 88    88 2019-W08 2019-W07              92         5390          53 ""         
+ 89    89 2019-W09 2019-W08              93         5443          49 ""         
+ 90    90 2019-W10 2019-W09              94         5492          47 ""         
+ 91    91 2019-W11 2019-W10              95         5539          57 ""         
+ 92    92 2019-W12 2019-W11              96         5596          55 ""         
+ 93    93 2019-W13 2019-W12              97         5651          59 ""         
+ 94    94 2019-W14 2019-W13              98         5710          63 ""         
+ 95    95 2019-W15 2019-W14              99         5773          61 ""         
+ 96    96 2019-W16 2019-W15             100         5834          62 ""         
+ 97    97 2019-W17 2019-W16             101         5896          59 ""         
+ 98    98 2020-W01 2019-W17             102         5955          69 "<-- seaso…
+ 99    99 2020-W02 2020-W01             103         6024          62 ""         
+100   100 2020-W03 2020-W02             104         6086          56 ""         
+101   101 2020-W04 2020-W03             105         6142          60 ""         
+102   102 2020-W05 2020-W04             106         6202          53 ""         
+103   103 2020-W06 2020-W05             107         6255          59 ""         
+104   104 2020-W07 2020-W06             108         6314          52 ""         
+105   105 2020-W08 2020-W07             109         6366          55 ""         
+106   106 2020-W09 2020-W08             110         6421          59 ""         
+107   107 2020-W10 2020-W09             111         6480          52 ""         
+108   108 2020-W11 2020-W10             112         6532          56 ""         
+109   109 2020-W12 2020-W11             113         6588          62 ""         
+110   110 2020-W13 2020-W12             114         6650          60 ""         
+111   111 2020-W14 2020-W13             115         6710          65 ""         
+112   112 2020-W15 2020-W14             116         6775          54 ""         
+113   113 2020-W16 2020-W15             117         6829          55 ""         
+114   114 2020-W17 2020-W16             118         6884          58 ""         
+115   115 2021-W01 2020-W17             119         6942          59 "<-- seaso…
+116   116 2021-W02 2021-W01             120         7001          58 ""         
+117   117 2021-W03 2021-W02             121         7059          58 ""         
+118   118 2021-W04 2021-W03             122         7117          61 ""         
+119   119 2021-W05 2021-W04             123         7178          64 ""         
+120   120 2021-W06 2021-W05             124         7242          51 ""         
+121   121 2021-W07 2021-W06             125         7293          50 ""         
+122   122 2021-W08 2021-W07             126         7343          58 ""         
+123   123 2021-W09 2021-W08             127         7401          54 ""         
+124   124 2021-W10 2021-W09             128         7455          56 ""         
+125   125 2021-W11 2021-W10             129         7511          53 ""         
+126   126 2021-W12 2021-W11             130         7564          57 ""         
+127   127 2021-W13 2021-W12             131         7621          50 ""         
+128   128 2021-W14 2021-W13             132         7671          51 ""         
+129   129 2021-W15 2021-W14             133         7722          59 ""         
+130   130 2021-W16 2021-W15             134         7781          62 ""         
+131   131 2021-W17 2021-W16             135         7843          61 ""         
+132   132 2021-W18 2021-W17             136         7904          61 ""         
+133   133 2022-W01 2021-W18             137         7965          61 "<-- seaso…
+134   134 2022-W02 2022-W01             138         8026          60 ""         
+135   135 2022-W03 2022-W02             139         8086          61 ""         
+136   136 2022-W04 2022-W03             140         8147          57 ""         
+137   137 2022-W05 2022-W04             141         8204          61 ""         
+138   138 2022-W06 2022-W05             142         8265          49 ""         
+139   139 2022-W07 2022-W06             143         8314          52 ""         
+140   140 2022-W08 2022-W07             144         8366          57 ""         
+141   141 2022-W09 2022-W08             145         8423          48 ""         
+142   142 2022-W10 2022-W09             146         8471          48 ""         
+143   143 2022-W11 2022-W10             147         8519          53 ""         
+144   144 2022-W12 2022-W11             148         8572          61 ""         
+145   145 2022-W13 2022-W12             149         8633          53 ""         
+146   146 2022-W14 2022-W13             150         8686          49 ""         
+147   147 2022-W15 2022-W14             151         8735          56 ""         
+148   148 2022-W16 2022-W15             152         8791          60 ""         
+149   149 2022-W17 2022-W16             153         8851          61 ""         
+150   150 2022-W18 2022-W17             154         8912          66 ""         
+151   151 2023-W01 2022-W18             155         8978          58 "<-- seaso…
+152   152 2023-W02 2023-W01             156         9036          55 ""         
+153   153 2023-W03 2023-W02             157         9091          62 ""         
+154   154 2023-W04 2023-W03             158         9153          59 ""         
+155   155 2023-W05 2023-W04             159         9212          51 ""         
+156   156 2023-W06 2023-W05             160         9263          49 ""         
+157   157 2023-W07 2023-W06             161         9312          46 ""         
+158   158 2023-W08 2023-W07             162         9358          60 ""         
+159   159 2023-W09 2023-W08             163         9418          48 ""         
+160   160 2023-W10 2023-W09             164         9466          50 ""         
+161   161 2023-W11 2023-W10             165         9516          52 ""         
+162   162 2023-W12 2023-W11             166         9568          57 ""         
+163   163 2023-W13 2023-W12             167         9625          46 ""         
+164   164 2023-W14 2023-W13             168         9671          54 ""         
+165   165 2023-W15 2023-W14             169         9725          67 ""         
+166   166 2023-W16 2023-W15             170         9792          58 ""         
+167   167 2023-W17 2023-W16             171         9850          59 ""         
+168   168 2023-W18 2023-W17             172         9909          56 ""         
+169   169 2024-W01 2023-W18             173         9965          53 "<-- seaso…
+170   170 2024-W02 2024-W01             174        10018          58 ""         
+171   171 2024-W03 2024-W02             175        10076          57 ""         
+172   172 2024-W04 2024-W03             176        10133          64 ""         
+173   173 2024-W05 2024-W04             177        10197          53 ""         
+174   174 2024-W06 2024-W05             178        10250          55 ""         
+175   175 2024-W07 2024-W06             179        10305          56 ""         
+176   176 2024-W08 2024-W07             180        10361          55 ""         
+177   177 2024-W09 2024-W08             181        10416          59 ""         
+178   178 2024-W10 2024-W09             182        10475          44 ""         
+179   179 2024-W11 2024-W10             183        10519          49 ""         
+180   180 2024-W12 2024-W11             184        10568          43 ""         
+181   181 2024-W13 2024-W12             185        10611          58 ""         
+182   182 2024-W14 2024-W13             186        10669          46 ""         
+183   183 2024-W15 2024-W14             187        10715          60 ""         
+184   184 2024-W16 2024-W15             188        10775          55 ""         
+185   185 2024-W17 2024-W16             189        10830          57 ""         
+186   186 2024-W18 2024-W17             190        10887          58 ""         
+187   187 2025-W01 2024-W18             191        10945          51 "<-- seaso…
+188   188 2025-W02 2025-W01             192        10996          58 ""         
+189   189 2025-W03 2025-W02             193        11054          61 ""         
+190   190 2025-W04 2025-W03             194        11115          57 ""         
+191   191 2025-W05 2025-W04             195        11172          53 ""         
+192   192 2025-W06 2025-W05             196        11225          52 ""         
+193   193 2025-W07 2025-W06             197        11277          52 ""         
+194   194 2025-W08 2025-W07             198        11329          49 ""         
+195   195 2025-W09 2025-W08             199        11378          47 ""         
+196   196 2025-W10 2025-W09             200        11425          47 ""         
+197   197 2025-W11 2025-W10             201        11472          54 ""         
+198   198 2025-W12 2025-W11             202        11526          50 ""         
+199   199 2025-W13 2025-W12             203        11576          58 ""         
+200   200 2025-W14 2025-W13             204        11634          51 ""         
+201   201 2025-W15 2025-W14             205        11685          58 ""         
+202   202 2025-W16 2025-W15             206        11743          60 ""         
+203   203 2025-W17 2025-W16             207        11803          55 ""         
+204   204 2025-W18 2025-W17             208        11858          60 ""         
+✔ Fold map assertions passed: no leakage, monotone expansion, season boundary clean
+ℹ 11 fold(s) cross a season boundary
+
+── Step 2b: Validate metric functions on known-answer synthetic data ───────────
+ℹ Test A: perfectly calibrated intervals — expect empirical near nominal
+# A tibble: 3 × 5
+  test              nominal empirical   delta sharpness
+  <chr>               <dbl>     <dbl>   <dbl>     <dbl>
+1 A: perfect (sd=1)     0.5     0.507 0.00700      1.35
+2 A: perfect (sd=1)     0.8     0.801 0.00100      2.56
+3 A: perfect (sd=1)     0.9     0.906 0.00550      3.29
+ℹ Test B: over-narrow intervals — expect empirical << nominal
+# A tibble: 3 × 5
+  test               nominal empirical  delta sharpness
+  <chr>                <dbl>     <dbl>  <dbl>     <dbl>
+1 B: narrow (sd=0.5)     0.5     0.274 -0.226     0.674
+2 B: narrow (sd=0.5)     0.8     0.481 -0.319     1.28 
+3 B: narrow (sd=0.5)     0.9     0.588 -0.312     1.64 
+ℹ Test C: over-wide intervals — expect empirical >> nominal
+# A tibble: 3 × 5
+  test           nominal empirical  delta sharpness
+  <chr>            <dbl>     <dbl>  <dbl>     <dbl>
+1 C: wide (sd=2)     0.5     0.822 0.322       2.70
+2 C: wide (sd=2)     0.8     0.989 0.189       5.13
+3 C: wide (sd=2)     0.9     0.998 0.0985      6.58
+✔ All metric function assertions passed -- ruler measures correctly in isolation
+
+── Step 2c: Low-usage bucket ───────────────────────────────────────────────────
+ℹ Test-fold rows (total):              11621
+ℹ Low-usage bucket (5-8 opp):          3049 (26.2%)
+ℹ High-usage bucket (>8 opp):        8572 (73.8%)
+ℹ Coverage SE at 80% nominal (low bucket, n=3049): ±0.7pp
+✔ Low bucket large enough for a meaningful coverage estimate
+ℹ Opp distribution in test folds (opp 5-15):
+# A tibble: 11 × 3
+   opportunities     n cum_pct
+           <int> <int>   <dbl>
+ 1             5   854     7.3
+ 2             6   742    13.7
+ 3             7   776    20.4
+ 4             8   677    26.2
+ 5             9   651    31.8
+ 6            10   606    37.1
+ 7            11   621    42.4
+ 8            12   595    47.5
+ 9            13   536    52.1
+10            14   542    56.8
+11            15   540    61.4
+
+── Step 2d: Fold map usage contract ────────────────────────────────────────────
+ℹ Each step-3 contender must implement exactly this filter logic:
+ℹ   ft <- readRDS('data/rb_feature_table.rds')
+ℹ   fold_map <- readRDS('data/fold_map.rds')
+ℹ   For fold f:
+ℹ     test  = ft |> filter(season == fold_map$test_season[f], week == fold_map$test_week[f])
+ℹ     train = ft |> filter(season < fold_map$test_season[f] |
+ℹ                          (season == fold_map$test_season[f] & week < fold_map$test_week[f]))
+ℹ   No other split logic is permitted.
+
+── Step 2e: Save ───────────────────────────────────────────────────────────────
+✔ data/fold_map.rds
+✔ output/fold_map.csv
+
+── Rubric locked ───────────────────────────────────────────────────────────────
+ℹ Frozen feature table: output/rb_feature_table_v2.0.csv
+ℹ Fold map:             output/fold_map.csv  (204 folds)
+ℹ Metric functions:     R/metrics.R  (source in step-3 scripts)
+ℹ Low-usage bucket:     opp 5-8, n=3049 test rows, SE ±0.7pp
+ℹ Step 3 may now begin.
+
+── Step 3A: LightGBM Control ───────────────────────────────────────────────────
+✔ Feature table: 11918 rows x 30 cols
+✔ Fold map: 204 folds | Expected test rows: 11621
+
+── Walk-forward fold loop ──────────────────────────────────────────────────────
+ℹ Fold 01 [2014-W06]: 63 rows | cal_sw=1 (59 rows)
+ℹ Fold 02 [2014-W07]: 58 rows | cal_sw=1 (63 rows)
+ℹ Fold 03 [2014-W08]: 57 rows | cal_sw=1 (58 rows)
+ℹ Fold 04 [2014-W09]: 53 rows | cal_sw=1 (57 rows)
+ℹ Fold 05 [2014-W10]: 53 rows | cal_sw=1 (53 rows)
+ℹ Fold 06 [2014-W11]: 51 rows | cal_sw=2 (106 rows)
+ℹ Fold 07 [2014-W12]: 60 rows | cal_sw=2 (104 rows)
+ℹ Fold 08 [2014-W13]: 61 rows | cal_sw=2 (111 rows)
+ℹ Fold 09 [2014-W14]: 58 rows | cal_sw=2 (121 rows)
+ℹ Fold 10 [2014-W15]: 64 rows | cal_sw=2 (119 rows)
+ℹ Fold 11 [2014-W16]: 62 rows | cal_sw=3 (183 rows)
+ℹ Fold 12 [2014-W17]: 70 rows | cal_sw=3 (184 rows)
+ℹ Fold 13 [2015-W01]: 60 rows | cal_sw=3 (196 rows)
+ℹ Fold 14 [2015-W02]: 60 rows | cal_sw=3 (192 rows)
+ℹ Fold 15 [2015-W03]: 67 rows | cal_sw=3 (190 rows)
+ℹ Fold 16 [2015-W04]: 57 rows | cal_sw=4 (257 rows)
+ℹ Fold 17 [2015-W05]: 59 rows | cal_sw=4 (244 rows)
+ℹ Fold 18 [2015-W06]: 55 rows | cal_sw=4 (243 rows)
+ℹ Fold 19 [2015-W07]: 59 rows | cal_sw=4 (238 rows)
+ℹ Fold 20 [2015-W08]: 49 rows | cal_sw=4 (230 rows)
+ℹ Fold 21 [2015-W09]: 45 rows | cal_sw=5 (279 rows)
+ℹ Fold 22 [2015-W10]: 51 rows | cal_sw=5 (267 rows)
+ℹ Fold 23 [2015-W11]: 55 rows | cal_sw=5 (259 rows)
+ℹ Fold 24 [2015-W12]: 61 rows | cal_sw=5 (259 rows)
+ℹ Fold 25 [2015-W13]: 68 rows | cal_sw=5 (261 rows)
+ℹ Fold 26 [2015-W14]: 64 rows | cal_sw=6 (329 rows)
+ℹ Fold 27 [2015-W15]: 64 rows | cal_sw=6 (344 rows)
+ℹ Fold 28 [2015-W16]: 70 rows | cal_sw=6 (363 rows)
+ℹ Fold 29 [2015-W17]: 68 rows | cal_sw=6 (382 rows)
+ℹ Fold 30 [2016-W01]: 54 rows | cal_sw=6 (395 rows)
+ℹ Fold 31 [2016-W02]: 60 rows | cal_sw=7 (449 rows)
+ℹ Fold 32 [2016-W03]: 62 rows | cal_sw=7 (448 rows)
+ℹ Fold 33 [2016-W04]: 56 rows | cal_sw=7 (442 rows)
+ℹ Fold 34 [2016-W05]: 52 rows | cal_sw=7 (434 rows)
+ℹ Fold 35 [2016-W06]: 57 rows | cal_sw=7 (422 rows)
+ℹ Fold 36 [2016-W07]: 55 rows | cal_sw=8 (479 rows)
+ℹ Fold 37 [2016-W08]: 47 rows | cal_sw=8 (464 rows)
+ℹ Fold 38 [2016-W09]: 47 rows | cal_sw=8 (443 rows)
+ℹ Fold 39 [2016-W10]: 53 rows | cal_sw=8 (436 rows)
+ℹ Fold 40 [2016-W11]: 50 rows | cal_sw=8 (429 rows)
+ℹ Fold 41 [2016-W12]: 59 rows | cal_sw=9 (479 rows)
+ℹ Fold 42 [2016-W13]: 56 rows | cal_sw=9 (476 rows)
+ℹ Fold 43 [2016-W14]: 56 rows | cal_sw=9 (476 rows)
+ℹ Fold 44 [2016-W15]: 61 rows | cal_sw=9 (480 rows)
+ℹ Fold 45 [2016-W16]: 61 rows | cal_sw=9 (484 rows)
+ℹ Fold 46 [2016-W17]: 66 rows | cal_sw=10 (545 rows)
+ℹ Fold 47 [2017-W01]: 63 rows | cal_sw=10 (556 rows)
+ℹ Fold 48 [2017-W02]: 68 rows | cal_sw=10 (572 rows)
+ℹ Fold 49 [2017-W03]: 64 rows | cal_sw=10 (593 rows)
+ℹ Fold 50 [2017-W04]: 67 rows | cal_sw=10 (604 rows)
+ℹ Fold 51 [2017-W05]: 56 rows | cal_sw=11 (671 rows)
+ℹ Fold 52 [2017-W06]: 53 rows | cal_sw=11 (677 rows)
+ℹ Fold 53 [2017-W07]: 60 rows | cal_sw=11 (671 rows)
+ℹ Fold 54 [2017-W08]: 52 rows | cal_sw=11 (675 rows)
+ℹ Fold 55 [2017-W09]: 56 rows | cal_sw=11 (671 rows)
+ℹ Fold 56 [2017-W10]: 60 rows | cal_sw=12 (727 rows)
+ℹ Fold 57 [2017-W11]: 59 rows | cal_sw=12 (726 rows)
+ℹ Fold 58 [2017-W12]: 64 rows | cal_sw=12 (724 rows)
+ℹ Fold 59 [2017-W13]: 64 rows | cal_sw=12 (722 rows)
+ℹ Fold 60 [2017-W14]: 62 rows | cal_sw=12 (723 rows)
+ℹ Fold 61 [2017-W15]: 68 rows | cal_sw=13 (785 rows)
+ℹ Fold 62 [2017-W16]: 63 rows | cal_sw=13 (785 rows)
+ℹ Fold 63 [2017-W17]: 63 rows | cal_sw=13 (784 rows)
+ℹ Fold 64 [2018-W01]: 61 rows | cal_sw=13 (780 rows)
+ℹ Fold 65 [2018-W02]: 64 rows | cal_sw=13 (785 rows)
+ℹ Fold 66 [2018-W03]: 60 rows | cal_sw=14 (849 rows)
+ℹ Fold 67 [2018-W04]: 59 rows | cal_sw=14 (856 rows)
+ℹ Fold 68 [2018-W05]: 56 rows | cal_sw=14 (855 rows)
+ℹ Fold 69 [2018-W06]: 57 rows | cal_sw=14 (859 rows)
+ℹ Fold 70 [2018-W07]: 54 rows | cal_sw=14 (860 rows)
+ℹ Fold 71 [2018-W08]: 49 rows | cal_sw=15 (914 rows)
+ℹ Fold 72 [2018-W09]: 53 rows | cal_sw=15 (903 rows)
+ℹ Fold 73 [2018-W10]: 54 rows | cal_sw=15 (897 rows)
+ℹ Fold 74 [2018-W11]: 46 rows | cal_sw=15 (887 rows)
+ℹ Fold 75 [2018-W12]: 56 rows | cal_sw=15 (869 rows)
+ℹ Fold 76 [2018-W13]: 64 rows | cal_sw=16 (925 rows)
+ℹ Fold 77 [2018-W14]: 60 rows | cal_sw=16 (927 rows)
+ℹ Fold 78 [2018-W15]: 60 rows | cal_sw=16 (919 rows)
+ℹ Fold 79 [2018-W16]: 62 rows | cal_sw=16 (916 rows)
+ℹ Fold 80 [2018-W17]: 64 rows | cal_sw=16 (915 rows)
+ℹ Fold 81 [2019-W01]: 63 rows | cal_sw=17 (979 rows)
+ℹ Fold 82 [2019-W02]: 61 rows | cal_sw=17 (981 rows)
+ℹ Fold 83 [2019-W03]: 59 rows | cal_sw=17 (978 rows)
+ℹ Fold 84 [2019-W04]: 57 rows | cal_sw=17 (977 rows)
+ℹ Fold 85 [2019-W05]: 57 rows | cal_sw=17 (975 rows)
+ℹ Fold 86 [2019-W06]: 50 rows | cal_sw=18 (1032 rows)
+ℹ Fold 87 [2019-W07]: 51 rows | cal_sw=18 (1026 rows)
+ℹ Fold 88 [2019-W08]: 53 rows | cal_sw=18 (1020 rows)
+ℹ Fold 89 [2019-W09]: 49 rows | cal_sw=18 (1019 rows)
+ℹ Fold 90 [2019-W10]: 47 rows | cal_sw=18 (1019 rows)
+ℹ Fold 91 [2019-W11]: 57 rows | cal_sw=19 (1066 rows)
+ℹ Fold 92 [2019-W12]: 55 rows | cal_sw=19 (1070 rows)
+ℹ Fold 93 [2019-W13]: 59 rows | cal_sw=19 (1071 rows)
+ℹ Fold 94 [2019-W14]: 63 rows | cal_sw=19 (1084 rows)
+ℹ Fold 95 [2019-W15]: 61 rows | cal_sw=19 (1091 rows)
+ℹ Fold 96 [2019-W16]: 62 rows | cal_sw=20 (1152 rows)
+ℹ Fold 97 [2019-W17]: 59 rows | cal_sw=20 (1150 rows)
+ℹ Fold 98 [2020-W01]: 69 rows | cal_sw=20 (1149 rows)
+ℹ Fold 99 [2020-W02]: 62 rows | cal_sw=20 (1158 rows)
+ℹ Fold 100 [2020-W03]: 56 rows | cal_sw=20 (1158 rows)
+ℹ Fold 101 [2020-W04]: 60 rows | cal_sw=21 (1214 rows)
+ℹ Fold 102 [2020-W05]: 53 rows | cal_sw=21 (1210 rows)
+ℹ Fold 103 [2020-W06]: 59 rows | cal_sw=21 (1200 rows)
+ℹ Fold 104 [2020-W07]: 52 rows | cal_sw=21 (1198 rows)
+ℹ Fold 105 [2020-W08]: 55 rows | cal_sw=21 (1191 rows)
+ℹ Fold 106 [2020-W09]: 59 rows | cal_sw=22 (1246 rows)
+ℹ Fold 107 [2020-W10]: 52 rows | cal_sw=22 (1248 rows)
+ℹ Fold 108 [2020-W11]: 56 rows | cal_sw=22 (1243 rows)
+ℹ Fold 109 [2020-W12]: 62 rows | cal_sw=22 (1249 rows)
+ℹ Fold 110 [2020-W13]: 60 rows | cal_sw=22 (1260 rows)
+ℹ Fold 111 [2020-W14]: 65 rows | cal_sw=23 (1320 rows)
+ℹ Fold 112 [2020-W15]: 54 rows | cal_sw=23 (1332 rows)
+ℹ Fold 113 [2020-W16]: 55 rows | cal_sw=23 (1337 rows)
+ℹ Fold 114 [2020-W17]: 58 rows | cal_sw=23 (1345 rows)
+ℹ Fold 115 [2021-W01]: 59 rows | cal_sw=23 (1346 rows)
+ℹ Fold 116 [2021-W02]: 58 rows | cal_sw=24 (1405 rows)
+ℹ Fold 117 [2021-W03]: 58 rows | cal_sw=24 (1408 rows)
+ℹ Fold 118 [2021-W04]: 61 rows | cal_sw=24 (1407 rows)
+ℹ Fold 119 [2021-W05]: 64 rows | cal_sw=24 (1405 rows)
+ℹ Fold 120 [2021-W06]: 51 rows | cal_sw=24 (1408 rows)
+ℹ Fold 121 [2021-W07]: 50 rows | cal_sw=25 (1459 rows)
+ℹ Fold 122 [2021-W08]: 58 rows | cal_sw=25 (1447 rows)
+ℹ Fold 123 [2021-W09]: 54 rows | cal_sw=25 (1446 rows)
+ℹ Fold 124 [2021-W10]: 56 rows | cal_sw=25 (1431 rows)
+ℹ Fold 125 [2021-W11]: 53 rows | cal_sw=25 (1425 rows)
+ℹ Fold 126 [2021-W12]: 57 rows | cal_sw=26 (1478 rows)
+ℹ Fold 127 [2021-W13]: 50 rows | cal_sw=26 (1479 rows)
+ℹ Fold 128 [2021-W14]: 51 rows | cal_sw=26 (1469 rows)
+ℹ Fold 129 [2021-W15]: 59 rows | cal_sw=26 (1467 rows)
+ℹ Fold 130 [2021-W16]: 62 rows | cal_sw=26 (1467 rows)
+ℹ Fold 131 [2021-W17]: 61 rows | cal_sw=27 (1529 rows)
+ℹ Fold 132 [2021-W18]: 61 rows | cal_sw=27 (1538 rows)
+ℹ Fold 133 [2022-W01]: 61 rows | cal_sw=27 (1544 rows)
+ℹ Fold 134 [2022-W02]: 60 rows | cal_sw=27 (1546 rows)
+ℹ Fold 135 [2022-W03]: 61 rows | cal_sw=27 (1554 rows)
+ℹ Fold 136 [2022-W04]: 57 rows | cal_sw=28 (1615 rows)
+ℹ Fold 137 [2022-W05]: 61 rows | cal_sw=28 (1616 rows)
+ℹ Fold 138 [2022-W06]: 49 rows | cal_sw=28 (1615 rows)
+ℹ Fold 139 [2022-W07]: 52 rows | cal_sw=28 (1604 rows)
+ℹ Fold 140 [2022-W08]: 57 rows | cal_sw=28 (1591 rows)
+ℹ Fold 141 [2022-W09]: 48 rows | cal_sw=29 (1648 rows)
+ℹ Fold 142 [2022-W10]: 48 rows | cal_sw=29 (1642 rows)
+ℹ Fold 143 [2022-W11]: 53 rows | cal_sw=29 (1635 rows)
+ℹ Fold 144 [2022-W12]: 61 rows | cal_sw=29 (1630 rows)
+ℹ Fold 145 [2022-W13]: 53 rows | cal_sw=29 (1632 rows)
+ℹ Fold 146 [2022-W14]: 49 rows | cal_sw=30 (1685 rows)
+ℹ Fold 147 [2022-W15]: 56 rows | cal_sw=30 (1676 rows)
+ℹ Fold 148 [2022-W16]: 60 rows | cal_sw=30 (1674 rows)
+ℹ Fold 149 [2022-W17]: 61 rows | cal_sw=30 (1673 rows)
+ℹ Fold 150 [2022-W18]: 66 rows | cal_sw=30 (1670 rows)
+ℹ Fold 151 [2023-W01]: 58 rows | cal_sw=31 (1736 rows)
+ℹ Fold 152 [2023-W02]: 55 rows | cal_sw=31 (1743 rows)
+ℹ Fold 153 [2023-W03]: 62 rows | cal_sw=31 (1748 rows)
+ℹ Fold 154 [2023-W04]: 59 rows | cal_sw=31 (1752 rows)
+ℹ Fold 155 [2023-W05]: 51 rows | cal_sw=31 (1757 rows)
+ℹ Fold 156 [2023-W06]: 49 rows | cal_sw=32 (1808 rows)
+ℹ Fold 157 [2023-W07]: 46 rows | cal_sw=32 (1801 rows)
+ℹ Fold 158 [2023-W08]: 60 rows | cal_sw=32 (1794 rows)
+ℹ Fold 159 [2023-W09]: 48 rows | cal_sw=32 (1797 rows)
+ℹ Fold 160 [2023-W10]: 50 rows | cal_sw=32 (1795 rows)
+ℹ Fold 161 [2023-W11]: 52 rows | cal_sw=33 (1845 rows)
+ℹ Fold 162 [2023-W12]: 57 rows | cal_sw=33 (1846 rows)
+ℹ Fold 163 [2023-W13]: 46 rows | cal_sw=33 (1844 rows)
+ℹ Fold 164 [2023-W14]: 54 rows | cal_sw=33 (1828 rows)
+ℹ Fold 165 [2023-W15]: 67 rows | cal_sw=33 (1821 rows)
+ℹ Fold 166 [2023-W16]: 58 rows | cal_sw=34 (1888 rows)
+ℹ Fold 167 [2023-W17]: 59 rows | cal_sw=34 (1885 rows)
+ℹ Fold 168 [2023-W18]: 56 rows | cal_sw=34 (1883 rows)
+ℹ Fold 169 [2024-W01]: 53 rows | cal_sw=34 (1879 rows)
+ℹ Fold 170 [2024-W02]: 58 rows | cal_sw=34 (1871 rows)
+ℹ Fold 171 [2024-W03]: 57 rows | cal_sw=35 (1929 rows)
+ℹ Fold 172 [2024-W04]: 64 rows | cal_sw=35 (1929 rows)
+ℹ Fold 173 [2024-W05]: 53 rows | cal_sw=35 (1932 rows)
+ℹ Fold 174 [2024-W06]: 55 rows | cal_sw=35 (1936 rows)
+ℹ Fold 175 [2024-W07]: 56 rows | cal_sw=35 (1939 rows)
+ℹ Fold 176 [2024-W08]: 55 rows | cal_sw=36 (1995 rows)
+ℹ Fold 177 [2024-W09]: 59 rows | cal_sw=36 (1993 rows)
+ℹ Fold 178 [2024-W10]: 44 rows | cal_sw=36 (2004 rows)
+ℹ Fold 179 [2024-W11]: 49 rows | cal_sw=36 (2000 rows)
+ℹ Fold 180 [2024-W12]: 43 rows | cal_sw=36 (1996 rows)
+ℹ Fold 181 [2024-W13]: 58 rows | cal_sw=37 (2039 rows)
+ℹ Fold 182 [2024-W14]: 46 rows | cal_sw=37 (2036 rows)
+ℹ Fold 183 [2024-W15]: 60 rows | cal_sw=37 (2029 rows)
+ℹ Fold 184 [2024-W16]: 55 rows | cal_sw=37 (2040 rows)
+ℹ Fold 185 [2024-W17]: 57 rows | cal_sw=37 (2039 rows)
+ℹ Fold 186 [2024-W18]: 58 rows | cal_sw=38 (2096 rows)
+ℹ Fold 187 [2025-W01]: 51 rows | cal_sw=38 (2094 rows)
+ℹ Fold 188 [2025-W02]: 58 rows | cal_sw=38 (2084 rows)
+ℹ Fold 189 [2025-W03]: 61 rows | cal_sw=38 (2076 rows)
+ℹ Fold 190 [2025-W04]: 57 rows | cal_sw=38 (2079 rows)
+ℹ Fold 191 [2025-W05]: 53 rows | cal_sw=39 (2136 rows)
+ℹ Fold 192 [2025-W06]: 52 rows | cal_sw=39 (2134 rows)
+ℹ Fold 193 [2025-W07]: 52 rows | cal_sw=39 (2124 rows)
+ℹ Fold 194 [2025-W08]: 49 rows | cal_sw=39 (2117 rows)
+ℹ Fold 195 [2025-W09]: 47 rows | cal_sw=39 (2115 rows)
+ℹ Fold 196 [2025-W10]: 47 rows | cal_sw=40 (2162 rows)
+ℹ Fold 197 [2025-W11]: 54 rows | cal_sw=40 (2160 rows)
+ℹ Fold 198 [2025-W12]: 50 rows | cal_sw=40 (2168 rows)
+ℹ Fold 199 [2025-W13]: 58 rows | cal_sw=40 (2158 rows)
+ℹ Fold 200 [2025-W14]: 51 rows | cal_sw=40 (2168 rows)
+ℹ Fold 201 [2025-W15]: 58 rows | cal_sw=41 (2219 rows)
+ℹ Fold 202 [2025-W16]: 60 rows | cal_sw=41 (2227 rows)
+ℹ Fold 203 [2025-W17]: 55 rows | cal_sw=41 (2235 rows)
+ℹ Fold 204 [2025-W18]: 60 rows | cal_sw=41 (2233 rows)
+
+── Normalized-Residual Flatness Check (combined, calibration rows) ─────────────
+# A tibble: 3 × 5
+  opp_bucket       n mean_raw_resid mean_norm_resid sd_norm_resid
+  <fct>        <int>          <dbl>           <dbl>         <dbl>
+1 low  (5-8)   62669           2.15           0.342         0.299
+2 mid  (9-13)  62621           2.81           0.258         0.214
+3 high (14+)  115778           3.66           0.189         0.154
+ℹ high/low normalized-residual ratio: 0.553 (1.0 = perfectly flat)
+
+── Harness Integrity Report ────────────────────────────────────────────────────
+✔ All 204 folds completed -- no silently skipped folds
+ℹ Test rows scored: 11621 | Expected: 11621
+✔ Row count matches expected 11621
+✔ Zero NA predictions across all folds and components
+✔ Conformal calibration: training-side only (loop assertion verified each fold)
+
+── Pooled Coverage (all 11621 test rows across 31 folds) ───────────────────────
+# A tibble: 9 × 6
+  component  stratum nominal empirical     delta sharpness
+  <chr>      <chr>     <dbl>     <dbl>     <dbl>     <dbl>
+1 efficiency pooled      0.5     0.498 -0.00219      0.378
+2 efficiency pooled      0.8     0.796 -0.00386      0.774
+3 efficiency pooled      0.9     0.900  0.000181     1.04 
+4 volume     pooled      0.5     0.506  0.00589      7.58 
+5 volume     pooled      0.8     0.800  0.000103    14.3  
+6 volume     pooled      0.9     0.900  0.000353    19.0  
+7 combined   pooled      0.5     0.496 -0.00374      5.37 
+8 combined   pooled      0.8     0.797 -0.00299     11.2  
+9 combined   pooled      0.9     0.901  0.00113     15.2  
+
+── Low-Usage Bucket (opp 5-8) ──────────────────────────────────────────────────
+ℹ Low-usage bucket rows: 3049
+# A tibble: 9 × 6
+  component  stratum     nominal empirical      delta sharpness
+  <chr>      <chr>         <dbl>     <dbl>      <dbl>     <dbl>
+1 efficiency low_opp_5_8     0.5     0.388 -0.112         0.379
+2 efficiency low_opp_5_8     0.8     0.673 -0.127         0.776
+3 efficiency low_opp_5_8     0.9     0.812 -0.0883        1.04 
+4 volume     low_opp_5_8     0.5     0.416 -0.0845        7.59 
+5 volume     low_opp_5_8     0.8     0.786 -0.0145       14.4  
+6 volume     low_opp_5_8     0.9     0.900 -0.0000328    19.0  
+7 combined   low_opp_5_8     0.5     0.358 -0.142         2.44 
+8 combined   low_opp_5_8     0.8     0.649 -0.151         5.09 
+9 combined   low_opp_5_8     0.9     0.793 -0.107         6.92 
+
+── Decision Rule Evaluation ────────────────────────────────────────────────────
+ℹ PRIMARY: pooled combined 80% coverage closest to nominal wins
+ℹ TIEBREAK: sharpest (narrowest 80% interval) among models within +/-2pp of nominal
+ℹ VETO: low-usage 80% delta > 10pp disqualifies regardless of pooled performance
+ℹ 3A pooled combined 80%: empirical=0.797 delta=-0.003
+ℹ 3A low-usage   combined 80%: empirical=0.649 delta=-0.151
+ℹ Sharpness summary (combined, pooled):
+ℹ 50%: width=5.37 | 80%: width=11.173 | 90%: width=15.186
+
+── Save outputs ────────────────────────────────────────────────────────────────
+✔ output/03a_lgbm_fold_predictions.csv  (11621 rows)
+✔ output/03a_lgbm_pooled_coverage.csv   (9 rows)
+✔ output/03a_lgbm_low_usage_coverage.csv (9 rows)
+
+── Step 3A complete ────────────────────────────────────────────────────────────
+Warning messages:
+1: Normalized residuals still heteroscedastic (ratio=0.55): linear scaling
+insufficient -- consider stratification 
+2: VETO TRIGGERED: low-usage bucket 80% delta = -15.1pp (threshold +-10pp) 
+
+── Step 3A-v2: Nested-Walk-Forward-Tuned LightGBM ──────────────────────────────
+ℹ Grid: 32 combos per component per fold (eff and vol tuned separately)
+ℹ Inner split: last 20% season-weeks as RMSE holdout (same as cal split)
+ℹ Construction: FROZEN Mechanism A power-law (identical to 3A/3B)
+ℹ Rubric: FROZEN (unchanged veto, decision rule, folds)
+✔ Feature table: 11918 rows | Fold map: 204 folds | Expected test rows: 11621
+
+── Walk-forward fold loop (204 folds x 32 combos x 2 components) ───────────────
+ℹ Fold 01 [2014-W06]: 63 rows | eff: leaves=7 minnode=50 lr=0.02 rds=95 | vol: leaves=31 minnode=10 lr=0.05 rds=38 | 1s
+ℹ Fold 02 [2014-W07]: 58 rows | eff: leaves=7 minnode=10 lr=0.05 rds=10 | vol: leaves=7 minnode=20 lr=0.05 rds=96 | 1s
+ℹ Fold 03 [2014-W08]: 57 rows | eff: leaves=15 minnode=10 lr=0.05 rds=10 | vol: leaves=31 minnode=10 lr=0.05 rds=55 | 1s
+ℹ Fold 04 [2014-W09]: 53 rows | eff: leaves=7 minnode=20 lr=0.05 rds=85 | vol: leaves=7 minnode=20 lr=0.05 rds=78 | 1s
+ℹ Fold 05 [2014-W10]: 53 rows | eff: leaves=7 minnode=100 lr=0.05 rds=10 | vol: leaves=7 minnode=10 lr=0.05 rds=59 | 1s
+ℹ Fold 06 [2014-W11]: 51 rows | eff: leaves=7 minnode=100 lr=0.02 rds=40 | vol: leaves=7 minnode=10 lr=0.05 rds=57 | 1s
+ℹ Fold 07 [2014-W12]: 60 rows | eff: leaves=7 minnode=20 lr=0.02 rds=10 | vol: leaves=7 minnode=10 lr=0.02 rds=170 | 1s
+ℹ Fold 08 [2014-W13]: 61 rows | eff: leaves=15 minnode=20 lr=0.05 rds=10 | vol: leaves=7 minnode=100 lr=0.05 rds=118 | 1s
+ℹ Fold 09 [2014-W14]: 58 rows | eff: leaves=7 minnode=100 lr=0.02 rds=115 | vol: leaves=7 minnode=100 lr=0.02 rds=180 | 1s
+ℹ Fold 10 [2014-W15]: 64 rows | eff: leaves=7 minnode=100 lr=0.05 rds=10 | vol: leaves=7 minnode=100 lr=0.05 rds=98 | 1s
+ℹ Fold 11 [2014-W16]: 62 rows | eff: leaves=7 minnode=10 lr=0.02 rds=19 | vol: leaves=7 minnode=100 lr=0.05 rds=98 | 1s
+ℹ Fold 12 [2014-W17]: 70 rows | eff: leaves=7 minnode=100 lr=0.02 rds=65 | vol: leaves=15 minnode=50 lr=0.05 rds=80 | 1s
+ℹ Fold 13 [2015-W01]: 60 rows | eff: leaves=15 minnode=50 lr=0.05 rds=10 | vol: leaves=7 minnode=100 lr=0.02 rds=165 | 1s
+ℹ Fold 14 [2015-W02]: 60 rows | eff: leaves=31 minnode=20 lr=0.05 rds=10 | vol: leaves=7 minnode=100 lr=0.05 rds=68 | 1s
+ℹ Fold 15 [2015-W03]: 67 rows | eff: leaves=31 minnode=10 lr=0.02 rds=45 | vol: leaves=7 minnode=50 lr=0.02 rds=75 | 1s
+ℹ Fold 16 [2015-W04]: 57 rows | eff: leaves=7 minnode=10 lr=0.02 rds=36 | vol: leaves=7 minnode=100 lr=0.02 rds=66 | 1s
+ℹ Fold 17 [2015-W05]: 59 rows | eff: leaves=7 minnode=20 lr=0.05 rds=10 | vol: leaves=7 minnode=10 lr=0.02 rds=66 | 1s
+ℹ Fold 18 [2015-W06]: 55 rows | eff: leaves=15 minnode=20 lr=0.02 rds=24 | vol: leaves=7 minnode=100 lr=0.05 rds=32 | 1s
+ℹ Fold 19 [2015-W07]: 59 rows | eff: leaves=7 minnode=20 lr=0.02 rds=50 | vol: leaves=7 minnode=100 lr=0.02 rds=127 | 1s
+ℹ Fold 20 [2015-W08]: 49 rows | eff: leaves=7 minnode=10 lr=0.05 rds=16 | vol: leaves=7 minnode=100 lr=0.05 rds=105 | 2s
+ℹ Fold 21 [2015-W09]: 45 rows | eff: leaves=7 minnode=10 lr=0.05 rds=16 | vol: leaves=7 minnode=50 lr=0.02 rds=159 | 2s
+ℹ Fold 22 [2015-W10]: 51 rows | eff: leaves=7 minnode=10 lr=0.05 rds=56 | vol: leaves=7 minnode=10 lr=0.02 rds=200 | 2s
+ℹ Fold 23 [2015-W11]: 55 rows | eff: leaves=15 minnode=10 lr=0.02 rds=75 | vol: leaves=7 minnode=100 lr=0.02 rds=196 | 2s
+ℹ Fold 24 [2015-W12]: 61 rows | eff: leaves=15 minnode=10 lr=0.02 rds=42 | vol: leaves=7 minnode=50 lr=0.05 rds=86 | 2s
+ℹ Fold 25 [2015-W13]: 68 rows | eff: leaves=15 minnode=10 lr=0.05 rds=22 | vol: leaves=7 minnode=100 lr=0.05 rds=94 | 2s
+ℹ Fold 26 [2015-W14]: 64 rows | eff: leaves=31 minnode=10 lr=0.05 rds=19 | vol: leaves=7 minnode=100 lr=0.05 rds=70 | 2s
+ℹ Fold 27 [2015-W15]: 64 rows | eff: leaves=31 minnode=10 lr=0.05 rds=20 | vol: leaves=15 minnode=50 lr=0.02 rds=118 | 2s
+ℹ Fold 28 [2015-W16]: 70 rows | eff: leaves=31 minnode=10 lr=0.02 rds=42 | vol: leaves=31 minnode=50 lr=0.02 rds=90 | 1s
+ℹ Fold 29 [2015-W17]: 68 rows | eff: leaves=7 minnode=10 lr=0.02 rds=44 | vol: leaves=15 minnode=100 lr=0.02 rds=92 | 1s
+ℹ Fold 30 [2016-W01]: 54 rows | eff: leaves=7 minnode=100 lr=0.05 rds=10 | vol: leaves=15 minnode=100 lr=0.02 rds=94 | 1s
+ℹ Fold 31 [2016-W02]: 60 rows | eff: leaves=7 minnode=100 lr=0.05 rds=29 | vol: leaves=15 minnode=100 lr=0.02 rds=94 | 1s
+ℹ Fold 32 [2016-W03]: 62 rows | eff: leaves=7 minnode=50 lr=0.05 rds=10 | vol: leaves=15 minnode=50 lr=0.05 rds=39 | 1s
+ℹ Fold 33 [2016-W04]: 56 rows | eff: leaves=31 minnode=50 lr=0.05 rds=10 | vol: leaves=7 minnode=10 lr=0.05 rds=115 | 2s
+ℹ Fold 34 [2016-W05]: 52 rows | eff: leaves=31 minnode=10 lr=0.05 rds=10 | vol: leaves=7 minnode=10 lr=0.05 rds=126 | 2s
+ℹ Fold 35 [2016-W06]: 57 rows | eff: leaves=15 minnode=100 lr=0.02 rds=25 | vol: leaves=7 minnode=50 lr=0.02 rds=174 | 2s
+ℹ Fold 36 [2016-W07]: 55 rows | eff: leaves=15 minnode=100 lr=0.02 rds=25 | vol: leaves=7 minnode=50 lr=0.02 rds=174 | 2s
+ℹ Fold 37 [2016-W08]: 47 rows | eff: leaves=7 minnode=50 lr=0.05 rds=30 | vol: leaves=7 minnode=20 lr=0.05 rds=158 | 2s
+ℹ Fold 38 [2016-W09]: 47 rows | eff: leaves=15 minnode=20 lr=0.05 rds=10 | vol: leaves=7 minnode=50 lr=0.05 rds=100 | 2s
+ℹ Fold 39 [2016-W10]: 53 rows | eff: leaves=31 minnode=10 lr=0.02 rds=31 | vol: leaves=15 minnode=20 lr=0.02 rds=135 | 2s
+ℹ Fold 40 [2016-W11]: 50 rows | eff: leaves=63 minnode=10 lr=0.05 rds=11 | vol: leaves=7 minnode=50 lr=0.05 rds=76 | 2s
+ℹ Fold 41 [2016-W12]: 59 rows | eff: leaves=31 minnode=20 lr=0.05 rds=15 | vol: leaves=7 minnode=50 lr=0.05 rds=91 | 2s
+ℹ Fold 42 [2016-W13]: 56 rows | eff: leaves=63 minnode=20 lr=0.05 rds=11 | vol: leaves=7 minnode=50 lr=0.02 rds=195 | 2s
+ℹ Fold 43 [2016-W14]: 56 rows | eff: leaves=31 minnode=10 lr=0.05 rds=25 | vol: leaves=15 minnode=100 lr=0.05 rds=92 | 2s
+ℹ Fold 44 [2016-W15]: 61 rows | eff: leaves=63 minnode=10 lr=0.02 rds=65 | vol: leaves=31 minnode=50 lr=0.05 rds=60 | 3s
+ℹ Fold 45 [2016-W16]: 61 rows | eff: leaves=31 minnode=10 lr=0.05 rds=49 | vol: leaves=31 minnode=50 lr=0.02 rds=162 | 3s
+ℹ Fold 46 [2016-W17]: 66 rows | eff: leaves=15 minnode=10 lr=0.05 rds=49 | vol: leaves=31 minnode=50 lr=0.02 rds=158 | 3s
+ℹ Fold 47 [2017-W01]: 63 rows | eff: leaves=15 minnode=20 lr=0.05 rds=40 | vol: leaves=63 minnode=50 lr=0.02 rds=137 | 3s
+ℹ Fold 48 [2017-W02]: 68 rows | eff: leaves=31 minnode=10 lr=0.02 rds=71 | vol: leaves=7 minnode=50 lr=0.05 rds=73 | 3s
+ℹ Fold 49 [2017-W03]: 64 rows | eff: leaves=15 minnode=20 lr=0.05 rds=10 | vol: leaves=7 minnode=100 lr=0.02 rds=183 | 2s
+ℹ Fold 50 [2017-W04]: 67 rows | eff: leaves=63 minnode=10 lr=0.02 rds=49 | vol: leaves=7 minnode=100 lr=0.02 rds=185 | 3s
+ℹ Fold 51 [2017-W05]: 56 rows | eff: leaves=15 minnode=10 lr=0.02 rds=78 | vol: leaves=7 minnode=100 lr=0.02 rds=186 | 3s
+ℹ Fold 52 [2017-W06]: 53 rows | eff: leaves=31 minnode=20 lr=0.05 rds=29 | vol: leaves=7 minnode=50 lr=0.02 rds=163 | 3s
+ℹ Fold 53 [2017-W07]: 60 rows | eff: leaves=63 minnode=10 lr=0.05 rds=22 | vol: leaves=7 minnode=10 lr=0.02 rds=160 | 3s
+ℹ Fold 54 [2017-W08]: 52 rows | eff: leaves=63 minnode=10 lr=0.02 rds=38 | vol: leaves=7 minnode=100 lr=0.05 rds=73 | 3s
+ℹ Fold 55 [2017-W09]: 56 rows | eff: leaves=7 minnode=50 lr=0.05 rds=42 | vol: leaves=7 minnode=10 lr=0.05 rds=76 | 3s
+ℹ Fold 56 [2017-W10]: 60 rows | eff: leaves=7 minnode=50 lr=0.05 rds=42 | vol: leaves=7 minnode=10 lr=0.05 rds=76 | 3s
+ℹ Fold 57 [2017-W11]: 59 rows | eff: leaves=31 minnode=10 lr=0.05 rds=19 | vol: leaves=7 minnode=50 lr=0.05 rds=76 | 2s
+ℹ Fold 58 [2017-W12]: 64 rows | eff: leaves=63 minnode=20 lr=0.05 rds=15 | vol: leaves=7 minnode=20 lr=0.02 rds=153 | 3s
+ℹ Fold 59 [2017-W13]: 64 rows | eff: leaves=7 minnode=100 lr=0.02 rds=80 | vol: leaves=7 minnode=10 lr=0.02 rds=199 | 3s
+ℹ Fold 60 [2017-W14]: 62 rows | eff: leaves=7 minnode=20 lr=0.02 rds=106 | vol: leaves=7 minnode=10 lr=0.05 rds=65 | 3s
+ℹ Fold 61 [2017-W15]: 68 rows | eff: leaves=7 minnode=10 lr=0.02 rds=125 | vol: leaves=7 minnode=10 lr=0.05 rds=65 | 3s
+ℹ Fold 62 [2017-W16]: 63 rows | eff: leaves=7 minnode=10 lr=0.05 rds=40 | vol: leaves=7 minnode=10 lr=0.05 rds=77 | 3s
+ℹ Fold 63 [2017-W17]: 63 rows | eff: leaves=63 minnode=10 lr=0.05 rds=22 | vol: leaves=7 minnode=10 lr=0.05 rds=96 | 3s
+ℹ Fold 64 [2018-W01]: 61 rows | eff: leaves=7 minnode=50 lr=0.02 rds=105 | vol: leaves=7 minnode=100 lr=0.02 rds=260 | 3s
+ℹ Fold 65 [2018-W02]: 64 rows | eff: leaves=7 minnode=10 lr=0.02 rds=174 | vol: leaves=7 minnode=100 lr=0.02 rds=275 | 3s
+ℹ Fold 66 [2018-W03]: 60 rows | eff: leaves=7 minnode=20 lr=0.05 rds=55 | vol: leaves=7 minnode=100 lr=0.05 rds=99 | 3s
+ℹ Fold 67 [2018-W04]: 59 rows | eff: leaves=7 minnode=100 lr=0.05 rds=46 | vol: leaves=7 minnode=100 lr=0.02 rds=255 | 4s
+ℹ Fold 68 [2018-W05]: 56 rows | eff: leaves=7 minnode=100 lr=0.02 rds=136 | vol: leaves=7 minnode=50 lr=0.05 rds=109 | 3s
+ℹ Fold 69 [2018-W06]: 57 rows | eff: leaves=7 minnode=100 lr=0.02 rds=135 | vol: leaves=15 minnode=100 lr=0.02 rds=226 | 3s
+ℹ Fold 70 [2018-W07]: 54 rows | eff: leaves=7 minnode=50 lr=0.05 rds=77 | vol: leaves=15 minnode=50 lr=0.02 rds=205 | 4s
+ℹ Fold 71 [2018-W08]: 49 rows | eff: leaves=7 minnode=50 lr=0.05 rds=77 | vol: leaves=7 minnode=20 lr=0.02 rds=284 | 3s
+ℹ Fold 72 [2018-W09]: 53 rows | eff: leaves=7 minnode=10 lr=0.05 rds=39 | vol: leaves=7 minnode=10 lr=0.05 rds=183 | 3s
+ℹ Fold 73 [2018-W10]: 54 rows | eff: leaves=7 minnode=20 lr=0.05 rds=52 | vol: leaves=7 minnode=10 lr=0.02 rds=200 | 3s
+ℹ Fold 74 [2018-W11]: 46 rows | eff: leaves=7 minnode=20 lr=0.05 rds=53 | vol: leaves=7 minnode=20 lr=0.05 rds=103 | 3s
+ℹ Fold 75 [2018-W12]: 56 rows | eff: leaves=7 minnode=20 lr=0.05 rds=44 | vol: leaves=7 minnode=100 lr=0.05 rds=83 | 3s
+ℹ Fold 76 [2018-W13]: 64 rows | eff: leaves=7 minnode=20 lr=0.05 rds=44 | vol: leaves=7 minnode=100 lr=0.05 rds=83 | 3s
+ℹ Fold 77 [2018-W14]: 60 rows | eff: leaves=7 minnode=20 lr=0.05 rds=51 | vol: leaves=7 minnode=50 lr=0.05 rds=68 | 3s
+ℹ Fold 78 [2018-W15]: 60 rows | eff: leaves=7 minnode=10 lr=0.02 rds=107 | vol: leaves=31 minnode=100 lr=0.02 rds=111 | 3s
+ℹ Fold 79 [2018-W16]: 62 rows | eff: leaves=7 minnode=20 lr=0.02 rds=125 | vol: leaves=15 minnode=10 lr=0.05 rds=45 | 3s
+ℹ Fold 80 [2018-W17]: 64 rows | eff: leaves=7 minnode=10 lr=0.05 rds=35 | vol: leaves=7 minnode=20 lr=0.05 rds=54 | 3s
+ℹ Fold 81 [2019-W01]: 63 rows | eff: leaves=7 minnode=10 lr=0.05 rds=35 | vol: leaves=7 minnode=10 lr=0.02 rds=125 | 3s
+ℹ Fold 82 [2019-W02]: 61 rows | eff: leaves=7 minnode=10 lr=0.02 rds=83 | vol: leaves=7 minnode=10 lr=0.02 rds=118 | 3s
+ℹ Fold 83 [2019-W03]: 59 rows | eff: leaves=7 minnode=20 lr=0.05 rds=81 | vol: leaves=7 minnode=10 lr=0.02 rds=137 | 3s
+ℹ Fold 84 [2019-W04]: 57 rows | eff: leaves=7 minnode=10 lr=0.02 rds=143 | vol: leaves=7 minnode=20 lr=0.02 rds=111 | 3s
+ℹ Fold 85 [2019-W05]: 57 rows | eff: leaves=7 minnode=10 lr=0.02 rds=136 | vol: leaves=7 minnode=20 lr=0.05 rds=68 | 3s
+ℹ Fold 86 [2019-W06]: 50 rows | eff: leaves=7 minnode=20 lr=0.02 rds=95 | vol: leaves=7 minnode=20 lr=0.05 rds=68 | 3s
+ℹ Fold 87 [2019-W07]: 51 rows | eff: leaves=7 minnode=10 lr=0.02 rds=130 | vol: leaves=7 minnode=10 lr=0.02 rds=190 | 3s
+ℹ Fold 88 [2019-W08]: 53 rows | eff: leaves=7 minnode=20 lr=0.05 rds=28 | vol: leaves=7 minnode=10 lr=0.02 rds=165 | 3s
+ℹ Fold 89 [2019-W09]: 49 rows | eff: leaves=7 minnode=10 lr=0.05 rds=52 | vol: leaves=7 minnode=20 lr=0.05 rds=83 | 4s
+ℹ Fold 90 [2019-W10]: 47 rows | eff: leaves=7 minnode=10 lr=0.02 rds=90 | vol: leaves=7 minnode=10 lr=0.02 rds=202 | 4s
+ℹ Fold 91 [2019-W11]: 57 rows | eff: leaves=7 minnode=10 lr=0.02 rds=100 | vol: leaves=7 minnode=10 lr=0.02 rds=202 | 4s
+ℹ Fold 92 [2019-W12]: 55 rows | eff: leaves=7 minnode=10 lr=0.05 rds=34 | vol: leaves=7 minnode=10 lr=0.02 rds=215 | 4s
+ℹ Fold 93 [2019-W13]: 59 rows | eff: leaves=7 minnode=10 lr=0.05 rds=47 | vol: leaves=7 minnode=10 lr=0.05 rds=114 | 4s
+ℹ Fold 94 [2019-W14]: 63 rows | eff: leaves=7 minnode=10 lr=0.05 rds=30 | vol: leaves=7 minnode=10 lr=0.05 rds=85 | 4s
+ℹ Fold 95 [2019-W15]: 61 rows | eff: leaves=31 minnode=10 lr=0.02 rds=40 | vol: leaves=7 minnode=20 lr=0.02 rds=205 | 4s
+ℹ Fold 96 [2019-W16]: 62 rows | eff: leaves=31 minnode=10 lr=0.02 rds=40 | vol: leaves=7 minnode=20 lr=0.02 rds=230 | 4s
+ℹ Fold 97 [2019-W17]: 59 rows | eff: leaves=7 minnode=10 lr=0.05 rds=32 | vol: leaves=7 minnode=20 lr=0.02 rds=219 | 4s
+ℹ Fold 98 [2020-W01]: 69 rows | eff: leaves=7 minnode=10 lr=0.05 rds=33 | vol: leaves=7 minnode=10 lr=0.02 rds=225 | 4s
+ℹ Fold 99 [2020-W02]: 62 rows | eff: leaves=7 minnode=10 lr=0.02 rds=85 | vol: leaves=15 minnode=10 lr=0.05 rds=86 | 4s
+ℹ Fold 100 [2020-W03]: 56 rows | eff: leaves=7 minnode=10 lr=0.02 rds=102 | vol: leaves=7 minnode=20 lr=0.05 rds=176 | 4s
+ℹ Fold 101 [2020-W04]: 60 rows | eff: leaves=7 minnode=10 lr=0.02 rds=97 | vol: leaves=7 minnode=10 lr=0.05 rds=174 | 4s
+ℹ Fold 102 [2020-W05]: 53 rows | eff: leaves=7 minnode=50 lr=0.02 rds=75 | vol: leaves=7 minnode=50 lr=0.05 rds=155 | 4s
+ℹ Fold 103 [2020-W06]: 59 rows | eff: leaves=15 minnode=100 lr=0.05 rds=16 | vol: leaves=7 minnode=20 lr=0.02 rds=282 | 4s
+ℹ Fold 104 [2020-W07]: 52 rows | eff: leaves=15 minnode=50 lr=0.05 rds=19 | vol: leaves=7 minnode=100 lr=0.02 rds=260 | 4s
+ℹ Fold 105 [2020-W08]: 55 rows | eff: leaves=15 minnode=20 lr=0.02 rds=42 | vol: leaves=15 minnode=10 lr=0.02 rds=179 | 4s
+ℹ Fold 106 [2020-W09]: 59 rows | eff: leaves=15 minnode=20 lr=0.02 rds=42 | vol: leaves=15 minnode=10 lr=0.02 rds=179 | 4s
+ℹ Fold 107 [2020-W10]: 52 rows | eff: leaves=63 minnode=20 lr=0.05 rds=10 | vol: leaves=7 minnode=20 lr=0.02 rds=252 | 4s
+ℹ Fold 108 [2020-W11]: 56 rows | eff: leaves=7 minnode=10 lr=0.02 rds=65 | vol: leaves=15 minnode=50 lr=0.05 rds=69 | 4s
+ℹ Fold 109 [2020-W12]: 62 rows | eff: leaves=7 minnode=20 lr=0.02 rds=127 | vol: leaves=15 minnode=20 lr=0.02 rds=153 | 4s
+ℹ Fold 110 [2020-W13]: 60 rows | eff: leaves=7 minnode=10 lr=0.05 rds=52 | vol: leaves=7 minnode=20 lr=0.05 rds=70 | 4s
+ℹ Fold 111 [2020-W14]: 65 rows | eff: leaves=7 minnode=10 lr=0.05 rds=52 | vol: leaves=7 minnode=20 lr=0.05 rds=70 | 4s
+ℹ Fold 112 [2020-W15]: 54 rows | eff: leaves=7 minnode=10 lr=0.02 rds=66 | vol: leaves=7 minnode=50 lr=0.05 rds=113 | 4s
+ℹ Fold 113 [2020-W16]: 55 rows | eff: leaves=15 minnode=50 lr=0.05 rds=13 | vol: leaves=7 minnode=100 lr=0.05 rds=68 | 3s
+ℹ Fold 114 [2020-W17]: 58 rows | eff: leaves=7 minnode=10 lr=0.02 rds=145 | vol: leaves=7 minnode=10 lr=0.05 rds=50 | 3s
+ℹ Fold 115 [2021-W01]: 59 rows | eff: leaves=63 minnode=100 lr=0.05 rds=29 | vol: leaves=7 minnode=10 lr=0.05 rds=48 | 4s
+ℹ Fold 116 [2021-W02]: 58 rows | eff: leaves=7 minnode=100 lr=0.05 rds=38 | vol: leaves=7 minnode=100 lr=0.05 rds=52 | 4s
+ℹ Fold 117 [2021-W03]: 58 rows | eff: leaves=15 minnode=10 lr=0.05 rds=50 | vol: leaves=7 minnode=10 lr=0.05 rds=61 | 4s
+ℹ Fold 118 [2021-W04]: 61 rows | eff: leaves=7 minnode=10 lr=0.02 rds=145 | vol: leaves=15 minnode=10 lr=0.02 rds=140 | 4s
+ℹ Fold 119 [2021-W05]: 64 rows | eff: leaves=7 minnode=20 lr=0.05 rds=79 | vol: leaves=15 minnode=100 lr=0.02 rds=130 | 4s
+ℹ Fold 120 [2021-W06]: 51 rows | eff: leaves=7 minnode=20 lr=0.05 rds=63 | vol: leaves=15 minnode=100 lr=0.05 rds=47 | 4s
+ℹ Fold 121 [2021-W07]: 50 rows | eff: leaves=7 minnode=100 lr=0.05 rds=53 | vol: leaves=15 minnode=100 lr=0.05 rds=47 | 4s
+ℹ Fold 122 [2021-W08]: 58 rows | eff: leaves=7 minnode=100 lr=0.05 rds=24 | vol: leaves=15 minnode=20 lr=0.05 rds=45 | 3s
+ℹ Fold 123 [2021-W09]: 54 rows | eff: leaves=7 minnode=100 lr=0.05 rds=47 | vol: leaves=7 minnode=100 lr=0.02 rds=127 | 4s
+ℹ Fold 124 [2021-W10]: 56 rows | eff: leaves=31 minnode=100 lr=0.05 rds=12 | vol: leaves=15 minnode=100 lr=0.05 rds=48 | 4s
+ℹ Fold 125 [2021-W11]: 53 rows | eff: leaves=7 minnode=100 lr=0.05 rds=34 | vol: leaves=7 minnode=10 lr=0.05 rds=78 | 4s
+ℹ Fold 126 [2021-W12]: 57 rows | eff: leaves=7 minnode=100 lr=0.05 rds=33 | vol: leaves=7 minnode=10 lr=0.05 rds=78 | 4s
+ℹ Fold 127 [2021-W13]: 50 rows | eff: leaves=15 minnode=20 lr=0.05 rds=27 | vol: leaves=7 minnode=100 lr=0.05 rds=50 | 4s
+ℹ Fold 128 [2021-W14]: 51 rows | eff: leaves=15 minnode=10 lr=0.02 rds=104 | vol: leaves=15 minnode=50 lr=0.05 rds=46 | 4s
+ℹ Fold 129 [2021-W15]: 59 rows | eff: leaves=63 minnode=50 lr=0.05 rds=19 | vol: leaves=15 minnode=100 lr=0.02 rds=127 | 4s
+ℹ Fold 130 [2021-W16]: 62 rows | eff: leaves=7 minnode=50 lr=0.02 rds=90 | vol: leaves=15 minnode=10 lr=0.02 rds=106 | 4s
+ℹ Fold 131 [2021-W17]: 61 rows | eff: leaves=7 minnode=20 lr=0.05 rds=41 | vol: leaves=15 minnode=10 lr=0.02 rds=106 | 4s
+ℹ Fold 132 [2021-W18]: 61 rows | eff: leaves=7 minnode=50 lr=0.05 rds=61 | vol: leaves=7 minnode=100 lr=0.02 rds=160 | 4s
+ℹ Fold 133 [2022-W01]: 61 rows | eff: leaves=15 minnode=10 lr=0.05 rds=25 | vol: leaves=7 minnode=50 lr=0.02 rds=136 | 4s
+ℹ Fold 134 [2022-W02]: 60 rows | eff: leaves=7 minnode=20 lr=0.05 rds=20 | vol: leaves=7 minnode=100 lr=0.02 rds=140 | 4s
+ℹ Fold 135 [2022-W03]: 61 rows | eff: leaves=7 minnode=20 lr=0.05 rds=35 | vol: leaves=15 minnode=100 lr=0.05 rds=66 | 4s
+ℹ Fold 136 [2022-W04]: 57 rows | eff: leaves=7 minnode=20 lr=0.05 rds=33 | vol: leaves=15 minnode=100 lr=0.05 rds=66 | 4s
+ℹ Fold 137 [2022-W05]: 61 rows | eff: leaves=7 minnode=100 lr=0.05 rds=24 | vol: leaves=7 minnode=100 lr=0.05 rds=59 | 4s
+ℹ Fold 138 [2022-W06]: 49 rows | eff: leaves=7 minnode=100 lr=0.05 rds=29 | vol: leaves=15 minnode=100 lr=0.02 rds=150 | 4s
+ℹ Fold 139 [2022-W07]: 52 rows | eff: leaves=7 minnode=50 lr=0.02 rds=110 | vol: leaves=7 minnode=100 lr=0.02 rds=175 | 4s
+ℹ Fold 140 [2022-W08]: 57 rows | eff: leaves=7 minnode=50 lr=0.02 rds=81 | vol: leaves=15 minnode=100 lr=0.05 rds=66 | 4s
+ℹ Fold 141 [2022-W09]: 48 rows | eff: leaves=15 minnode=100 lr=0.05 rds=23 | vol: leaves=15 minnode=100 lr=0.05 rds=66 | 4s
+ℹ Fold 142 [2022-W10]: 48 rows | eff: leaves=15 minnode=100 lr=0.02 rds=58 | vol: leaves=7 minnode=100 lr=0.05 rds=71 | 5s
+ℹ Fold 143 [2022-W11]: 53 rows | eff: leaves=31 minnode=50 lr=0.05 rds=11 | vol: leaves=7 minnode=20 lr=0.05 rds=92 | 5s
+ℹ Fold 144 [2022-W12]: 61 rows | eff: leaves=7 minnode=50 lr=0.05 rds=32 | vol: leaves=15 minnode=10 lr=0.02 rds=185 | 4s
+ℹ Fold 145 [2022-W13]: 53 rows | eff: leaves=31 minnode=10 lr=0.05 rds=18 | vol: leaves=7 minnode=10 lr=0.02 rds=184 | 5s
+ℹ Fold 146 [2022-W14]: 49 rows | eff: leaves=31 minnode=10 lr=0.05 rds=18 | vol: leaves=7 minnode=10 lr=0.02 rds=184 | 5s
+ℹ Fold 147 [2022-W15]: 56 rows | eff: leaves=31 minnode=20 lr=0.05 rds=14 | vol: leaves=7 minnode=20 lr=0.02 rds=207 | 4s
+ℹ Fold 148 [2022-W16]: 60 rows | eff: leaves=63 minnode=20 lr=0.05 rds=11 | vol: leaves=15 minnode=20 lr=0.05 rds=99 | 5s
+ℹ Fold 149 [2022-W17]: 61 rows | eff: leaves=15 minnode=100 lr=0.05 rds=17 | vol: leaves=7 minnode=50 lr=0.05 rds=107 | 5s
+ℹ Fold 150 [2022-W18]: 66 rows | eff: leaves=15 minnode=100 lr=0.02 rds=30 | vol: leaves=7 minnode=10 lr=0.02 rds=214 | 5s
+ℹ Fold 151 [2023-W01]: 58 rows | eff: leaves=15 minnode=100 lr=0.02 rds=34 | vol: leaves=7 minnode=20 lr=0.02 rds=200 | 5s
+ℹ Fold 152 [2023-W02]: 55 rows | eff: leaves=7 minnode=50 lr=0.05 rds=22 | vol: leaves=7 minnode=20 lr=0.05 rds=100 | 5s
+ℹ Fold 153 [2023-W03]: 62 rows | eff: leaves=31 minnode=50 lr=0.05 rds=15 | vol: leaves=7 minnode=10 lr=0.02 rds=215 | 5s
+ℹ Fold 154 [2023-W04]: 59 rows | eff: leaves=7 minnode=50 lr=0.02 rds=125 | vol: leaves=7 minnode=20 lr=0.05 rds=105 | 5s
+ℹ Fold 155 [2023-W05]: 51 rows | eff: leaves=7 minnode=20 lr=0.02 rds=66 | vol: leaves=7 minnode=10 lr=0.05 rds=114 | 5s
+ℹ Fold 156 [2023-W06]: 49 rows | eff: leaves=7 minnode=20 lr=0.02 rds=66 | vol: leaves=7 minnode=100 lr=0.05 rds=85 | 5s
+ℹ Fold 157 [2023-W07]: 46 rows | eff: leaves=15 minnode=50 lr=0.05 rds=15 | vol: leaves=15 minnode=10 lr=0.05 rds=90 | 5s
+ℹ Fold 158 [2023-W08]: 60 rows | eff: leaves=7 minnode=20 lr=0.02 rds=77 | vol: leaves=7 minnode=20 lr=0.05 rds=79 | 5s
+ℹ Fold 159 [2023-W09]: 48 rows | eff: leaves=31 minnode=50 lr=0.02 rds=28 | vol: leaves=7 minnode=20 lr=0.05 rds=80 | 5s
+ℹ Fold 160 [2023-W10]: 50 rows | eff: leaves=15 minnode=100 lr=0.02 rds=36 | vol: leaves=63 minnode=10 lr=0.05 rds=51 | 5s
+ℹ Fold 161 [2023-W11]: 52 rows | eff: leaves=15 minnode=100 lr=0.02 rds=36 | vol: leaves=63 minnode=10 lr=0.05 rds=51 | 5s
+ℹ Fold 162 [2023-W12]: 57 rows | eff: leaves=31 minnode=50 lr=0.02 rds=40 | vol: leaves=7 minnode=20 lr=0.02 rds=202 | 5s
+ℹ Fold 163 [2023-W13]: 46 rows | eff: leaves=63 minnode=20 lr=0.05 rds=10 | vol: leaves=15 minnode=20 lr=0.05 rds=72 | 5s
+ℹ Fold 164 [2023-W14]: 54 rows | eff: leaves=15 minnode=100 lr=0.05 rds=17 | vol: leaves=7 minnode=20 lr=0.05 rds=65 | 4s
+ℹ Fold 165 [2023-W15]: 67 rows | eff: leaves=31 minnode=20 lr=0.05 rds=22 | vol: leaves=31 minnode=10 lr=0.05 rds=45 | 5s
+ℹ Fold 166 [2023-W16]: 58 rows | eff: leaves=31 minnode=20 lr=0.05 rds=20 | vol: leaves=7 minnode=10 lr=0.05 rds=95 | 5s
+ℹ Fold 167 [2023-W17]: 59 rows | eff: leaves=7 minnode=100 lr=0.05 rds=24 | vol: leaves=7 minnode=100 lr=0.05 rds=103 | 5s
+ℹ Fold 168 [2023-W18]: 56 rows | eff: leaves=7 minnode=100 lr=0.02 rds=95 | vol: leaves=15 minnode=10 lr=0.05 rds=97 | 5s
+ℹ Fold 169 [2024-W01]: 53 rows | eff: leaves=31 minnode=100 lr=0.02 rds=44 | vol: leaves=15 minnode=20 lr=0.02 rds=199 | 5s
+ℹ Fold 170 [2024-W02]: 58 rows | eff: leaves=63 minnode=10 lr=0.02 rds=19 | vol: leaves=7 minnode=50 lr=0.05 rds=90 | 5s
+ℹ Fold 171 [2024-W03]: 57 rows | eff: leaves=63 minnode=10 lr=0.02 rds=19 | vol: leaves=7 minnode=50 lr=0.05 rds=90 | 5s
+ℹ Fold 172 [2024-W04]: 64 rows | eff: leaves=15 minnode=10 lr=0.05 rds=20 | vol: leaves=31 minnode=20 lr=0.02 rds=125 | 5s
+ℹ Fold 173 [2024-W05]: 53 rows | eff: leaves=63 minnode=10 lr=0.02 rds=32 | vol: leaves=15 minnode=20 lr=0.05 rds=90 | 5s
+ℹ Fold 174 [2024-W06]: 55 rows | eff: leaves=7 minnode=100 lr=0.05 rds=24 | vol: leaves=15 minnode=20 lr=0.02 rds=170 | 5s
+ℹ Fold 175 [2024-W07]: 56 rows | eff: leaves=7 minnode=20 lr=0.05 rds=20 | vol: leaves=31 minnode=50 lr=0.02 rds=126 | 5s
+ℹ Fold 176 [2024-W08]: 55 rows | eff: leaves=7 minnode=20 lr=0.05 rds=20 | vol: leaves=15 minnode=20 lr=0.02 rds=162 | 5s
+ℹ Fold 177 [2024-W09]: 59 rows | eff: leaves=7 minnode=20 lr=0.02 rds=66 | vol: leaves=63 minnode=10 lr=0.05 rds=50 | 5s
+ℹ Fold 178 [2024-W10]: 44 rows | eff: leaves=31 minnode=20 lr=0.02 rds=28 | vol: leaves=7 minnode=50 lr=0.05 rds=88 | 5s
+ℹ Fold 179 [2024-W11]: 49 rows | eff: leaves=63 minnode=20 lr=0.05 rds=18 | vol: leaves=7 minnode=20 lr=0.02 rds=246 | 5s
+ℹ Fold 180 [2024-W12]: 43 rows | eff: leaves=31 minnode=20 lr=0.02 rds=35 | vol: leaves=7 minnode=20 lr=0.05 rds=103 | 5s
+ℹ Fold 181 [2024-W13]: 58 rows | eff: leaves=31 minnode=20 lr=0.02 rds=35 | vol: leaves=7 minnode=20 lr=0.05 rds=103 | 5s
+ℹ Fold 182 [2024-W14]: 46 rows | eff: leaves=15 minnode=50 lr=0.05 rds=10 | vol: leaves=15 minnode=50 lr=0.05 rds=89 | 5s
+ℹ Fold 183 [2024-W15]: 60 rows | eff: leaves=63 minnode=20 lr=0.05 rds=10 | vol: leaves=7 minnode=50 lr=0.02 rds=244 | 5s
+ℹ Fold 184 [2024-W16]: 55 rows | eff: leaves=31 minnode=10 lr=0.02 rds=42 | vol: leaves=7 minnode=50 lr=0.05 rds=104 | 5s
+ℹ Fold 185 [2024-W17]: 57 rows | eff: leaves=7 minnode=100 lr=0.05 rds=29 | vol: leaves=7 minnode=50 lr=0.02 rds=215 | 5s
+ℹ Fold 186 [2024-W18]: 58 rows | eff: leaves=63 minnode=10 lr=0.05 rds=10 | vol: leaves=7 minnode=50 lr=0.02 rds=214 | 5s
+ℹ Fold 187 [2025-W01]: 51 rows | eff: leaves=7 minnode=50 lr=0.02 rds=100 | vol: leaves=7 minnode=50 lr=0.02 rds=214 | 6s
+ℹ Fold 188 [2025-W02]: 58 rows | eff: leaves=31 minnode=10 lr=0.02 rds=46 | vol: leaves=7 minnode=50 lr=0.02 rds=211 | 5s
+ℹ Fold 189 [2025-W03]: 61 rows | eff: leaves=31 minnode=20 lr=0.02 rds=28 | vol: leaves=7 minnode=50 lr=0.02 rds=225 | 5s
+ℹ Fold 190 [2025-W04]: 57 rows | eff: leaves=15 minnode=10 lr=0.05 rds=19 | vol: leaves=7 minnode=50 lr=0.02 rds=199 | 6s
+ℹ Fold 191 [2025-W05]: 53 rows | eff: leaves=15 minnode=10 lr=0.05 rds=19 | vol: leaves=7 minnode=50 lr=0.02 rds=199 | 6s
+ℹ Fold 192 [2025-W06]: 52 rows | eff: leaves=31 minnode=50 lr=0.05 rds=10 | vol: leaves=7 minnode=50 lr=0.05 rds=115 | 5s
+ℹ Fold 193 [2025-W07]: 52 rows | eff: leaves=7 minnode=10 lr=0.05 rds=19 | vol: leaves=7 minnode=50 lr=0.05 rds=70 | 5s
+ℹ Fold 194 [2025-W08]: 49 rows | eff: leaves=31 minnode=20 lr=0.02 rds=28 | vol: leaves=7 minnode=50 lr=0.02 rds=195 | 5s
+ℹ Fold 195 [2025-W09]: 47 rows | eff: leaves=31 minnode=20 lr=0.02 rds=40 | vol: leaves=7 minnode=50 lr=0.05 rds=74 | 5s
+ℹ Fold 196 [2025-W10]: 47 rows | eff: leaves=31 minnode=20 lr=0.02 rds=40 | vol: leaves=7 minnode=50 lr=0.05 rds=74 | 5s
+ℹ Fold 197 [2025-W11]: 54 rows | eff: leaves=7 minnode=100 lr=0.02 rds=40 | vol: leaves=7 minnode=50 lr=0.02 rds=169 | 5s
+ℹ Fold 198 [2025-W12]: 50 rows | eff: leaves=63 minnode=20 lr=0.02 rds=17 | vol: leaves=7 minnode=50 lr=0.05 rds=85 | 5s
+ℹ Fold 199 [2025-W13]: 58 rows | eff: leaves=7 minnode=100 lr=0.02 rds=54 | vol: leaves=7 minnode=100 lr=0.05 rds=76 | 6s
+ℹ Fold 200 [2025-W14]: 51 rows | eff: leaves=7 minnode=50 lr=0.02 rds=79 | vol: leaves=7 minnode=50 lr=0.02 rds=215 | 6s
+ℹ Fold 201 [2025-W15]: 58 rows | eff: leaves=7 minnode=50 lr=0.02 rds=79 | vol: leaves=7 minnode=20 lr=0.05 rds=95 | 6s
+ℹ Fold 202 [2025-W16]: 60 rows | eff: leaves=7 minnode=20 lr=0.02 rds=92 | vol: leaves=7 minnode=100 lr=0.05 rds=99 | 6s
+ℹ Fold 203 [2025-W17]: 55 rows | eff: leaves=7 minnode=20 lr=0.05 rds=38 | vol: leaves=7 minnode=100 lr=0.02 rds=179 | 5s
+ℹ Fold 204 [2025-W18]: 60 rows | eff: leaves=7 minnode=10 lr=0.02 rds=67 | vol: leaves=7 minnode=50 lr=0.05 rds=124 | 6s
+
+── Harness Integrity Report ────────────────────────────────────────────────────
+✔ All 204 folds completed
+✔ Row count: 11621 / 11621
+✔ Zero NA predictions
+✔ Inner tuning: all 32 combos per component per fold scored on inner holdout only
+✔ Outer test: each fold scored exactly once after param selection
+ℹ alpha_fold range [0.2, 0.845] | median 0.531
+
+── Selected Hyperparameters (tuning audit) ─────────────────────────────────────
+# A tibble: 204 × 11
+     fold eff_num_leaves eff_lr eff_min_node eff_rounds eff_inner_rmse
+    <int>          <int>  <dbl>        <int>      <int>          <dbl>
+  1     1              7   0.02           50         95          0.314
+  2     2              7   0.05           10          8          0.369
+  3     3             15   0.05           10          6          0.289
+  4     4              7   0.05           20         85          0.291
+  5     5              7   0.05          100         10          0.329
+  6     6              7   0.02          100         40          0.336
+  7     7              7   0.02           20         10          0.340
+  8     8             15   0.05           20          3          0.308
+  9     9              7   0.02          100        115          0.287
+ 10    10              7   0.05          100          5          0.280
+ 11    11              7   0.02           10         19          0.278
+ 12    12              7   0.02          100         65          0.282
+ 13    13             15   0.05           50          5          0.287
+ 14    14             31   0.05           20          9          0.282
+ 15    15             31   0.02           10         45          0.268
+ 16    16              7   0.02           10         36          0.276
+ 17    17              7   0.05           20          3          0.294
+ 18    18             15   0.02           20         24          0.322
+ 19    19              7   0.02           20         50          0.331
+ 20    20              7   0.05           10         16          0.337
+ 21    21              7   0.05           10         16          0.320
+ 22    22              7   0.05           10         56          0.318
+ 23    23             15   0.02           10         75          0.301
+ 24    24             15   0.02           10         42          0.320
+ 25    25             15   0.05           10         22          0.320
+ 26    26             31   0.05           10         19          0.313
+ 27    27             31   0.05           10         20          0.324
+ 28    28             31   0.02           10         42          0.338
+ 29    29              7   0.02           10         44          0.335
+ 30    30              7   0.05          100          6          0.334
+ 31    31              7   0.05          100         29          0.334
+ 32    32              7   0.05           50          7          0.329
+ 33    33             31   0.05           50          2          0.336
+ 34    34             31   0.05           10          5          0.334
+ 35    35             15   0.02          100         25          0.317
+ 36    36             15   0.02          100         25          0.315
+ 37    37              7   0.05           50         30          0.327
+ 38    38             15   0.05           20         10          0.312
+ 39    39             31   0.02           10         31          0.306
+ 40    40             63   0.05           10         11          0.300
+ 41    41             31   0.05           20         15          0.301
+ 42    42             63   0.05           20         11          0.294
+ 43    43             31   0.05           10         25          0.302
+ 44    44             63   0.02           10         65          0.298
+ 45    45             31   0.05           10         49          0.300
+ 46    46             15   0.05           10         49          0.299
+ 47    47             15   0.05           20         40          0.306
+ 48    48             31   0.02           10         71          0.303
+ 49    49             15   0.05           20          6          0.316
+ 50    50             63   0.02           10         49          0.328
+ 51    51             15   0.02           10         78          0.330
+ 52    52             31   0.05           20         29          0.327
+ 53    53             63   0.05           10         22          0.330
+ 54    54             63   0.02           10         38          0.324
+ 55    55              7   0.05           50         42          0.326
+ 56    56              7   0.05           50         42          0.325
+ 57    57             31   0.05           10         19          0.329
+ 58    58             63   0.05           20         15          0.330
+ 59    59              7   0.02          100         80          0.327
+ 60    60              7   0.02           20        106          0.338
+ 61    61              7   0.02           10        125          0.337
+ 62    62              7   0.05           10         40          0.329
+ 63    63             63   0.05           10         22          0.328
+ 64    64              7   0.02           50        105          0.32 
+ 65    65              7   0.02           10        174          0.324
+ 66    66              7   0.05           20         55          0.324
+ 67    67              7   0.05          100         46          0.323
+ 68    68              7   0.02          100        136          0.327
+ 69    69              7   0.02          100        135          0.333
+ 70    70              7   0.05           50         77          0.334
+ 71    71              7   0.05           50         77          0.331
+ 72    72              7   0.05           10         39          0.325
+ 73    73              7   0.05           20         52          0.327
+ 74    74              7   0.05           20         53          0.327
+ 75    75              7   0.05           20         44          0.319
+ 76    76              7   0.05           20         44          0.319
+ 77    77              7   0.05           20         51          0.321
+ 78    78              7   0.02           10        107          0.321
+ 79    79              7   0.02           20        125          0.319
+ 80    80              7   0.05           10         35          0.324
+ 81    81              7   0.05           10         35          0.324
+ 82    82              7   0.02           10         83          0.327
+ 83    83              7   0.05           20         81          0.328
+ 84    84              7   0.02           10        143          0.330
+ 85    85              7   0.02           10        136          0.326
+ 86    86              7   0.02           20         95          0.325
+ 87    87              7   0.02           10        130          0.324
+ 88    88              7   0.05           20         28          0.322
+ 89    89              7   0.05           10         52          0.328
+ 90    90              7   0.02           10         90          0.331
+ 91    91              7   0.02           10        100          0.330
+ 92    92              7   0.05           10         34          0.328
+ 93    93              7   0.05           10         47          0.323
+ 94    94              7   0.05           10         30          0.324
+ 95    95             31   0.02           10         40          0.327
+ 96    96             31   0.02           10         40          0.329
+ 97    97              7   0.05           10         32          0.329
+ 98    98              7   0.05           10         33          0.328
+ 99    99              7   0.02           10         85          0.327
+100   100              7   0.02           10        102          0.324
+101   101              7   0.02           10         97          0.321
+102   102              7   0.02           50         75          0.321
+103   103             15   0.05          100         16          0.317
+104   104             15   0.05           50         19          0.317
+105   105             15   0.02           20         42          0.316
+106   106             15   0.02           20         42          0.314
+107   107             63   0.05           20          9          0.320
+108   108              7   0.02           10         65          0.322
+109   109              7   0.02           20        127          0.319
+110   110              7   0.05           10         52          0.328
+111   111              7   0.05           10         52          0.329
+112   112              7   0.02           10         66          0.328
+113   113             15   0.05           50         13          0.326
+114   114              7   0.02           10        145          0.325
+115   115             63   0.05          100         29          0.326
+116   116              7   0.05          100         38          0.322
+117   117             15   0.05           10         50          0.323
+118   118              7   0.02           10        145          0.323
+119   119              7   0.05           20         79          0.322
+120   120              7   0.05           20         63          0.319
+121   121              7   0.05          100         53          0.319
+122   122              7   0.05          100         24          0.320
+123   123              7   0.05          100         47          0.321
+124   124             31   0.05          100         12          0.322
+125   125              7   0.05          100         34          0.323
+126   126              7   0.05          100         33          0.320
+127   127             15   0.05           20         27          0.320
+128   128             15   0.02           10        104          0.324
+129   129             63   0.05           50         19          0.323
+130   130              7   0.02           50         90          0.323
+131   131              7   0.05           20         41          0.326
+132   132              7   0.05           50         61          0.323
+133   133             15   0.05           10         25          0.325
+134   134              7   0.05           20         20          0.322
+135   135              7   0.05           20         35          0.320
+136   136              7   0.05           20         33          0.319
+137   137              7   0.05          100         24          0.318
+138   138              7   0.05          100         29          0.311
+139   139              7   0.02           50        110          0.310
+140   140              7   0.02           50         81          0.307
+141   141             15   0.05          100         23          0.309
+142   142             15   0.02          100         58          0.309
+143   143             31   0.05           50         11          0.308
+144   144              7   0.05           50         32          0.307
+145   145             31   0.05           10         18          0.31 
+146   146             31   0.05           10         18          0.310
+147   147             31   0.05           20         14          0.313
+148   148             63   0.05           20         11          0.316
+149   149             15   0.05          100         17          0.314
+150   150             15   0.02          100         30          0.316
+151   151             15   0.02          100         34          0.317
+152   152              7   0.05           50         22          0.317
+153   153             31   0.05           50         15          0.318
+154   154              7   0.02           50        125          0.319
+155   155              7   0.02           20         66          0.319
+156   156              7   0.02           20         66          0.322
+157   157             15   0.05           50         15          0.320
+158   158              7   0.02           20         77          0.320
+159   159             31   0.02           50         28          0.320
+160   160             15   0.02          100         36          0.318
+161   161             15   0.02          100         36          0.317
+162   162             31   0.02           50         40          0.315
+163   163             63   0.05           20          8          0.315
+164   164             15   0.05          100         17          0.310
+165   165             31   0.05           20         22          0.309
+166   166             31   0.05           20         20          0.312
+167   167              7   0.05          100         24          0.310
+168   168              7   0.02          100         95          0.312
+169   169             31   0.02          100         44          0.313
+170   170             63   0.02           10         19          0.313
+171   171             63   0.02           10         19          0.313
+172   172             15   0.05           10         20          0.315
+173   173             63   0.02           10         32          0.319
+174   174              7   0.05          100         24          0.319
+175   175              7   0.05           20         20          0.320
+176   176              7   0.05           20         20          0.323
+177   177              7   0.02           20         66          0.320
+178   178             31   0.02           20         28          0.321
+179   179             63   0.05           20         18          0.321
+180   180             31   0.02           20         35          0.321
+181   181             31   0.02           20         35          0.322
+182   182             15   0.05           50         10          0.322
+183   183             63   0.05           20          9          0.322
+184   184             31   0.02           10         42          0.323
+185   185              7   0.05          100         29          0.321
+186   186             63   0.05           10          8          0.320
+187   187              7   0.02           50        100          0.321
+188   188             31   0.02           10         46          0.319
+189   189             31   0.02           20         28          0.319
+190   190             15   0.05           10         19          0.319
+191   191             15   0.05           10         19          0.317
+192   192             31   0.05           50          9          0.316
+193   193              7   0.05           10         19          0.314
+194   194             31   0.02           20         28          0.315
+195   195             31   0.02           20         40          0.315
+196   196             31   0.02           20         40          0.315
+197   197              7   0.02          100         40          0.316
+198   198             63   0.02           20         17          0.315
+199   199              7   0.02          100         54          0.318
+200   200              7   0.02           50         79          0.316
+201   201              7   0.02           50         79          0.316
+202   202              7   0.02           20         92          0.317
+203   203              7   0.05           20         38          0.317
+204   204              7   0.02           10         67          0.319
+# ℹ 5 more variables: vol_num_leaves <int>, vol_lr <dbl>, vol_min_node <int>,
+#   vol_rounds <int>, vol_inner_rmse <dbl>
+
+── Summary across 31 folds ──
+
+ℹ --- EFFICIENCY ---
+ℹ   num_leaves: mode=7 | counts: 7=111 | 15=36 | 31=37 | 63=20
+ℹ   min_data_in_leaf: mode=10 | counts: 10=75 | 20=59 | 50=31 | 100=39
+ℹ   lr: counts: 0.02=89 | 0.05=115
+ℹ   rounds (refit): median=360 | range [20, 1740]
+ℹ --- VOLUME ---
+ℹ   num_leaves: mode=7 | counts: 7=149 | 15=41 | 31=10 | 63=4
+ℹ   min_data_in_leaf: mode=10 | counts: 10=56 | 20=42 | 50=52 | 100=54
+ℹ   lr: counts: 0.02=93 | 0.05=111
+ℹ   rounds (refit): median=1050 | range [320, 2840]
+
+── Default (3A) vs data-chosen (3A-v2) ──
+
+ℹ 3A used: num_leaves=31, min_data_in_leaf=20, lr=0.05, rounds=200 (fixed)
+ℹ 3A-v2 efficiency modal: leaves=7 | minnode=10 | lr_mode=0.05
+ℹ 3A-v2 volume modal:     leaves=7 | minnode=10 | lr_mode=0.05
+
+── 3A-v2 Pooled Coverage (all 11621 test rows) ─────────────────────────────────
+# A tibble: 9 × 6
+  component  stratum nominal empirical     delta sharpness
+  <chr>      <chr>     <dbl>     <dbl>     <dbl>     <dbl>
+1 efficiency pooled      0.5     0.501  0.000559     0.360
+2 efficiency pooled      0.8     0.796 -0.00411      0.726
+3 efficiency pooled      0.9     0.899 -0.00128      0.991
+4 volume     pooled      0.5     0.501  0.00125      7.41 
+5 volume     pooled      0.8     0.800 -0.000241    13.6  
+6 volume     pooled      0.9     0.898 -0.00163     18.0  
+7 combined   pooled      0.5     0.498 -0.00185      4.66 
+8 combined   pooled      0.8     0.797 -0.00317      9.24 
+9 combined   pooled      0.9     0.899 -0.00111     12.5  
+
+── 3A-v2 Low-Usage Bucket (opp 5-8) ────────────────────────────────────────────
+ℹ Low-usage rows: 3049
+# A tibble: 9 × 6
+  component  stratum     nominal empirical    delta sharpness
+  <chr>      <chr>         <dbl>     <dbl>    <dbl>     <dbl>
+1 efficiency low_opp_5_8     0.5     0.383 -0.117       0.360
+2 efficiency low_opp_5_8     0.8     0.670 -0.130       0.726
+3 efficiency low_opp_5_8     0.9     0.801 -0.0994      0.992
+4 volume     low_opp_5_8     0.5     0.358 -0.142       7.40 
+5 volume     low_opp_5_8     0.8     0.787 -0.0132     13.6  
+6 volume     low_opp_5_8     0.9     0.907  0.00653    18.0  
+7 combined   low_opp_5_8     0.5     0.501  0.00115     3.14 
+8 combined   low_opp_5_8     0.8     0.792 -0.00761     6.23 
+9 combined   low_opp_5_8     0.9     0.891 -0.00922     8.42 
+
+── Stratified combined coverage at 80% (sharpness honesty check) ──
+
+# A tibble: 3 × 6
+  stratum         n empirical    delta sharpness delta_pp
+  <fct>       <int>     <dbl>    <dbl>     <dbl> <chr>   
+1 low  (5-8)   3049     0.792 -0.00761      6.23 -0.8pp  
+2 mid  (9-13)  3009     0.799 -0.00106      8.27 -0.1pp  
+3 high (14+)   5563     0.798 -0.00187     11.4  -0.2pp  
+── Comparison: 3A-v2 vs 3A vs 3B (partial; 3D follows when TabPFN is ready) ────
+
+── Rubric table (pooled + low-usage combined) ──
+
+ℹ model                    | stratum | 80% delta | 80% width | veto
+ℹ     3A-LightGBM(default) | low_opp_5_8 | -15.1pp | 5.094 | TRIGGER
+ℹ    3A-v2-LightGBM(tuned) | low_opp_5_8 | -0.8pp | 6.231 | pass
+ℹ      3B-RF               | low_opp_5_8 | +1.9pp | 6.921 | pass
+ℹ     3A-LightGBM(default) |  pooled | -0.3pp | 11.173 | pass
+ℹ    3A-v2-LightGBM(tuned) |  pooled | -0.3pp | 9.242 | pass
+ℹ      3B-RF               |  pooled | +0.6pp | 10.153 | pass
+
+── Sharpness head-to-head (contested axis) -- combined, pooled ──
+
+ℹ A sharpness gain is real only if coverage holds per stratum:
+ℹ model                    | stratum | n   | 80% delta | 80% width
+ℹ     3A-LightGBM(default) | high (14+) | 5563 | +8.8pp | 15.887
+ℹ    3A-v2-LightGBM(tuned) | high (14+) | 5563 | -0.2pp | 11.417
+ℹ      3B-RF               | high (14+) |  827 | +0.7pp | 12.379
+ℹ     3A-LightGBM(default) | low  (5-8) | 3049 | -15.1pp | 5.094
+ℹ    3A-v2-LightGBM(tuned) | low  (5-8) | 3049 | -0.8pp | 6.231
+ℹ      3B-RF               | low  (5-8) |  432 | +1.9pp | 6.921
+ℹ     3A-LightGBM(default) | mid  (9-13) | 3009 | -2.2pp | 8.618
+ℹ    3A-v2-LightGBM(tuned) | mid  (9-13) | 3009 | -0.1pp | 8.271
+ℹ      3B-RF               | mid  (9-13) |  423 | -0.8pp | 9.101
+
+── Low-opp efficiency 80% -- how much of 3A's -8.7pp was tuning vs family? ──
+
+ℹ     3A-LightGBM(default): delta=-12.7pp | width=0.776
+ℹ      3B-RF              : delta=-10.8pp | width=0.782
+ℹ    3A-v2-LightGBM(tuned): delta=-13.0pp | width=0.726
+
+── Rubric Decision: 3A-v2 vs current leader (3B) ───────────────────────────────
+✔ 3A-v2 veto passed: -0.8pp
+✔ Both within +-2pp; 3A-v2 narrower (tiebreak): 3A-v2 WINS -- tuned booster beats RF
+
+── Save outputs ────────────────────────────────────────────────────────────────
+✔ output/03a_v2_lgbm_fold_predictions.csv  (11621 rows)
+✔ output/03a_v2_lgbm_pooled_coverage.csv
+✔ output/03a_v2_lgbm_low_usage_coverage.csv
+✔ output/03a_v2_lgbm_tune_log.csv  (full per-fold param audit)
+
+── Step 3A-v2 complete -- 3D (TabPFN) follows when TABPFN_TOKEN is set ─────────
+
+── Step 3B: Random Forest + Conformal (learner comparison) ─────────────────────
+ℹ Efficiency: Random Forest (ranger, 500 trees, mtry=sqrt(p)=3)
+ℹ Volume: LightGBM (frozen -- identical to 3A)
+ℹ Combined: Mechanism A power-law conformal (frozen construction)
+✔ Feature table: 11918 rows x 30 cols
+✔ Fold map: 204 folds | Expected test rows: 11621
+
+── Walk-forward fold loop ──────────────────────────────────────────────────────
+ℹ Fold 01 [2014-W06]: 63 rows | alpha=0.225 | cal_sw=1 (59 rows)
+ℹ Fold 02 [2014-W07]: 58 rows | alpha=0.2 | cal_sw=1 (63 rows)
+ℹ Fold 03 [2014-W08]: 57 rows | alpha=0.311 | cal_sw=1 (58 rows)
+ℹ Fold 04 [2014-W09]: 53 rows | alpha=0.231 | cal_sw=1 (57 rows)
+ℹ Fold 05 [2014-W10]: 53 rows | alpha=0.2 | cal_sw=1 (53 rows)
+ℹ Fold 06 [2014-W11]: 51 rows | alpha=0.311 | cal_sw=2 (106 rows)
+ℹ Fold 07 [2014-W12]: 60 rows | alpha=0.455 | cal_sw=2 (104 rows)
+ℹ Fold 08 [2014-W13]: 61 rows | alpha=0.282 | cal_sw=2 (111 rows)
+ℹ Fold 09 [2014-W14]: 58 rows | alpha=0.321 | cal_sw=2 (121 rows)
+ℹ Fold 10 [2014-W15]: 64 rows | alpha=0.326 | cal_sw=2 (119 rows)
+ℹ Fold 11 [2014-W16]: 62 rows | alpha=0.483 | cal_sw=3 (183 rows)
+ℹ Fold 12 [2014-W17]: 70 rows | alpha=0.492 | cal_sw=3 (184 rows)
+ℹ Fold 13 [2015-W01]: 60 rows | alpha=0.456 | cal_sw=3 (196 rows)
+ℹ Fold 14 [2015-W02]: 60 rows | alpha=0.405 | cal_sw=3 (192 rows)
+ℹ Fold 15 [2015-W03]: 67 rows | alpha=0.395 | cal_sw=3 (190 rows)
+ℹ Fold 16 [2015-W04]: 57 rows | alpha=0.437 | cal_sw=4 (257 rows)
+ℹ Fold 17 [2015-W05]: 59 rows | alpha=0.611 | cal_sw=4 (244 rows)
+ℹ Fold 18 [2015-W06]: 55 rows | alpha=0.59 | cal_sw=4 (243 rows)
+ℹ Fold 19 [2015-W07]: 59 rows | alpha=0.707 | cal_sw=4 (238 rows)
+ℹ Fold 20 [2015-W08]: 49 rows | alpha=0.601 | cal_sw=4 (230 rows)
+ℹ Fold 21 [2015-W09]: 45 rows | alpha=0.593 | cal_sw=5 (279 rows)
+ℹ Fold 22 [2015-W10]: 51 rows | alpha=0.568 | cal_sw=5 (267 rows)
+ℹ Fold 23 [2015-W11]: 55 rows | alpha=0.47 | cal_sw=5 (259 rows)
+ℹ Fold 24 [2015-W12]: 61 rows | alpha=0.449 | cal_sw=5 (259 rows)
+ℹ Fold 25 [2015-W13]: 68 rows | alpha=0.395 | cal_sw=5 (261 rows)
+ℹ Fold 26 [2015-W14]: 64 rows | alpha=0.373 | cal_sw=6 (329 rows)
+ℹ Fold 27 [2015-W15]: 64 rows | alpha=0.365 | cal_sw=6 (344 rows)
+ℹ Fold 28 [2015-W16]: 70 rows | alpha=0.401 | cal_sw=6 (363 rows)
+ℹ Fold 29 [2015-W17]: 68 rows | alpha=0.543 | cal_sw=6 (382 rows)
+ℹ Fold 30 [2016-W01]: 54 rows | alpha=0.417 | cal_sw=6 (395 rows)
+ℹ Fold 31 [2016-W02]: 60 rows | alpha=0.484 | cal_sw=7 (449 rows)
+ℹ Fold 32 [2016-W03]: 62 rows | alpha=0.539 | cal_sw=7 (448 rows)
+ℹ Fold 33 [2016-W04]: 56 rows | alpha=0.503 | cal_sw=7 (442 rows)
+ℹ Fold 34 [2016-W05]: 52 rows | alpha=0.472 | cal_sw=7 (434 rows)
+ℹ Fold 35 [2016-W06]: 57 rows | alpha=0.444 | cal_sw=7 (422 rows)
+ℹ Fold 36 [2016-W07]: 55 rows | alpha=0.425 | cal_sw=8 (479 rows)
+ℹ Fold 37 [2016-W08]: 47 rows | alpha=0.265 | cal_sw=8 (464 rows)
+ℹ Fold 38 [2016-W09]: 47 rows | alpha=0.2 | cal_sw=8 (443 rows)
+ℹ Fold 39 [2016-W10]: 53 rows | alpha=0.206 | cal_sw=8 (436 rows)
+ℹ Fold 40 [2016-W11]: 50 rows | alpha=0.267 | cal_sw=8 (429 rows)
+ℹ Fold 41 [2016-W12]: 59 rows | alpha=0.292 | cal_sw=9 (479 rows)
+ℹ Fold 42 [2016-W13]: 56 rows | alpha=0.491 | cal_sw=9 (476 rows)
+ℹ Fold 43 [2016-W14]: 56 rows | alpha=0.467 | cal_sw=9 (476 rows)
+ℹ Fold 44 [2016-W15]: 61 rows | alpha=0.5 | cal_sw=9 (480 rows)
+ℹ Fold 45 [2016-W16]: 61 rows | alpha=0.541 | cal_sw=9 (484 rows)
+ℹ Fold 46 [2016-W17]: 66 rows | alpha=0.504 | cal_sw=10 (545 rows)
+ℹ Fold 47 [2017-W01]: 63 rows | alpha=0.528 | cal_sw=10 (556 rows)
+ℹ Fold 48 [2017-W02]: 68 rows | alpha=0.529 | cal_sw=10 (572 rows)
+ℹ Fold 49 [2017-W03]: 64 rows | alpha=0.361 | cal_sw=10 (593 rows)
+ℹ Fold 50 [2017-W04]: 67 rows | alpha=0.409 | cal_sw=10 (604 rows)
+ℹ Fold 51 [2017-W05]: 56 rows | alpha=0.361 | cal_sw=11 (671 rows)
+ℹ Fold 52 [2017-W06]: 53 rows | alpha=0.355 | cal_sw=11 (677 rows)
+ℹ Fold 53 [2017-W07]: 60 rows | alpha=0.281 | cal_sw=11 (671 rows)
+ℹ Fold 54 [2017-W08]: 52 rows | alpha=0.334 | cal_sw=11 (675 rows)
+ℹ Fold 55 [2017-W09]: 56 rows | alpha=0.314 | cal_sw=11 (671 rows)
+ℹ Fold 56 [2017-W10]: 60 rows | alpha=0.343 | cal_sw=12 (727 rows)
+ℹ Fold 57 [2017-W11]: 59 rows | alpha=0.379 | cal_sw=12 (726 rows)
+ℹ Fold 58 [2017-W12]: 64 rows | alpha=0.434 | cal_sw=12 (724 rows)
+ℹ Fold 59 [2017-W13]: 64 rows | alpha=0.447 | cal_sw=12 (722 rows)
+ℹ Fold 60 [2017-W14]: 62 rows | alpha=0.456 | cal_sw=12 (723 rows)
+ℹ Fold 61 [2017-W15]: 68 rows | alpha=0.426 | cal_sw=13 (785 rows)
+ℹ Fold 62 [2017-W16]: 63 rows | alpha=0.522 | cal_sw=13 (785 rows)
+ℹ Fold 63 [2017-W17]: 63 rows | alpha=0.516 | cal_sw=13 (784 rows)
+ℹ Fold 64 [2018-W01]: 61 rows | alpha=0.599 | cal_sw=13 (780 rows)
+ℹ Fold 65 [2018-W02]: 64 rows | alpha=0.477 | cal_sw=13 (785 rows)
+ℹ Fold 66 [2018-W03]: 60 rows | alpha=0.479 | cal_sw=14 (849 rows)
+ℹ Fold 67 [2018-W04]: 59 rows | alpha=0.465 | cal_sw=14 (856 rows)
+ℹ Fold 68 [2018-W05]: 56 rows | alpha=0.483 | cal_sw=14 (855 rows)
+ℹ Fold 69 [2018-W06]: 57 rows | alpha=0.487 | cal_sw=14 (859 rows)
+ℹ Fold 70 [2018-W07]: 54 rows | alpha=0.48 | cal_sw=14 (860 rows)
+ℹ Fold 71 [2018-W08]: 49 rows | alpha=0.477 | cal_sw=15 (914 rows)
+ℹ Fold 72 [2018-W09]: 53 rows | alpha=0.452 | cal_sw=15 (903 rows)
+ℹ Fold 73 [2018-W10]: 54 rows | alpha=0.45 | cal_sw=15 (897 rows)
+ℹ Fold 74 [2018-W11]: 46 rows | alpha=0.493 | cal_sw=15 (887 rows)
+ℹ Fold 75 [2018-W12]: 56 rows | alpha=0.504 | cal_sw=15 (869 rows)
+ℹ Fold 76 [2018-W13]: 64 rows | alpha=0.508 | cal_sw=16 (925 rows)
+ℹ Fold 77 [2018-W14]: 60 rows | alpha=0.487 | cal_sw=16 (927 rows)
+ℹ Fold 78 [2018-W15]: 60 rows | alpha=0.479 | cal_sw=16 (919 rows)
+ℹ Fold 79 [2018-W16]: 62 rows | alpha=0.434 | cal_sw=16 (916 rows)
+ℹ Fold 80 [2018-W17]: 64 rows | alpha=0.506 | cal_sw=16 (915 rows)
+ℹ Fold 81 [2019-W01]: 63 rows | alpha=0.494 | cal_sw=17 (979 rows)
+ℹ Fold 82 [2019-W02]: 61 rows | alpha=0.49 | cal_sw=17 (981 rows)
+ℹ Fold 83 [2019-W03]: 59 rows | alpha=0.43 | cal_sw=17 (978 rows)
+ℹ Fold 84 [2019-W04]: 57 rows | alpha=0.483 | cal_sw=17 (977 rows)
+ℹ Fold 85 [2019-W05]: 57 rows | alpha=0.489 | cal_sw=17 (975 rows)
+ℹ Fold 86 [2019-W06]: 50 rows | alpha=0.498 | cal_sw=18 (1032 rows)
+ℹ Fold 87 [2019-W07]: 51 rows | alpha=0.54 | cal_sw=18 (1026 rows)
+ℹ Fold 88 [2019-W08]: 53 rows | alpha=0.502 | cal_sw=18 (1020 rows)
+ℹ Fold 89 [2019-W09]: 49 rows | alpha=0.482 | cal_sw=18 (1019 rows)
+ℹ Fold 90 [2019-W10]: 47 rows | alpha=0.464 | cal_sw=18 (1019 rows)
+ℹ Fold 91 [2019-W11]: 57 rows | alpha=0.484 | cal_sw=19 (1066 rows)
+ℹ Fold 92 [2019-W12]: 55 rows | alpha=0.417 | cal_sw=19 (1070 rows)
+ℹ Fold 93 [2019-W13]: 59 rows | alpha=0.463 | cal_sw=19 (1071 rows)
+ℹ Fold 94 [2019-W14]: 63 rows | alpha=0.427 | cal_sw=19 (1084 rows)
+ℹ Fold 95 [2019-W15]: 61 rows | alpha=0.41 | cal_sw=19 (1091 rows)
+ℹ Fold 96 [2019-W16]: 62 rows | alpha=0.409 | cal_sw=20 (1152 rows)
+ℹ Fold 97 [2019-W17]: 59 rows | alpha=0.478 | cal_sw=20 (1150 rows)
+ℹ Fold 98 [2020-W01]: 69 rows | alpha=0.476 | cal_sw=20 (1149 rows)
+ℹ Fold 99 [2020-W02]: 62 rows | alpha=0.494 | cal_sw=20 (1158 rows)
+ℹ Fold 100 [2020-W03]: 56 rows | alpha=0.44 | cal_sw=20 (1158 rows)
+ℹ Fold 101 [2020-W04]: 60 rows | alpha=0.451 | cal_sw=21 (1214 rows)
+ℹ Fold 102 [2020-W05]: 53 rows | alpha=0.482 | cal_sw=21 (1210 rows)
+ℹ Fold 103 [2020-W06]: 59 rows | alpha=0.466 | cal_sw=21 (1200 rows)
+ℹ Fold 104 [2020-W07]: 52 rows | alpha=0.497 | cal_sw=21 (1198 rows)
+ℹ Fold 105 [2020-W08]: 55 rows | alpha=0.474 | cal_sw=21 (1191 rows)
+ℹ Fold 106 [2020-W09]: 59 rows | alpha=0.471 | cal_sw=22 (1246 rows)
+ℹ Fold 107 [2020-W10]: 52 rows | alpha=0.454 | cal_sw=22 (1248 rows)
+ℹ Fold 108 [2020-W11]: 56 rows | alpha=0.385 | cal_sw=22 (1243 rows)
+ℹ Fold 109 [2020-W12]: 62 rows | alpha=0.446 | cal_sw=22 (1249 rows)
+ℹ Fold 110 [2020-W13]: 60 rows | alpha=0.467 | cal_sw=22 (1260 rows)
+ℹ Fold 111 [2020-W14]: 65 rows | alpha=0.468 | cal_sw=23 (1320 rows)
+ℹ Fold 112 [2020-W15]: 54 rows | alpha=0.472 | cal_sw=23 (1332 rows)
+ℹ Fold 113 [2020-W16]: 55 rows | alpha=0.459 | cal_sw=23 (1337 rows)
+ℹ Fold 114 [2020-W17]: 58 rows | alpha=0.457 | cal_sw=23 (1345 rows)
+ℹ Fold 115 [2021-W01]: 59 rows | alpha=0.454 | cal_sw=23 (1346 rows)
+ℹ Fold 116 [2021-W02]: 58 rows | alpha=0.458 | cal_sw=24 (1405 rows)
+ℹ Fold 117 [2021-W03]: 58 rows | alpha=0.454 | cal_sw=24 (1408 rows)
+ℹ Fold 118 [2021-W04]: 61 rows | alpha=0.498 | cal_sw=24 (1407 rows)
+ℹ Fold 119 [2021-W05]: 64 rows | alpha=0.501 | cal_sw=24 (1405 rows)
+ℹ Fold 120 [2021-W06]: 51 rows | alpha=0.503 | cal_sw=24 (1408 rows)
+ℹ Fold 121 [2021-W07]: 50 rows | alpha=0.503 | cal_sw=25 (1459 rows)
+ℹ Fold 122 [2021-W08]: 58 rows | alpha=0.502 | cal_sw=25 (1447 rows)
+ℹ Fold 123 [2021-W09]: 54 rows | alpha=0.48 | cal_sw=25 (1446 rows)
+ℹ Fold 124 [2021-W10]: 56 rows | alpha=0.522 | cal_sw=25 (1431 rows)
+ℹ Fold 125 [2021-W11]: 53 rows | alpha=0.515 | cal_sw=25 (1425 rows)
+ℹ Fold 126 [2021-W12]: 57 rows | alpha=0.494 | cal_sw=26 (1478 rows)
+ℹ Fold 127 [2021-W13]: 50 rows | alpha=0.516 | cal_sw=26 (1479 rows)
+ℹ Fold 128 [2021-W14]: 51 rows | alpha=0.474 | cal_sw=26 (1469 rows)
+ℹ Fold 129 [2021-W15]: 59 rows | alpha=0.481 | cal_sw=26 (1467 rows)
+ℹ Fold 130 [2021-W16]: 62 rows | alpha=0.461 | cal_sw=26 (1467 rows)
+ℹ Fold 131 [2021-W17]: 61 rows | alpha=0.471 | cal_sw=27 (1529 rows)
+ℹ Fold 132 [2021-W18]: 61 rows | alpha=0.478 | cal_sw=27 (1538 rows)
+ℹ Fold 133 [2022-W01]: 61 rows | alpha=0.458 | cal_sw=27 (1544 rows)
+ℹ Fold 134 [2022-W02]: 60 rows | alpha=0.444 | cal_sw=27 (1546 rows)
+ℹ Fold 135 [2022-W03]: 61 rows | alpha=0.468 | cal_sw=27 (1554 rows)
+ℹ Fold 136 [2022-W04]: 57 rows | alpha=0.461 | cal_sw=28 (1615 rows)
+ℹ Fold 137 [2022-W05]: 61 rows | alpha=0.416 | cal_sw=28 (1616 rows)
+ℹ Fold 138 [2022-W06]: 49 rows | alpha=0.374 | cal_sw=28 (1615 rows)
+ℹ Fold 139 [2022-W07]: 52 rows | alpha=0.394 | cal_sw=28 (1604 rows)
+ℹ Fold 140 [2022-W08]: 57 rows | alpha=0.372 | cal_sw=28 (1591 rows)
+ℹ Fold 141 [2022-W09]: 48 rows | alpha=0.372 | cal_sw=29 (1648 rows)
+ℹ Fold 142 [2022-W10]: 48 rows | alpha=0.398 | cal_sw=29 (1642 rows)
+ℹ Fold 143 [2022-W11]: 53 rows | alpha=0.38 | cal_sw=29 (1635 rows)
+ℹ Fold 144 [2022-W12]: 61 rows | alpha=0.368 | cal_sw=29 (1630 rows)
+ℹ Fold 145 [2022-W13]: 53 rows | alpha=0.345 | cal_sw=29 (1632 rows)
+ℹ Fold 146 [2022-W14]: 49 rows | alpha=0.355 | cal_sw=30 (1685 rows)
+ℹ Fold 147 [2022-W15]: 56 rows | alpha=0.37 | cal_sw=30 (1676 rows)
+ℹ Fold 148 [2022-W16]: 60 rows | alpha=0.405 | cal_sw=30 (1674 rows)
+ℹ Fold 149 [2022-W17]: 61 rows | alpha=0.392 | cal_sw=30 (1673 rows)
+ℹ Fold 150 [2022-W18]: 66 rows | alpha=0.397 | cal_sw=30 (1670 rows)
+ℹ Fold 151 [2023-W01]: 58 rows | alpha=0.404 | cal_sw=31 (1736 rows)
+ℹ Fold 152 [2023-W02]: 55 rows | alpha=0.404 | cal_sw=31 (1743 rows)
+ℹ Fold 153 [2023-W03]: 62 rows | alpha=0.413 | cal_sw=31 (1748 rows)
+ℹ Fold 154 [2023-W04]: 59 rows | alpha=0.409 | cal_sw=31 (1752 rows)
+ℹ Fold 155 [2023-W05]: 51 rows | alpha=0.409 | cal_sw=31 (1757 rows)
+ℹ Fold 156 [2023-W06]: 49 rows | alpha=0.413 | cal_sw=32 (1808 rows)
+ℹ Fold 157 [2023-W07]: 46 rows | alpha=0.394 | cal_sw=32 (1801 rows)
+ℹ Fold 158 [2023-W08]: 60 rows | alpha=0.432 | cal_sw=32 (1794 rows)
+ℹ Fold 159 [2023-W09]: 48 rows | alpha=0.458 | cal_sw=32 (1797 rows)
+ℹ Fold 160 [2023-W10]: 50 rows | alpha=0.49 | cal_sw=32 (1795 rows)
+ℹ Fold 161 [2023-W11]: 52 rows | alpha=0.503 | cal_sw=33 (1845 rows)
+ℹ Fold 162 [2023-W12]: 57 rows | alpha=0.511 | cal_sw=33 (1846 rows)
+ℹ Fold 163 [2023-W13]: 46 rows | alpha=0.509 | cal_sw=33 (1844 rows)
+ℹ Fold 164 [2023-W14]: 54 rows | alpha=0.516 | cal_sw=33 (1828 rows)
+ℹ Fold 165 [2023-W15]: 67 rows | alpha=0.489 | cal_sw=33 (1821 rows)
+ℹ Fold 166 [2023-W16]: 58 rows | alpha=0.492 | cal_sw=34 (1888 rows)
+ℹ Fold 167 [2023-W17]: 59 rows | alpha=0.506 | cal_sw=34 (1885 rows)
+ℹ Fold 168 [2023-W18]: 56 rows | alpha=0.558 | cal_sw=34 (1883 rows)
+ℹ Fold 169 [2024-W01]: 53 rows | alpha=0.546 | cal_sw=34 (1879 rows)
+ℹ Fold 170 [2024-W02]: 58 rows | alpha=0.586 | cal_sw=34 (1871 rows)
+ℹ Fold 171 [2024-W03]: 57 rows | alpha=0.591 | cal_sw=35 (1929 rows)
+ℹ Fold 172 [2024-W04]: 64 rows | alpha=0.582 | cal_sw=35 (1929 rows)
+ℹ Fold 173 [2024-W05]: 53 rows | alpha=0.532 | cal_sw=35 (1932 rows)
+ℹ Fold 174 [2024-W06]: 55 rows | alpha=0.547 | cal_sw=35 (1936 rows)
+ℹ Fold 175 [2024-W07]: 56 rows | alpha=0.537 | cal_sw=35 (1939 rows)
+ℹ Fold 176 [2024-W08]: 55 rows | alpha=0.535 | cal_sw=36 (1995 rows)
+ℹ Fold 177 [2024-W09]: 59 rows | alpha=0.59 | cal_sw=36 (1993 rows)
+ℹ Fold 178 [2024-W10]: 44 rows | alpha=0.606 | cal_sw=36 (2004 rows)
+ℹ Fold 179 [2024-W11]: 49 rows | alpha=0.582 | cal_sw=36 (2000 rows)
+ℹ Fold 180 [2024-W12]: 43 rows | alpha=0.561 | cal_sw=36 (1996 rows)
+ℹ Fold 181 [2024-W13]: 58 rows | alpha=0.575 | cal_sw=37 (2039 rows)
+ℹ Fold 182 [2024-W14]: 46 rows | alpha=0.581 | cal_sw=37 (2036 rows)
+ℹ Fold 183 [2024-W15]: 60 rows | alpha=0.59 | cal_sw=37 (2029 rows)
+ℹ Fold 184 [2024-W16]: 55 rows | alpha=0.625 | cal_sw=37 (2040 rows)
+ℹ Fold 185 [2024-W17]: 57 rows | alpha=0.647 | cal_sw=37 (2039 rows)
+ℹ Fold 186 [2024-W18]: 58 rows | alpha=0.657 | cal_sw=38 (2096 rows)
+ℹ Fold 187 [2025-W01]: 51 rows | alpha=0.623 | cal_sw=38 (2094 rows)
+ℹ Fold 188 [2025-W02]: 58 rows | alpha=0.624 | cal_sw=38 (2084 rows)
+ℹ Fold 189 [2025-W03]: 61 rows | alpha=0.607 | cal_sw=38 (2076 rows)
+ℹ Fold 190 [2025-W04]: 57 rows | alpha=0.615 | cal_sw=38 (2079 rows)
+ℹ Fold 191 [2025-W05]: 53 rows | alpha=0.613 | cal_sw=39 (2136 rows)
+ℹ Fold 192 [2025-W06]: 52 rows | alpha=0.646 | cal_sw=39 (2134 rows)
+ℹ Fold 193 [2025-W07]: 52 rows | alpha=0.616 | cal_sw=39 (2124 rows)
+ℹ Fold 194 [2025-W08]: 49 rows | alpha=0.597 | cal_sw=39 (2117 rows)
+ℹ Fold 195 [2025-W09]: 47 rows | alpha=0.637 | cal_sw=39 (2115 rows)
+ℹ Fold 196 [2025-W10]: 47 rows | alpha=0.632 | cal_sw=40 (2162 rows)
+ℹ Fold 197 [2025-W11]: 54 rows | alpha=0.599 | cal_sw=40 (2160 rows)
+ℹ Fold 198 [2025-W12]: 50 rows | alpha=0.65 | cal_sw=40 (2168 rows)
+ℹ Fold 199 [2025-W13]: 58 rows | alpha=0.605 | cal_sw=40 (2158 rows)
+ℹ Fold 200 [2025-W14]: 51 rows | alpha=0.553 | cal_sw=40 (2168 rows)
+ℹ Fold 201 [2025-W15]: 58 rows | alpha=0.547 | cal_sw=41 (2219 rows)
+ℹ Fold 202 [2025-W16]: 60 rows | alpha=0.552 | cal_sw=41 (2227 rows)
+ℹ Fold 203 [2025-W17]: 55 rows | alpha=0.561 | cal_sw=41 (2235 rows)
+ℹ Fold 204 [2025-W18]: 60 rows | alpha=0.572 | cal_sw=41 (2233 rows)
+
+── Harness Integrity Report ────────────────────────────────────────────────────
+✔ All 204 folds completed
+ℹ Test rows scored: 11621 | Expected: 11621
+✔ Row count matches expected 11621
+✔ Zero NA predictions across all folds and components
+✔ Conformal calibration: training-side only (loop assertion verified each fold)
+ℹ alpha_fold range [0.2, 0.707] | median 0.477
+
+── 3B Pooled Coverage (all 11621 test rows) ────────────────────────────────────
+# A tibble: 9 × 6
+  component  stratum nominal empirical     delta sharpness
+  <chr>      <chr>     <dbl>     <dbl>     <dbl>     <dbl>
+1 efficiency pooled      0.5     0.502  0.00194      0.374
+2 efficiency pooled      0.8     0.799 -0.000929     0.753
+3 efficiency pooled      0.9     0.900  0.000353     1.03 
+4 volume     pooled      0.5     0.506  0.00589      7.58 
+5 volume     pooled      0.8     0.800  0.000103    14.3  
+6 volume     pooled      0.9     0.900  0.000353    19.0  
+7 combined   pooled      0.5     0.500 -0.000129     4.84 
+8 combined   pooled      0.8     0.799 -0.000843     9.62 
+9 combined   pooled      0.9     0.900  0.000181    12.8  
+
+── 3B Low-Usage Bucket (opp 5-8) ───────────────────────────────────────────────
+ℹ Low-usage rows: 3049
+# A tibble: 9 × 6
+  component  stratum     nominal empirical      delta sharpness
+  <chr>      <chr>         <dbl>     <dbl>      <dbl>     <dbl>
+1 efficiency low_opp_5_8     0.5     0.391 -0.109         0.374
+2 efficiency low_opp_5_8     0.8     0.675 -0.125         0.754
+3 efficiency low_opp_5_8     0.9     0.808 -0.0919        1.03 
+4 volume     low_opp_5_8     0.5     0.416 -0.0845        7.59 
+5 volume     low_opp_5_8     0.8     0.786 -0.0145       14.4  
+6 volume     low_opp_5_8     0.9     0.900 -0.0000328    19.0  
+7 combined   low_opp_5_8     0.5     0.509  0.00869       3.44 
+8 combined   low_opp_5_8     0.8     0.808  0.00813       6.85 
+9 combined   low_opp_5_8     0.9     0.898 -0.00233       9.12 
+
+── Learner Comparison: 3B (RF) vs 3A (LightGBM) ────────────────────────────────
+
+── 1. Low-Usage Efficiency Coverage (the -8.7pp target) ──
+
+ℹ model          | nominal | coverage_delta | width
+ℹ 3A-LightGBM | 50% | -11.2pp | 0.379
+ℹ 3B-RF        | 50% | -10.9pp | 0.374
+ℹ 3A-LightGBM | 80% | -12.7pp | 0.776
+ℹ 3B-RF        | 80% | -12.5pp | 0.754
+ℹ 3A-LightGBM | 90% | -8.8pp | 1.043
+ℹ 3B-RF        | 90% | -9.2pp | 1.03
+
+── 2. Combined Coverage -- Pooled and Low-Usage ──
+
+ℹ model          | stratum       | nominal | delta   | width
+ℹ 3A-LightGBM |    low_opp_5_8 | 50% | -14.2pp | 2.444
+ℹ 3B-RF        |    low_opp_5_8 | 50% | +0.9pp | 3.444
+ℹ 3A-LightGBM |    low_opp_5_8 | 80% | -15.1pp | 5.094
+ℹ 3B-RF        |    low_opp_5_8 | 80% | +0.8pp | 6.85
+ℹ 3A-LightGBM |    low_opp_5_8 | 90% | -10.7pp | 6.922
+ℹ 3B-RF        |    low_opp_5_8 | 90% | -0.2pp | 9.119
+ℹ 3A-LightGBM |         pooled | 50% | -0.4pp | 5.37
+ℹ 3B-RF        |         pooled | 50% | -0.0pp | 4.84
+ℹ 3A-LightGBM |         pooled | 80% | -0.3pp | 11.173
+ℹ 3B-RF        |         pooled | 80% | -0.1pp | 9.625
+ℹ 3A-LightGBM |         pooled | 90% | +0.1pp | 15.186
+ℹ 3B-RF        |         pooled | 90% | +0.0pp | 12.817
+
+── 3. Low-Usage Volume Coverage (should match 3A -- same model) ──
+
+ℹ model          | nominal | coverage_delta | width
+ℹ 3A-LightGBM | 50% | -8.4pp | 7.589
+ℹ 3B-RF        | 50% | -8.4pp | 7.589
+ℹ 3A-LightGBM | 80% | -1.4pp | 14.354
+ℹ 3B-RF        | 80% | -1.4pp | 14.354
+ℹ 3A-LightGBM | 90% | -0.0pp | 19.002
+ℹ 3B-RF        | 90% | -0.0pp | 19.002
+✔ Volume low-usage 80% shift: +0.0pp (within 5pp -- same model confirmed)
+
+── 4. Pre-Registered Direction Check (efficiency and combined should move together in 5-8 bucket) ──
+
+ℹ 3A: efficiency 80% delta = -12.7pp | combined 80% delta = -15.1pp
+ℹ 3B: efficiency 80% delta = -12.5pp | combined 80% delta = +0.8pp
+ℹ Shift: efficiency +0.2pp | combined +15.9pp
+✔ Direction consistent: efficiency and combined move together in 5-8 bucket
+
+── Decision Rule Evaluation ────────────────────────────────────────────────────
+ℹ PRIMARY: pooled combined 80% closest to nominal
+ℹ TIEBREAK: sharpest among models within +-2pp of nominal
+ℹ VETO: low-usage combined 80% delta > +-10pp disqualifies
+ℹ 3A pooled combined 80%: delta=-0.3pp | 3B: delta=-0.1pp
+ℹ 3A low combined 80%:    delta=-15.1pp | 3B: delta=+0.8pp
+✔ 3B veto check passed: low-usage 80% delta = +0.8pp
+ℹ Sharpness (pooled combined 80%): 3A=11.173 | 3B=9.625
+
+── Scoring Summary ──
+
+✔ Both within +-2pp; 3B sharper: 3B wins tiebreak
+
+── Save outputs ────────────────────────────────────────────────────────────────
+✔ output/03b_rf_fold_predictions.csv  (11621 rows)
+✔ output/03b_rf_pooled_coverage.csv
+✔ output/03b_rf_low_usage_coverage.csv
+
+── Step 3B complete ────────────────────────────────────────────────────────────
+
+── Step 3C: Hierarchical Bayes + Student-t (paradigm comparison) ───────────────
+ℹ Efficiency: Student-t likelihood, sigma ~ log_opp, (1|player_id) + (1|defteam)
+ℹ Volume:     Gaussian, (1|player_id) + (1|defteam)
+ℹ Combined:   posterior predictive draws (pp_eff * pp_vol) -- NO conformal step
+ℹ Backend: cmdstanr | chains=2 | iter=1500 | warmup=750
+✔ Feature table: 11918 rows x 30 cols
+✔ Fold map: 204 folds | Expected test rows: 11621
+
+── Walk-forward fold loop (204 folds -- MCMC, expect ~30-60 min) ───────────────
+ℹ Fold 01: compiling efficiency model (one-time)...
+Loading required namespace: rstan
+ℹ Fold 01: compiling volume model (one-time)...
+ℹ Fold 01 [2014-W06]: 63 rows | nu=11.7 | sigma_slope=-0.299 | 23s
+ℹ Fold 02 [2014-W07]: 58 rows | nu=9.5 | sigma_slope=-0.347 | 14s
+ℹ Fold 03 [2014-W08]: 57 rows | nu=9.2 | sigma_slope=-0.335 | 16s
+ℹ Fold 04 [2014-W09]: 53 rows | nu=9.9 | sigma_slope=-0.326 | 19s
+ℹ Fold 05 [2014-W10]: 53 rows | nu=10.3 | sigma_slope=-0.34 | 20s
+ℹ Fold 06 [2014-W11]: 51 rows | nu=10.2 | sigma_slope=-0.327 | 22s
+ℹ Fold 07 [2014-W12]: 60 rows | nu=12.3 | sigma_slope=-0.317 | 24s
+ℹ Fold 08 [2014-W13]: 61 rows | nu=13.1 | sigma_slope=-0.317 | 25s
+ℹ Fold 09 [2014-W14]: 58 rows | nu=12.1 | sigma_slope=-0.324 | 28s
+ℹ Fold 10 [2014-W15]: 64 rows | nu=11.6 | sigma_slope=-0.328 | 30s
+ℹ Fold 11 [2014-W16]: 62 rows | nu=12.4 | sigma_slope=-0.314 | 32s
+ℹ Fold 12 [2014-W17]: 70 rows | nu=12.6 | sigma_slope=-0.317 | 35s
+ℹ Fold 13 [2015-W01]: 60 rows | nu=13 | sigma_slope=-0.311 | 36s
+ℹ Fold 14 [2015-W02]: 60 rows | nu=13 | sigma_slope=-0.299 | 37s
+ℹ Fold 15 [2015-W03]: 67 rows | nu=14 | sigma_slope=-0.296 | 39s
+ℹ Fold 16 [2015-W04]: 57 rows | nu=14.5 | sigma_slope=-0.293 | 42s
+ℹ Fold 17 [2015-W05]: 59 rows | nu=13.3 | sigma_slope=-0.291 | 48s
+ℹ Fold 18 [2015-W06]: 55 rows | nu=11.5 | sigma_slope=-0.296 | 46s
+ℹ Fold 19 [2015-W07]: 59 rows | nu=12.4 | sigma_slope=-0.292 | 46s
+ℹ Fold 20 [2015-W08]: 49 rows | nu=11.5 | sigma_slope=-0.292 | 48s
+ℹ Fold 21 [2015-W09]: 45 rows | nu=11.4 | sigma_slope=-0.286 | 51s
+ℹ Fold 22 [2015-W10]: 51 rows | nu=11.6 | sigma_slope=-0.289 | 52s
+ℹ Fold 23 [2015-W11]: 55 rows | nu=11.5 | sigma_slope=-0.287 | 58s
+ℹ Fold 24 [2015-W12]: 61 rows | nu=11.4 | sigma_slope=-0.289 | 55s
+ℹ Fold 25 [2015-W13]: 68 rows | nu=11.3 | sigma_slope=-0.289 | 57s
+ℹ Fold 26 [2015-W14]: 64 rows | nu=10.6 | sigma_slope=-0.29 | 60s
+ℹ Fold 27 [2015-W15]: 64 rows | nu=11.2 | sigma_slope=-0.289 | 63s
+ℹ Fold 28 [2015-W16]: 70 rows | nu=10.1 | sigma_slope=-0.287 | 65s
+ℹ Fold 29 [2015-W17]: 68 rows | nu=10.4 | sigma_slope=-0.285 | 67s
+ℹ Fold 30 [2016-W01]: 54 rows | nu=10.5 | sigma_slope=-0.282 | 71s
+ℹ Fold 31 [2016-W02]: 60 rows | nu=10.6 | sigma_slope=-0.281 | 67s
+ℹ Fold 32 [2016-W03]: 62 rows | nu=10.4 | sigma_slope=-0.277 | 69s
+ℹ Fold 33 [2016-W04]: 56 rows | nu=10.1 | sigma_slope=-0.278 | 74s
+ℹ Fold 34 [2016-W05]: 52 rows | nu=10.3 | sigma_slope=-0.276 | 78s
+ℹ Fold 35 [2016-W06]: 57 rows | nu=10.5 | sigma_slope=-0.276 | 79s
+ℹ Fold 36 [2016-W07]: 55 rows | nu=10.7 | sigma_slope=-0.278 | 78s
+ℹ Fold 37 [2016-W08]: 47 rows | nu=10.4 | sigma_slope=-0.285 | 83s
+ℹ Fold 38 [2016-W09]: 47 rows | nu=10.1 | sigma_slope=-0.287 | 86s
+ℹ Fold 39 [2016-W10]: 53 rows | nu=10.3 | sigma_slope=-0.283 | 90s
+ℹ Fold 40 [2016-W11]: 50 rows | nu=9.5 | sigma_slope=-0.28 | 88s
+ℹ Fold 41 [2016-W12]: 59 rows | nu=9.4 | sigma_slope=-0.283 | 96s
+ℹ Fold 42 [2016-W13]: 56 rows | nu=9 | sigma_slope=-0.281 | 90s
+ℹ Fold 43 [2016-W14]: 56 rows | nu=9.2 | sigma_slope=-0.284 | 90s
+ℹ Fold 44 [2016-W15]: 61 rows | nu=9.1 | sigma_slope=-0.282 | 97s
+ℹ Fold 45 [2016-W16]: 61 rows | nu=9.3 | sigma_slope=-0.282 | 96s
+ℹ Fold 46 [2016-W17]: 66 rows | nu=9.5 | sigma_slope=-0.284 | 105s
+ℹ Fold 47 [2017-W01]: 63 rows | nu=8.6 | sigma_slope=-0.282 | 99s
+ℹ Fold 48 [2017-W02]: 68 rows | nu=8.1 | sigma_slope=-0.278 | 100s
+ℹ Fold 49 [2017-W03]: 64 rows | nu=8.3 | sigma_slope=-0.28 | 102s
+ℹ Fold 50 [2017-W04]: 67 rows | nu=7.9 | sigma_slope=-0.28 | 107s
+ℹ Fold 51 [2017-W05]: 56 rows | nu=8 | sigma_slope=-0.282 | 105s
+ℹ Fold 52 [2017-W06]: 53 rows | nu=7.9 | sigma_slope=-0.279 | 109s
+ℹ Fold 53 [2017-W07]: 60 rows | nu=7.8 | sigma_slope=-0.279 | 109s
+ℹ Fold 54 [2017-W08]: 52 rows | nu=7.8 | sigma_slope=-0.276 | 115s
+ℹ Fold 55 [2017-W09]: 56 rows | nu=7.8 | sigma_slope=-0.274 | 115s
+ℹ Fold 56 [2017-W10]: 60 rows | nu=7.7 | sigma_slope=-0.274 | 117s
+ℹ Fold 57 [2017-W11]: 59 rows | nu=7.8 | sigma_slope=-0.272 | 112s
+ℹ Fold 58 [2017-W12]: 64 rows | nu=8 | sigma_slope=-0.275 | 115s
+ℹ Fold 59 [2017-W13]: 64 rows | nu=7.6 | sigma_slope=-0.274 | 119s
+ℹ Fold 60 [2017-W14]: 62 rows | nu=7.3 | sigma_slope=-0.274 | 123s
+ℹ Fold 61 [2017-W15]: 68 rows | nu=7.2 | sigma_slope=-0.274 | 127s
+ℹ Fold 62 [2017-W16]: 63 rows | nu=7.1 | sigma_slope=-0.269 | 130s
+ℹ Fold 63 [2017-W17]: 63 rows | nu=7.2 | sigma_slope=-0.269 | 128s
+ℹ Fold 64 [2018-W01]: 61 rows | nu=7.2 | sigma_slope=-0.271 | 131s
+ℹ Fold 65 [2018-W02]: 64 rows | nu=7.2 | sigma_slope=-0.272 | 128s
+ℹ Fold 66 [2018-W03]: 60 rows | nu=7.2 | sigma_slope=-0.272 | 131s
+ℹ Fold 67 [2018-W04]: 59 rows | nu=7.2 | sigma_slope=-0.274 | 137s
+ℹ Fold 68 [2018-W05]: 56 rows | nu=7.3 | sigma_slope=-0.274 | 142s
+ℹ Fold 69 [2018-W06]: 57 rows | nu=7.2 | sigma_slope=-0.275 | 141s
+ℹ Fold 70 [2018-W07]: 54 rows | nu=7.1 | sigma_slope=-0.274 | 146s
+ℹ Fold 71 [2018-W08]: 49 rows | nu=7.1 | sigma_slope=-0.273 | 144s
+ℹ Fold 72 [2018-W09]: 53 rows | nu=7.1 | sigma_slope=-0.273 | 141s
+ℹ Fold 73 [2018-W10]: 54 rows | nu=7.2 | sigma_slope=-0.273 | 145s
+ℹ Fold 74 [2018-W11]: 46 rows | nu=7.2 | sigma_slope=-0.272 | 147s
+ℹ Fold 75 [2018-W12]: 56 rows | nu=7.2 | sigma_slope=-0.271 | 151s
+ℹ Fold 76 [2018-W13]: 64 rows | nu=7.3 | sigma_slope=-0.273 | 156s
+ℹ Fold 77 [2018-W14]: 60 rows | nu=7.4 | sigma_slope=-0.273 | 151s
+ℹ Fold 78 [2018-W15]: 60 rows | nu=7.3 | sigma_slope=-0.272 | 157s
+ℹ Fold 79 [2018-W16]: 62 rows | nu=7.4 | sigma_slope=-0.271 | 162s
+ℹ Fold 80 [2018-W17]: 64 rows | nu=7.4 | sigma_slope=-0.27 | 163s
+ℹ Fold 81 [2019-W01]: 63 rows | nu=7.5 | sigma_slope=-0.271 | 162s
+ℹ Fold 82 [2019-W02]: 61 rows | nu=7.7 | sigma_slope=-0.271 | 162s
+ℹ Fold 83 [2019-W03]: 59 rows | nu=7.6 | sigma_slope=-0.27 | 164s
+ℹ Fold 84 [2019-W04]: 57 rows | nu=7.5 | sigma_slope=-0.268 | 167s
+ℹ Fold 85 [2019-W05]: 57 rows | nu=7.6 | sigma_slope=-0.266 | 169s
+ℹ Fold 86 [2019-W06]: 50 rows | nu=7.7 | sigma_slope=-0.264 | 168s
+ℹ Fold 87 [2019-W07]: 51 rows | nu=7.8 | sigma_slope=-0.267 | 171s
+ℹ Fold 88 [2019-W08]: 53 rows | nu=7.8 | sigma_slope=-0.266 | 184s
+ℹ Fold 89 [2019-W09]: 49 rows | nu=7.6 | sigma_slope=-0.266 | 178s
+ℹ Fold 90 [2019-W10]: 47 rows | nu=7.6 | sigma_slope=-0.268 | 174s
+ℹ Fold 91 [2019-W11]: 57 rows | nu=7.7 | sigma_slope=-0.267 | 186s
+ℹ Fold 92 [2019-W12]: 55 rows | nu=7.6 | sigma_slope=-0.267 | 180s
+ℹ Fold 93 [2019-W13]: 59 rows | nu=7.6 | sigma_slope=-0.267 | 179s
+ℹ Fold 94 [2019-W14]: 63 rows | nu=7.7 | sigma_slope=-0.268 | 185s
+ℹ Fold 95 [2019-W15]: 61 rows | nu=7.6 | sigma_slope=-0.267 | 185s
+ℹ Fold 96 [2019-W16]: 62 rows | nu=7.6 | sigma_slope=-0.266 | 192s
+ℹ Fold 97 [2019-W17]: 59 rows | nu=7.6 | sigma_slope=-0.268 | 186s
+ℹ Fold 98 [2020-W01]: 69 rows | nu=7.7 | sigma_slope=-0.267 | 188s
+ℹ Fold 99 [2020-W02]: 62 rows | nu=7.7 | sigma_slope=-0.268 | 193s
+ℹ Fold 100 [2020-W03]: 56 rows | nu=7.7 | sigma_slope=-0.268 | 193s
+ℹ Fold 101 [2020-W04]: 60 rows | nu=7.8 | sigma_slope=-0.267 | 198s
+ℹ Fold 102 [2020-W05]: 53 rows | nu=7.8 | sigma_slope=-0.268 | 197s
+ℹ Fold 103 [2020-W06]: 59 rows | nu=7.7 | sigma_slope=-0.269 | 200s
+ℹ Fold 104 [2020-W07]: 52 rows | nu=7.8 | sigma_slope=-0.268 | 203s
+ℹ Fold 105 [2020-W08]: 55 rows | nu=7.7 | sigma_slope=-0.269 | 204s
+ℹ Fold 106 [2020-W09]: 59 rows | nu=7.8 | sigma_slope=-0.268 | 203s
+ℹ Fold 107 [2020-W10]: 52 rows | nu=7.7 | sigma_slope=-0.267 | 205s
+ℹ Fold 108 [2020-W11]: 56 rows | nu=7.7 | sigma_slope=-0.268 | 209s
+ℹ Fold 109 [2020-W12]: 62 rows | nu=7.6 | sigma_slope=-0.267 | 220s
+ℹ Fold 110 [2020-W13]: 60 rows | nu=7.5 | sigma_slope=-0.266 | 210s
+ℹ Fold 111 [2020-W14]: 65 rows | nu=7.5 | sigma_slope=-0.267 | 214s
+ℹ Fold 112 [2020-W15]: 54 rows | nu=7.5 | sigma_slope=-0.266 | 212s
+ℹ Fold 113 [2020-W16]: 55 rows | nu=7.6 | sigma_slope=-0.268 | 221s
+ℹ Fold 114 [2020-W17]: 58 rows | nu=7.7 | sigma_slope=-0.267 | 230s
+ℹ Fold 115 [2021-W01]: 59 rows | nu=7.7 | sigma_slope=-0.266 | 223s
+ℹ Fold 116 [2021-W02]: 58 rows | nu=7.7 | sigma_slope=-0.265 | 227s
+ℹ Fold 117 [2021-W03]: 58 rows | nu=7.7 | sigma_slope=-0.265 | 231s
+ℹ Fold 118 [2021-W04]: 61 rows | nu=7.7 | sigma_slope=-0.264 | 227s
+ℹ Fold 119 [2021-W05]: 64 rows | nu=7.8 | sigma_slope=-0.265 | 231s
+ℹ Fold 120 [2021-W06]: 51 rows | nu=7.8 | sigma_slope=-0.265 | 227s
+ℹ Fold 121 [2021-W07]: 50 rows | nu=7.9 | sigma_slope=-0.266 | 259s
+ℹ Fold 122 [2021-W08]: 58 rows | nu=7.8 | sigma_slope=-0.267 | 235s
+ℹ Fold 123 [2021-W09]: 54 rows | nu=7.9 | sigma_slope=-0.267 | 232s
+ℹ Fold 124 [2021-W10]: 56 rows | nu=7.9 | sigma_slope=-0.266 | 238s
+ℹ Fold 125 [2021-W11]: 53 rows | nu=7.9 | sigma_slope=-0.266 | 254s
+ℹ Fold 126 [2021-W12]: 57 rows | nu=7.9 | sigma_slope=-0.266 | 245s
+ℹ Fold 127 [2021-W13]: 50 rows | nu=8 | sigma_slope=-0.265 | 249s
+ℹ Fold 128 [2021-W14]: 51 rows | nu=7.9 | sigma_slope=-0.267 | 259s
+ℹ Fold 129 [2021-W15]: 59 rows | nu=8 | sigma_slope=-0.269 | 244s
+ℹ Fold 130 [2021-W16]: 62 rows | nu=8.1 | sigma_slope=-0.269 | 248s
+ℹ Fold 131 [2021-W17]: 61 rows | nu=8.1 | sigma_slope=-0.269 | 259s
+ℹ Fold 132 [2021-W18]: 61 rows | nu=8.1 | sigma_slope=-0.269 | 267s
+ℹ Fold 133 [2022-W01]: 61 rows | nu=8.1 | sigma_slope=-0.269 | 250s
+ℹ Fold 134 [2022-W02]: 60 rows | nu=8.1 | sigma_slope=-0.269 | 261s
+ℹ Fold 135 [2022-W03]: 61 rows | nu=8.1 | sigma_slope=-0.268 | 265s
+ℹ Fold 136 [2022-W04]: 57 rows | nu=8.1 | sigma_slope=-0.268 | 264s
+ℹ Fold 137 [2022-W05]: 61 rows | nu=8.1 | sigma_slope=-0.268 | 269s
+ℹ Fold 138 [2022-W06]: 49 rows | nu=8.2 | sigma_slope=-0.268 | 274s
+ℹ Fold 139 [2022-W07]: 52 rows | nu=8.1 | sigma_slope=-0.269 | 273s
+ℹ Fold 140 [2022-W08]: 57 rows | nu=8.1 | sigma_slope=-0.269 | 299s
+ℹ Fold 141 [2022-W09]: 48 rows | nu=8.2 | sigma_slope=-0.27 | 297s
+ℹ Fold 142 [2022-W10]: 48 rows | nu=8.1 | sigma_slope=-0.27 | 274s
+ℹ Fold 143 [2022-W11]: 53 rows | nu=8.2 | sigma_slope=-0.27 | 304s
+ℹ Fold 144 [2022-W12]: 61 rows | nu=8.2 | sigma_slope=-0.27 | 280s
+ℹ Fold 145 [2022-W13]: 53 rows | nu=8.1 | sigma_slope=-0.27 | 274s
+ℹ Fold 146 [2022-W14]: 49 rows | nu=8.2 | sigma_slope=-0.271 | 290s
+ℹ Fold 147 [2022-W15]: 56 rows | nu=8.2 | sigma_slope=-0.271 | 287s
+ℹ Fold 148 [2022-W16]: 60 rows | nu=8.2 | sigma_slope=-0.272 | 290s
+ℹ Fold 149 [2022-W17]: 61 rows | nu=8.2 | sigma_slope=-0.271 | 284s
+ℹ Fold 150 [2022-W18]: 66 rows | nu=8.2 | sigma_slope=-0.271 | 292s
+ℹ Fold 151 [2023-W01]: 58 rows | nu=8.2 | sigma_slope=-0.272 | 329s
+ℹ Fold 152 [2023-W02]: 55 rows | nu=8.1 | sigma_slope=-0.271 | 289s
+ℹ Fold 153 [2023-W03]: 62 rows | nu=8.2 | sigma_slope=-0.272 | 298s
+ℹ Fold 154 [2023-W04]: 59 rows | nu=8.1 | sigma_slope=-0.272 | 291s
+ℹ Fold 155 [2023-W05]: 51 rows | nu=8.2 | sigma_slope=-0.271 | 301s
+ℹ Fold 156 [2023-W06]: 49 rows | nu=8.2 | sigma_slope=-0.271 | 303s
+ℹ Fold 157 [2023-W07]: 46 rows | nu=8.2 | sigma_slope=-0.271 | 294s
+ℹ Fold 158 [2023-W08]: 60 rows | nu=8.2 | sigma_slope=-0.27 | 300s
+ℹ Fold 159 [2023-W09]: 48 rows | nu=8.2 | sigma_slope=-0.269 | 309s
+ℹ Fold 160 [2023-W10]: 50 rows | nu=8.3 | sigma_slope=-0.269 | 301s
+ℹ Fold 161 [2023-W11]: 52 rows | nu=8.3 | sigma_slope=-0.269 | 312s
+ℹ Fold 162 [2023-W12]: 57 rows | nu=8.3 | sigma_slope=-0.269 | 317s
+ℹ Fold 163 [2023-W13]: 46 rows | nu=8.3 | sigma_slope=-0.267 | 314s
+ℹ Fold 164 [2023-W14]: 54 rows | nu=8.3 | sigma_slope=-0.267 | 318s
+ℹ Fold 165 [2023-W15]: 67 rows | nu=8.3 | sigma_slope=-0.267 | 305s
+ℹ Fold 166 [2023-W16]: 58 rows | nu=8.3 | sigma_slope=-0.267 | 316s
+ℹ Fold 167 [2023-W17]: 59 rows | nu=8.3 | sigma_slope=-0.266 | 317s
+ℹ Fold 168 [2023-W18]: 56 rows | nu=8.2 | sigma_slope=-0.266 | 310s
+ℹ Fold 169 [2024-W01]: 53 rows | nu=8.3 | sigma_slope=-0.266 | 328s
+ℹ Fold 170 [2024-W02]: 58 rows | nu=8.3 | sigma_slope=-0.266 | 323s
+ℹ Fold 171 [2024-W03]: 57 rows | nu=8.2 | sigma_slope=-0.267 | 322s
+ℹ Fold 172 [2024-W04]: 64 rows | nu=8.4 | sigma_slope=-0.267 | 324s
+ℹ Fold 173 [2024-W05]: 53 rows | nu=8.3 | sigma_slope=-0.267 | 321s
+ℹ Fold 174 [2024-W06]: 55 rows | nu=8.4 | sigma_slope=-0.268 | 336s
+ℹ Fold 175 [2024-W07]: 56 rows | nu=8.3 | sigma_slope=-0.267 | 337s
+ℹ Fold 176 [2024-W08]: 55 rows | nu=8.3 | sigma_slope=-0.267 | 325s
+ℹ Fold 177 [2024-W09]: 59 rows | nu=8.3 | sigma_slope=-0.267 | 330s
+ℹ Fold 178 [2024-W10]: 44 rows | nu=8.4 | sigma_slope=-0.269 | 335s
+ℹ Fold 179 [2024-W11]: 49 rows | nu=8.3 | sigma_slope=-0.268 | 339s
+ℹ Fold 180 [2024-W12]: 43 rows | nu=8.4 | sigma_slope=-0.268 | 343s
+ℹ Fold 181 [2024-W13]: 58 rows | nu=8.3 | sigma_slope=-0.267 | 351s
+ℹ Fold 182 [2024-W14]: 46 rows | nu=8.4 | sigma_slope=-0.267 | 343s
+ℹ Fold 183 [2024-W15]: 60 rows | nu=8.4 | sigma_slope=-0.268 | 363s
+ℹ Fold 184 [2024-W16]: 55 rows | nu=8.3 | sigma_slope=-0.268 | 346s
+ℹ Fold 185 [2024-W17]: 57 rows | nu=8.3 | sigma_slope=-0.267 | 353s
+ℹ Fold 186 [2024-W18]: 58 rows | nu=8.3 | sigma_slope=-0.266 | 351s
+ℹ Fold 187 [2025-W01]: 51 rows | nu=8.3 | sigma_slope=-0.267 | 353s
+ℹ Fold 188 [2025-W02]: 58 rows | nu=8.4 | sigma_slope=-0.267 | 361s
+ℹ Fold 189 [2025-W03]: 61 rows | nu=8.4 | sigma_slope=-0.268 | 365s
+ℹ Fold 190 [2025-W04]: 57 rows | nu=8.3 | sigma_slope=-0.267 | 362s
+ℹ Fold 191 [2025-W05]: 53 rows | nu=8.3 | sigma_slope=-0.267 | 359s
+ℹ Fold 192 [2025-W06]: 52 rows | nu=8.4 | sigma_slope=-0.267 | 366s
+ℹ Fold 193 [2025-W07]: 52 rows | nu=8.4 | sigma_slope=-0.266 | 363s
+ℹ Fold 194 [2025-W08]: 49 rows | nu=8.4 | sigma_slope=-0.265 | 377s
+ℹ Fold 195 [2025-W09]: 47 rows | nu=8.3 | sigma_slope=-0.265 | 367s
+ℹ Fold 196 [2025-W10]: 47 rows | nu=8.3 | sigma_slope=-0.265 | 361s
+ℹ Fold 197 [2025-W11]: 54 rows | nu=8.3 | sigma_slope=-0.265 | 395s
+ℹ Fold 198 [2025-W12]: 50 rows | nu=8.3 | sigma_slope=-0.264 | 365s
+ℹ Fold 199 [2025-W13]: 58 rows | nu=8.3 | sigma_slope=-0.265 | 385s
+ℹ Fold 200 [2025-W14]: 51 rows | nu=8.3 | sigma_slope=-0.265 | 377s
+ℹ Fold 201 [2025-W15]: 58 rows | nu=8.3 | sigma_slope=-0.265 | 374s
+ℹ Fold 202 [2025-W16]: 60 rows | nu=8.4 | sigma_slope=-0.265 | 419s
+ℹ Fold 203 [2025-W17]: 55 rows | nu=8.4 | sigma_slope=-0.264 | 377s
+ℹ Fold 204 [2025-W18]: 60 rows | nu=8.4 | sigma_slope=-0.264 | 379s
+
+── Harness Integrity Report ────────────────────────────────────────────────────
+✔ All 204 folds completed
+ℹ Test rows scored: 11621 | Expected: 11621
+✔ Row count matches 11621
+✔ Zero NA predictions across all components
+ℹ   fold=1 model=eff rhat=1.0131
+ℹ   fold=1 model=vol rhat=1.01
+ℹ   fold=2 model=eff rhat=1.0121
+ℹ   fold=2 model=vol rhat=1.0139
+ℹ   fold=3 model=eff rhat=1.0138
+ℹ   fold=3 model=vol rhat=1.0101
+ℹ   fold=4 model=eff rhat=1.0203
+ℹ   fold=4 model=vol rhat=1.0118
+ℹ   fold=5 model=eff rhat=1.0123
+ℹ   fold=5 model=vol rhat=1.0117
+ℹ   fold=6 model=vol rhat=1.0152
+ℹ   fold=7 model=vol rhat=1.0134
+ℹ   fold=8 model=eff rhat=1.0199
+ℹ   fold=9 model=eff rhat=1.0304
+ℹ   fold=11 model=eff rhat=1.084
+ℹ   fold=12 model=eff rhat=1.0144
+ℹ   fold=12 model=vol rhat=1.0134
+ℹ   fold=14 model=eff rhat=1.011
+ℹ   fold=15 model=eff rhat=1.0141
+ℹ   fold=15 model=vol rhat=1.0108
+ℹ   fold=16 model=eff rhat=1.029
+ℹ   fold=17 model=vol rhat=1.0119
+ℹ   fold=19 model=eff rhat=1.0162
+ℹ   fold=20 model=eff rhat=1.0134
+ℹ   fold=20 model=vol rhat=1.0138
+ℹ   fold=22 model=eff rhat=1.0165
+ℹ   fold=23 model=eff rhat=1.0111
+ℹ   fold=23 model=vol rhat=1.0118
+ℹ   fold=24 model=eff rhat=1.0194
+ℹ   fold=25 model=eff rhat=1.0172
+ℹ   fold=25 model=vol rhat=1.0133
+ℹ   fold=26 model=eff rhat=1.0105
+ℹ   fold=26 model=vol rhat=1.0126
+ℹ   fold=27 model=vol rhat=1.0118
+ℹ   fold=28 model=eff rhat=1.0112
+ℹ   fold=29 model=vol rhat=1.0136
+ℹ   fold=30 model=eff rhat=1.0156
+ℹ   fold=30 model=vol rhat=1.0151
+ℹ   fold=31 model=vol rhat=1.0108
+ℹ   fold=32 model=eff rhat=1.0115
+ℹ   fold=32 model=vol rhat=1.0137
+ℹ   fold=33 model=eff rhat=1.0117
+ℹ   fold=33 model=vol rhat=1.0104
+ℹ   fold=34 model=eff rhat=1.0145
+ℹ   fold=34 model=vol rhat=1.0119
+ℹ   fold=35 model=eff rhat=1.013
+ℹ   fold=36 model=eff rhat=1.01
+ℹ   fold=36 model=vol rhat=1.0123
+ℹ   fold=37 model=eff rhat=1.0121
+ℹ   fold=37 model=vol rhat=1.0114
+ℹ   fold=38 model=vol rhat=1.0105
+ℹ   fold=39 model=eff rhat=1.0143
+ℹ   fold=39 model=vol rhat=1.0156
+ℹ   fold=40 model=vol rhat=1.0108
+ℹ   fold=41 model=vol rhat=1.0121
+ℹ   fold=42 model=eff rhat=1.0148
+ℹ   fold=42 model=vol rhat=1.0129
+ℹ   fold=43 model=eff rhat=1.0173
+ℹ   fold=43 model=vol rhat=1.0124
+ℹ   fold=44 model=eff rhat=1.0255
+ℹ   fold=44 model=vol rhat=1.0127
+ℹ   fold=45 model=eff rhat=1.015
+ℹ   fold=45 model=vol rhat=1.0115
+ℹ   fold=46 model=eff rhat=1.0112
+ℹ   fold=46 model=vol rhat=1.0107
+ℹ   fold=47 model=vol rhat=1.0112
+ℹ   fold=48 model=vol rhat=1.0115
+ℹ   fold=49 model=eff rhat=1.0176
+ℹ   fold=49 model=vol rhat=1.0159
+ℹ   fold=50 model=eff rhat=1.0166
+ℹ   fold=50 model=vol rhat=1.0115
+ℹ   fold=51 model=vol rhat=1.0124
+ℹ   fold=52 model=eff rhat=1.0101
+ℹ   fold=52 model=vol rhat=1.0126
+ℹ   fold=53 model=eff rhat=1.0209
+ℹ   fold=53 model=vol rhat=1.0124
+ℹ   fold=54 model=eff rhat=1.0109
+ℹ   fold=54 model=vol rhat=1.0112
+ℹ   fold=55 model=eff rhat=1.0137
+ℹ   fold=56 model=vol rhat=1.0117
+ℹ   fold=57 model=eff rhat=1.0273
+ℹ   fold=57 model=vol rhat=1.0149
+ℹ   fold=58 model=eff rhat=1.0113
+ℹ   fold=58 model=vol rhat=1.013
+ℹ   fold=59 model=eff rhat=1.0229
+ℹ   fold=59 model=vol rhat=1.0113
+ℹ   fold=60 model=vol rhat=1.011
+ℹ   fold=61 model=vol rhat=1.0101
+ℹ   fold=62 model=eff rhat=1.0102
+ℹ   fold=62 model=vol rhat=1.0144
+ℹ   fold=63 model=eff rhat=1.0131
+ℹ   fold=63 model=vol rhat=1.0125
+ℹ   fold=64 model=eff rhat=1.0164
+ℹ   fold=64 model=vol rhat=1.0132
+ℹ   fold=65 model=eff rhat=1.0135
+ℹ   fold=65 model=vol rhat=1.0175
+ℹ   fold=66 model=eff rhat=1.012
+ℹ   fold=67 model=eff rhat=1.0161
+ℹ   fold=67 model=vol rhat=1.0141
+ℹ   fold=68 model=eff rhat=1.0165
+ℹ   fold=69 model=eff rhat=1.0113
+ℹ   fold=70 model=eff rhat=1.0221
+ℹ   fold=70 model=vol rhat=1.0114
+ℹ   fold=71 model=eff rhat=1.0186
+ℹ   fold=71 model=vol rhat=1.0116
+ℹ   fold=72 model=eff rhat=1.0242
+ℹ   fold=72 model=vol rhat=1.0114
+ℹ   fold=73 model=eff rhat=1.0129
+ℹ   fold=73 model=vol rhat=1.0116
+ℹ   fold=74 model=eff rhat=1.012
+ℹ   fold=74 model=vol rhat=1.0119
+ℹ   fold=75 model=eff rhat=1.0158
+ℹ   fold=75 model=vol rhat=1.0124
+ℹ   fold=76 model=eff rhat=1.0102
+ℹ   fold=76 model=vol rhat=1.0127
+ℹ   fold=77 model=eff rhat=1.0135
+ℹ   fold=77 model=vol rhat=1.0108
+ℹ   fold=78 model=eff rhat=1.0154
+ℹ   fold=78 model=vol rhat=1.0102
+ℹ   fold=79 model=eff rhat=1.0177
+ℹ   fold=79 model=vol rhat=1.0157
+ℹ   fold=80 model=vol rhat=1.0148
+ℹ   fold=81 model=eff rhat=1.0149
+ℹ   fold=82 model=eff rhat=1.0112
+ℹ   fold=82 model=vol rhat=1.0131
+ℹ   fold=83 model=eff rhat=1.0137
+ℹ   fold=83 model=vol rhat=1.0183
+ℹ   fold=84 model=eff rhat=1.0199
+ℹ   fold=84 model=vol rhat=1.0157
+ℹ   fold=85 model=eff rhat=1.0112
+ℹ   fold=85 model=vol rhat=1.0118
+ℹ   fold=86 model=eff rhat=1.0103
+ℹ   fold=86 model=vol rhat=1.0147
+ℹ   fold=87 model=vol rhat=1.0257
+ℹ   fold=88 model=eff rhat=1.0104
+ℹ   fold=88 model=vol rhat=1.0125
+ℹ   fold=89 model=eff rhat=1.0133
+ℹ   fold=89 model=vol rhat=1.0102
+ℹ   fold=90 model=eff rhat=1.0134
+ℹ   fold=90 model=vol rhat=1.0104
+ℹ   fold=91 model=vol rhat=1.0121
+ℹ   fold=92 model=eff rhat=1.0146
+ℹ   fold=92 model=vol rhat=1.0107
+ℹ   fold=93 model=eff rhat=1.0108
+ℹ   fold=93 model=vol rhat=1.0175
+ℹ   fold=94 model=eff rhat=1.0129
+ℹ   fold=94 model=vol rhat=1.0161
+ℹ   fold=95 model=eff rhat=1.0105
+ℹ   fold=95 model=vol rhat=1.0174
+ℹ   fold=96 model=eff rhat=1.0167
+ℹ   fold=96 model=vol rhat=1.0103
+ℹ   fold=97 model=eff rhat=1.0111
+ℹ   fold=97 model=vol rhat=1.0157
+ℹ   fold=98 model=eff rhat=1.0121
+ℹ   fold=98 model=vol rhat=1.0103
+ℹ   fold=99 model=eff rhat=1.0137
+ℹ   fold=99 model=vol rhat=1.0118
+ℹ   fold=100 model=eff rhat=1.0145
+ℹ   fold=101 model=eff rhat=1.0517
+ℹ   fold=101 model=vol rhat=1.0136
+ℹ   fold=102 model=eff rhat=1.0178
+ℹ   fold=102 model=vol rhat=1.0118
+ℹ   fold=103 model=eff rhat=1.0149
+ℹ   fold=103 model=vol rhat=1.0114
+ℹ   fold=104 model=eff rhat=1.0155
+ℹ   fold=104 model=vol rhat=1.0132
+ℹ   fold=105 model=eff rhat=1.0152
+ℹ   fold=105 model=vol rhat=1.012
+ℹ   fold=106 model=eff rhat=1.0227
+ℹ   fold=106 model=vol rhat=1.0114
+ℹ   fold=107 model=eff rhat=1.0128
+ℹ   fold=107 model=vol rhat=1.0121
+ℹ   fold=108 model=vol rhat=1.0111
+ℹ   fold=109 model=eff rhat=1.0152
+ℹ   fold=109 model=vol rhat=1.0134
+ℹ   fold=110 model=eff rhat=1.0167
+ℹ   fold=110 model=vol rhat=1.0177
+ℹ   fold=111 model=eff rhat=1.0173
+ℹ   fold=111 model=vol rhat=1.0126
+ℹ   fold=112 model=eff rhat=1.0121
+ℹ   fold=112 model=vol rhat=1.0136
+ℹ   fold=113 model=eff rhat=1.0139
+ℹ   fold=113 model=vol rhat=1.015
+ℹ   fold=114 model=vol rhat=1.0148
+ℹ   fold=115 model=eff rhat=1.0106
+ℹ   fold=115 model=vol rhat=1.0112
+ℹ   fold=116 model=eff rhat=1.0147
+ℹ   fold=116 model=vol rhat=1.0167
+ℹ   fold=117 model=eff rhat=1.0169
+ℹ   fold=117 model=vol rhat=1.0146
+ℹ   fold=118 model=eff rhat=1.0122
+ℹ   fold=118 model=vol rhat=1.0147
+ℹ   fold=119 model=eff rhat=1.0123
+ℹ   fold=119 model=vol rhat=1.0137
+ℹ   fold=120 model=eff rhat=1.0164
+ℹ   fold=120 model=vol rhat=1.0139
+ℹ   fold=121 model=eff rhat=1.0126
+ℹ   fold=121 model=vol rhat=1.0197
+ℹ   fold=122 model=eff rhat=1.0163
+ℹ   fold=122 model=vol rhat=1.0125
+ℹ   fold=123 model=eff rhat=1.0186
+ℹ   fold=123 model=vol rhat=1.012
+ℹ   fold=124 model=eff rhat=1.0134
+ℹ   fold=125 model=eff rhat=1.0116
+ℹ   fold=125 model=vol rhat=1.015
+ℹ   fold=126 model=eff rhat=1.0108
+ℹ   fold=126 model=vol rhat=1.0116
+ℹ   fold=127 model=vol rhat=1.011
+ℹ   fold=128 model=eff rhat=1.0108
+ℹ   fold=128 model=vol rhat=1.0113
+ℹ   fold=129 model=eff rhat=1.0114
+ℹ   fold=129 model=vol rhat=1.0123
+ℹ   fold=130 model=vol rhat=1.015
+ℹ   fold=131 model=eff rhat=1.0123
+ℹ   fold=131 model=vol rhat=1.0135
+ℹ   fold=132 model=eff rhat=1.0106
+ℹ   fold=132 model=vol rhat=1.0111
+ℹ   fold=133 model=eff rhat=1.0118
+ℹ   fold=133 model=vol rhat=1.0145
+ℹ   fold=134 model=eff rhat=1.0146
+ℹ   fold=134 model=vol rhat=1.0172
+ℹ   fold=135 model=vol rhat=1.0198
+ℹ   fold=136 model=eff rhat=1.0149
+ℹ   fold=136 model=vol rhat=1.0163
+ℹ   fold=137 model=eff rhat=1.0145
+ℹ   fold=137 model=vol rhat=1.0113
+ℹ   fold=138 model=eff rhat=1.0145
+ℹ   fold=138 model=vol rhat=1.0379
+ℹ   fold=139 model=eff rhat=1.0182
+ℹ   fold=140 model=eff rhat=1.022
+ℹ   fold=140 model=vol rhat=1.017
+ℹ   fold=141 model=eff rhat=1.0117
+ℹ   fold=141 model=vol rhat=1.014
+ℹ   fold=142 model=eff rhat=1.0115
+ℹ   fold=142 model=vol rhat=1.0118
+ℹ   fold=143 model=eff rhat=1.018
+ℹ   fold=143 model=vol rhat=1.0109
+ℹ   fold=144 model=eff rhat=1.0158
+ℹ   fold=144 model=vol rhat=1.0151
+ℹ   fold=145 model=eff rhat=1.0108
+ℹ   fold=145 model=vol rhat=1.0117
+ℹ   fold=146 model=eff rhat=1.0105
+ℹ   fold=146 model=vol rhat=1.0156
+ℹ   fold=147 model=eff rhat=1.0164
+ℹ   fold=147 model=vol rhat=1.0156
+ℹ   fold=148 model=vol rhat=1.013
+ℹ   fold=149 model=eff rhat=1.0167
+ℹ   fold=149 model=vol rhat=1.0117
+ℹ   fold=150 model=eff rhat=1.0125
+ℹ   fold=150 model=vol rhat=1.012
+ℹ   fold=151 model=eff rhat=1.0158
+ℹ   fold=151 model=vol rhat=1.0119
+ℹ   fold=152 model=eff rhat=1.0148
+ℹ   fold=152 model=vol rhat=1.0129
+ℹ   fold=153 model=eff rhat=1.0105
+ℹ   fold=153 model=vol rhat=1.015
+ℹ   fold=154 model=eff rhat=1.0147
+ℹ   fold=154 model=vol rhat=1.0287
+ℹ   fold=155 model=eff rhat=1.0127
+ℹ   fold=155 model=vol rhat=1.0116
+ℹ   fold=156 model=eff rhat=1.0153
+ℹ   fold=156 model=vol rhat=1.0148
+ℹ   fold=157 model=eff rhat=1.0114
+ℹ   fold=157 model=vol rhat=1.0161
+ℹ   fold=158 model=eff rhat=1.0143
+ℹ   fold=158 model=vol rhat=1.0143
+ℹ   fold=159 model=eff rhat=1.0156
+ℹ   fold=159 model=vol rhat=1.0141
+ℹ   fold=160 model=eff rhat=1.0165
+ℹ   fold=160 model=vol rhat=1.0106
+ℹ   fold=161 model=eff rhat=1.0105
+ℹ   fold=161 model=vol rhat=1.0113
+ℹ   fold=162 model=eff rhat=1.0103
+ℹ   fold=162 model=vol rhat=1.0185
+ℹ   fold=163 model=eff rhat=1.0142
+ℹ   fold=163 model=vol rhat=1.0138
+ℹ   fold=164 model=eff rhat=1.0126
+ℹ   fold=164 model=vol rhat=1.0117
+ℹ   fold=165 model=eff rhat=1.0112
+ℹ   fold=165 model=vol rhat=1.0123
+ℹ   fold=166 model=eff rhat=1.0171
+ℹ   fold=166 model=vol rhat=1.0125
+ℹ   fold=167 model=eff rhat=1.0158
+ℹ   fold=167 model=vol rhat=1.0159
+ℹ   fold=168 model=eff rhat=1.0128
+ℹ   fold=168 model=vol rhat=1.0139
+ℹ   fold=169 model=eff rhat=1.0111
+ℹ   fold=170 model=eff rhat=1.0114
+ℹ   fold=170 model=vol rhat=1.0158
+ℹ   fold=171 model=eff rhat=1.0107
+ℹ   fold=171 model=vol rhat=1.0124
+ℹ   fold=172 model=eff rhat=1.0205
+ℹ   fold=172 model=vol rhat=1.0174
+ℹ   fold=173 model=eff rhat=1.014
+ℹ   fold=173 model=vol rhat=1.0159
+ℹ   fold=174 model=eff rhat=1.0166
+ℹ   fold=174 model=vol rhat=1.0179
+ℹ   fold=175 model=eff rhat=1.0107
+ℹ   fold=175 model=vol rhat=1.0137
+ℹ   fold=176 model=eff rhat=1.0118
+ℹ   fold=176 model=vol rhat=1.0126
+ℹ   fold=177 model=eff rhat=1.0115
+ℹ   fold=177 model=vol rhat=1.0133
+ℹ   fold=178 model=vol rhat=1.0133
+ℹ   fold=179 model=eff rhat=1.0146
+ℹ   fold=179 model=vol rhat=1.0177
+ℹ   fold=180 model=eff rhat=1.0154
+ℹ   fold=180 model=vol rhat=1.0158
+ℹ   fold=181 model=eff rhat=1.0149
+ℹ   fold=181 model=vol rhat=1.0124
+ℹ   fold=182 model=eff rhat=1.0121
+ℹ   fold=182 model=vol rhat=1.0216
+ℹ   fold=183 model=eff rhat=1.0124
+ℹ   fold=183 model=vol rhat=1.0105
+ℹ   fold=184 model=eff rhat=1.0129
+ℹ   fold=184 model=vol rhat=1.0181
+ℹ   fold=185 model=eff rhat=1.0158
+ℹ   fold=185 model=vol rhat=1.0133
+ℹ   fold=186 model=eff rhat=1.0146
+ℹ   fold=186 model=vol rhat=1.02
+ℹ   fold=187 model=eff rhat=1.0139
+ℹ   fold=187 model=vol rhat=1.0145
+ℹ   fold=188 model=eff rhat=1.0102
+ℹ   fold=188 model=vol rhat=1.0111
+ℹ   fold=189 model=eff rhat=1.0135
+ℹ   fold=189 model=vol rhat=1.0143
+ℹ   fold=190 model=eff rhat=1.0134
+ℹ   fold=190 model=vol rhat=1.0138
+ℹ   fold=191 model=eff rhat=1.0164
+ℹ   fold=191 model=vol rhat=1.0125
+ℹ   fold=192 model=eff rhat=1.0101
+ℹ   fold=192 model=vol rhat=1.0172
+ℹ   fold=193 model=eff rhat=1.0121
+ℹ   fold=193 model=vol rhat=1.0127
+ℹ   fold=194 model=eff rhat=1.014
+ℹ   fold=194 model=vol rhat=1.0181
+ℹ   fold=195 model=eff rhat=1.0143
+ℹ   fold=195 model=vol rhat=1.0114
+ℹ   fold=196 model=eff rhat=1.0131
+ℹ   fold=196 model=vol rhat=1.0138
+ℹ   fold=197 model=eff rhat=1.0191
+ℹ   fold=197 model=vol rhat=1.0171
+ℹ   fold=198 model=eff rhat=1.0183
+ℹ   fold=198 model=vol rhat=1.0113
+ℹ   fold=199 model=eff rhat=1.0131
+ℹ   fold=199 model=vol rhat=1.0124
+ℹ   fold=200 model=eff rhat=1.0209
+ℹ   fold=200 model=vol rhat=1.0183
+ℹ   fold=201 model=eff rhat=1.0128
+ℹ   fold=201 model=vol rhat=1.0131
+ℹ   fold=202 model=eff rhat=1.0153
+ℹ   fold=202 model=vol rhat=1.0142
+ℹ   fold=203 model=eff rhat=1.0146
+ℹ   fold=203 model=vol rhat=1.0121
+ℹ   fold=204 model=eff rhat=1.0119
+ℹ   fold=204 model=vol rhat=1.014
+✔ Divergent transitions: no folds exceeded 10
+ℹ Efficiency nu (Student-t df) across 31 folds:
+ℹ   range [7.1, 14.5] | median 8.2 | mean 8.6
+ℹ Median nu = 8.2: moderate tail weight
+ℹ sigma slope on log_opp (negative = more opp -> smaller sigma):
+ℹ   range [-0.347, -0.264] | median -0.269
+
+── 3C Pooled Coverage (all 11621 test rows) ────────────────────────────────────
+# A tibble: 9 × 6
+  component  stratum nominal empirical     delta sharpness
+  <chr>      <chr>     <dbl>     <dbl>     <dbl>     <dbl>
+1 efficiency pooled      0.5     0.497 -0.00262      0.375
+2 efficiency pooled      0.8     0.797 -0.00291      0.740
+3 efficiency pooled      0.9     0.896 -0.00386      0.981
+4 volume     pooled      0.5     0.530  0.0296       7.64 
+5 volume     pooled      0.8     0.823  0.0226      14.5  
+6 volume     pooled      0.9     0.909  0.00947     18.3  
+7 combined   pooled      0.5     0.500  0.000129     4.62 
+8 combined   pooled      0.8     0.806  0.00630     10.3  
+9 combined   pooled      0.9     0.904  0.00431     14.5  
+
+── 3C Low-Usage Bucket (opp 5-8) ───────────────────────────────────────────────
+ℹ Low-usage rows: 3049
+# A tibble: 9 × 6
+  component  stratum     nominal empirical    delta sharpness
+  <chr>      <chr>         <dbl>     <dbl>    <dbl>     <dbl>
+1 efficiency low_opp_5_8     0.5     0.515  0.0146      0.520
+2 efficiency low_opp_5_8     0.8     0.809  0.00912     1.02 
+3 efficiency low_opp_5_8     0.9     0.899 -0.00134     1.36 
+4 volume     low_opp_5_8     0.5     0.454 -0.0461      7.67 
+5 volume     low_opp_5_8     0.8     0.805  0.00453    14.4  
+6 volume     low_opp_5_8     0.9     0.918  0.0177     17.9  
+7 combined   low_opp_5_8     0.5     0.663  0.163       4.95 
+8 combined   low_opp_5_8     0.8     0.934  0.134      11.7  
+9 combined   low_opp_5_8     0.9     0.982  0.0823     16.9  
+
+── 3C Stratified Combined Coverage (sharpness honesty check) ───────────────────
+# A tibble: 9 × 7
+  component stratum         n nominal empirical   delta sharpness
+  <chr>     <fct>       <int>   <dbl>     <dbl>   <dbl>     <dbl>
+1 combined  low  (5-8)   3049     0.5     0.663  0.163       4.95
+2 combined  low  (5-8)   3049     0.8     0.934  0.134      11.7 
+3 combined  low  (5-8)   3049     0.9     0.982  0.0823     16.9 
+4 combined  mid  (9-13)  3009     0.5     0.524  0.0244      4.56
+5 combined  mid  (9-13)  3009     0.8     0.843  0.0428     10.3 
+6 combined  mid  (9-13)  3009     0.9     0.939  0.0389     14.5 
+7 combined  high (14+)   5563     0.5     0.398 -0.102       4.48
+8 combined  high (14+)   5563     0.8     0.717 -0.0835      9.58
+9 combined  high (14+)   5563     0.9     0.843 -0.0571     13.3 
+
+── Three-Way Comparison: 3C vs 3B vs 3A ────────────────────────────────────────
+
+── 1. Noise-Floor Adjudication: Low-Usage Efficiency Coverage ──
+
+ℹ 3A (LightGBM conformal) vs 3B (RF conformal) vs 3C (hierarchical Bayes)
+ℹ model          | 50% delta | 80% delta | 90% delta | 80% width
+ℹ 3A-LightGBM | -11.2pp | -12.7pp | -8.8pp | 0.776
+ℹ 3B-RF       | -10.9pp | -12.5pp | -9.2pp | 0.754
+ℹ 3C-HierBayes | +1.5pp | +0.9pp | -0.1pp | 1.024
+
+── Noise-floor verdict: ──
+
+✔ 3C efficiency 80% delta = +0.9pp: AT/NEAR NOMINAL -- tree-family artifact confirmed. Heavy-tail likelihood captured the per-touch tail that tree learners could not.
+
+── 2. Combined Coverage -- Pooled and Low-Usage (rubric decision surface) ──
+
+ℹ model          | stratum       | 50% delta | 80% delta | 80% width
+ℹ 3A-LightGBM |    low_opp_5_8 | -14.2pp | -15.1pp | 5.094
+ℹ 3A-LightGBM |         pooled | -0.4pp | -0.3pp | 11.173
+ℹ 3B-RF       |    low_opp_5_8 | +0.9pp | +0.8pp | 6.85
+ℹ 3B-RF       |         pooled | -0.0pp | -0.1pp | 9.625
+ℹ 3C-HierBayes |    low_opp_5_8 | +16.3pp | +13.4pp | 11.715
+ℹ 3C-HierBayes |         pooled | +0.0pp | +0.6pp | 10.32
+
+── 3. Low-Usage Volume Coverage ──
+
+ℹ model          | 50% delta | 80% delta | 90% delta | 80% width
+ℹ 3A-LightGBM | -8.4pp | -1.4pp | -0.0pp | 14.354
+ℹ 3B-RF       | -8.4pp | -1.4pp | -0.0pp | 14.354
+ℹ 3C-HierBayes | -4.6pp | +0.5pp | +1.8pp | 14.431
+
+── 4. 3C Stratified Combined Coverage (verify pooled sharpness is honest) ──
+
+# A tibble: 3 × 6
+  stratum         n empirical   delta sharpness delta_pp
+  <fct>       <int>     <dbl>   <dbl>     <dbl> <chr>   
+1 low  (5-8)   3049     0.934  0.134      11.7  +13.4pp 
+2 mid  (9-13)  3009     0.843  0.0428     10.3  +4.3pp  
+3 high (14+)   5563     0.717 -0.0835      9.58 -8.3pp  
+── Decision Rule Evaluation ────────────────────────────────────────────────────
+ℹ PRIMARY: pooled combined 80% closest to nominal
+ℹ TIEBREAK: sharpest (narrowest) among models within +-2pp of nominal
+ℹ VETO: low-usage combined 80% > +-10pp disqualifies
+
+── Pooled combined 80% (primary): ──
+
+ℹ 3B-RF      : delta=-0.1pp | width=9.625
+ℹ 3A-LightGBM: delta=-0.3pp | width=11.173
+ℹ 3C-HierBayes: delta=+0.6pp | width=10.32
+
+── Low-usage combined 80% (veto check): ──
+
+ℹ 3A-LightGBM: delta=-15.1pp [VETO TRIGGERED]
+ℹ 3B-RF      : delta=+0.8pp [pass]
+ℹ 3C-HierBayes: delta=+13.4pp [VETO TRIGGERED]
+✔ Winner: 3B-RF       (only eligible model within +-2pp)
+
+── Save outputs ────────────────────────────────────────────────────────────────
+✔ output/03c_hier_fold_predictions.csv  (11621 rows)
+✔ output/03c_hier_pooled_coverage.csv
+✔ output/03c_hier_low_usage_coverage.csv
+✔ output/03c_hier_convergence_diag.csv
+✔ output/03c_hier_nu_log.csv
+
+── Step 3C complete ────────────────────────────────────────────────────────────
+There were 50 or more warnings (use warnings() to see the first 50)
+
+── Step 3D: TabPFN + Conformal (sharpness re-run) ──────────────────────────────
+✔ TABPFN_TOKEN set (length 53)
+ℹ Python: /opt/homebrew/bin/python3
+✔ TABPFN_TOKEN injected into Python os.environ
+✔ tabpfn version: 8.0.8
+ℹ TabPFN n_estimators=16 | limits: rows<=50000, features<=2000
+ℹ EFF features: 12 | VOL features: 8 -- within limits
+ℹ Construction: FROZEN power-law Mechanism A (identical to 3A/3B/3A-v2)
+ℹ Native TabPFN distribution: NOT USED (future thread -- do not build now)
+✔ Feature table: 11918 rows | Fold map: 204 folds | Expected test rows: 11621
+
+── Walk-forward fold loop (204 folds -- TabPFN forward pass per fold) ──────────
+ℹ Note: two TabPFN.fit() calls per fold (cal + test prediction sets handled separately)
+
+ *** caught segfault ***
+address 0x540, cause 'invalid permissions'
+
+── Step 3E: Direct-Quantile LightGBM ───────────────────────────────────────────
+ℹ Combined: q10/q50/q90 quantile regression on total_epa (no conformal wrapper)
+ℹ Components: Mechanism A conformal, fixed hyperparams (rubric compliance)
+ℹ TOT_FEATURES: 15 (prior_epa_per_opp, baseline_epa_per_opp, rolling_epa_per_opp, form_residual, is_cold_start_int, draft_tier_int, def_rush_epa_adj, def_short_pass_epa_adj, def_deep_pass_epa_adj, wt_snap_share, games_played_so_far, def_used_fallback_int, wt_carry_share, wt_target_share, wt_team_total_plays)
+✔ Feature table: 11918 rows | Fold map: 204 folds | Expected test rows: 11621
+
+── Walk-forward fold loop (204 folds -- 5 LightGBM fits per fold) ──────────────
+ℹ Fold 01 [2014-W06]: 63 rows | alpha_obs=0.466 | 0s
+ℹ Fold 02 [2014-W07]: 58 rows | alpha_obs=0.2 | 0s
+ℹ Fold 03 [2014-W08]: 57 rows | alpha_obs=0.2 | 0s
+ℹ Fold 04 [2014-W09]: 53 rows | alpha_obs=0.383 | 0s
+ℹ Fold 05 [2014-W10]: 53 rows | alpha_obs=0.201 | 0s
+ℹ Fold 06 [2014-W11]: 51 rows | alpha_obs=0.329 | 0s
+ℹ Fold 07 [2014-W12]: 60 rows | alpha_obs=0.549 | 0s
+ℹ Fold 08 [2014-W13]: 61 rows | alpha_obs=0.545 | 0s
+ℹ Fold 09 [2014-W14]: 58 rows | alpha_obs=0.256 | 0s
+ℹ Fold 10 [2014-W15]: 64 rows | alpha_obs=0.43 | 0s
+ℹ Fold 11 [2014-W16]: 62 rows | alpha_obs=0.526 | 0s
+ℹ Fold 12 [2014-W17]: 70 rows | alpha_obs=0.417 | 0s
+ℹ Fold 13 [2015-W01]: 60 rows | alpha_obs=0.432 | 0s
+ℹ Fold 14 [2015-W02]: 60 rows | alpha_obs=0.412 | 0s
+ℹ Fold 15 [2015-W03]: 67 rows | alpha_obs=0.542 | 0s
+ℹ Fold 16 [2015-W04]: 57 rows | alpha_obs=0.569 | 0s
+ℹ Fold 17 [2015-W05]: 59 rows | alpha_obs=0.668 | 0s
+ℹ Fold 18 [2015-W06]: 55 rows | alpha_obs=0.597 | 0s
+ℹ Fold 19 [2015-W07]: 59 rows | alpha_obs=0.741 | 1s
+ℹ Fold 20 [2015-W08]: 49 rows | alpha_obs=0.575 | 1s
+ℹ Fold 21 [2015-W09]: 45 rows | alpha_obs=0.609 | 1s
+ℹ Fold 22 [2015-W10]: 51 rows | alpha_obs=0.592 | 1s
+ℹ Fold 23 [2015-W11]: 55 rows | alpha_obs=0.534 | 1s
+ℹ Fold 24 [2015-W12]: 61 rows | alpha_obs=0.622 | 1s
+ℹ Fold 25 [2015-W13]: 68 rows | alpha_obs=0.531 | 1s
+ℹ Fold 26 [2015-W14]: 64 rows | alpha_obs=0.474 | 1s
+ℹ Fold 27 [2015-W15]: 64 rows | alpha_obs=0.412 | 1s
+ℹ Fold 28 [2015-W16]: 70 rows | alpha_obs=0.483 | 1s
+ℹ Fold 29 [2015-W17]: 68 rows | alpha_obs=0.445 | 1s
+ℹ Fold 30 [2016-W01]: 54 rows | alpha_obs=0.394 | 1s
+ℹ Fold 31 [2016-W02]: 60 rows | alpha_obs=0.498 | 1s
+ℹ Fold 32 [2016-W03]: 62 rows | alpha_obs=0.56 | 1s
+ℹ Fold 33 [2016-W04]: 56 rows | alpha_obs=0.547 | 1s
+ℹ Fold 34 [2016-W05]: 52 rows | alpha_obs=0.57 | 1s
+ℹ Fold 35 [2016-W06]: 57 rows | alpha_obs=0.565 | 1s
+ℹ Fold 36 [2016-W07]: 55 rows | alpha_obs=0.559 | 1s
+ℹ Fold 37 [2016-W08]: 47 rows | alpha_obs=0.394 | 1s
+ℹ Fold 38 [2016-W09]: 47 rows | alpha_obs=0.448 | 1s
+ℹ Fold 39 [2016-W10]: 53 rows | alpha_obs=0.349 | 1s
+ℹ Fold 40 [2016-W11]: 50 rows | alpha_obs=0.378 | 1s
+ℹ Fold 41 [2016-W12]: 59 rows | alpha_obs=0.416 | 1s
+ℹ Fold 42 [2016-W13]: 56 rows | alpha_obs=0.466 | 1s
+ℹ Fold 43 [2016-W14]: 56 rows | alpha_obs=0.421 | 1s
+ℹ Fold 44 [2016-W15]: 61 rows | alpha_obs=0.438 | 1s
+ℹ Fold 45 [2016-W16]: 61 rows | alpha_obs=0.491 | 1s
+ℹ Fold 46 [2016-W17]: 66 rows | alpha_obs=0.476 | 1s
+ℹ Fold 47 [2017-W01]: 63 rows | alpha_obs=0.52 | 1s
+ℹ Fold 48 [2017-W02]: 68 rows | alpha_obs=0.657 | 1s
+ℹ Fold 49 [2017-W03]: 64 rows | alpha_obs=0.571 | 1s
+ℹ Fold 50 [2017-W04]: 67 rows | alpha_obs=0.567 | 1s
+ℹ Fold 51 [2017-W05]: 56 rows | alpha_obs=0.538 | 1s
+ℹ Fold 52 [2017-W06]: 53 rows | alpha_obs=0.578 | 1s
+ℹ Fold 53 [2017-W07]: 60 rows | alpha_obs=0.472 | 1s
+ℹ Fold 54 [2017-W08]: 52 rows | alpha_obs=0.561 | 1s
+ℹ Fold 55 [2017-W09]: 56 rows | alpha_obs=0.56 | 1s
+ℹ Fold 56 [2017-W10]: 60 rows | alpha_obs=0.565 | 1s
+ℹ Fold 57 [2017-W11]: 59 rows | alpha_obs=0.59 | 1s
+ℹ Fold 58 [2017-W12]: 64 rows | alpha_obs=0.606 | 1s
+ℹ Fold 59 [2017-W13]: 64 rows | alpha_obs=0.585 | 1s
+ℹ Fold 60 [2017-W14]: 62 rows | alpha_obs=0.583 | 1s
+ℹ Fold 61 [2017-W15]: 68 rows | alpha_obs=0.581 | 1s
+ℹ Fold 62 [2017-W16]: 63 rows | alpha_obs=0.603 | 1s
+ℹ Fold 63 [2017-W17]: 63 rows | alpha_obs=0.553 | 1s
+ℹ Fold 64 [2018-W01]: 61 rows | alpha_obs=0.577 | 1s
+ℹ Fold 65 [2018-W02]: 64 rows | alpha_obs=0.528 | 1s
+ℹ Fold 66 [2018-W03]: 60 rows | alpha_obs=0.53 | 1s
+ℹ Fold 67 [2018-W04]: 59 rows | alpha_obs=0.575 | 1s
+ℹ Fold 68 [2018-W05]: 56 rows | alpha_obs=0.563 | 1s
+ℹ Fold 69 [2018-W06]: 57 rows | alpha_obs=0.494 | 1s
+ℹ Fold 70 [2018-W07]: 54 rows | alpha_obs=0.505 | 1s
+ℹ Fold 71 [2018-W08]: 49 rows | alpha_obs=0.509 | 1s
+ℹ Fold 72 [2018-W09]: 53 rows | alpha_obs=0.535 | 1s
+ℹ Fold 73 [2018-W10]: 54 rows | alpha_obs=0.501 | 1s
+ℹ Fold 74 [2018-W11]: 46 rows | alpha_obs=0.534 | 1s
+ℹ Fold 75 [2018-W12]: 56 rows | alpha_obs=0.553 | 1s
+ℹ Fold 76 [2018-W13]: 64 rows | alpha_obs=0.547 | 1s
+ℹ Fold 77 [2018-W14]: 60 rows | alpha_obs=0.526 | 1s
+ℹ Fold 78 [2018-W15]: 60 rows | alpha_obs=0.481 | 1s
+ℹ Fold 79 [2018-W16]: 62 rows | alpha_obs=0.485 | 1s
+ℹ Fold 80 [2018-W17]: 64 rows | alpha_obs=0.436 | 1s
+ℹ Fold 81 [2019-W01]: 63 rows | alpha_obs=0.428 | 1s
+ℹ Fold 82 [2019-W02]: 61 rows | alpha_obs=0.47 | 1s
+ℹ Fold 83 [2019-W03]: 59 rows | alpha_obs=0.436 | 1s
+ℹ Fold 84 [2019-W04]: 57 rows | alpha_obs=0.553 | 1s
+ℹ Fold 85 [2019-W05]: 57 rows | alpha_obs=0.575 | 1s
+ℹ Fold 86 [2019-W06]: 50 rows | alpha_obs=0.524 | 1s
+ℹ Fold 87 [2019-W07]: 51 rows | alpha_obs=0.566 | 1s
+ℹ Fold 88 [2019-W08]: 53 rows | alpha_obs=0.586 | 1s
+ℹ Fold 89 [2019-W09]: 49 rows | alpha_obs=0.611 | 1s
+ℹ Fold 90 [2019-W10]: 47 rows | alpha_obs=0.543 | 1s
+ℹ Fold 91 [2019-W11]: 57 rows | alpha_obs=0.551 | 1s
+ℹ Fold 92 [2019-W12]: 55 rows | alpha_obs=0.606 | 1s
+ℹ Fold 93 [2019-W13]: 59 rows | alpha_obs=0.528 | 1s
+ℹ Fold 94 [2019-W14]: 63 rows | alpha_obs=0.505 | 1s
+ℹ Fold 95 [2019-W15]: 61 rows | alpha_obs=0.517 | 1s
+ℹ Fold 96 [2019-W16]: 62 rows | alpha_obs=0.519 | 1s
+ℹ Fold 97 [2019-W17]: 59 rows | alpha_obs=0.525 | 1s
+ℹ Fold 98 [2020-W01]: 69 rows | alpha_obs=0.539 | 1s
+ℹ Fold 99 [2020-W02]: 62 rows | alpha_obs=0.499 | 1s
+ℹ Fold 100 [2020-W03]: 56 rows | alpha_obs=0.564 | 1s
+ℹ Fold 101 [2020-W04]: 60 rows | alpha_obs=0.585 | 1s
+ℹ Fold 102 [2020-W05]: 53 rows | alpha_obs=0.558 | 1s
+ℹ Fold 103 [2020-W06]: 59 rows | alpha_obs=0.554 | 1s
+ℹ Fold 104 [2020-W07]: 52 rows | alpha_obs=0.55 | 1s
+ℹ Fold 105 [2020-W08]: 55 rows | alpha_obs=0.549 | 1s
+ℹ Fold 106 [2020-W09]: 59 rows | alpha_obs=0.544 | 1s
+ℹ Fold 107 [2020-W10]: 52 rows | alpha_obs=0.514 | 1s
+ℹ Fold 108 [2020-W11]: 56 rows | alpha_obs=0.502 | 1s
+ℹ Fold 109 [2020-W12]: 62 rows | alpha_obs=0.518 | 1s
+ℹ Fold 110 [2020-W13]: 60 rows | alpha_obs=0.546 | 1s
+ℹ Fold 111 [2020-W14]: 65 rows | alpha_obs=0.554 | 1s
+ℹ Fold 112 [2020-W15]: 54 rows | alpha_obs=0.511 | 1s
+ℹ Fold 113 [2020-W16]: 55 rows | alpha_obs=0.52 | 1s
+ℹ Fold 114 [2020-W17]: 58 rows | alpha_obs=0.507 | 1s
+ℹ Fold 115 [2021-W01]: 59 rows | alpha_obs=0.522 | 1s
+ℹ Fold 116 [2021-W02]: 58 rows | alpha_obs=0.526 | 1s
+ℹ Fold 117 [2021-W03]: 58 rows | alpha_obs=0.516 | 1s
+ℹ Fold 118 [2021-W04]: 61 rows | alpha_obs=0.519 | 1s
+ℹ Fold 119 [2021-W05]: 64 rows | alpha_obs=0.595 | 1s
+ℹ Fold 120 [2021-W06]: 51 rows | alpha_obs=0.532 | 1s
+ℹ Fold 121 [2021-W07]: 50 rows | alpha_obs=0.525 | 1s
+ℹ Fold 122 [2021-W08]: 58 rows | alpha_obs=0.5 | 1s
+ℹ Fold 123 [2021-W09]: 54 rows | alpha_obs=0.534 | 1s
+ℹ Fold 124 [2021-W10]: 56 rows | alpha_obs=0.54 | 1s
+ℹ Fold 125 [2021-W11]: 53 rows | alpha_obs=0.511 | 1s
+ℹ Fold 126 [2021-W12]: 57 rows | alpha_obs=0.5 | 1s
+ℹ Fold 127 [2021-W13]: 50 rows | alpha_obs=0.515 | 1s
+ℹ Fold 128 [2021-W14]: 51 rows | alpha_obs=0.492 | 1s
+ℹ Fold 129 [2021-W15]: 59 rows | alpha_obs=0.506 | 1s
+ℹ Fold 130 [2021-W16]: 62 rows | alpha_obs=0.476 | 1s
+ℹ Fold 131 [2021-W17]: 61 rows | alpha_obs=0.483 | 1s
+ℹ Fold 132 [2021-W18]: 61 rows | alpha_obs=0.515 | 1s
+ℹ Fold 133 [2022-W01]: 61 rows | alpha_obs=0.486 | 1s
+ℹ Fold 134 [2022-W02]: 60 rows | alpha_obs=0.52 | 1s
+ℹ Fold 135 [2022-W03]: 61 rows | alpha_obs=0.477 | 1s
+ℹ Fold 136 [2022-W04]: 57 rows | alpha_obs=0.479 | 1s
+ℹ Fold 137 [2022-W05]: 61 rows | alpha_obs=0.474 | 1s
+ℹ Fold 138 [2022-W06]: 49 rows | alpha_obs=0.427 | 1s
+ℹ Fold 139 [2022-W07]: 52 rows | alpha_obs=0.435 | 1s
+ℹ Fold 140 [2022-W08]: 57 rows | alpha_obs=0.461 | 1s
+ℹ Fold 141 [2022-W09]: 48 rows | alpha_obs=0.45 | 1s
+ℹ Fold 142 [2022-W10]: 48 rows | alpha_obs=0.473 | 1s
+ℹ Fold 143 [2022-W11]: 53 rows | alpha_obs=0.47 | 1s
+ℹ Fold 144 [2022-W12]: 61 rows | alpha_obs=0.455 | 1s
+ℹ Fold 145 [2022-W13]: 53 rows | alpha_obs=0.427 | 1s
+ℹ Fold 146 [2022-W14]: 49 rows | alpha_obs=0.426 | 1s
+ℹ Fold 147 [2022-W15]: 56 rows | alpha_obs=0.421 | 1s
+ℹ Fold 148 [2022-W16]: 60 rows | alpha_obs=0.401 | 1s
+ℹ Fold 149 [2022-W17]: 61 rows | alpha_obs=0.462 | 1s
+ℹ Fold 150 [2022-W18]: 66 rows | alpha_obs=0.431 | 1s
+ℹ Fold 151 [2023-W01]: 58 rows | alpha_obs=0.432 | 1s
+ℹ Fold 152 [2023-W02]: 55 rows | alpha_obs=0.449 | 1s
+ℹ Fold 153 [2023-W03]: 62 rows | alpha_obs=0.457 | 1s
+ℹ Fold 154 [2023-W04]: 59 rows | alpha_obs=0.459 | 1s
+ℹ Fold 155 [2023-W05]: 51 rows | alpha_obs=0.481 | 1s
+ℹ Fold 156 [2023-W06]: 49 rows | alpha_obs=0.484 | 1s
+ℹ Fold 157 [2023-W07]: 46 rows | alpha_obs=0.494 | 1s
+ℹ Fold 158 [2023-W08]: 60 rows | alpha_obs=0.472 | 1s
+ℹ Fold 159 [2023-W09]: 48 rows | alpha_obs=0.494 | 1s
+ℹ Fold 160 [2023-W10]: 50 rows | alpha_obs=0.524 | 1s
+ℹ Fold 161 [2023-W11]: 52 rows | alpha_obs=0.522 | 1s
+ℹ Fold 162 [2023-W12]: 57 rows | alpha_obs=0.543 | 1s
+ℹ Fold 163 [2023-W13]: 46 rows | alpha_obs=0.576 | 1s
+ℹ Fold 164 [2023-W14]: 54 rows | alpha_obs=0.593 | 1s
+ℹ Fold 165 [2023-W15]: 67 rows | alpha_obs=0.543 | 1s
+ℹ Fold 166 [2023-W16]: 58 rows | alpha_obs=0.547 | 1s
+ℹ Fold 167 [2023-W17]: 59 rows | alpha_obs=0.563 | 1s
+ℹ Fold 168 [2023-W18]: 56 rows | alpha_obs=0.596 | 1s
+ℹ Fold 169 [2024-W01]: 53 rows | alpha_obs=0.54 | 1s
+ℹ Fold 170 [2024-W02]: 58 rows | alpha_obs=0.543 | 1s
+ℹ Fold 171 [2024-W03]: 57 rows | alpha_obs=0.543 | 1s
+ℹ Fold 172 [2024-W04]: 64 rows | alpha_obs=0.574 | 1s
+ℹ Fold 173 [2024-W05]: 53 rows | alpha_obs=0.542 | 1s
+ℹ Fold 174 [2024-W06]: 55 rows | alpha_obs=0.552 | 1s
+ℹ Fold 175 [2024-W07]: 56 rows | alpha_obs=0.58 | 1s
+ℹ Fold 176 [2024-W08]: 55 rows | alpha_obs=0.581 | 1s
+ℹ Fold 177 [2024-W09]: 59 rows | alpha_obs=0.594 | 1s
+ℹ Fold 178 [2024-W10]: 44 rows | alpha_obs=0.585 | 1s
+ℹ Fold 179 [2024-W11]: 49 rows | alpha_obs=0.598 | 1s
+ℹ Fold 180 [2024-W12]: 43 rows | alpha_obs=0.594 | 1s
+ℹ Fold 181 [2024-W13]: 58 rows | alpha_obs=0.617 | 1s
+ℹ Fold 182 [2024-W14]: 46 rows | alpha_obs=0.559 | 1s
+ℹ Fold 183 [2024-W15]: 60 rows | alpha_obs=0.581 | 1s
+ℹ Fold 184 [2024-W16]: 55 rows | alpha_obs=0.608 | 1s
+ℹ Fold 185 [2024-W17]: 57 rows | alpha_obs=0.621 | 1s
+ℹ Fold 186 [2024-W18]: 58 rows | alpha_obs=0.627 | 1s
+ℹ Fold 187 [2025-W01]: 51 rows | alpha_obs=0.63 | 1s
+ℹ Fold 188 [2025-W02]: 58 rows | alpha_obs=0.607 | 1s
+ℹ Fold 189 [2025-W03]: 61 rows | alpha_obs=0.603 | 1s
+ℹ Fold 190 [2025-W04]: 57 rows | alpha_obs=0.633 | 1s
+ℹ Fold 191 [2025-W05]: 53 rows | alpha_obs=0.616 | 1s
+ℹ Fold 192 [2025-W06]: 52 rows | alpha_obs=0.616 | 1s
+ℹ Fold 193 [2025-W07]: 52 rows | alpha_obs=0.628 | 1s
+ℹ Fold 194 [2025-W08]: 49 rows | alpha_obs=0.616 | 1s
+ℹ Fold 195 [2025-W09]: 47 rows | alpha_obs=0.617 | 1s
+ℹ Fold 196 [2025-W10]: 47 rows | alpha_obs=0.619 | 1s
+ℹ Fold 197 [2025-W11]: 54 rows | alpha_obs=0.604 | 1s
+ℹ Fold 198 [2025-W12]: 50 rows | alpha_obs=0.633 | 1s
+ℹ Fold 199 [2025-W13]: 58 rows | alpha_obs=0.577 | 1s
+ℹ Fold 200 [2025-W14]: 51 rows | alpha_obs=0.566 | 1s
+ℹ Fold 201 [2025-W15]: 58 rows | alpha_obs=0.567 | 1s
+ℹ Fold 202 [2025-W16]: 60 rows | alpha_obs=0.596 | 1s
+ℹ Fold 203 [2025-W17]: 55 rows | alpha_obs=0.587 | 1s
+ℹ Fold 204 [2025-W18]: 60 rows | alpha_obs=0.576 | 1s
+
+── Harness Integrity Report ────────────────────────────────────────────────────
+✔ Row count: 11621 / 11621
+✔ Zero NA predictions
+ℹ alpha_obs range [0.2, 0.741] | median 0.534
+
+── 3E Pooled Coverage (all 11621 test rows) ────────────────────────────────────
+# A tibble: 9 × 6
+  component  stratum nominal empirical      delta sharpness
+  <chr>      <chr>     <dbl>     <dbl>      <dbl>     <dbl>
+1 efficiency pooled      0.5     0.500 -0.0000430     0.396
+2 efficiency pooled      0.8     0.801  0.000964      0.806
+3 efficiency pooled      0.9     0.898 -0.00188       1.07 
+4 volume     pooled      0.5     0.502  0.00237       7.80 
+5 volume     pooled      0.8     0.798 -0.00205      14.9  
+6 volume     pooled      0.9     0.899 -0.000680     19.7  
+7 combined   pooled      0.5     0.514  0.0138        4.61 
+8 combined   pooled      0.8     0.782 -0.0180        8.77 
+9 combined   pooled      0.9     0.867 -0.0332       11.3  
+
+── 3E Low-Usage Bucket (opp 5-8) ───────────────────────────────────────────────
+ℹ Low-usage rows: 3049
+# A tibble: 9 × 6
+  component  stratum     nominal empirical    delta sharpness
+  <chr>      <chr>         <dbl>     <dbl>    <dbl>     <dbl>
+1 efficiency low_opp_5_8     0.5     0.398 -0.102       0.397
+2 efficiency low_opp_5_8     0.8     0.683 -0.117       0.808
+3 efficiency low_opp_5_8     0.9     0.809 -0.0906      1.08 
+4 volume     low_opp_5_8     0.5     0.425 -0.0753      7.81 
+5 volume     low_opp_5_8     0.8     0.785 -0.0152     14.9  
+6 volume     low_opp_5_8     0.9     0.898 -0.00233    19.7  
+7 combined   low_opp_5_8     0.5     0.646  0.146       4.38 
+8 combined   low_opp_5_8     0.8     0.886  0.0862      8.32 
+9 combined   low_opp_5_8     0.9     0.939  0.0393     10.7  
+
+── Stratified combined coverage at 80% ──
+
+# A tibble: 3 × 6
+  stratum         n empirical   delta sharpness delta_pp
+  <fct>       <int>     <dbl>   <dbl>     <dbl> <chr>   
+1 low  (5-8)   3049     0.886  0.0862      8.32 +8.6pp  
+2 mid  (9-13)  3009     0.810  0.0102      8.56 +1.0pp  
+3 high (14+)   5563     0.710 -0.0903      9.13 -9.0pp  
+── Save outputs ────────────────────────────────────────────────────────────────
+✔ output/03e_quantile_lgbm_fold_predictions.csv  (11621 rows)
+✔ output/03e_quantile_lgbm_pooled_coverage.csv
+✔ output/03e_quantile_lgbm_low_usage_coverage.csv
+
+── Step 3E complete ────────────────────────────────────────────────────────────

@@ -1,0 +1,131 @@
+
+── Step 3D: TabPFN + Conformal (sharpness re-run) ──────────────────────────────
+✔ TABPFN_TOKEN set (length 53)
+ℹ Python: /opt/homebrew/bin/python3
+✔ TABPFN_TOKEN injected into Python os.environ
+✔ tabpfn version: 8.0.8
+ℹ TabPFN n_estimators=16 | limits: rows<=50000, features<=2000
+ℹ EFF features: 12 | VOL features: 8 -- within limits
+ℹ Construction: FROZEN power-law Mechanism A (identical to 3A/3B/3A-v2)
+ℹ Native TabPFN distribution: NOT USED (future thread -- do not build now)
+✔ Feature table: 1966 rows | Fold map: 31 folds
+
+── Walk-forward fold loop (31 folds -- TabPFN forward pass per fold) ───────────
+ℹ Note: two TabPFN.fit() calls per fold (cal + test prediction sets handled separately)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+ℹ Fold 01 [2023-W06]: 49 rows | alpha=0.768 | 29s
+ℹ Fold 02 [2023-W07]: 46 rows | alpha=0.829 | 16s
+ℹ Fold 03 [2023-W08]: 60 rows | alpha=0.47 | 17s
+ℹ Fold 04 [2023-W09]: 48 rows | alpha=0.9 | 16s
+ℹ Fold 05 [2023-W10]: 50 rows | alpha=0.2 | 17s
+ℹ Fold 06 [2023-W11]: 52 rows | alpha=0.243 | 17s
+ℹ Fold 07 [2023-W12]: 57 rows | alpha=0.641 | 17s
+ℹ Fold 08 [2023-W13]: 46 rows | alpha=0.9 | 20s
+ℹ Fold 09 [2023-W14]: 54 rows | alpha=0.865 | 20s
+ℹ Fold 10 [2023-W15]: 67 rows | alpha=0.2 | 21s
+ℹ Fold 11 [2023-W16]: 58 rows | alpha=0.239 | 23s
+ℹ Fold 12 [2023-W17]: 59 rows | alpha=0.346 | 24s
+ℹ Fold 13 [2023-W18]: 56 rows | alpha=0.657 | 24s
+ℹ Fold 14 [2024-W01]: 53 rows | alpha=0.601 | 24s
+ℹ Fold 15 [2024-W02]: 58 rows | alpha=0.507 | 26s
+ℹ Fold 16 [2024-W03]: 57 rows | alpha=0.478 | 27s
+ℹ Fold 17 [2024-W04]: 64 rows | alpha=0.379 | 29s
+ℹ Fold 18 [2024-W05]: 53 rows | alpha=0.4 | 26s
+ℹ Fold 19 [2024-W06]: 55 rows | alpha=0.406 | 29s
+ℹ Fold 20 [2024-W07]: 56 rows | alpha=0.532 | 29s
+ℹ Fold 21 [2024-W08]: 55 rows | alpha=0.594 | 29s
+ℹ Fold 22 [2024-W09]: 59 rows | alpha=0.699 | 34s
+ℹ Fold 23 [2024-W10]: 44 rows | alpha=0.569 | 33s
+ℹ Fold 24 [2024-W11]: 49 rows | alpha=0.613 | 34s
+ℹ Fold 25 [2024-W12]: 43 rows | alpha=0.452 | 34s
+ℹ Fold 26 [2024-W13]: 58 rows | alpha=0.535 | 33s
+ℹ Fold 27 [2024-W14]: 46 rows | alpha=0.485 | 38s
+ℹ Fold 28 [2024-W15]: 60 rows | alpha=0.477 | 37s
+ℹ Fold 29 [2024-W16]: 55 rows | alpha=0.546 | 36s
+ℹ Fold 30 [2024-W17]: 57 rows | alpha=0.663 | 39s
+ℹ Fold 31 [2024-W18]: 58 rows | alpha=0.693 | 43s
+
+── Harness Integrity Report ────────────────────────────────────────────────────
+✔ All 31 folds completed
+✔ Row count: 1682 / 1682
+✔ Zero NA predictions -- no silent fallback to mean
+✔ Conformal calibration: training-side only (fit_data, verified per fold)
+ℹ alpha_fold range [0.2, 0.9] | median 0.535
+
+── 3D Pooled Coverage (all 1682 test rows) ─────────────────────────────────────
+# A tibble: 9 × 6
+  component  stratum nominal empirical     delta sharpness
+  <chr>      <chr>     <dbl>     <dbl>     <dbl>     <dbl>
+1 efficiency pooled      0.5     0.515  0.0149       0.389
+2 efficiency pooled      0.8     0.801  0.000832     0.727
+3 efficiency pooled      0.9     0.897 -0.00345      0.963
+4 volume     pooled      0.5     0.506  0.00595      7.07 
+5 volume     pooled      0.8     0.800 -0.000357    13.1  
+6 volume     pooled      0.9     0.897 -0.00345     18.2  
+7 combined   pooled      0.5     0.505  0.00476      4.94 
+8 combined   pooled      0.8     0.802  0.00202      9.46 
+9 combined   pooled      0.9     0.900  0.000119    12.5  
+
+── 3D Low-Usage Bucket (opp 5-8) ───────────────────────────────────────────────
+ℹ Low-usage rows: 432
+# A tibble: 9 × 6
+  component  stratum     nominal empirical    delta sharpness
+  <chr>      <chr>         <dbl>     <dbl>    <dbl>     <dbl>
+1 efficiency low_opp_5_8     0.5     0.417 -0.0833      0.389
+2 efficiency low_opp_5_8     0.8     0.681 -0.119       0.729
+3 efficiency low_opp_5_8     0.9     0.812 -0.0875      0.966
+4 volume     low_opp_5_8     0.5     0.493 -0.00694     7.06 
+5 volume     low_opp_5_8     0.8     0.831  0.0310     13.2  
+6 volume     low_opp_5_8     0.9     0.907  0.00741    18.2  
+7 combined   low_opp_5_8     0.5     0.539  0.0394      3.29 
+8 combined   low_opp_5_8     0.8     0.819  0.0194      6.37 
+9 combined   low_opp_5_8     0.9     0.889 -0.0111      8.38 
+
+── Five-Way Comparison: 3A / 3A-v2 / 3B / 3C / 3D ──────────────────────────────
+
+── 1. Rubric Table (all five models) ──
+
+ℹ model                    | pooled 80% | low 80%  | veto  | pooled width
+ℹ      3D-TabPFN           |     +0.2pp |    +1.9pp |    pass | 9.462
+ℹ    3A-v2-LightGBM(tuned) |     -0.4pp |    +0.6pp |    pass | 9.413
+ℹ      3B-RF               |     +0.6pp |    +1.9pp |    pass | 10.153
+ℹ     3A-LightGBM(default) |     +1.3pp |    +1.9pp |    pass | 10.792
+ℹ      3C-HierBayes        |     +1.4pp |   +13.3pp | TRIGGER | 10.392
+
+── 2. Sharpness Head-to-Head (conformal entrants: 3A / 3A-v2 / 3B / 3D) ──
+
+ℹ Stratified combined width at 80% (coverage must hold per bucket)
+ℹ model                    | low delta | low wid | mid delta | mid wid | hi delta | hi wid
+ℹ     3A-LightGBM(default) |     +1.9pp |    7.287 |     -0.8pp |    9.611 |    +2.0pp | 13.227
+ℹ    3A-v2-LightGBM(tuned) |     +0.6pp |    6.159 |     -1.5pp |    8.268 |    -0.3pp | 11.698
+ℹ      3B-RF               |     +1.9pp |    6.921 |     -0.8pp |    9.101 |    +0.7pp | 12.379
+ℹ      3D-TabPFN           |     +1.9pp |    6.371 |     +0.1pp |    8.412 |    -0.7pp | 11.613
+
+── 3. Low-Opp Efficiency 80% (how much of 3A's -8.7pp was tuning vs family?) ──
+
+ℹ     3A-LightGBM(default): delta=-8.7pp | width=0.812
+ℹ    3A-v2-LightGBM(tuned): delta=-12.2pp | width=0.73
+ℹ      3B-RF              : delta=-10.8pp | width=0.782
+ℹ      3C-HierBayes       : delta=+2.6pp | width=0.993
+ℹ      3D-TabPFN          : delta=-11.9pp | width=0.729
+
+── Final Rubric Decision (all five models) ─────────────────────────────────────
+ℹ PRIMARY: pooled combined 80% closest to nominal
+ℹ TIEBREAK: sharpest (narrowest combined 80% width) among models within +-2pp
+ℹ VETO: low-usage combined 80% > +-10pp disqualifies
+Warning message:
+Vetoed: 3C-HierBayes 
+✔ Tiebreak (all within +-2pp, sharpest wins): 3A-v2-LightGBM(tuned)
+ℹ    3A-v2-LightGBM(tuned): delta=-0.4pp | width=9.413
+ℹ      3D-TabPFN          : delta=+0.2pp | width=9.462
+ℹ      3B-RF              : delta=+0.6pp | width=10.153
+ℹ     3A-LightGBM(default): delta=+1.3pp | width=10.792
+
+── Save outputs ────────────────────────────────────────────────────────────────
+✔ output/03d_tabpfn_fold_predictions.csv  (1682 rows)
+✔ output/03d_tabpfn_pooled_coverage.csv
+✔ output/03d_tabpfn_low_usage_coverage.csv
+
+── Step 3D complete -- five-way bake-off verdict above ─────────────────────────
+/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/multiprocessing/resource_tracker.py:396: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/loky-21619-6fg7tq9h'}
+  warnings.warn(

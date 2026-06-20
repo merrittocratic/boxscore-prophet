@@ -1,0 +1,214 @@
+
+── Step 3C: Hierarchical Bayes + Student-t (paradigm comparison) ───────────────
+ℹ Efficiency: Student-t likelihood, sigma ~ log_opp, (1|player_id) + (1|defteam)
+ℹ Volume:     Gaussian, (1|player_id) + (1|defteam)
+ℹ Combined:   posterior predictive draws (pp_eff * pp_vol) -- NO conformal step
+ℹ Backend: cmdstanr | chains=2 | iter=1500 | warmup=750
+✔ Feature table: 1966 rows x 30 cols
+✔ Fold map: 31 folds | Expected test rows: 1682
+
+── Walk-forward fold loop (31 folds -- MCMC, expect ~30-60 min) ────────────────
+ℹ Fold 01: compiling efficiency model (one-time)...
+Loading required namespace: rstan
+ℹ Fold 01: compiling volume model (one-time)...
+ℹ Fold 01 [2023-W06]: 49 rows | nu=14.3 | sigma_slope=-0.267 | 22s
+ℹ Fold 02 [2023-W07]: 46 rows | nu=14.5 | sigma_slope=-0.258 | 11s
+ℹ Fold 03 [2023-W08]: 60 rows | nu=12.6 | sigma_slope=-0.227 | 14s
+ℹ Fold 04 [2023-W09]: 48 rows | nu=11.4 | sigma_slope=-0.209 | 14s
+ℹ Fold 05 [2023-W10]: 50 rows | nu=12.3 | sigma_slope=-0.211 | 18s
+ℹ Fold 06 [2023-W11]: 52 rows | nu=13.6 | sigma_slope=-0.213 | 18s
+ℹ Fold 07 [2023-W12]: 57 rows | nu=14.1 | sigma_slope=-0.21 | 24s
+ℹ Fold 08 [2023-W13]: 46 rows | nu=12.9 | sigma_slope=-0.199 | 24s
+ℹ Fold 09 [2023-W14]: 54 rows | nu=12.4 | sigma_slope=-0.198 | 26s
+ℹ Fold 10 [2023-W15]: 67 rows | nu=12.8 | sigma_slope=-0.207 | 29s
+ℹ Fold 11 [2023-W16]: 58 rows | nu=11.3 | sigma_slope=-0.203 | 32s
+ℹ Fold 12 [2023-W17]: 59 rows | nu=11.1 | sigma_slope=-0.199 | 37s
+ℹ Fold 13 [2023-W18]: 56 rows | nu=9.4 | sigma_slope=-0.199 | 38s
+ℹ Fold 14 [2024-W01]: 53 rows | nu=9 | sigma_slope=-0.213 | 42s
+ℹ Fold 15 [2024-W02]: 58 rows | nu=9 | sigma_slope=-0.211 | 41s
+ℹ Fold 16 [2024-W03]: 57 rows | nu=9.4 | sigma_slope=-0.213 | 43s
+ℹ Fold 17 [2024-W04]: 64 rows | nu=10.3 | sigma_slope=-0.219 | 40s
+ℹ Fold 18 [2024-W05]: 53 rows | nu=9.7 | sigma_slope=-0.23 | 42s
+ℹ Fold 19 [2024-W06]: 55 rows | nu=10 | sigma_slope=-0.235 | 43s
+ℹ Fold 20 [2024-W07]: 56 rows | nu=9.5 | sigma_slope=-0.231 | 44s
+ℹ Fold 21 [2024-W08]: 55 rows | nu=9.1 | sigma_slope=-0.232 | 48s
+ℹ Fold 22 [2024-W09]: 59 rows | nu=9.2 | sigma_slope=-0.232 | 46s
+ℹ Fold 23 [2024-W10]: 44 rows | nu=9.6 | sigma_slope=-0.243 | 48s
+ℹ Fold 24 [2024-W11]: 49 rows | nu=9.8 | sigma_slope=-0.243 | 50s
+ℹ Fold 25 [2024-W12]: 43 rows | nu=10.3 | sigma_slope=-0.244 | 52s
+ℹ Fold 26 [2024-W13]: 58 rows | nu=10 | sigma_slope=-0.235 | 52s
+ℹ Fold 27 [2024-W14]: 46 rows | nu=9.8 | sigma_slope=-0.239 | 54s
+ℹ Fold 28 [2024-W15]: 60 rows | nu=10 | sigma_slope=-0.245 | 55s
+ℹ Fold 29 [2024-W16]: 55 rows | nu=8.7 | sigma_slope=-0.248 | 58s
+ℹ Fold 30 [2024-W17]: 57 rows | nu=8.8 | sigma_slope=-0.239 | 58s
+ℹ Fold 31 [2024-W18]: 58 rows | nu=8.7 | sigma_slope=-0.24 | 65s
+There were 50 or more warnings (use warnings() to see the first 50)
+
+── Harness Integrity Report ────────────────────────────────────────────────────
+✔ All 31 folds completed
+ℹ Test rows scored: 1682 | Expected: 1682
+✔ Row count matches 1682
+✔ Zero NA predictions across all components
+ℹ   fold=1 model=eff rhat=1.0149
+ℹ   fold=1 model=vol rhat=1.0115
+ℹ   fold=2 model=eff rhat=1.0107
+ℹ   fold=3 model=eff rhat=1.0119
+ℹ   fold=4 model=eff rhat=1.0138
+ℹ   fold=4 model=vol rhat=1.0107
+ℹ   fold=6 model=eff rhat=1.0114
+ℹ   fold=6 model=vol rhat=1.016
+ℹ   fold=7 model=vol rhat=1.0133
+ℹ   fold=8 model=eff rhat=1.0245
+ℹ   fold=8 model=vol rhat=1.0136
+ℹ   fold=9 model=vol rhat=1.0127
+ℹ   fold=10 model=eff rhat=1.0114
+ℹ   fold=10 model=vol rhat=1.0112
+ℹ   fold=11 model=eff rhat=1.0116
+ℹ   fold=12 model=eff rhat=1.0107
+ℹ   fold=12 model=vol rhat=1.013
+ℹ   fold=13 model=eff rhat=1.0172
+ℹ   fold=14 model=eff rhat=1.0107
+ℹ   fold=14 model=vol rhat=1.0125
+ℹ   fold=15 model=vol rhat=1.0115
+ℹ   fold=17 model=eff rhat=1.012
+ℹ   fold=18 model=eff rhat=1.013
+ℹ   fold=19 model=eff rhat=1.023
+ℹ   fold=20 model=eff rhat=1.0148
+ℹ   fold=20 model=vol rhat=1.0154
+ℹ   fold=21 model=eff rhat=1.0143
+ℹ   fold=21 model=vol rhat=1.0109
+ℹ   fold=22 model=eff rhat=1.0104
+ℹ   fold=22 model=vol rhat=1.0166
+ℹ   fold=23 model=eff rhat=1.0104
+ℹ   fold=23 model=vol rhat=1.0102
+ℹ   fold=24 model=eff rhat=1.0142
+ℹ   fold=24 model=vol rhat=1.0102
+ℹ   fold=26 model=vol rhat=1.0133
+ℹ   fold=27 model=eff rhat=1.0106
+ℹ   fold=27 model=vol rhat=1.0114
+ℹ   fold=28 model=eff rhat=1.0128
+ℹ   fold=29 model=eff rhat=1.0159
+ℹ   fold=30 model=vol rhat=1.0121
+ℹ   fold=31 model=eff rhat=1.0149
+ℹ   fold=31 model=vol rhat=1.0134
+Warning message:
+42 model-folds with R-hat > 1.01 
+✔ Divergent transitions: no folds exceeded 10
+ℹ Efficiency nu (Student-t df) across 31 folds:
+ℹ   range [8.7, 14.5] | median 10 | mean 10.8
+ℹ Median nu = 10: moderate tail weight
+ℹ sigma slope on log_opp (negative = more opp -> smaller sigma):
+ℹ   range [-0.267, -0.198] | median -0.23
+
+── 3C Pooled Coverage (all 1682 test rows) ─────────────────────────────────────
+# A tibble: 9 × 6
+  component  stratum nominal empirical    delta sharpness
+  <chr>      <chr>     <dbl>     <dbl>    <dbl>     <dbl>
+1 efficiency pooled      0.5     0.487 -0.0131      0.384
+2 efficiency pooled      0.8     0.807  0.00737     0.750
+3 efficiency pooled      0.9     0.903  0.00309     0.988
+4 volume     pooled      0.5     0.507  0.00713     7.10 
+5 volume     pooled      0.8     0.801  0.00143    13.4  
+6 volume     pooled      0.9     0.896 -0.00404    17.0  
+7 combined   pooled      0.5     0.497 -0.00297     4.76 
+8 combined   pooled      0.8     0.814  0.0139     10.4  
+9 combined   pooled      0.9     0.912  0.0120     14.5  
+
+── 3C Low-Usage Bucket (opp 5-8) ───────────────────────────────────────────────
+ℹ Low-usage rows: 432
+# A tibble: 9 × 6
+  component  stratum     nominal empirical     delta sharpness
+  <chr>      <chr>         <dbl>     <dbl>     <dbl>     <dbl>
+1 efficiency low_opp_5_8     0.5     0.509  0.00926      0.509
+2 efficiency low_opp_5_8     0.8     0.826  0.0264       0.993
+3 efficiency low_opp_5_8     0.9     0.903  0.00278      1.31 
+4 volume     low_opp_5_8     0.5     0.481 -0.0185       7.16 
+5 volume     low_opp_5_8     0.8     0.801  0.000926    13.4  
+6 volume     low_opp_5_8     0.9     0.907  0.00741     16.6  
+7 combined   low_opp_5_8     0.5     0.662  0.162        4.59 
+8 combined   low_opp_5_8     0.8     0.933  0.133       10.7  
+9 combined   low_opp_5_8     0.9     0.970  0.0699      15.3  
+
+── 3C Stratified Combined Coverage (sharpness honesty check) ───────────────────
+# A tibble: 9 × 7
+  component stratum         n nominal empirical   delta sharpness
+  <chr>     <fct>       <int>   <dbl>     <dbl>   <dbl>     <dbl>
+1 combined  low  (5-8)    432     0.5     0.662  0.162       4.59
+2 combined  low  (5-8)    432     0.8     0.933  0.133      10.7 
+3 combined  low  (5-8)    432     0.9     0.970  0.0699     15.3 
+4 combined  mid  (9-13)   423     0.5     0.511  0.0106      4.66
+5 combined  mid  (9-13)   423     0.8     0.835  0.0345     10.3 
+6 combined  mid  (9-13)   423     0.9     0.943  0.0433     14.4 
+7 combined  high (14+)    827     0.5     0.404 -0.0961      4.90
+8 combined  high (14+)    827     0.8     0.741 -0.0588     10.3 
+9 combined  high (14+)    827     0.9     0.866 -0.0342     14.1 
+
+── Three-Way Comparison: 3C vs 3B vs 3A ────────────────────────────────────────
+
+── 1. Noise-Floor Adjudication: Low-Usage Efficiency Coverage ──
+
+ℹ 3A (LightGBM conformal) vs 3B (RF conformal) vs 3C (hierarchical Bayes)
+ℹ model          | 50% delta | 80% delta | 90% delta | 80% width
+ℹ 3A-LightGBM | -8.1pp | -8.7pp | -6.0pp | 0.812
+ℹ 3B-RF       | -11.3pp | -10.8pp | -8.1pp | 0.782
+ℹ 3C-HierBayes | +0.9pp | +2.6pp | +0.3pp | 0.993
+
+── Noise-floor verdict: ──
+
+✔ 3C efficiency 80% delta = +2.6pp: AT/NEAR NOMINAL -- tree-family artifact confirmed. Heavy-tail likelihood captured the per-touch tail that tree learners could not.
+
+── 2. Combined Coverage -- Pooled and Low-Usage (rubric decision surface) ──
+
+ℹ model          | stratum       | 50% delta | 80% delta | 80% width
+ℹ 3A-LightGBM |    low_opp_5_8 | +3.5pp | +1.9pp | 7.287
+ℹ 3A-LightGBM |         pooled | +0.4pp | +1.3pp | 10.792
+ℹ 3B-RF       |    low_opp_5_8 | +3.7pp | +1.9pp | 6.921
+ℹ 3B-RF       |         pooled | +2.0pp | +0.6pp | 10.153
+ℹ 3C-HierBayes |    low_opp_5_8 | +16.2pp | +13.3pp | 10.739
+ℹ 3C-HierBayes |         pooled | -0.3pp | +1.4pp | 10.392
+
+── 3. Low-Usage Volume Coverage ──
+
+ℹ model          | 50% delta | 80% delta | 90% delta | 80% width
+ℹ 3A-LightGBM | -0.7pp | +1.0pp | +0.5pp | 14.458
+ℹ 3B-RF       | -0.7pp | +1.0pp | +0.5pp | 14.458
+ℹ 3C-HierBayes | -1.9pp | +0.1pp | +0.7pp | 13.408
+
+── 4. 3C Stratified Combined Coverage (verify pooled sharpness is honest) ──
+
+# A tibble: 3 × 6
+  stratum         n empirical   delta sharpness delta_pp
+  <fct>       <int>     <dbl>   <dbl>     <dbl> <chr>   
+1 low  (5-8)    432     0.933  0.133       10.7 +13.3pp 
+2 mid  (9-13)   423     0.835  0.0345      10.3 +3.5pp  
+3 high (14+)    827     0.741 -0.0588      10.3 -5.9pp  
+── Decision Rule Evaluation ────────────────────────────────────────────────────
+ℹ PRIMARY: pooled combined 80% closest to nominal
+ℹ TIEBREAK: sharpest (narrowest) among models within +-2pp of nominal
+ℹ VETO: low-usage combined 80% > +-10pp disqualifies
+
+── Pooled combined 80% (primary): ──
+
+ℹ 3B-RF      : delta=+0.6pp | width=10.153
+ℹ 3A-LightGBM: delta=+1.3pp | width=10.792
+ℹ 3C-HierBayes: delta=+1.4pp | width=10.392
+
+── Low-usage combined 80% (veto check): ──
+
+ℹ 3A-LightGBM: delta=+1.9pp [pass]
+ℹ 3B-RF      : delta=+1.9pp [pass]
+ℹ 3C-HierBayes: delta=+13.3pp [VETO TRIGGERED]
+Warning message:
+Disqualified by veto: 3C-HierBayes 
+✔ Tiebreak (all within +-2pp): winner = 3B-RF       (sharpest combined)
+ℹ 3B-RF      : delta=+0.6pp | width=10.153
+ℹ 3A-LightGBM: delta=+1.3pp | width=10.792
+
+── Save outputs ────────────────────────────────────────────────────────────────
+✔ output/03c_hier_fold_predictions.csv  (1682 rows)
+✔ output/03c_hier_pooled_coverage.csv
+✔ output/03c_hier_low_usage_coverage.csv
+✔ output/03c_hier_convergence_diag.csv
+✔ output/03c_hier_nu_log.csv
+
+── Step 3C complete ────────────────────────────────────────────────────────────
