@@ -30,7 +30,7 @@ The `stat_type` argument of `load_player_stats()` is deprecated as of nflreadr
 5 WR       mid    6728  3.61 0.847
 6 WR       high   2954  4.48 0.591
 ── Step 4: Load fold predictions ───────────────────────────────────────────────
-ℹ WR predictions: output/04b_wr_lgbm_fold_predictions.csv | output prefix: 06b
+ℹ WR predictions: output/04c_wr_asym_fold_predictions.csv | output prefix: 06d
 ✔ RB preds: 11621 rows | WR preds: 17223 rows
 
 ── Step 5: Estimate EPA-error / volume-error correlation ───────────────────────
@@ -74,28 +74,29 @@ The `stat_type` argument of `load_player_stats()` is deprecated as of nflreadr
 # A tibble: 10 × 5
    bin       n_norm delta_norm_pp n_sim delta_sim_pp
    <fct>      <int> <chr>         <int> <chr>       
- 1 [0,0.1)      995 -4.7           1309 -4.3        
- 2 [0.1,0.2)   4930 -2.9           4979 -3.6        
- 3 [0.2,0.3)   4317 -0.7           4540 -0.0        
- 4 [0.3,0.4)   3059 +1.1           3160 +4.3        
- 5 [0.4,0.5)   2251 +0.4           2181 +3.3        
- 6 [0.5,0.6)   1257 -4.5            909 +1.9        
- 7 [0.6,0.7)    363 -13.3           131 -4.0        
- 8 [0.7,0.8)     46 -16.8            12 -15.2       
- 9 [0.8,0.9)      4 -33.3             1 -82.2       
-10 [0.9,1]        1 -94.4             1 -93.0       
+ 1 [0,0.1)      920 -5.1           1291 -4.3        
+ 2 [0.1,0.2)   4944 -3.0           5042 -3.8        
+ 3 [0.2,0.3)   4339 -0.8           4432 +0.2        
+ 4 [0.3,0.4)   3090 +0.9           3161 +3.7        
+ 5 [0.4,0.5)   2259 +0.2           2183 +3.3        
+ 6 [0.5,0.6)   1259 -4.4            957 +2.2        
+ 7 [0.6,0.7)    363 -13.6           141 -5.1        
+ 8 [0.7,0.8)     44 -14.2            14 -22.5       
+ 9 [0.8,0.9)      4 -33.0             1 +19.9       
+10 [0.9,1]        1 -93.8             1 -90.3       
 ── WR P(20+) -- delta by bin, normal vs simulation ──
 
-# A tibble: 7 × 5
+# A tibble: 8 × 5
   bin       n_norm delta_norm_pp n_sim delta_sim_pp
   <fct>      <int> <chr>         <int> <chr>       
-1 [0,0.1)    10575 +1.1           9418 -0.5        
-2 [0.1,0.2)   4208 +5.9           4855 +3.1        
-3 [0.2,0.3)   1851 +8.4           2264 +7.5        
-4 [0.3,0.4)    512 +5.8            627 +9.9        
-5 [0.4,0.5)     65 +9.0             53 +15.2       
-6 [0.5,0.6)     11 -17.5             5 +4.3        
-7 [0.7,0.8)      1 -76.4             1 -75.8       
+1 [0,0.1)    10506 +1.0           9354 -1.0        
+2 [0.1,0.2)   4251 +5.7           4852 +3.2        
+3 [0.2,0.3)   1864 +8.1           2285 +7.1        
+4 [0.3,0.4)    524 +5.9            657 +11.4       
+5 [0.4,0.5)     66 +9.8             67 +10.4       
+6 [0.5,0.6)     11 -17.4             6 -35.4       
+7 [0.7,0.8)      1 -75.7            NA NA          
+8 [0.6,0.7)     NA NA                2 -15.5       
 ── n-weighted mean |delta| (pp): normal vs simulation ──
 
 # A tibble: 4 × 4
@@ -103,12 +104,12 @@ The `stat_type` argument of `load_player_stats()` is deprecated as of nflreadr
   <chr>    <chr>     <chr> <chr>
 1 RB       15+       2.2   2.2  
 2 RB       20+       2.4   2.4  
-3 WR       15+       2.2   2.7  
-4 WR       20+       3.2   2.6  
+3 WR       15+       2.2   2.8  
+4 WR       20+       3.1   2.9  
 ── Step 8: Save outputs ────────────────────────────────────────────────────────
-✔ output/06b_fp_sim_probabilities.csv (28844 rows)
-✔ output/06b_fp_sim_calibration.csv
-✔ output/06b_resid_pools.csv (deployment residual pools)
-✔ output/06b_sim_params.csv
+✔ output/06d_fp_sim_probabilities.csv (28844 rows)
+✔ output/06d_fp_sim_calibration.csv
+✔ output/06d_resid_pools.csv (deployment residual pools)
+✔ output/06d_sim_params.csv
 
 ── Step 6b complete -- simulation translation layer ────────────────────────────

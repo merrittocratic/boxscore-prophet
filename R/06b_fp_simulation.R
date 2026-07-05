@@ -30,6 +30,7 @@
 suppressPackageStartupMessages({
   library(tidyverse)
   library(nflreadr)
+  library(splines)
   library(cli)
 })
 
@@ -87,8 +88,30 @@ cli_alert_success("RB join: {nrow(rb_fp)} rows | WR join: {nrow(wr_fp)} rows")
 
 cli_h1("Step 3: Fit EPA -> PPR regressions, pool residuals by volume tier")
 
-fit_rb <- lm(fantasy_points_ppr ~ total_epa + opportunities, data = rb_fp)
-fit_wr <- lm(fantasy_points_ppr ~ total_epa + opportunities, data = wr_fp)
+# Spline on total_epa: FP is CONVEX in EPA (a TD adds ~6 FP but
+# proportionally less EPA). The linear fit's residual mean by EPA decile is
+# U-shaped (+1.4 to +1.9 at the extremes, -0.6 in the middle), which
+# simultaneously understates P(20+) for boom games and overstates P(15+)
+# for must-starts. ns() extrapolates linearly beyond the boundary knots,
+# which keeps simulated tail draws conservative.
+fit_rb <- lm(fantasy_points_ppr ~ ns(total_epa, df = 4) + opportunities, data = rb_fp)
+fit_wr <- lm(fantasy_points_ppr ~ ns(total_epa, df = 4) + opportunities, data = wr_fp)
+
+# Linear fits retained as the v1 "norm" comparison baseline
+fit_rb_lin <- lm(fantasy_points_ppr ~ total_epa + opportunities, data = rb_fp)
+fit_wr_lin <- lm(fantasy_points_ppr ~ total_epa + opportunities, data = wr_fp)
+
+# Functional-form check: spline residual means by EPA decile should be flat
+decile_check <- function(fit, df, pos) {
+  tibble(res = residuals(fit), epa = df$total_epa) |>
+    mutate(dec = ntile(epa, 10)) |>
+    group_by(dec) |>
+    summarise(mean_res = round(mean(res), 2), .groups = "drop") |>
+    mutate(position = pos)
+}
+cli_h2("Spline residual mean by EPA decile (should be ~0 everywhere)")
+print(bind_rows(decile_check(fit_rb, rb_fp, "RB"), decile_check(fit_wr, wr_fp, "WR")) |>
+        pivot_wider(names_from = dec, values_from = mean_res), n = Inf)
 
 make_pools <- function(fit, df, tier_fn) {
   tibble(resid = residuals(fit), tier = tier_fn(df$opportunities)) |>
@@ -118,9 +141,16 @@ print(pool_diag, n = Inf)
 
 cli_h1("Step 4: Load fold predictions")
 
+# Overridable seams for interval-construction experiments (e.g. 04c
+# asymmetric conformal): swap the WR prediction source and redirect outputs
+# without touching the shipped 06b artifacts.
+WR_PRED_FILE <- Sys.getenv("WR_PRED_FILE", "output/04b_wr_lgbm_fold_predictions.csv")
+OUT_PREFIX   <- Sys.getenv("FP_OUT_PREFIX", "06b")
+cli_alert_info("WR predictions: {WR_PRED_FILE} | output prefix: {OUT_PREFIX}")
+
 rb_preds <- readr::read_csv("output/03a_v2_lgbm_fold_predictions.csv",
                             show_col_types = FALSE) |> filter(!is.na(player_id))
-wr_preds <- readr::read_csv("output/04b_wr_lgbm_fold_predictions.csv",
+wr_preds <- readr::read_csv(WR_PRED_FILE,
                             show_col_types = FALSE) |> filter(!is.na(player_id))
 
 cli_alert_success("RB preds: {nrow(rb_preds)} rows | WR preds: {nrow(wr_preds)} rows")
@@ -161,15 +191,18 @@ inv_cdf <- function(Q, u) {
 }
 
 quantile_matrix <- function(preds, stem) {
-  cols <- paste0(c("lo_90_", "lo_80_", "lo_50_", "pred_", "hi_50_", "hi_80_", "hi_90_"), stem)
+  # Symmetric (04b-style) intervals put the point prediction at the CDF
+  # median. Asymmetric (04c-style) files carry a med_* column -- the signed
+  # 50% residual quantile -- which is the honest median under skew.
+  center <- if (paste0("med_", stem) %in% names(preds)) "med_" else "pred_"
+  cols <- paste0(c("lo_90_", "lo_80_", "lo_50_", center, "hi_50_", "hi_80_", "hi_90_"), stem)
   Q <- as.matrix(preds[, cols])
   for (j in 2:7) Q[, j] <- pmax(Q[, j], Q[, j - 1])   # enforce monotone quantiles
   Q
 }
 
-simulate_position <- function(preds, fit, pools, tier_fn, rho, position_label) {
+simulate_position <- function(preds, fit, fit_lin, pools, tier_fn, rho, position_label) {
   n     <- nrow(preds)
-  b     <- coef(fit)
   Q_tot <- quantile_matrix(preds, "tot")
   Q_vol <- quantile_matrix(preds, "vol")
 
@@ -189,19 +222,19 @@ simulate_position <- function(preds, fit, pools, tier_fn, rho, position_label) {
       if (length(idx)) res[idx] <- sample(pools[[tr]], length(idx), replace = TRUE)
     }
 
-    fp <- b[["(Intercept)"]] + b[["total_epa"]] * epa_draw +
-      b[["opportunities"]] * opp_draw + res
+    fp <- predict(fit, tibble(total_epa = epa_draw, opportunities = opp_draw)) + res
     hit_start <- hit_start + (fp >= THRESH_START)
     hit_boom  <- hit_boom  + (fp >= THRESH_BOOM)
   }
 
-  # v1 normal approximation on the same rows, for apples-to-apples comparison
+  # v1 baseline on the same rows: LINEAR fit + normal approximation
+  b_lin     <- coef(fit_lin)
   sigma_epa <- (preds$hi_80_tot - preds$lo_80_tot) / 2 / Z_80
   sigma_opp <- (preds$hi_80_vol - preds$lo_80_vol) / 2 / Z_80
-  mu_fp     <- b[["(Intercept)"]] + b[["total_epa"]] * preds$pred_tot +
-    b[["opportunities"]] * preds$pred_vol
-  sigma_fp  <- sqrt((b[["total_epa"]] * sigma_epa)^2 +
-                    (b[["opportunities"]] * sigma_opp)^2 + sigma(fit)^2)
+  mu_fp     <- b_lin[["(Intercept)"]] + b_lin[["total_epa"]] * preds$pred_tot +
+    b_lin[["opportunities"]] * preds$pred_vol
+  sigma_fp  <- sqrt((b_lin[["total_epa"]] * sigma_epa)^2 +
+                    (b_lin[["opportunities"]] * sigma_opp)^2 + sigma(fit_lin)^2)
 
   preds |>
     mutate(
@@ -213,9 +246,9 @@ simulate_position <- function(preds, fit, pools, tier_fn, rho, position_label) {
     )
 }
 
-rb_probs <- simulate_position(rb_preds, fit_rb, pools_rb, tier_rb, rho_rb, "RB")
+rb_probs <- simulate_position(rb_preds, fit_rb, fit_rb_lin, pools_rb, tier_rb, rho_rb, "RB")
 cli_alert_success("RB simulation complete")
-wr_probs <- simulate_position(wr_preds, fit_wr, pools_wr, tier_wr, rho_wr, "WR")
+wr_probs <- simulate_position(wr_preds, fit_wr, fit_wr_lin, pools_wr, tier_wr, rho_wr, "WR")
 cli_alert_success("WR simulation complete")
 
 all_probs <- bind_rows(rb_probs, wr_probs) |>
@@ -290,8 +323,8 @@ print(cal_summary, n = Inf)
 
 cli_h1("Step 8: Save outputs")
 
-readr::write_csv(all_probs, "output/06b_fp_sim_probabilities.csv")
-readr::write_csv(cal_all,   "output/06b_fp_sim_calibration.csv")
+readr::write_csv(all_probs, paste0("output/", OUT_PREFIX, "_fp_sim_probabilities.csv"))
+readr::write_csv(cal_all,   paste0("output/", OUT_PREFIX, "_fp_sim_calibration.csv"))
 
 resid_pools_out <- tibble(
   position = rep(c("RB", "WR"), c(sum(lengths(pools_rb)), sum(lengths(pools_wr)))),
@@ -300,7 +333,7 @@ resid_pools_out <- tibble(
   resid    = c(unlist(pools_rb, use.names = FALSE),
                unlist(pools_wr, use.names = FALSE))
 )
-readr::write_csv(resid_pools_out, "output/06b_resid_pools.csv")
+readr::write_csv(resid_pools_out, paste0("output/", OUT_PREFIX, "_resid_pools.csv"))
 
 sim_params <- tibble(
   position = c("RB", "WR"),
@@ -308,11 +341,14 @@ sim_params <- tibble(
   n_sim    = N_SIM,
   seed     = 42
 )
-readr::write_csv(sim_params, "output/06b_sim_params.csv")
+readr::write_csv(sim_params, paste0("output/", OUT_PREFIX, "_sim_params.csv"))
 
-cli_alert_success("output/06b_fp_sim_probabilities.csv ({nrow(all_probs)} rows)")
-cli_alert_success("output/06b_fp_sim_calibration.csv")
-cli_alert_success("output/06b_resid_pools.csv (deployment residual pools)")
-cli_alert_success("output/06b_sim_params.csv")
+# Fitted translation models (spline mu) for weekly deployment
+saveRDS(list(rb = fit_rb, wr = fit_wr), "data/fp_translation_fits.rds")
+
+cli_alert_success("output/{OUT_PREFIX}_fp_sim_probabilities.csv ({nrow(all_probs)} rows)")
+cli_alert_success("output/{OUT_PREFIX}_fp_sim_calibration.csv")
+cli_alert_success("output/{OUT_PREFIX}_resid_pools.csv (deployment residual pools)")
+cli_alert_success("output/{OUT_PREFIX}_sim_params.csv")
 
 cli_h1("Step 6b complete -- simulation translation layer")

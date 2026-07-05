@@ -229,14 +229,29 @@ n-weighted mean |calibration delta| after v2 (2026-07-05):
 | RB | 1.9pp | 1.3pp | publishable |
 | WR | 2.3pp | 2.2pp | boom bins still understate +6-7pp |
 
-The remaining WR miss is structural: conformal intervals are symmetric by
-construction (pred +/- half-width), so the simulation cannot recover skew in
-the EPA errors themselves -- and WR per-target EPA is the skewed quantity
-(same character as the D9 finding, one layer downstream). The next lever is
-**asymmetric conformal** in the WR interval construction: separate upper and
-lower quantiles from signed normalized residuals instead of one quantile on
-absolute residuals. Acceptance bar: WR 20+ content bins inside +-3pp without
-breaking the rubric (pooled +-2pp, veto) or the decision zone.
+The gap was chased hard (2026-07-05 session) and the negative results are
+as informative as the wins:
+- **Asymmetric conformal (04c)**: signed-residual upper/lower quantiles,
+  04b learner unchanged. Passes the rubric, slightly sharper than 04b, and
+  fixes the WR volume upper tail (target eruptions: above-90% arm exceedance
+  8.2% -> 5.7%). Kept as the WR interval source. Did NOT move FP calibration.
+- **Spline translation**: the linear EPA->FP fit had U-shaped residuals by
+  EPA decile (TD convexity: a TD is ~6 FP but little EPA). ns(total_epa, 4)
+  flattens them and FIXES the must-start overconfidence -- but worsens boom
+  bins, revealing that the linear model's mid-range inflation had been
+  accidentally compensating the boom miss (two canceling errors).
+- **Ruled out by direct diagnostics**: EPA interval tails (marginal and
+  conditional on prediction level), volume tails (after 04c), EPA-error x
+  translation-residual dependence (~0), joint tail dependence (mild). An
+  oracle test (true EPA/volume through the translation layer) is nearly
+  calibrated, so no single structural culprit remains; the residual +5-7pp
+  boom understatement is several ~1-2pp effects compounding.
+
+Next lever: a **walk-forward recalibration layer** mapping stated probability
+to empirical rate (isotonic/Platt), fit on past folds only and applied
+forward -- honest because train and eval are separated in time. With every
+structural layer individually calibrated, a thin final recalibration is the
+principled mop-up, and it covers the post-spline RB boom bins too.
 
 ## Repository map
 
@@ -276,11 +291,12 @@ logs/    run logs for reproducibility
 - Every model stage writes its coverage/calibration tables to `output/` and
   its console log to `logs/`
 
-## Status (2026-07-05)
+## Status (2026-07-05, end of session)
 
-- RB projection + translation: **calibrated, content-ready**
-- WR projection: calibrated at the EPA level; boom translation understates
-  (open item -- asymmetric conformal experiment next)
+- RB projection + translation: decision zone and must-start calibrated;
+  boom bins understate ~+5pp post-spline (was masked by linear-fit bias)
+- WR projection: EPA layer fully calibrated (04c); must-start fixed by
+  spline; boom bins understate +5-7pp -- recalibration layer is next
+- Both positions' boom numbers are directionally conservative (real rates
+  run hotter than stated) -- safe to publish with that caveat, not final
 - RB upside product (3C): scoped, not yet built out
-- Content launch order: RB first is viable; WR boom numbers are
-  directionally conservative (real rates run hotter than stated)
