@@ -1,0 +1,89 @@
+
+── Step 1: Pull QB weekly stats ────────────────────────────────────────────────
+✔ QB player-weeks: 7480 total | 6372 starter games (dropbacks >= 15)
+ℹ Unique QBs in starter sample: 188
+ℹ Starter games per season: ~531
+ℹ fantasy_points vs manual 4pt recompute: mean |gap| = 0.000 pts (small = 4pt confirmed)
+
+── Q1: Threshold hit rates (starter games, 4pt pass TD) ────────────────────────
+   threshold hit_pct
+1         14   58.7%
+2         15   53.4%
+3         16   48.6%
+4         17   43.4%
+5         18   38.7%
+6         19   34.1%
+7         20   29.6%
+8         21   25.8%
+9         22   22.4%
+10        23   19.3%
+11        24   16.3%
+12        25   13.7%
+13        26   11.6%
+14        27    9.6%
+15        28    7.6%
+ℹ RB/WR reference rates: start threshold hit ~27% of games, boom ~13%
+
+── Q2: Fantasy exchange rates per EPA point ────────────────────────────────────
+
+── Two-component model: fp ~ pass_epa + rush_epa + dropbacks + carries ──
+
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)    3.393      0.226  14.986        0
+passing_epa    0.556      0.005 113.376        0
+rushing_epa    0.704      0.020  35.588        0
+dropbacks      0.271      0.006  47.041        0
+carries        0.623      0.018  33.997        0
+ℹ R-squared: 0.730 | resid SD: 4.12 | resid skew: 0.30
+
+── Single-total model: fp ~ total_epa + total_volume ──
+
+ℹ R-squared: 0.710 | resid SD: 4.27 | resid skew: 0.40
+ℹ Exchange rates: 0.56 FP per passing EPA vs 0.70 FP per rushing EPA (1.3x)
+
+── Mean residual (bias) by rushing tier -- the scrambler mis-pricing test ──
+
+       rush_tier    n bias_total_model bias_split_model
+1   statue (0-3) 3855            -0.62             0.02
+2    mover (4-7) 1937             0.44            -0.11
+3 scrambler (8+)  580             2.66             0.22
+── Q3: Residual mean by EPA decile (TD convexity check) ────────────────────────
+
+── By passing EPA decile ──
+
+   dec   n epa_mid mean_res skew_res
+1    1 638   -16.1     1.09     0.32
+2    2 638    -9.7     0.00     0.52
+3    3 637    -5.7    -0.31     0.62
+4    4 637    -2.3    -0.47     0.39
+5    5 637     0.4    -0.56     0.38
+6    6 637     3.0    -0.42     0.26
+7    7 637     5.9    -0.31     0.41
+8    8 637     8.7    -0.24     0.11
+9    9 637    12.4     0.02     0.21
+10  10 637    18.3     1.20     0.06
+── By rushing EPA decile ──
+
+   dec   n epa_mid mean_res skew_res
+1    1 638    -4.2     0.75     0.32
+2    2 638    -1.9    -0.07     0.35
+3    3 637    -0.9    -0.30     0.21
+4    4 637    -0.2    -0.19     0.32
+5    5 637     0.0    -0.21     0.19
+6    6 637     0.2    -0.02     0.44
+7    7 637     0.8    -0.23     0.10
+8    8 637     1.6    -0.40     0.29
+9    9 637     2.5    -0.04     0.29
+10  10 637     4.7     0.71     0.27
+── Q4: FP distribution by rushing tier (veto axis check) ───────────────────────
+       rush_tier    n mean_fp sd_fp skew_fp  p_18  p_24
+1   statue (0-3) 3855    14.7   7.7    0.37 31.7% 12.0%
+2    mover (4-7) 1937    17.6   7.5    0.37 45.4% 20.3%
+3 scrambler (8+)  580    21.1   7.8    0.46 62.4% 31.7%
+
+── Save outputs ────────────────────────────────────────────────────────────────
+✔ output/07_qb_feasibility_thresholds.csv
+✔ output/07_qb_feasibility_tier_bias.csv
+✔ output/07_qb_feasibility_tier_dist.csv
+
+── Feasibility pass complete ───────────────────────────────────────────────────

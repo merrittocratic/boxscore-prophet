@@ -1,0 +1,4 @@
+rush_tier,n,bias_total_model,bias_split_model
+statue (0-3),3855,-0.62,0.02
+mover (4-7),1937,0.44,-0.11
+scrambler (8+),580,2.66,0.22
