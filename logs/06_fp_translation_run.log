@@ -1,0 +1,123 @@
+
+── Step 1: Pull weekly PPR fantasy points (nflreadr) ───────────────────────────
+Warning message:
+The `stat_type` argument of `load_player_stats()` is deprecated as of nflreadr
+1.5.0.
+ℹ Please use `load_player_stats()` instead. 
+ℹ player_stats: 217487 rows | cols: player_id, player_name, player_display_name, position, position_group, headshot_url, season, week, season_type, team, opponent_team, completions, attempts, passing_yards, passing_tds, passing_interceptions, sacks_suffered, sack_yards_lost, sack_fumbles, sack_fumbles_lost, passing_air_yards, passing_yards_after_catch, passing_first_downs, passing_epa, passing_cpoe, passing_2pt_conversions, pacr, carries, rushing_yards, rushing_tds, rushing_fumbles, rushing_fumbles_lost, rushing_first_downs, rushing_epa, rushing_2pt_conversions, receptions, targets, receiving_yards, receiving_tds, receiving_fumbles, receiving_fumbles_lost, receiving_air_yards, receiving_yards_after_catch, receiving_first_downs, receiving_epa, receiving_2pt_conversions, racr, target_share, air_yards_share, wopr, special_teams_tds, def_tackles_solo, def_tackles_with_assist, def_tackle_assists, def_tackles_for_loss, def_tackles_for_loss_yards, def_fumbles_forced, def_sacks, def_sack_yards, def_qb_hits, def_interceptions, def_interception_yards, def_pass_defended, def_tds, def_fumbles, def_safeties, misc_yards, fumble_recovery_own, fumble_recovery_yards_own, fumble_recovery_opp, fumble_recovery_yards_opp, fumble_recovery_tds, penalties, penalty_yards, punt_returns, punt_return_yards, kickoff_returns, kickoff_return_yards, fg_made, fg_att, fg_missed, fg_blocked, fg_long, fg_pct, fg_made_0_19, fg_made_20_29, fg_made_30_39, fg_made_40_49, fg_made_50_59, fg_made_60_, fg_missed_0_19, fg_missed_20_29, fg_missed_30_39, fg_missed_40_49, fg_missed_50_59, fg_missed_60_, fg_made_list, fg_missed_list, fg_blocked_list, fg_made_distance, fg_missed_distance, fg_blocked_distance, pat_made, pat_att, pat_missed, pat_blocked, pat_pct, gwfg_made, gwfg_att, gwfg_missed, gwfg_blocked, gwfg_distance, fantasy_points, fantasy_points_ppr, game_id
+✔ PPR fantasy points: 207959 player-game rows, 6258 unique players
+
+── Step 2: Join to RB and WR outcome tables ────────────────────────────────────
+✔ RB join: 17458 player-game rows (17458 before join)
+✔ WR join: 24963 player-game rows (24963 before join)
+ℹ Pearson r(FP, total_epa): RB=0.408 | WR=0.657
+
+── Step 3: Fit EPA -> PPR regression per position ──────────────────────────────
+
+── RB regression: fp_ppr ~ total_epa + opportunities ──
+
+               Estimate  Std. Error   t value    Pr(>|t|)
+(Intercept)   0.7097902 0.043388848  16.35882 1.04682e-59
+total_epa     1.0036374 0.007857283 127.73340 0.00000e+00
+opportunities 0.7954109 0.003308548 240.41089 0.00000e+00
+ℹ R-squared: 0.807
+ℹ Residual SD (translation noise): 3.49 pts
+
+── WR regression: fp_ppr ~ total_epa + opportunities ──
+
+               Estimate  Std. Error    t value     Pr(>|t|)
+(Intercept)   0.3234513 0.036281348   8.915085 5.200304e-19
+total_epa     1.0252902 0.005457827 187.856839 0.000000e+00
+opportunities 1.4402515 0.006077197 236.992733 0.000000e+00
+ℹ R-squared: 0.825
+ℹ Residual SD (translation noise): 3.257 pts
+ℹ Residual skewness: RB=0.9 | WR=1.19 (|skew| < 1 = normal approx ok)
+
+── Step 4: Load fold predictions ───────────────────────────────────────────────
+✔ RB fold predictions: 11621 rows
+✔ WR fold predictions: 17223 rows
+
+── Step 5: Compute P(FP >= 15) and P(FP >= 20) ─────────────────────────────────
+✔ Probabilities computed: 28844 total rows | 28844 with observed FP for calibration
+
+── Step 6: Calibration check ───────────────────────────────────────────────────
+
+── RB P(FP >= 15) calibration ──
+
+# A tibble: 9 × 5
+  prob_bin      n pred_prob empirical delta_pp
+  <fct>     <int>     <dbl>     <dbl> <chr>   
+1 [0,0.1)     661    0.0881    0.0318 -5.6pp  
+2 [0.1,0.2)  3544    0.148     0.124  -2.4pp  
+3 [0.2,0.3)  2489    0.246     0.243  -0.3pp  
+4 [0.3,0.4)  1689    0.348     0.326  -2.3pp  
+5 [0.4,0.5)  1878    0.448     0.434  -1.4pp  
+6 [0.5,0.6)   898    0.542     0.501  -4.1pp  
+7 [0.6,0.7)   374    0.644     0.588  -5.6pp  
+8 [0.7,0.8)    84    0.737     0.655  -8.2pp  
+9 [0.8,0.9)     4    0.848     1      +15.2pp 
+── RB P(FP >= 20) calibration ──
+
+# A tibble: 7 × 5
+  prob_bin      n pred_prob empirical delta_pp
+  <fct>     <int>     <dbl>     <dbl> <chr>   
+1 [0,0.1)    6609    0.0458    0.0575 +1.2pp  
+2 [0.1,0.2)  2763    0.148     0.181  +3.3pp  
+3 [0.2,0.3)  1589    0.239     0.284  +4.4pp  
+4 [0.3,0.4)   482    0.342     0.413  +7.0pp  
+5 [0.4,0.5)   150    0.435     0.493  +5.8pp  
+6 [0.5,0.6)    26    0.527     0.577  +5.0pp  
+7 [0.6,0.7)     2    0.668     0.5    -16.8pp 
+── WR P(FP >= 15) calibration ──
+
+# A tibble: 10 × 5
+   prob_bin      n pred_prob empirical delta_pp
+   <fct>     <int>     <dbl>     <dbl> <chr>   
+ 1 [0,0.1)     995    0.0863    0.0392 -4.7pp  
+ 2 [0.1,0.2)  4930    0.147     0.118  -2.9pp  
+ 3 [0.2,0.3)  4317    0.248     0.241  -0.7pp  
+ 4 [0.3,0.4)  3059    0.346     0.356  +1.1pp  
+ 5 [0.4,0.5)  2251    0.447     0.451  +0.4pp  
+ 6 [0.5,0.6)  1257    0.543     0.499  -4.5pp  
+ 7 [0.6,0.7)   363    0.637     0.504  -13.3pp 
+ 8 [0.7,0.8)    46    0.733     0.565  -16.8pp 
+ 9 [0.8,0.9)     4    0.833     0.5    -33.3pp 
+10 [0.9,1]       1    0.944     0      -94.4pp 
+── WR P(FP >= 20) calibration ──
+
+# A tibble: 7 × 5
+  prob_bin      n pred_prob empirical delta_pp
+  <fct>     <int>     <dbl>     <dbl> <chr>   
+1 [0,0.1)   10575    0.0467    0.0572 +1.1pp  
+2 [0.1,0.2)  4208    0.144     0.203  +5.9pp  
+3 [0.2,0.3)  1851    0.242     0.326  +8.4pp  
+4 [0.3,0.4)   512    0.337     0.395  +5.8pp  
+5 [0.4,0.5)    65    0.433     0.523  +9.0pp  
+6 [0.5,0.6)    11    0.538     0.364  -17.5pp 
+7 [0.7,0.8)     1    0.764     0      -76.4pp 
+── Calibration summary ──
+
+# A tibble: 4 × 4
+  position threshold mean_abs_delta_pp max_abs_delta_pp
+  <chr>    <chr>     <chr>             <chr>           
+1 RB       15+       +5.0pp            +15.2pp         
+2 RB       20+       +6.2pp            +16.8pp         
+3 WR       15+       +17.2pp           +94.4pp         
+4 WR       20+       +17.7pp           +76.4pp         
+── Step 7: Distribution of probabilities ───────────────────────────────────────
+# A tibble: 2 × 8
+  position     n pct_hit_start pct_hit_boom med_p_start med_p_boom mean_mu_fp
+  <chr>    <int>         <dbl>        <dbl>       <dbl>      <dbl>      <dbl>
+1 RB       11621          27.2         13.9       0.259      0.08        11.2
+2 WR       17223          26.7         13.4       0.26       0.074       11.2
+# ℹ 1 more variable: mean_sigma_fp <dbl>
+ℹ RB: 27.2% of games hit 15+ | 13.9% hit 20+
+ℹ WR: 26.7% of games hit 15+ | 13.4% hit 20+
+
+── Step 8: Save outputs ────────────────────────────────────────────────────────
+✔ output/06_fp_translation_coefs.csv
+✔ output/06_fp_probabilities.csv  (28844 rows)
+✔ output/06_fp_calibration.csv
+
+── Step 6 complete -- translation layer ready ──────────────────────────────────
+ℹ Content outputs: P(FP >= 15) = start/sit | P(FP >= 20) = boom indicator
