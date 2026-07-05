@@ -144,7 +144,7 @@ cli_h1("Step 4: Load fold predictions")
 # Overridable seams for interval-construction experiments (e.g. 04c
 # asymmetric conformal): swap the WR prediction source and redirect outputs
 # without touching the shipped 06b artifacts.
-WR_PRED_FILE <- Sys.getenv("WR_PRED_FILE", "output/04b_wr_lgbm_fold_predictions.csv")
+WR_PRED_FILE <- Sys.getenv("WR_PRED_FILE", "output/04c_wr_asym_fold_predictions.csv")
 OUT_PREFIX   <- Sys.getenv("FP_OUT_PREFIX", "06b")
 cli_alert_info("WR predictions: {WR_PRED_FILE} | output prefix: {OUT_PREFIX}")
 

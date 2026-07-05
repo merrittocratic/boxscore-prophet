@@ -25,10 +25,13 @@ The EPA models are infrastructure. The probabilities are the product.
   [4] WR clone of 3A-v2               same construction, WR features
         |
         v                             RB + WR = the projection spine
-  [6] EPA -> PPR translation          per-position OLS + empirical simulation
+  [6] EPA -> PPR translation          spline regression + empirical simulation
         |                             (06 normal approx superseded by 06b)
         v
-  P(FP >= 15), P(FP >= 20)            per player per week, calibration-checked
+  [6c] Walk-forward recalibration     isotonic maps, fit on past weeks only
+        |
+        v
+  P(FP >= 15), P(FP >= 20)            per player per week, honest out-of-time
 ```
 
 Parked branches: 3C hierarchical Bayes as an RB upside model (see two-product
@@ -247,11 +250,43 @@ as informative as the wins:
   calibrated, so no single structural culprit remains; the residual +5-7pp
   boom understatement is several ~1-2pp effects compounding.
 
-Next lever: a **walk-forward recalibration layer** mapping stated probability
-to empirical rate (isotonic/Platt), fit on past folds only and applied
-forward -- honest because train and eval are separated in time. With every
-structural layer individually calibrated, a thin final recalibration is the
-principled mop-up, and it covers the post-spline RB boom bins too.
+Resolution: D13.
+
+### D13. Walk-forward recalibration layer (6c) -- the last inch
+
+`06c_recalibration.R` maps stated probability to empirical rate with a thin
+final recalibration: four maps (position x threshold), refit weekly on all
+PRIOR weeks only and applied forward (2014-15 burn-in, evaluated 2016+).
+Isotonic and Platt competed under a pre-committed rule (n-weighted mean
+|bin delta| primary, Brier-must-not-degrade sanity); **isotonic won all
+four**, with Brier improving everywhere.
+
+Out-of-time weighted |calibration error|, raw -> recalibrated:
+
+| Map | Raw | Recalibrated |
+|---|---|---|
+| RB 15+ | 2.33pp | 1.05pp |
+| RB 20+ | 2.63pp | 0.61pp |
+| WR 15+ | 2.79pp | 0.57pp |
+| WR 20+ | 2.90pp | 0.53pp |
+
+**Why this is not a fudge:** it is graded exclusively on weeks it never saw,
+the same walk-forward discipline as every model stage. And it was only
+built AFTER every structural layer was individually verified honest -- a
+recalibration slapped on top of broken structure would mask defects; on top
+of verified structure it corrects the compounding of small residual leaks.
+**Why isotonic:** the miss was nonlinear in stated probability (small at the
+bottom, growing through the middle bins); a two-parameter Platt curve
+underfit it.
+
+Known blemish: the extreme top tail (stated 15+ probability above ~0.7, or
+20+ above ~0.5) is a few player-weeks per season and stays noisy. Editorial
+guidance: cap displayed probabilities (publish ">70%") rather than quote
+precise numbers there.
+
+Deployment artifacts: `data/fp_recal_maps.rds` (maps refit on all history)
+and `output/06c_recal_map_grid.csv`. Weekly flow: 06b simulation
+probabilities -> apply maps -> publish.
 
 ## Repository map
 
@@ -272,7 +307,8 @@ R/
   04b_wr_lgbm_tuned.R           [4] WR projection model (3A-v2 clone)
   05_wr_3c_hierarchical_bayes.R [5] WR upside attempt (parked, do not deploy)
   06_fp_translation.R           [6] EPA -> PPR regression + v1 normal approx
-  06b_fp_simulation.R           [6] v2 simulation probabilities (current)
+  06b_fp_simulation.R           [6] simulation probabilities (spline + 04c)
+  06c_recalibration.R           [6] walk-forward isotonic recalibration (final)
   read_stathead.R               data utility
 
 data/    RDS intermediates (feature tables, outcomes, fold map)
@@ -293,10 +329,12 @@ logs/    run logs for reproducibility
 
 ## Status (2026-07-05, end of session)
 
-- RB projection + translation: decision zone and must-start calibrated;
-  boom bins understate ~+5pp post-spline (was masked by linear-fit bias)
-- WR projection: EPA layer fully calibrated (04c); must-start fixed by
-  spline; boom bins understate +5-7pp -- recalibration layer is next
-- Both positions' boom numbers are directionally conservative (real rates
-  run hotter than stated) -- safe to publish with that caveat, not final
+- **P(15+) and P(20+) are content-ready for both positions** after 6c:
+  every content-relevant bin honest out-of-time, weighted calibration
+  error 0.5-1.1pp across all four maps
+- Full product stack: 3A-v2 RB intervals + 04c WR asymmetric intervals ->
+  spline translation + empirical simulation (06b) -> isotonic
+  recalibration (06c)
+- Editorial note: cap displayed probabilities in the sparse extreme tail
 - RB upside product (3C): scoped, not yet built out
+- Next: weekly deployment wiring (Earnest) and content formats

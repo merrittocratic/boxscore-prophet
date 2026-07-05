@@ -1,0 +1,13 @@
+position,threshold,method,brier,w_mean_abs_delta_pp
+RB,15+,iso,0.17039,1.05
+RB,15+,platt,0.17041,1.50
+RB,15+,raw,0.17073,2.33
+RB,20+,iso,0.10614,0.61
+RB,20+,platt,0.10598,1.39
+RB,20+,raw,0.10731,2.63
+WR,15+,iso,0.16988,0.57
+WR,15+,platt,0.16988,1.86
+WR,15+,raw,0.17051,2.79
+WR,20+,iso,0.10026,0.53
+WR,20+,platt,0.09994,0.86
+WR,20+,raw,0.10153,2.90
