@@ -1,0 +1,10 @@
+rush_tier,n,mean_raw_resid,mean_norm_resid,sd_norm_resid,mechanism,scrambler_statue_ratio,variant,mech_winner
+statue (0-3),4376,9.15,0.631,0.477,const,0.959,H,const
+mover (4-7),1420,8.464,0.587,0.455,const,0.959,H,const
+scrambler (8+),433,8.649,0.605,0.456,const,0.959,H,const
+statue (0-3),4376,9.15,0.635,0.48,plaw,0.913,H,const
+mover (4-7),1420,8.464,0.576,0.447,plaw,0.913,H,const
+scrambler (8+),433,8.649,0.58,0.439,plaw,0.913,H,const
+statue (0-3),4376,9.15,0.619,0.469,tier,1.016,H,const
+mover (4-7),1420,8.464,0.615,0.477,tier,1.016,H,const
+scrambler (8+),433,8.649,0.629,0.485,tier,1.016,H,const

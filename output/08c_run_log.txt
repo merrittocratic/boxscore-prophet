@@ -1,0 +1,124 @@
+
+── Step 8c: QB Nested-Walk-Forward-Tuned LightGBM (hybrid + const) ─────────────
+ℹ Grid: 32 combos x 4 components per fold
+ℹ Construction: FROZEN variant H + const mechanism (from 08b)
+ℹ Veto axis: EX-ANTE rush tier at 80%, +-10pp
+✔ QB feature table: 6382 rows | Fold map: 204 folds | Expected test rows: 6229
+✔ All model features present
+
+── Walk-forward fold loop (204 folds x 32 combos x 4 components) ───────────────
+ℹ Fold 001 [2014-W06]: 30 rows | inner RMSE eff=0.2731 db=9.612 carry=1.9368 rush=2.2467 | 1s
+ℹ Fold 010 [2014-W15]: 32 rows | inner RMSE eff=0.3132 db=9.348 carry=1.5404 rush=2.0593 | 1s
+ℹ Fold 020 [2015-W08]: 28 rows | inner RMSE eff=0.2896 db=9.4476 carry=1.8933 rush=2.1561 | 1s
+ℹ Fold 030 [2016-W01]: 32 rows | inner RMSE eff=0.3207 db=9.0368 carry=1.864 rush=2.2799 | 3s
+ℹ Fold 040 [2016-W11]: 29 rows | inner RMSE eff=0.2685 db=8.6403 carry=1.8425 rush=2.0268 | 2s
+ℹ Fold 050 [2017-W04]: 32 rows | inner RMSE eff=0.316 db=8.3863 carry=1.6603 rush=2.0153 | 2s
+ℹ Fold 060 [2017-W14]: 31 rows | inner RMSE eff=0.3162 db=8.6295 carry=1.7425 rush=2.4954 | 3s
+ℹ Fold 070 [2018-W07]: 28 rows | inner RMSE eff=0.3146 db=8.8226 carry=1.7926 rush=2.1528 | 3s
+ℹ Fold 080 [2018-W17]: 32 rows | inner RMSE eff=0.3231 db=9.58 carry=2.1464 rush=2.1742 | 4s
+ℹ Fold 090 [2019-W10]: 26 rows | inner RMSE eff=0.3386 db=8.8325 carry=2.2615 rush=2.3425 | 5s
+ℹ Fold 100 [2020-W03]: 33 rows | inner RMSE eff=0.3301 db=8.7175 carry=2.012 rush=2.3691 | 5s
+ℹ Fold 110 [2020-W13]: 31 rows | inner RMSE eff=0.3082 db=8.8349 carry=2.0295 rush=2.2959 | 6s
+ℹ Fold 120 [2021-W06]: 28 rows | inner RMSE eff=0.3103 db=9.0452 carry=2.2837 rush=2.5482 | 7s
+ℹ Fold 130 [2021-W16]: 34 rows | inner RMSE eff=0.3148 db=8.9699 carry=2.294 rush=2.4969 | 7s
+ℹ Fold 140 [2022-W08]: 29 rows | inner RMSE eff=0.3162 db=8.8977 carry=2.2053 rush=2.5664 | 7s
+ℹ Fold 150 [2022-W18]: 32 rows | inner RMSE eff=0.3012 db=8.7373 carry=2.2212 rush=2.6388 | 8s
+ℹ Fold 160 [2023-W10]: 29 rows | inner RMSE eff=0.308 db=8.7061 carry=2.2252 rush=2.6992 | 8s
+ℹ Fold 170 [2024-W02]: 32 rows | inner RMSE eff=0.3041 db=8.5291 carry=2.2758 rush=2.6946 | 9s
+ℹ Fold 180 [2024-W12]: 26 rows | inner RMSE eff=0.3138 db=8.5495 carry=2.2701 rush=2.6933 | 7s
+ℹ Fold 190 [2025-W04]: 32 rows | inner RMSE eff=0.3225 db=8.4836 carry=2.2098 rush=2.6908 | 6s
+ℹ Fold 200 [2025-W14]: 28 rows | inner RMSE eff=0.3212 db=8.4982 carry=2.1925 rush=2.6308 | 7s
+ℹ Fold 204 [2025-W18]: 32 rows | inner RMSE eff=0.3261 db=8.4865 carry=2.1925 rush=2.5933 | 8s
+
+── Harness Integrity Report ────────────────────────────────────────────────────
+✔ All 204 folds completed
+✔ Row count: 6229 / 6229
+✔ Zero NA combined predictions
+✔ Inner tuning: all combos scored on inner holdout only; outer test scored once
+
+── Selected Hyperparameters (summary) ──────────────────────────────────────────
+ℹ pass_eff: leaves 7=127 | 15=58 | 31=14 | 63=5 | median rounds 74
+ℹ db_vol: leaves 7=135 | 15=39 | 31=21 | 63=9 | median rounds 59.5
+ℹ carry_vol: leaves 7=113 | 15=71 | 31=14 | 63=6 | median rounds 110
+ℹ rush_dir: leaves 7=143 | 15=46 | 31=10 | 63=5 | median rounds 54.5
+
+── 8c Pooled Coverage (all 6229 test rows) ─────────────────────────────────────
+# A tibble: 15 × 6
+   component       stratum nominal empirical     delta sharpness
+   <chr>           <chr>     <dbl>     <dbl>     <dbl>     <dbl>
+ 1 pass_efficiency pooled      0.5     0.495 -0.00538      0.405
+ 2 pass_efficiency pooled      0.8     0.795 -0.00469      0.776
+ 3 pass_efficiency pooled      0.9     0.898 -0.00162      1.01 
+ 4 dropback_volume pooled      0.5     0.496 -0.00377     12.1  
+ 5 dropback_volume pooled      0.8     0.796 -0.00405     22.6  
+ 6 dropback_volume pooled      0.9     0.900 -0.000498    29.0  
+ 7 carry_volume    pooled      0.5     0.495 -0.00522      2.33 
+ 8 carry_volume    pooled      0.8     0.786 -0.0135       4.49 
+ 9 carry_volume    pooled      0.9     0.895 -0.00547      6.35 
+10 rush_epa_direct pooled      0.5     0.495 -0.00538      2.09 
+11 rush_epa_direct pooled      0.8     0.799 -0.000674     5.38 
+12 rush_epa_direct pooled      0.9     0.897 -0.00275      8.08 
+13 combined        pooled      0.5     0.499 -0.00104     14.2  
+14 combined        pooled      0.8     0.795 -0.00485     27.1  
+15 combined        pooled      0.9     0.897 -0.00275     34.8  
+
+── Combined coverage by EX-ANTE rush tier (VETO AXIS) ──
+
+# A tibble: 9 × 6
+  stratum            n nominal empirical    delta sharpness
+  <fct>          <int>   <dbl>     <dbl>    <dbl>     <dbl>
+1 statue (0-3)    4472     0.5     0.496 -0.00380      14.2
+2 statue (0-3)    4472     0.8     0.797 -0.00304      27.1
+3 statue (0-3)    4472     0.9     0.898 -0.00219      34.8
+4 mover (4-7)      997     0.5     0.509  0.00853      14.1
+5 mover (4-7)      997     0.8     0.790 -0.00963      27.1
+6 mover (4-7)      997     0.9     0.893 -0.00732      34.6
+7 scrambler (8+)   227     0.5     0.524  0.0242       14.1
+8 scrambler (8+)   227     0.8     0.771 -0.0291       27.2
+9 scrambler (8+)   227     0.9     0.916  0.0163       34.8
+── Combined coverage by OBSERVED rush tier (game-script axis, report only) ──
+
+# A tibble: 9 × 6
+  stratum            n nominal empirical     delta sharpness
+  <fct>          <int>   <dbl>     <dbl>     <dbl>     <dbl>
+1 statue (0-3)    4376     0.5     0.491 -0.00868       14.2
+2 statue (0-3)    4376     0.8     0.790 -0.0105        27.1
+3 statue (0-3)    4376     0.9     0.893 -0.00672       34.8
+4 mover (4-7)     1420     0.5     0.517  0.0169        14.2
+5 mover (4-7)     1420     0.8     0.810  0.00986       27.1
+6 mover (4-7)     1420     0.9     0.899 -0.000704      34.7
+7 scrambler (8+)   433     0.5     0.517  0.0173        14.1
+8 scrambler (8+)   433     0.8     0.804  0.00370       27.1
+9 scrambler (8+)   433     0.9     0.931  0.0307        34.7
+── Rubric Decision: 8c ─────────────────────────────────────────────────────────
+ℹ Pooled 80%: delta=-0.5pp | width=27.13 (untuned 08b: 29.0)
+ℹ   ex-ante statue (0-3) (n=4472): -0.3pp
+ℹ   ex-ante mover (4-7) (n=997): -1.0pp
+ℹ   ex-ante scrambler (8+) (n=227): -2.9pp
+✔ 8c veto passed: worst ex-ante tier delta = -2.9pp (scrambler (8+))
+✔ Pooled coverage within +-2pp -- QB model READY
+
+── Watch items (08b2 diagnostics re-run on tuned model) ────────────────────────
+ℹ res_rush ~ prior_carries_pg: slope=0.0916 (t=5.41) | untuned was +0.069 (t=3.84)
+
+── Largest per-player |bias| (>= 20 games, top 10) ──
+
+  player_id     player_name games  cpg bias_tot t_tot
+ 00-0037013     Zach Wilson    33 2.36    -5.85 -3.51
+ 00-0029567      Nick Foles    35 1.06    -5.23 -2.78
+ 00-0039851      Drake Maye    27 4.81     5.14  2.72
+ 00-0027948  Blaine Gabbert    24 3.67    -4.87 -2.97
+ 00-0033873 Patrick Mahomes   125 3.09     4.78  5.29
+ 00-0026625     Brian Hoyer    34 0.94    -3.60 -1.91
+ 00-0037834     Brock Purdy    46 2.76     3.60  2.36
+ 00-0039910  Jayden Daniels    23 8.22     3.57  1.63
+ 00-0021206     Josh McCown    36 1.94    -3.52 -1.85
+ 00-0032156  Trevor Siemian    35 1.77    -3.49 -2.07
+── Save outputs ────────────────────────────────────────────────────────────────
+✔ output/08c_qb_fold_predictions.csv  (6229 rows)
+✔ output/08c_qb_tune_log.csv
+✔ output/08c_qb_pooled_coverage.csv
+✔ output/08c_qb_tier_coverage.csv  (ex-ante veto axis + observed)
+✔ output/08c_qb_player_bias.csv
+
+── Step 8c complete ────────────────────────────────────────────────────────────

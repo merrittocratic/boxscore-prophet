@@ -1,0 +1,3 @@
+grp,n,above_80,below_80,above_90,below_90
+runner (wt_carries >= 6),504,8.5,10.5,4.2,4.6
+statue-ish (< 6),5192,9.6,10.9,4.3,5.8

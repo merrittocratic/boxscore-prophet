@@ -1,0 +1,4 @@
+decision,winner,verdict,detail
+decomposition,H,FAIL_STOP,max obs-tier bias H=1.387 S=1.329 | ex-ante H=0.527 S=0.621 | rmse H=11.252 S=11.264
+mechanism,const,PASS,scrambler/statue ratios: const=0.959 | plaw=0.913 | tier=1.016
+tier_veto_80,NA,PASS,worst tier mover (4-7) delta=+0.014

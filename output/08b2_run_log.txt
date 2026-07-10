@@ -1,0 +1,46 @@
+
+── Step 8b2: Scrambler mispricing check (diagnosis only) ───────────────────────
+✔ 6229 fold-test rows joined (533 week-1 rows lack wt_carries)
+
+── Q1: Residual vs ex-ante rush identity (continuous, all rows) ────────────────
+  residual        predictor    n   slope     se     t epa_at_10_carries
+1  res_tot       wt_carries 5696  0.0258 0.0660  0.39             0.258
+2 res_pass       wt_carries 5696 -0.0059 0.0647 -0.09            -0.059
+3 res_rush       wt_carries 5696  0.0316 0.0152  2.08             0.316
+4  res_tot prior_carries_pg 4545  0.0223 0.0785  0.28             0.223
+5 res_pass prior_carries_pg 4545 -0.0466 0.0770 -0.61            -0.466
+6 res_rush prior_carries_pg 4545  0.0690 0.0180  3.84             0.690
+
+── Q2: Per-player mean residual, established runners vs pocket QBs ─────────────
+
+── Established runners (career cpg >= 5, >= 20 games) ──
+
+  player_id      player_name games  cpg bias_tot bias_rush t_tot
+ 00-0034796    Lamar Jackson   104 9.27     2.01      0.23  1.79
+ 00-0036945    Justin Fields    49 8.67    -1.04      0.96 -0.75
+ 00-0036389      Jalen Hurts    81 8.47     0.44      0.59  0.40
+ 00-0039910   Jayden Daniels    23 8.22     4.34      1.91  2.06
+ 00-0027939       Cam Newton    92 7.35    -1.76      0.19 -1.57
+ 00-0034857       Josh Allen   125 6.16     2.13      1.38  2.56
+ 00-0035228     Kyler Murray    85 5.79    -0.37      0.17 -0.36
+ 00-0028118     Tyrod Taylor    62 5.40     0.47      0.89  0.40
+ 00-0027974 Colin Kaepernick    29 5.31    -1.79      0.09 -0.87
+ 00-0033537   Deshaun Watson    72 5.03     0.66      0.74  0.48
+ℹ Runners with positive total bias: 6/10 (noise expectation ~50%)
+ℹ Runner-group mean bias: 0.51 EPA | pocket-group: -0.238 EPA
+ℹ Sign test p-value (runners positive vs 50/50): 0.754
+
+── Q3: One-sided tail exceedance (nominal above-hi: 10% at 80, 5% at 90) ───────
+                       grp    n above_80 below_80 above_90 below_90
+1 runner (wt_carries >= 6)  504      8.5     10.5      4.2      4.6
+2         statue-ish (< 6) 5192      9.6     10.9      4.3      5.8
+
+── Q4: Runner-row bias by era (real effect should be era-stable/growing) ───────
+        era   n   bias     t
+1 2014-2018 124 -1.924 -2.02
+2 2019-2025 380  0.094  0.17
+
+── Save outputs ────────────────────────────────────────────────────────────────
+✔ output/08b2_scrambler_slopes.csv / _player_bias / _tail_exceedance / _era_bias
+
+── Step 8b2 complete ───────────────────────────────────────────────────────────

@@ -1,0 +1,7 @@
+residual,predictor,n,slope,se,t,epa_at_10_carries
+res_tot,wt_carries,5696,0.0258,0.066,0.39,0.258
+res_pass,wt_carries,5696,-0.0059,0.0647,-0.09,-0.059
+res_rush,wt_carries,5696,0.0316,0.0152,2.08,0.316
+res_tot,prior_carries_pg,4545,0.0223,0.0785,0.28,0.223
+res_pass,prior_carries_pg,4545,-0.0466,0.077,-0.61,-0.466
+res_rush,prior_carries_pg,4545,0.069,0.018,3.84,0.69

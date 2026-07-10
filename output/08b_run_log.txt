@@ -1,0 +1,150 @@
+
+── Step 8b: QB Decomposition + Additive Combined-Interval Construction ─────────
+ℹ Decision 1: rush side direct (H) vs eff x carries (S) -- judge: rush-tier bias
+ℹ Decision 2: const vs power-law vs tier-conditional -- judge: rush-tier flatness [0.67, 1.5]
+ℹ Model: default-params LightGBM (no tuning at this step)
+✔ QB feature table: 6382 rows | Fold map: 204 folds | Expected test rows: 6229
+✔ All model features present in QB feature table
+
+── Walk-forward fold loop (204 folds x 5 component models) ─────────────────────
+ℹ Fold 020 [2015-W08]: 28 rows
+ℹ Fold 040 [2016-W11]: 29 rows
+ℹ Fold 060 [2017-W14]: 31 rows
+ℹ Fold 080 [2018-W17]: 32 rows
+ℹ Fold 100 [2020-W03]: 33 rows
+ℹ Fold 120 [2021-W06]: 28 rows
+ℹ Fold 140 [2022-W08]: 29 rows
+ℹ Fold 160 [2023-W10]: 29 rows
+ℹ Fold 180 [2024-W12]: 26 rows
+ℹ Fold 200 [2025-W14]: 28 rows
+ℹ Fold 204 [2025-W18]: 32 rows
+
+── Harness Integrity Report ────────────────────────────────────────────────────
+✔ All 204 folds completed
+✔ Row count: 6229 / 6229
+✔ Zero NA combined predictions
+ℹ plaw alpha (variant H): range [0.2, 0.838] | median 0.205 | at lower clamp: 101/204 folds
+
+── Decision 1: Rush-side decomposition (judge: rush-tier bias) ─────────────────
+       rush_tier    n bias_H bias_S
+1   statue (0-3) 4376 -0.433 -0.418
+2    mover (4-7) 1420 -0.064 -0.111
+3 scrambler (8+)  433  1.387  1.329
+ℹ Variant H (hybrid):    max |tier bias| = 1.387 EPA | pooled RMSE = 11.252
+ℹ Variant S (symmetric): max |tier bias| = 1.329 EPA | pooled RMSE = 11.264
+Warning message:
+STOP condition (pre-committed, observed-tier judge): both variants exceed 0.5
+EPA max tier bias. Verdict recorded; producing full diagnostics -- do NOT
+proceed to 08c without review. 
+
+── Diagnostic A: component share of tier bias (pass vs rush) ──
+
+       rush_tier    n bias_pass bias_rush_H bias_rush_S
+1   statue (0-3) 4376    -0.343      -0.090      -0.074
+2    mover (4-7) 1420    -0.705       0.641       0.594
+3 scrambler (8+)  433    -0.095       1.482       1.424
+── Diagnostic B: bias by EX-ANTE rush tier (rolling wt_carries; 533 week-1 rows excluded) ──
+
+         ex_tier    n bias_H bias_S
+1   statue (0-3) 4472 -0.128 -0.100
+2    mover (4-7)  997 -0.448 -0.621
+3 scrambler (8+)  227  0.527  0.431
+ℹ Ex-ante max |tier bias|: H = 0.527 EPA | S = 0.621 EPA
+✔ Decomposition winner: Variant H (full tie -- prefer hybrid (fewer noise-fitted components))
+
+── Decision 2: Combined-interval mechanism (judge: rush-tier flatness) ─────────
+
+── Mechanism const ──
+
+       rush_tier    n mean_raw_resid mean_norm_resid sd_norm_resid
+1   statue (0-3) 4376          9.150           0.631         0.477
+2    mover (4-7) 1420          8.464           0.587         0.455
+3 scrambler (8+)  433          8.649           0.605         0.456
+ℹ const scrambler/statue ratio: 0.959
+
+── Mechanism plaw ──
+
+       rush_tier    n mean_raw_resid mean_norm_resid sd_norm_resid
+1   statue (0-3) 4376          9.150           0.635         0.480
+2    mover (4-7) 1420          8.464           0.576         0.447
+3 scrambler (8+)  433          8.649           0.580         0.439
+ℹ plaw scrambler/statue ratio: 0.913
+
+── Mechanism tier ──
+
+       rush_tier    n mean_raw_resid mean_norm_resid sd_norm_resid
+1   statue (0-3) 4376          9.150           0.619         0.469
+2    mover (4-7) 1420          8.464           0.615         0.477
+3 scrambler (8+)  433          8.649           0.629         0.485
+ℹ tier scrambler/statue ratio: 1.016
+✔ const: FLAT
+✔ plaw: FLAT
+✔ tier: FLAT
+✔ Mechanism winner: const | ratios: const=0.959 | plaw=0.913 | tier=1.016
+
+── Coverage: Variant H x mechanism const ───────────────────────────────────────
+# A tibble: 15 × 6
+   component       stratum nominal empirical     delta sharpness
+   <chr>           <chr>     <dbl>     <dbl>     <dbl>     <dbl>
+ 1 pass_efficiency pooled      0.5     0.495 -0.00538      0.425
+ 2 pass_efficiency pooled      0.8     0.798 -0.00228      0.828
+ 3 pass_efficiency pooled      0.9     0.898 -0.00242      1.08 
+ 4 dropback_volume pooled      0.5     0.502  0.00153     12.8  
+ 5 dropback_volume pooled      0.8     0.801  0.00109     23.7  
+ 6 dropback_volume pooled      0.9     0.900 -0.000177    30.3  
+ 7 carry_volume    pooled      0.5     0.494 -0.00602      2.38 
+ 8 carry_volume    pooled      0.8     0.790 -0.00999      4.85 
+ 9 carry_volume    pooled      0.9     0.893 -0.00724      6.81 
+10 rush_epa_direct pooled      0.5     0.495 -0.00538      2.49 
+11 rush_epa_direct pooled      0.8     0.795 -0.00485      5.85 
+12 rush_epa_direct pooled      0.9     0.898 -0.00178      8.64 
+13 combined        pooled      0.5     0.501  0.000562    15.0  
+14 combined        pooled      0.8     0.796 -0.00372     29.0  
+15 combined        pooled      0.9     0.900  0.000305    37.5  
+
+── Combined coverage stratified by rush tier (the veto axis) ──
+
+# A tibble: 9 × 6
+  stratum            n nominal empirical    delta sharpness
+  <fct>          <int>   <dbl>     <dbl>    <dbl>     <dbl>
+1 statue (0-3)    4376     0.5     0.493 -0.00731      15.0
+2 statue (0-3)    4376     0.8     0.790 -0.0105       29.1
+3 statue (0-3)    4376     0.9     0.896 -0.00375      37.6
+4 mover (4-7)     1420     0.5     0.520  0.0197       14.9
+5 mover (4-7)     1420     0.8     0.814  0.0141       28.9
+6 mover (4-7)     1420     0.9     0.911  0.0113       37.3
+7 scrambler (8+)   433     0.5     0.517  0.0173       14.8
+8 scrambler (8+)   433     0.8     0.806  0.00600      28.6
+9 scrambler (8+)   433     0.9     0.905  0.00531      37.1
+── Decision Rule Evaluation ────────────────────────────────────────────────────
+ℹ Pooled combined 80%: -0.4pp
+ℹ   statue (0-3) (n=4376): -1.0pp
+ℹ   mover (4-7) (n=1420): +1.4pp
+ℹ   scrambler (8+) (n=433): +0.6pp
+✔ Veto check passed: worst tier delta = +1.4pp (mover (4-7))
+
+── Combined coverage stratified by EX-ANTE rush tier (deployable conditioning) ──
+
+# A tibble: 9 × 6
+  stratum            n nominal empirical    delta sharpness
+  <fct>          <int>   <dbl>     <dbl>    <dbl>     <dbl>
+1 statue (0-3)    4472     0.5     0.496 -0.00403      15.0
+2 statue (0-3)    4472     0.8     0.796 -0.00416      29.1
+3 statue (0-3)    4472     0.9     0.899 -0.00107      37.6
+4 mover (4-7)      997     0.5     0.524  0.0236       14.9
+5 mover (4-7)      997     0.8     0.804  0.00441      28.8
+6 mover (4-7)      997     0.9     0.905  0.00471      37.1
+7 scrambler (8+)   227     0.5     0.515  0.0154       14.8
+8 scrambler (8+)   227     0.8     0.784 -0.0159       28.6
+9 scrambler (8+)   227     0.9     0.899 -0.00132      37.0
+── Save outputs ────────────────────────────────────────────────────────────────
+✔ output/08b_qb_decomposition_bias.csv    (winner: H)
+✔ output/08b_qb_construction_flatness.csv (winner: const)
+✔ output/08b_qb_fold_predictions.csv      (6229 rows)
+✔ output/08b_qb_pooled_coverage.csv
+✔ output/08b_qb_tier_coverage.csv
+✔ output/08b_qb_component_bias.csv + ex_ante_bias + ex_ante_coverage + decision_summary
+Warning message:
+One or more pre-committed verdicts FAILED -- review decision_summary before 08c 
+
+── Step 8b complete ────────────────────────────────────────────────────────────
