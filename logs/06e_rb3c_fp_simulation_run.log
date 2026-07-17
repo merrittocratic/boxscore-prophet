@@ -1,0 +1,37 @@
+
+── Step 1: Load shared RB translation fit + residual pools ─────────────────────
+✔ Translation fit + pools loaded (n = 17458 residuals)
+
+── Step 2: Load 3C fold predictions and observed FP ────────────────────────────
+✔ 3C preds: 11621 rows | FP rows: 11621
+
+── Step 3: Estimate 3C EPA-error / volume-error correlation ────────────────────
+ℹ Copula rho (3C): 0.05 (06b 3A-v2 chain: 0.034)
+
+── Step 4: Simulate FP distributions (2000 draws per player-week) ──────────────
+✔ Probabilities: 11621 rows (11621 with observed FP)
+
+── Step 5: Raw calibration (recalibration follows in 06f) ──────────────────────
+
+── Raw n-weighted mean |delta| (pp) ──
+
+# A tibble: 2 × 2
+  threshold w_mean_abs_delta_pp
+  <chr>     <chr>              
+1 15+       4.7                
+2 20+       2.5                
+── Raw calibration by ex-ante stratum (3C pred_vol: <10 / 10-14 / 14+) ──
+
+# A tibble: 3 × 8
+  stratum         n pred_start emp_start d_start_pp pred_boom emp_boom d_boom_pp
+  <fct>       <int>      <dbl>     <dbl> <chr>          <dbl>    <dbl> <chr>    
+1 exante_low   2111      0.112     0.113 +0.1          0.0305   0.0417 +1.1     
+2 exante_mid   3581      0.203     0.171 -3.3          0.0719   0.0698 -0.2     
+3 exante_high  5929      0.425     0.390 -3.6          0.205    0.216  +1.1     
+── Step 6: Save outputs ────────────────────────────────────────────────────────
+✔ output/06e_rb3c_fp_sim_probabilities.csv (11621 rows)
+✔ output/06e_rb3c_fp_sim_calibration.csv
+✔ output/06e_rb3c_strat_calibration.csv
+✔ output/06e_rb3c_sim_params.csv
+
+── Step 6e complete -- 3C simulation translation ───────────────────────────────

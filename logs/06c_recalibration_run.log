@@ -8,8 +8,8 @@
 # A tibble: 6 × 3
   position stratum         n
   <chr>    <fct>       <int>
-1 RB       exante_low     57
-2 RB       exante_mid   5891
+1 RB       exante_low   1798
+2 RB       exante_mid   4150
 3 RB       exante_high  5673
 4 WR       exante_low   2556
 5 WR       exante_mid  13646
@@ -25,18 +25,18 @@
 # A tibble: 24 × 6
    position threshold method      strat_pp pooled_pp brier  
    <chr>    <chr>     <chr>       <chr>    <chr>     <chr>  
- 1 RB       15+       strat_iso   1.20     0.99      0.16781
- 2 RB       15+       strat_platt 2.36     1.67      0.16811
- 3 RB       15+       iso         2.50     1.05      0.17039
- 4 RB       15+       platt       2.89     1.50      0.17041
- 5 RB       15+       platt_vol   3.03     2.45      0.15871
- 6 RB       15+       raw         4.13     2.33      0.17073
- 7 RB       20+       strat_iso   0.79     0.75      0.10510
- 8 RB       20+       strat_platt 1.15     1.13      0.10464
- 9 RB       20+       iso         1.84     0.61      0.10614
-10 RB       20+       platt_vol   1.90     1.25      0.09897
-11 RB       20+       platt       2.11     1.39      0.10598
-12 RB       20+       raw         2.63     2.63      0.10731
+ 1 RB       15+       strat_iso   1.23     0.96      0.16617
+ 2 RB       15+       strat_platt 2.30     1.74      0.16626
+ 3 RB       15+       platt_vol   3.40     2.45      0.15871
+ 4 RB       15+       iso         3.58     1.05      0.17039
+ 5 RB       15+       platt       3.81     1.50      0.17041
+ 6 RB       15+       raw         4.86     2.33      0.17073
+ 7 RB       20+       strat_iso   0.83     0.79      0.10469
+ 8 RB       20+       strat_platt 1.17     1.09      0.10412
+ 9 RB       20+       platt_vol   2.03     1.25      0.09897
+10 RB       20+       iso         2.31     0.61      0.10614
+11 RB       20+       platt       2.42     1.39      0.10598
+12 RB       20+       raw         2.77     2.63      0.10731
 13 WR       15+       strat_iso   0.69     0.64      0.16913
 14 WR       15+       iso         1.41     0.57      0.16988
 15 WR       15+       strat_platt 1.71     1.36      0.16900
@@ -63,23 +63,23 @@
 # A tibble: 36 × 8
    position threshold method    stratum         n pred  emp   delta_pp
    <chr>    <chr>     <chr>     <fct>       <int> <chr> <chr> <chr>   
- 1 RB       15+       raw       exante_low     26 0.080 0.038 -4.2    
- 2 RB       15+       raw       exante_mid   4971 0.160 0.157 -0.3    
+ 1 RB       15+       raw       exante_low   1466 0.104 0.102 -0.2    
+ 2 RB       15+       raw       exante_mid   3531 0.183 0.179 -0.4    
  3 RB       15+       raw       exante_high  4902 0.405 0.400 -0.5    
- 4 RB       15+       iso       exante_low     26 0.040 0.038 -0.1    
- 5 RB       15+       iso       exante_mid   4971 0.140 0.157 +1.7    
+ 4 RB       15+       iso       exante_low   1466 0.063 0.102 +3.9    
+ 5 RB       15+       iso       exante_mid   3531 0.171 0.179 +0.8    
  6 RB       15+       iso       exante_high  4902 0.414 0.400 -1.4    
- 7 RB       15+       strat_iso exante_low     26 0.040 0.038 -0.1    
- 8 RB       15+       strat_iso exante_mid   4971 0.161 0.157 -0.4    
+ 7 RB       15+       strat_iso exante_low   1466 0.105 0.102 -0.3    
+ 8 RB       15+       strat_iso exante_mid   3531 0.183 0.179 -0.4    
  9 RB       15+       strat_iso exante_high  4902 0.392 0.400 +0.8    
-10 RB       20+       raw       exante_low     26 0.021 0.000 -2.1    
-11 RB       20+       raw       exante_mid   4971 0.053 0.063 +1.0    
+10 RB       20+       raw       exante_low   1466 0.029 0.034 +0.5    
+11 RB       20+       raw       exante_mid   3531 0.063 0.074 +1.1    
 12 RB       20+       raw       exante_high  4902 0.197 0.224 +2.7    
-13 RB       20+       iso       exante_low     26 0.009 0.000 -0.9    
-14 RB       20+       iso       exante_mid   4971 0.049 0.063 +1.3    
+13 RB       20+       iso       exante_low   1466 0.016 0.034 +1.8    
+14 RB       20+       iso       exante_mid   3531 0.063 0.074 +1.1    
 15 RB       20+       iso       exante_high  4902 0.242 0.224 -1.8    
-16 RB       20+       strat_iso exante_low     26 0.009 0.000 -0.9    
-17 RB       20+       strat_iso exante_mid   4971 0.064 0.063 -0.1    
+16 RB       20+       strat_iso exante_low   1466 0.037 0.034 -0.3    
+17 RB       20+       strat_iso exante_mid   3531 0.075 0.074 -0.1    
 18 RB       20+       strat_iso exante_high  4902 0.225 0.224 -0.1    
 19 WR       15+       raw       exante_low   2149 0.109 0.099 -1.0    
 20 WR       15+       raw       exante_mid  11772 0.278 0.280 +0.2    

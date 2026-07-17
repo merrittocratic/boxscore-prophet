@@ -59,7 +59,12 @@ MIN_STRAT_N       <- 300L    # below this many train rows, stratum falls back
 # pre-kickoff). Cut points mirror the roster concepts: streamer / mid /
 # locked-in starter. Stratifying by OBSERVED volume would condition on game
 # script (see QB 08b false-STOP lesson) -- ex-ante only.
-STRATA_BREAKS <- list(RB = c(-Inf, 8, 14, Inf), WR = c(-Inf, 5, 9, Inf))
+# RB low boundary moved 8 -> 10 (2026-07-17, after the 06f veto): volume-
+# model shrinkage means pred_vol <= 8 holds only 57 rows, so the low
+# stratum always hit the pooled fallback and the streamer roster
+# (pred_vol < 10, where the two-product router actually cuts) ran +3.25pp
+# cold. At 10 the stratum has ~1,800 rows and fits its own map.
+STRATA_BREAKS <- list(RB = c(-Inf, 10, 14, Inf), WR = c(-Inf, 5, 9, Inf))
 STRATA_LABELS <- c("exante_low", "exante_mid", "exante_high")
 
 stratum_of <- function(position, pred_vol) {

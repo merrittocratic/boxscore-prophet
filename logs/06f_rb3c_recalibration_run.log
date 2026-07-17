@@ -1,0 +1,59 @@
+
+── Step 6f: RB 3C walk-forward recalibration + two-product veto ────────────────
+✔ 11621 scored RB-weeks | seasons 2014-2025
+# A tibble: 3 × 2
+  stratum         n
+  <fct>       <int>
+1 exante_low   2111
+2 exante_mid   3581
+3 exante_high  5929
+
+── Walk-forward weekly refits ──────────────────────────────────────────────────
+✔ Recalibrated 9899 eval-window rows
+
+── Evaluation on 2016+ (out-of-time) ───────────────────────────────────────────
+
+── Judge metric (stratified) + pooled |delta| (pp) + Brier, by method ──
+
+# A tibble: 12 × 5
+   threshold method      strat_pp pooled_pp brier  
+   <chr>     <chr>       <chr>    <chr>     <chr>  
+ 1 15+       strat_iso   1.41     1.38      0.17941
+ 2 15+       strat_platt 2.21     1.79      0.17749
+ 3 15+       iso         3.98     0.86      0.18221
+ 4 15+       platt_vol   4.43     4.20      0.17499
+ 5 15+       platt       5.46     2.58      0.18325
+ 6 15+       raw         6.96     4.65      0.18443
+ 7 20+       strat_iso   1.07     1.07      0.11399
+ 8 20+       strat_platt 1.39     1.17      0.11352
+ 9 20+       platt_vol   3.19     2.76      0.10964
+10 20+       raw         3.41     2.24      0.11681
+11 20+       platt       4.04     1.43      0.11675
+12 20+       iso         4.41     0.82      0.11629
+── Method picks (pre-committed rule) ──
+
+# A tibble: 2 × 4
+  position threshold pick      reason                                      
+  <chr>    <chr>     <chr>     <chr>                                       
+1 RB_3C    15+       strat_iso lowest stratified weighted |delta|, Brier ok
+2 RB_3C    20+       strat_iso lowest stratified weighted |delta|, Brier ok
+── Two-product veto: streamer roster (3C pred_vol < 10), 2016+ ─────────────────
+ℹ Streamer roster rows (joined to incumbent): 1739
+
+── Veto table (honest_ok: |delta| <= 2pp; brier_ok: <= incumbent) ──
+
+# A tibble: 2 × 9
+  threshold pick_3c   delta_3c_pp delta_inc_pp brier_3c brier_inc honest_ok
+  <chr>     <chr>     <chr>       <chr>        <chr>    <chr>     <lgl>    
+1 15+       strat_iso -0.91       +1.31        0.09818  0.08292   TRUE     
+2 20+       strat_iso -0.48       +0.71        0.03831  0.03384   TRUE     
+# ℹ 2 more variables: brier_ok <lgl>, pass <lgl>
+── VETO FAILED: 3C chain does NOT ship for the RB streamer roster ──────────────
+
+── Deployment maps (refit on all seasons) ──────────────────────────────────────
+✔ output/06f_rb3c_recal_probabilities.csv (9899 rows)
+✔ output/06f_rb3c_recal_summary.csv
+✔ output/06f_rb3c_veto.csv
+✔ data/rb3c_fp_recal_maps.rds
+
+── Step 6f complete ────────────────────────────────────────────────────────────

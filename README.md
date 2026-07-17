@@ -422,6 +422,68 @@ but the translation fits (`fp_translation_fits.rds`,
 `qb_fp_translation_fit.rds`) use `ns()` -- the production runner must
 `library(splines)` before calling `predict()` on them.
 
+### D16. RB 3C wiring veto FAILED: single-engine RB, streamer cut moved to 10
+
+The 3C upside engine was wired through translation (06e: shared translation
+fit + pools, engine-independent; 3C intervals + own copula rho) and
+recalibration (06f: same conditional bake-off, strat_iso won both maps),
+then graded by a veto pre-committed BEFORE the run: ship for the streamer
+roster (3C pred_vol < 10) only if honest there (|delta| <= 2pp) AND Brier
+no worse than the shipped 3A-v2 chain on the same player-weeks.
+
+Result: honest yes (-0.9pp / -0.5pp), Brier NO -- and against the FINAL
+incumbent (strat_iso after the stratum re-cut below), the incumbent is
+both honest on the roster (+1.3pp / +0.7pp) and clearly sharper (Brier
+0.0829 vs 0.0982 at 15+; 0.0338 vs 0.0383 at 20+). The Bayes intervals
+are wide, which pushes probabilities toward the base rate: calibrated in
+the mean but weaker at separating the 4%-tail streamer from the 15%-tail
+one -- and discrimination is what a streamer board is for. **Both
+positions therefore run single-engine (the D7 two-product split survives
+as a roster/presentation split), and 3C is retired for deployment at both
+positions.** 06e/06f artifacts kept as the receipts.
+
+The veto's real payload was a defect in the SHIPPED chain: the 6c RB low
+stratum cut at pred_vol <= 8 held only 57 rows (volume-model shrinkage --
+observed 10th pctile is 6 opportunities, predicted is 9), so the streamer
+band always hit the pooled fallback and ran +3.25pp cold where the router
+actually cuts (< 10). Fix: RB low boundary moved 8 -> 10 in 6c and the
+bake-off re-run under the unchanged judge.
+
+## Deployment runner (10-series) -- design, in progress 2026-07-17
+
+The backtest chain trains a model per fold; deployment is ONE MORE FOLD:
+train on all history through the current week using the same pre-committed
+tuning grids and conformal machinery, score the upcoming slate, push
+through the saved translation + recalibration artifacts. Weekly retrain
+(that is exactly what the walk-forward folds simulate). Stages:
+
+```
+10a_deployment_models.R   retrain tuned LGBM per position/component on all
+                          rows through week W; inner-split param selection
+                          (same grids as 03a-v2/04b/04c/08c); deployment
+                          conformal quantiles from calibration residuals;
+                          saves data/deployment_models_<pos>.rds
+10b_weekly_slate.R        build EX-ANTE feature rows for week W+1 from
+                          data through W: schedule (nflreadr), active
+                          rosters, rolling features carried forward, cold
+                          -start handling; router assigns RB two-product
+                          roster; Earnest depth-chart shock override hook
+10c_weekly_score.R        point preds + intervals for the slate ->
+                          simulation translation (saved resid pools +
+                          copula rhos) -> recal maps (library(splines);
+                          function(p, pred_vol)) -> calibrated
+                          probabilities per player
+10d_content_tables.R      emit content products: forward boards
+                          (leaderboards by threshold) + backward receipts
+                          (last week's stated p vs outcomes); editorial
+                          caps applied in the extreme tails
+```
+
+Laptop = stage, MacMini (Earnest) = production; same scripts, cron on the
+MacMini. In-season cadence: Tuesday night data pull + retrain + score;
+re-score Sunday morning on inactives (10b/10c only, models frozen for the
+week).
+
 ## Reproducibility
 
 - Data: nflreadr play-by-play and player stats, seasons 2014-2025, REG only
