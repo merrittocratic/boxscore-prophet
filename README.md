@@ -177,6 +177,11 @@ tail) than RB per-carry EPA. The two-product architecture may be RB-only;
 that is an acceptable outcome. Revisit only with a fundamentally different
 distributional spec.
 
+*Resolved 2026-07-17: retired, not revisited -- see D14. The failure lives
+at the efficiency-component level, which the product never ships; the
+combined-level chain is honest on the WR streamer roster without a second
+engine.*
+
 ### D10. The product is P(threshold), not a point projection
 
 Published numbers: P(FP >= 15) for start/sit, P(FP >= 20) for booms. PPR.
@@ -261,14 +266,36 @@ Isotonic and Platt competed under a pre-committed rule (n-weighted mean
 |bin delta| primary, Brier-must-not-degrade sanity); **isotonic won all
 four**, with Brier improving everywhere.
 
-Out-of-time weighted |calibration error|, raw -> recalibrated:
+**Extended 2026-07-17 to volume-conditional maps.** The pooled maps were
+honest on average but blind to who the probability belongs to: stratifying
+the 07-05 run by EX-ANTE predicted volume (pred_vol -- deployable
+pre-kickoff; observed volume would condition on game script, the QB 08b
+false-STOP lesson) showed the WR streamer stratum (<= 5 projected targets)
+understating P(15+) by +3.8pp and the WR high-volume stratum overstating
+P(20+) by -6.7pp. Three volume-aware candidates entered the bake-off
+(stratified Platt, stratified isotonic with pooled fallback under 300 train
+rows, and Platt-with-volume-covariate), judged by an updated pre-committed
+rule: n-weighted mean |delta| over (stratum x bin) cells -- stratified
+because the pooled metric is exactly what the incumbents saturate -- with
+the same Brier-must-not-degrade sanity check. **Stratified isotonic won all
+four maps**, beating the incumbent pooled isotonic out-of-time.
 
-| Map | Raw | Recalibrated |
-|---|---|---|
-| RB 15+ | 2.33pp | 1.05pp |
-| RB 20+ | 2.63pp | 0.61pp |
-| WR 15+ | 2.79pp | 0.57pp |
-| WR 20+ | 2.90pp | 0.53pp |
+Judge metric (stratified weighted |delta|), raw -> pooled iso -> strat_iso:
+
+| Map | Raw | Pooled iso | Strat iso |
+|---|---|---|---|
+| RB 15+ | 4.13pp | 2.50pp | 1.20pp |
+| RB 20+ | 2.63pp | 1.84pp | 0.79pp |
+| WR 15+ | 3.21pp | 1.41pp | 0.69pp |
+| WR 20+ | 3.14pp | 1.24pp | 0.76pp |
+
+Stratum-level honesty after the fix: every position x threshold x stratum
+cell within +-1.3pp (WR streamer P(15+) +3.8pp -> +1.1pp; WR high-volume
+P(20+) -6.7pp -> -1.3pp). Note: the Platt-with-covariate candidate posted
+the best Brier scores (its volume term adds resolution) but worse
+calibration cells; the pre-committed rule is calibration-first because
+resolution belongs to the upstream models -- this layer's only job is
+honesty.
 
 **Why this is not a fudge:** it is graded exclusively on weeks it never saw,
 the same walk-forward discipline as every model stage. And it was only
@@ -284,9 +311,30 @@ Known blemish: the extreme top tail (stated 15+ probability above ~0.7, or
 guidance: cap displayed probabilities (publish ">70%") rather than quote
 precise numbers there.
 
-Deployment artifacts: `data/fp_recal_maps.rds` (maps refit on all history)
-and `output/06c_recal_map_grid.csv`. Weekly flow: 06b simulation
-probabilities -> apply maps -> publish.
+Deployment artifacts: `data/fp_recal_maps.rds` (maps refit on all history;
+every map has uniform signature `function(p, pred_vol)` and is
+self-contained -- closures bind everything locally, no globalenv
+dependencies, so the production runner can readRDS in a fresh session) and
+`output/06c_recal_map_grid.csv` (maps evaluated at each stratum's median
+pred_vol). Weekly flow: 06b simulation probabilities -> apply maps ->
+publish.
+
+### D14. WR 3C retired: the upside question was a calibration question
+
+The revisit of D9 (2026-07-17) reframed it: WR 3C failed at the efficiency
+component, but the product ships combined-level FP probabilities, and at
+that level the deployed 04c chain was already honest on the streamer
+roster (80% interval covers 80.5% on 3-5 target WRs) -- the efficiency
+miss washes out against the volume component. The only real defect was the
+conditional probability miscalibration fixed by the D13 extension. So the
+RB rationale for a second engine (projection models abandoned the
+committee-back tail at the COMBINED level) never applied to WR.
+
+**Decision:** WR two-product = one engine (04c), two rosters at the
+presentation layer, routed by ex-ante predicted targets. `05_wr_3c_*` is
+retired history, not parked work. RB keeps its 3C upside engine (its
+low-touch roster genuinely needs one), but RB 3C is not yet wired through
+FP translation -- that belongs to deployment scoping.
 
 ## Repository map
 
@@ -305,10 +353,11 @@ R/
   04_bakeoff_results.R          [3] rubric adjudication
   04a_wr_feature_layer.R        [4] WR feature table (frozen v1.0)
   04b_wr_lgbm_tuned.R           [4] WR projection model (3A-v2 clone)
-  05_wr_3c_hierarchical_bayes.R [5] WR upside attempt (parked, do not deploy)
+  05_wr_3c_hierarchical_bayes.R [5] WR upside attempt (RETIRED, see D14)
   06_fp_translation.R           [6] EPA -> PPR regression + v1 normal approx
   06b_fp_simulation.R           [6] simulation probabilities (spline + 04c)
-  06c_recalibration.R           [6] walk-forward isotonic recalibration (final)
+  06c_recalibration.R           [6] walk-forward recalibration, volume-
+                                    conditional stratified isotonic (final)
   read_stathead.R               data utility
 
 data/    RDS intermediates (feature tables, outcomes, fold map)
@@ -327,14 +376,19 @@ logs/    run logs for reproducibility
 - Every model stage writes its coverage/calibration tables to `output/` and
   its console log to `logs/`
 
-## Status (2026-07-05, end of session)
+## Status (2026-07-17, end of session)
 
-- **P(15+) and P(20+) are content-ready for both positions** after 6c:
-  every content-relevant bin honest out-of-time, weighted calibration
-  error 0.5-1.1pp across all four maps
+- **P(15+) and P(20+) are content-ready for both positions**, now honest
+  conditionally as well as on average: after the 6c volume-conditional
+  extension, every position x threshold x ex-ante-volume stratum is within
+  +-1.3pp out-of-time
 - Full product stack: 3A-v2 RB intervals + 04c WR asymmetric intervals ->
-  spline translation + empirical simulation (06b) -> isotonic
-  recalibration (06c)
+  spline translation + empirical simulation (06b) -> stratified isotonic
+  recalibration (06c, deployed maps take (p, pred_vol))
+- WR 3C retired (D14): WR upside is a roster split over the single 04c
+  engine; RB keeps its 3C upside engine (not yet wired through translation)
+- QB spine ready (07/08a-08c committed, veto passed, width 27.1); next =
+  QB translation layer (06-series analog, thresholds 20/25)
 - Editorial note: cap displayed probabilities in the sparse extreme tail
-- RB upside product (3C): scoped, not yet built out
-- Next: weekly deployment wiring (Earnest) and content formats
+- Next after QB translation: weekly deployment wiring (Earnest) and
+  content formats
