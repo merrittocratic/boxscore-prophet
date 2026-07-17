@@ -97,7 +97,7 @@ fit_platt <- function(p, hit) {
                   })
   if (is.null(fit)) return(identity)
   function(pnew) {
-    as.numeric(predict(fit, newdata = tibble(x = qlogis(clamp(pnew))),
+    as.numeric(predict(fit, newdata = data.frame(x = qlogis(clamp(pnew))),
                        type = "response"))
   }
 }
@@ -144,7 +144,7 @@ fit_platt_vol <- function(p, hit, vol) {
   if (is.null(fit)) return(NULL)
   function(pnew, vnew) {
     as.numeric(predict(fit,
-      newdata = tibble(x = qlogis(clamp(pnew)), v = vnew),
+      newdata = data.frame(x = qlogis(clamp(pnew)), v = vnew),
       type = "response"))
   }
 }

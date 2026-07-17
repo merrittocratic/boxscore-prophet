@@ -336,6 +336,44 @@ retired history, not parked work. RB keeps its 3C upside engine (its
 low-touch roster genuinely needs one), but RB 3C is not yet wired through
 FP translation -- that belongs to deployment scoping.
 
+### D15. QB translation layer (9a/9b): components stay separate, raw mostly wins
+
+`09a_qb_fp_simulation.R` is the 06b analog on the 08c hybrid spine, with
+the differences pre-specified in the 08c wrap-up: standard scoring (4pt
+pass TD, no PPR), thresholds 20/25, and the regression keeps pass and rush
+separate -- `fp ~ ns(pass_epa) + dropbacks + rush_epa + carries` -- because
+the FP exchange rate differs by component (rush TDs 6pt vs pass 4pt).
+The simulation draws all four 08c component intervals under a 4x4 Gaussian
+copula from standardized fold errors (rush_epa x carries came in at +0.23,
+the one dependence the design notes predicted would matter) and derives
+pass_epa = pass_eff x dropbacks per draw. Residual pools are binned by
+carries tier (statue/mover/scrambler, 4/8): the scrambler pool is
+fatter-right-tailed (skew 0.52 vs 0.27), which is rush-TD lumpiness.
+
+**The functional-form gate earned its keep:** the first fit omitted
+dropbacks (pass volume "already inside" pass_epa) and showed a monotone
+residual trend from -4.4 FP to +4.5 FP across dropback deciles. FP pays
+for yardage ACCRUAL that EPA does not credit -- a 40-dropback zero-EPA
+game still banks ~10 FP of passing yards. With dropbacks as a term the
+trend flattens to +-0.5.
+
+Raw simulation calibration: 1.2pp weighted error at 20+, 1.1pp at 25+,
+beating the normal baseline at 20+ (2.3pp) -- QB skew is milder than
+RB/WR, as feasibility predicted.
+
+`09b_qb_recalibration.R` runs the same conditional bake-off as 6c with
+strata on ex-ante pred_carry. Verdict, per the pre-committed judge:
+**raw wins at 20+** (every recal method degraded Brier -- the simulation
+is already honest there; the deployed map is the identity) and **pooled
+Platt wins at 25+** (1.07pp -> 0.24pp). No conditional method survived --
+the QB probability surface is not conditionally mispriced the way WR was.
+Watch items, documented not patched: movers +3.4pp cold at 20+ (n=809,
+borderline); scramblers -4 to -5pp hot (n=132, inside noise, and
+opposite-signed to the same check under prior_carries_pg conditioning --
+the signature of noise, not structure). Deployment:
+`data/qb_fp_recal_maps.rds`, same `function(p, pred_vol)` signature as
+RB/WR with pred_vol = pred_carry.
+
 ## Repository map
 
 ```
@@ -358,6 +396,17 @@ R/
   06b_fp_simulation.R           [6] simulation probabilities (spline + 04c)
   06c_recalibration.R           [6] walk-forward recalibration, volume-
                                     conditional stratified isotonic (final)
+  07_qb_feasibility.R           [7] QB feasibility: 4pt TD, thresholds,
+                                    two-component requirement
+  08a_qb_feature_layer.R        [8] QB feature table (frozen v1.0)
+  08b_qb_interval_construction.R[8] hybrid vs symmetric bake-off; const
+                                    mechanism locked; ex-ante judge lesson
+  08b2_qb_scrambler_check.R     [8] scrambler deep-dive (cleared)
+  08c_qb_lgbm_tuned.R           [8] QB spine: tuned hybrid model, veto passed
+  09a_qb_fp_simulation.R        [9] QB FP translation + 4-component copula
+                                    simulation (thresholds 20/25)
+  09b_qb_recalibration.R        [9] QB walk-forward recalibration (raw at
+                                    20+, Platt at 25+)
   read_stathead.R               data utility
 
 data/    RDS intermediates (feature tables, outcomes, fold map)
@@ -366,6 +415,12 @@ output/  frozen CSV artifacts: feature tables, fold predictions, coverage
          06b_resid_pools)
 logs/    run logs for reproducibility
 ```
+
+Deployment artifact dependency note: the recalibration maps
+(`fp_recal_maps.rds`, `qb_fp_recal_maps.rds`) are base-R self-contained,
+but the translation fits (`fp_translation_fits.rds`,
+`qb_fp_translation_fit.rds`) use `ns()` -- the production runner must
+`library(splines)` before calling `predict()` on them.
 
 ## Reproducibility
 
@@ -387,8 +442,11 @@ logs/    run logs for reproducibility
   recalibration (06c, deployed maps take (p, pred_vol))
 - WR 3C retired (D14): WR upside is a roster split over the single 04c
   engine; RB keeps its 3C upside engine (not yet wired through translation)
-- QB spine ready (07/08a-08c committed, veto passed, width 27.1); next =
-  QB translation layer (06-series analog, thresholds 20/25)
+- **QB is content-ready** (D15): P(20+)/P(25+) from the 9a simulation
+  layer, raw honest at 20+ (identity map), Platt at 25+; known
+  limitations: star shrinkage (elite tier reads conservative) and the
+  mover/scrambler watch items
 - Editorial note: cap displayed probabilities in the sparse extreme tail
-- Next after QB translation: weekly deployment wiring (Earnest) and
-  content formats
+- Next: weekly deployment wiring (Earnest) and content formats -- all
+  three positions now emit calibrated probabilities through deployed
+  artifacts (translation fits + recal maps, all self-contained rds)

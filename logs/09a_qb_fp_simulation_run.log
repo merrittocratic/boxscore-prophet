@@ -1,0 +1,95 @@
+
+── Step 1: Pull weekly standard fantasy points (nflreadr, 4pt pass TD) ─────────
+Warning message:
+The `stat_type` argument of `load_player_stats()` is deprecated as of nflreadr
+1.5.0.
+ℹ Please use `load_player_stats()` instead. 
+✔ Fantasy points: 207959 player-game rows
+
+── Step 2: Join to QB starter rows ─────────────────────────────────────────────
+✔ QB join: 6382 starter rows with fantasy points
+
+── Step 3: Fit FP translation, pool residuals by rushing tier ──────────────────
+
+── Residual mean by decile (should be ~0 everywhere) ──
+
+# A tibble: 2 × 11
+  axis        `1`   `2`   `3`   `4`   `5`   `6`   `7`   `8`   `9`  `10`
+  <chr>     <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+1 pass_epa  -0.06  0.04  0.06 -0.01 -0.03  0.18 -0.17  0.01 -0.09  0.07
+2 dropbacks -0.24  0.24  0.5  -0.24 -0.03 -0.02  0.01 -0.26  0.04  0.01
+── Residual mean by rushing tier (kneel-offset + exchange-rate check) ──
+
+# A tibble: 3 × 5
+  tier          n mean_res sd_res  skew
+  <fct>     <int>    <dbl>  <dbl> <dbl>
+1 statue     4496    -0.01   3.89  0.27
+2 mover      1447     0.02   4.39  0.28
+3 scrambler   439     0.08   4.77  0.52
+── Step 4: Load 08c fold predictions ───────────────────────────────────────────
+✔ QB preds: 6229 rows
+
+── Step 5: Estimate component-error copula (pass_eff, db, rush, carry) ─────────
+
+── Copula rho matrix ──
+
+         pass_eff     db   rush carry
+pass_eff    1.000 -0.109 -0.010 0.031
+db         -0.109  1.000  0.001 0.037
+rush       -0.010  0.001  1.000 0.228
+carry       0.031  0.037  0.228 1.000
+── Step 6: Simulate FP distributions (2000 draws per player-week) ──────────────
+✔ Simulation complete
+✔ Probabilities: 6229 rows (6229 with observed FP)
+
+── Step 7: Calibration -- simulation vs normal approximation ───────────────────
+
+── QB P(20+) -- delta by bin, normal vs simulation ──
+
+# A tibble: 8 × 5
+  bin       n_norm delta_norm_pp n_sim delta_sim_pp
+  <fct>      <int> <chr>         <int> <chr>       
+1 [0,0.1)        3 -9.2             80 -2.1        
+2 [0.1,0.2)    595 -4.7            897 -1.4        
+3 [0.2,0.3)   2294 -2.1           2147 -0.2        
+4 [0.3,0.4)   2257 -1.4           2105 -0.9        
+5 [0.4,0.5)    747 -2.7            724 -2.0        
+6 [0.5,0.6)    254 +2.8            226 +6.6        
+7 [0.6,0.7)     72 -8.0             47 -15.2       
+8 [0.7,0.8)      7 -30.4             3 -41.7       
+── QB P(25+) -- delta by bin, normal vs simulation ──
+
+# A tibble: 6 × 5
+  bin       n_norm delta_norm_pp n_sim delta_sim_pp
+  <fct>      <int> <chr>         <int> <chr>       
+1 [0,0.1)     2025 -0.6           1621 -1.0        
+2 [0.1,0.2)   3452 +0.8           3386 -0.7        
+3 [0.2,0.3)    600 +2.3           1004 -1.7        
+4 [0.3,0.4)    131 -2.7            188 +1.3        
+5 [0.4,0.5)     19 -11.7            27 -20.9       
+6 [0.5,0.6)      2 -51.5             3 -18.9       
+── n-weighted mean |delta| (pp): normal vs simulation ──
+
+# A tibble: 2 × 3
+  threshold norm  sim  
+  <chr>     <chr> <chr>
+1 20+       2.3   1.2  
+2 25+       1.0   1.1  
+── Sim calibration by EX-ANTE rushing tier (prior_carries_pg) ──
+
+# A tibble: 4 × 8
+  exante_tier     n pred_start emp_start d_start_pp pred_boom emp_boom d_boom_pp
+  <fct>       <int>      <dbl>     <dbl> <chr>          <dbl>    <dbl> <chr>    
+1 statue       3632      0.309     0.304 -0.5          0.150    0.140  -1.0     
+2 mover         725      0.411     0.422 +1.1          0.217    0.208  -0.9     
+3 scrambler     188      0.530     0.574 +4.5          0.307    0.330  +2.2     
+4 <NA>         1684      0.222     0.196 -2.6          0.0942   0.0802 -1.4     
+── Step 8: Save outputs ────────────────────────────────────────────────────────
+✔ output/09a_qb_fp_sim_probabilities.csv (6229 rows)
+✔ output/09a_qb_fp_sim_calibration.csv
+✔ output/09a_qb_tier_calibration.csv
+✔ output/09a_qb_resid_pools.csv
+✔ output/09a_qb_sim_params.csv
+✔ data/qb_fp_translation_fit.rds
+
+── Step 9a complete -- QB simulation translation layer ─────────────────────────
