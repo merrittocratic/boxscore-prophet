@@ -1,0 +1,9 @@
+component,num_leaves,lr,min_data_in_leaf,rounds,inner_rmse
+rb_eff,63,0.02,100,49,0.3209
+rb_vol,7,0.05,20,79,5.3673
+wr_eff,15,0.05,20,65,0.721
+wr_vol,31,0.05,100,89,2.4642
+qb_pass_eff,7,0.05,100,99,0.3257
+qb_db_vol,15,0.05,20,61,8.4576
+qb_carry_vol,15,0.02,100,95,2.1951
+qb_rush_dir,7,0.02,100,110,2.5739

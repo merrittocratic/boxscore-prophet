@@ -458,11 +458,19 @@ through the saved translation + recalibration artifacts. Weekly retrain
 (that is exactly what the walk-forward folds simulate). Stages:
 
 ```
-10a_deployment_models.R   retrain tuned LGBM per position/component on all
-                          rows through week W; inner-split param selection
-                          (same grids as 03a-v2/04b/04c/08c); deployment
-                          conformal quantiles from calibration residuals;
-                          saves data/deployment_models_<pos>.rds
+10a_deployment_models.R   BUILT 2026-07-18. Deployment = one more fold of
+                          the frozen backtest procedure per position: all
+                          rows, last-20% season-week cal split, frozen
+                          32-combo grids, conformal from cal residuals.
+                          Saves data/deploy_models/*.txt (8 lgb models) +
+                          data/deployment_params.rds. Trained through
+                          2025-W18; reruns Tuesdays in-season. Deployment
+                          seam: RB/WR combined intervals scale by
+                          pred_vol^alpha at scoring time (observed volume
+                          does not exist pre-kickoff); re-scored backtest
+                          coverage under pred scaling holds at 80/90
+                          (+1.2/+0.3pp RB, +1.4/+0.1pp WR), +2.5pp
+                          conservative at 50. QB const mechanism: no seam.
 10b_weekly_slate.R        build EX-ANTE feature rows for week W+1 from
                           data through W: schedule (nflreadr), active
                           rosters, rolling features carried forward, cold
