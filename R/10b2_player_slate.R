@@ -42,6 +42,8 @@ suppressPackageStartupMessages({
   library(cli)
 })
 
+source("R/10b_roster_helpers.R")
+
 args <- commandArgs(trailingOnly = TRUE)
 TARGET_SEASON <- if (length(args) >= 1) as.integer(args[1]) else 2025L
 TARGET_WEEK   <- if (length(args) >= 2) as.integer(args[2]) else 15L
@@ -120,39 +122,23 @@ season_hist <- hist_outcomes |> filter(season == TARGET_SEASON)
 
 cli_h1("Step 2: Slate roster")
 
-# Ex-ante roster: every RB with a played game this season whose most recent
-# team plays this week. Team = most recent posteam (mid-season trades track
-# through outcomes; the override hook below catches breaking moves).
-roster_exante <- season_hist |>
-  arrange(player_id, week) |>
-  group_by(player_id) |>
-  summarise(posteam = last(posteam), .groups = "drop") |>
-  inner_join(games_long, by = "posteam")
+# Ex-ante roster: played-this-season UNION point-in-time weekly roster
+# (cold starts: rookies, new signings, week 1) + override hook -- shared
+# construction in R/10b_roster_helpers.R
+roster_exante <- build_exante_roster("RB", TARGET_SEASON, TARGET_WEEK,
+                                     games_long, season_hist,
+                                     known_ids = unique(rb_outcomes$player_id))
 
-# Depth-chart override hook (Earnest): add players (e.g. practice-squad
-# elevation, cold-start rookie) or drop players (e.g. announced inactive)
-ov_file <- "data/overrides/depth_overrides.csv"
-overrides <- if (file.exists(ov_file)) {
-  readr::read_csv(ov_file, show_col_types = FALSE)
-} else tibble(player_id = character(), action = character(), note = character())
-if (nrow(overrides)) {
-  cli_alert_info("Applying {nrow(overrides)} depth-chart override(s)")
-  roster_exante <- roster_exante |> filter(!player_id %in% overrides$player_id[overrides$action == "drop"])
-  # 'add' overrides must supply posteam in the CSV; joined to games_long
-  adds <- overrides |> filter(action == "add") |>
-    inner_join(games_long, by = "posteam")
-  roster_exante <- bind_rows(roster_exante, adds |> select(any_of(names(roster_exante)))) |>
-    distinct(player_id, .keep_all = TRUE)
-}
-
-# Hindcast gate roster: the players actually in the frozen table that week
-roster <- if (hindcast) {
+# Gate mode uses the frozen table's rows (exact-match comparison);
+# FORCE_FUTURE=1 exercises the ex-ante path on a past week for validation
+force_future <- Sys.getenv("FORCE_FUTURE", "0") == "1"
+roster <- if (hindcast && !force_future) {
   ft |> filter(season == TARGET_SEASON, week == TARGET_WEEK) |>
     select(player_id, posteam, defteam, game_id)
 } else {
-  roster_exante |> select(player_id, posteam, defteam, game_id)
+  roster_exante |> select(player_id, posteam, defteam, game_id, source)
 }
-cli_alert_success("Slate roster: {nrow(roster)} players (ex-ante roster would be {nrow(roster_exante)})")
+cli_alert_success("Slate roster: {nrow(roster)} players (ex-ante: {nrow(roster_exante)}; cold adds: {sum(roster_exante$source == 'roster_cold')})")
 
 # ===========================================================================
 # 3. PLAYER ROLLING FEATURES (next value from season history)
@@ -177,7 +163,8 @@ player_roll <- season_hist |>
 # plays, so we do the same; step-6 logic of build_rb_feature_layer.R)
 MIN_PRIOR_OPP <- 10L
 
-rosters_all <- nflreadr::load_rosters(seasons = PREDICTION_SEASONS)
+rosters_all <- nflreadr::load_rosters(
+  seasons = sort(unique(c(PREDICTION_SEASONS, TARGET_SEASON))))
 draft_raw   <- nflreadr::load_draft_picks()
 
 draft_meta <- draft_raw |>
@@ -326,16 +313,25 @@ for (cat in c("rush", "short_pass", "deep_pass")) {
   if (!cat %in% names(def_wide)) def_wide[[cat]] <- 0
 }
 
-def_next <- def_wide |>
-  arrange(defteam, week) |>
-  group_by(defteam) |>
-  summarise(
-    games_played_so_far    = n(),
-    def_rush_epa_adj       = next_roll(rush,       DEF_WINDOW, DECAY_RATE),
-    def_short_pass_epa_adj = next_roll(short_pass, DEF_WINDOW, DECAY_RATE),
-    def_deep_pass_epa_adj  = next_roll(deep_pass,  DEF_WINDOW, DECAY_RATE),
-    .groups = "drop"
+# All slated defenses get a row: teams with no played games this season
+# (week 1, or a bye-heavy early slate) fall through to the prior-season
+# fallback below instead of silently producing NA features
+def_next <- games_long |>
+  distinct(defteam) |>
+  left_join(
+    def_wide |>
+      arrange(defteam, week) |>
+      group_by(defteam) |>
+      summarise(
+        games_played_so_far    = n(),
+        def_rush_epa_adj       = next_roll(rush,       DEF_WINDOW, DECAY_RATE),
+        def_short_pass_epa_adj = next_roll(short_pass, DEF_WINDOW, DECAY_RATE),
+        def_deep_pass_epa_adj  = next_roll(deep_pass,  DEF_WINDOW, DECAY_RATE),
+        .groups = "drop"
+      ),
+    by = "defteam"
   ) |>
+  mutate(games_played_so_far = coalesce(games_played_so_far, 0L)) |>
   left_join(def_prior |> filter(prediction_season == TARGET_SEASON), by = "defteam") |>
   mutate(
     def_used_fallback = games_played_so_far < FALLBACK_MIN_GAMES,

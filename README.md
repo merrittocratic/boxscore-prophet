@@ -502,9 +502,20 @@ through the saved translation + recalibration artifacts. Weekly retrain
                           08a rerun verified byte-identical artifacts:
                           feature regeneration is deterministic, safe
                           for the weekly cadence.
-                          NEXT: ex-ante roster hardening for true future
-                          weeks (cold-start additions from rosters),
-                          then 10c scoring.
+10b_roster_helpers.R      EX-ANTE ROSTER HARDENED 2026-07-18: future-
+                          mode roster = played-this-season UNION point-
+                          in-time weekly roster (load_rosters_weekly,
+                          archived -- hindcast-honest) incl. position
+                          converts via known_ids (frozen-layer "ever at
+                          pos" definition); current roster team wins on
+                          trades; def fallback now covers no-history
+                          teams (week-1 bug fixed). Validation: recall
+                          100% all positions at W15 AND W01 (2025);
+                          forced-future runs ALSO pass the exact-match
+                          gate on intersections incl. the all-cold-start
+                          week-1 regime; zero NA defense/baseline
+                          features; fallback rates exactly 100%/0% at
+                          W01/W15. NEXT: 10c scoring.
 
 KNOWN DATA-QUALITY FLAG (found by the 10b3 gate, 2026-07-18): the frozen
 WR feature table carries one NA-player pseudo-row per team-game (3,734

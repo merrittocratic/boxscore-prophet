@@ -16,6 +16,8 @@ suppressPackageStartupMessages({
   library(cli)
 })
 
+source("R/10b_roster_helpers.R")
+
 args <- commandArgs(trailingOnly = TRUE)
 TARGET_SEASON <- if (length(args) >= 1) as.integer(args[1]) else 2025L
 TARGET_WEEK   <- if (length(args) >= 2) as.integer(args[2]) else 15L
@@ -87,36 +89,21 @@ season_hist <- hist_outcomes |> filter(season == TARGET_SEASON)
 
 cli_h1("Step 2: Slate roster")
 
-roster_exante <- season_hist |>
-  arrange(player_id, week) |>
-  group_by(player_id) |>
-  summarise(posteam = last(posteam), .groups = "drop") |>
-  inner_join(games_long, by = "posteam")
+roster_exante <- build_exante_roster("WR", TARGET_SEASON, TARGET_WEEK,
+                                     games_long, season_hist,
+                                     known_ids = unique(wr_outcomes$player_id))
 
-ov_file <- "data/overrides/depth_overrides.csv"
-overrides <- if (file.exists(ov_file)) {
-  readr::read_csv(ov_file, show_col_types = FALSE)
-} else tibble(player_id = character(), action = character(), note = character())
-if (nrow(overrides)) {
-  cli_alert_info("Applying {nrow(overrides)} depth-chart override(s)")
-  roster_exante <- roster_exante |> filter(!player_id %in% overrides$player_id[overrides$action == "drop"])
-  adds <- overrides |> filter(action == "add") |> inner_join(games_long, by = "posteam")
-  roster_exante <- bind_rows(roster_exante, adds |> select(any_of(names(roster_exante)))) |>
-    distinct(player_id, .keep_all = TRUE)
-}
-
-# NA player_id excluded: the frozen WR table carries one NA-player
-# pseudo-row per team-game (unattributed targets; wr_ids includes an NA
-# gsis_id so `NA %in% wr_ids` passes the play filter). Flagged 2026-07-18
-# as a data-quality item for the WR chain; a slate row must be a person.
-roster <- if (hindcast) {
+# NA player_id excluded from gate roster: the frozen WR table carries one
+# NA-player pseudo-row per team-game (sized IMMATERIAL in 04d; filter due
+# in next feature-table version). A slate row must be a person.
+force_future <- Sys.getenv("FORCE_FUTURE", "0") == "1"
+roster <- if (hindcast && !force_future) {
   ft |> filter(season == TARGET_SEASON, week == TARGET_WEEK, !is.na(player_id)) |>
     select(player_id, posteam, defteam, game_id)
 } else {
-  roster_exante |> filter(!is.na(player_id)) |>
-    select(player_id, posteam, defteam, game_id)
+  roster_exante |> select(player_id, posteam, defteam, game_id, source)
 }
-cli_alert_success("Slate roster: {nrow(roster)} players (ex-ante roster would be {nrow(roster_exante)})")
+cli_alert_success("Slate roster: {nrow(roster)} players (ex-ante: {nrow(roster_exante)}; cold adds: {sum(roster_exante$source == 'roster_cold')})")
 
 # ===========================================================================
 # 3. PLAYER ROLLING + SEASON CONSTANTS
@@ -136,7 +123,8 @@ player_roll <- season_hist |>
     .groups = "drop"
   )
 
-rosters_all <- nflreadr::load_rosters(seasons = PREDICTION_SEASONS)
+rosters_all <- nflreadr::load_rosters(
+  seasons = sort(unique(c(PREDICTION_SEASONS, TARGET_SEASON))))
 draft_raw   <- nflreadr::load_draft_picks()
 
 draft_meta <- draft_raw |>
@@ -284,15 +272,23 @@ for (cat in c("short_pass", "deep_pass")) {
   if (!cat %in% names(def_wide)) def_wide[[cat]] <- 0
 }
 
-def_next <- def_wide |>
-  arrange(defteam, week) |>
-  group_by(defteam) |>
-  summarise(
-    games_played_so_far    = n(),
-    def_short_pass_epa_adj = next_roll(short_pass, DEF_WINDOW, DECAY_RATE),
-    def_deep_pass_epa_adj  = next_roll(deep_pass,  DEF_WINDOW, DECAY_RATE),
-    .groups = "drop"
+# All slated defenses get a row (week-1/no-history teams fall through to
+# the prior-season fallback instead of NA features)
+def_next <- games_long |>
+  distinct(defteam) |>
+  left_join(
+    def_wide |>
+      arrange(defteam, week) |>
+      group_by(defteam) |>
+      summarise(
+        games_played_so_far    = n(),
+        def_short_pass_epa_adj = next_roll(short_pass, DEF_WINDOW, DECAY_RATE),
+        def_deep_pass_epa_adj  = next_roll(deep_pass,  DEF_WINDOW, DECAY_RATE),
+        .groups = "drop"
+      ),
+    by = "defteam"
   ) |>
+  mutate(games_played_so_far = coalesce(games_played_so_far, 0L)) |>
   left_join(def_prior |> filter(prediction_season == TARGET_SEASON), by = "defteam") |>
   mutate(
     def_used_fallback = games_played_so_far < FALLBACK_MIN_GAMES,
