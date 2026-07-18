@@ -77,6 +77,41 @@ Contract-year, revenge-game, primetime effects: run each through the
 fold harness, publish the results INCLUDING the nulls. "We tested
 revenge games so you don't have to."
 
+## 2026-07-18: The reconciliation gate that found a train/serve skew
+
+10c (score a slate end-to-end, reconcile against the backtest chain)
+shipped with pre-committed bounds: r >= 0.95 per position-threshold,
+mean signed diff within +-2pp, no unexplained row over 10pp. QB passed
+outright. RB and WR breached -- r down to 0.87, nineteen rows past
+10pp -- and the diagnosis was better than a pass would have been.
+
+Two causes, both structural, neither a bug. First, the backtest scaled
+RB/WR interval widths by OBSERVED test-week volume; deployment scores
+before kickoff and can only use predicted volume. Raw probability
+diffs correlated -0.6 to -0.8 with the observed-minus-predicted volume
+gap: every flagged RB had a gap of six-plus opportunities (predicted 9,
+got 18). The backtest had quietly been conditioning on game script.
+Second, the recalibration maps -- isotonic step functions with 20-30pp
+cliffs -- amplified those few-pp raw diffs into 25pp final diffs.
+
+The deeper find: the deployed maps were FIT on probabilities from
+obs-vol intervals but APPLIED to probabilities from pred-vol intervals.
+A genuine train/serve skew, hiding inside a documented seam.
+
+The fix was not to widen the bounds. We rebuilt the translation chain
+on deployment-consistent inputs (06b0 rescales every backtest fold
+interval to pred-vol scaling; 06b/06c rerun downstream), and let the
+frozen 6c bake-off re-judge. The step maps LOST to smooth maps on the
+honest inputs -- their wins had been partly fitting the scaling
+mismatch. Rerun reconciliation: 18 of 18 bound cells pass across three
+hindcast weeks (r 0.97-0.99, means under 2pp), one explainable rookie
+row at 10.05pp out of ~930 comparisons.
+
+Lesson worth publishing: a reconciliation gate is not a formality --
+ours caught the model being graded on information it will never have
+on a Sunday morning, and the pre-committed judge, rerun on honest
+inputs, reversed its own earlier pick.
+
 ## 2026-07-18: The gate that caught a ghost roster (and the A/B that sized it)
 
 The slate builder's exact-match validation gate -- built to prove the

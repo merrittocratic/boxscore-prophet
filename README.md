@@ -533,11 +533,35 @@ RMSE a wash. The NA rows acted as mildly stabilizing calibration mass
 (removing them WIDENS intervals slightly). Decision: shipped chain
 stands; the wr_ids NA filter goes into the next feature-table version
 rather than an emergency rebuild.
-10c_weekly_score.R        point preds + intervals for the slate ->
-                          simulation translation (saved resid pools +
-                          copula rhos) -> recal maps (library(splines);
-                          function(p, pred_vol)) -> calibrated
-                          probabilities per player
+10c_weekly_score.R        BUILT 2026-07-18: slate -> deploy models ->
+                          conformal intervals (RB sym power-law, WR
+                          asym qsets, QB const; pred_vol floored at 1
+                          for scaling only) -> cloned 06b/09a sim
+                          (saved pools + rhos) -> recal maps
+                          (library(splines); function(p, pred_vol),
+                          pred_carry for QB) -> coherence-capped
+                          probabilities + reconciliation vs backtest
+                          chain under PRE-COMMITTED bounds (r >= 0.95,
+                          |mean| <= 2pp, rows > 10pp flagged).
+                          RECONCILIATION FINDING (2026-07-18): first
+                          run breached RB/WR -- backtest intervals were
+                          scaled by OBSERVED volume (game script),
+                          deployment by predicted; recal maps were fit
+                          on obs-vol probabilities but applied to
+                          pred-vol ones (train/serve skew), amplified
+                          by strat_iso step cliffs. Fix: 06b0 rescales
+                          fold tot-intervals to pred-vol scaling
+                          ((pred/obs)^alpha_fold arm rescale); 06b/06c
+                          rerun on deployment-consistent inputs (env
+                          seams RB_PRED_FILE/WR_PRED_FILE). Frozen 6c
+                          judge re-ran: smooth maps beat the step maps
+                          (RB15 raw, RB20 platt, WR strat_platt x2) --
+                          no more 20-30pp cliffs. Rerun reconciliation
+                          PASSES 18/18 bound cells over W13/W14/W15
+                          hindcasts (r 0.97-0.99, |mean| < 2pp); one
+                          explainable rookie row at 10.05pp (fold-vs-
+                          all-data refit, Egbuka W13). QB chain
+                          untouched (const mechanism, no seam).
 10d_content_tables.R      emit content products: forward boards
                           (leaderboards by threshold) + backward receipts
                           (last week's stated p vs outcomes); editorial

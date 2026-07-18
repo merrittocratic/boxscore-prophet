@@ -142,13 +142,15 @@ print(pool_diag, n = Inf)
 cli_h1("Step 4: Load fold predictions")
 
 # Overridable seams for interval-construction experiments (e.g. 04c
-# asymmetric conformal): swap the WR prediction source and redirect outputs
-# without touching the shipped 06b artifacts.
+# asymmetric conformal, 06b0 pred-vol rescale): swap the prediction sources
+# and redirect outputs without touching the shipped 06b artifacts.
+RB_PRED_FILE <- Sys.getenv("RB_PRED_FILE", "output/03a_v2_lgbm_fold_predictions.csv")
 WR_PRED_FILE <- Sys.getenv("WR_PRED_FILE", "output/04c_wr_asym_fold_predictions.csv")
 OUT_PREFIX   <- Sys.getenv("FP_OUT_PREFIX", "06b")
+cli_alert_info("RB predictions: {RB_PRED_FILE}")
 cli_alert_info("WR predictions: {WR_PRED_FILE} | output prefix: {OUT_PREFIX}")
 
-rb_preds <- readr::read_csv("output/03a_v2_lgbm_fold_predictions.csv",
+rb_preds <- readr::read_csv(RB_PRED_FILE,
                             show_col_types = FALSE) |> filter(!is.na(player_id))
 wr_preds <- readr::read_csv(WR_PRED_FILE,
                             show_col_types = FALSE) |> filter(!is.na(player_id))
