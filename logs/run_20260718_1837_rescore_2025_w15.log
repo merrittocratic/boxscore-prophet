@@ -1,0 +1,244 @@
+== Rscript R/10b_weekly_slate.R 2025 15 ==
+
+── Step 10b (part 1): game slate + weather -- 2025 week 15 ─────────────────────
+
+── Step 1: Schedule and venues ─────────────────────────────────────────────────
+✔ 16 games | 4 indoor | 12 outdoor
+
+── Step 2: Kickoff-hour weather at stadium coordinates ─────────────────────────
+
+── Slate with weather (outdoor flags: wind >= 24km/h, temp <= -7C) ──
+
+# A tibble: 16 × 10
+   matchup   gameday    gametime roof_eff temp_f wind_mph gust_mph precip_mm
+   <chr>     <chr>      <chr>    <chr>     <dbl>    <dbl>    <dbl>     <dbl>
+ 1 ATL @ TB  2025-12-11 20:15    outdoors     56        3        9       0  
+ 2 CLE @ CHI 2025-12-14 13:00    outdoors      6        8       15       0  
+ 3 BAL @ CIN 2025-12-14 13:00    outdoors      6        9       16       0  
+ 4 ARI @ HOU 2025-12-14 13:00    closed       55       14       24       0  
+ 5 NYJ @ JAX 2025-12-14 13:00    outdoors     73        9       20       0  
+ 6 LAC @ KC  2025-12-14 13:00    outdoors     16        1        4       0  
+ 7 BUF @ NE  2025-12-14 13:00    outdoors     32        8       13       0.4
+ 8 WAS @ NYG 2025-12-14 13:00    outdoors     29       11       19       0  
+ 9 LV @ PHI  2025-12-14 13:00    outdoors     29       14       23       0  
+10 GB @ DEN  2025-12-14 16:25    outdoors     66        1        3       0  
+11 DET @ LA  2025-12-14 16:25    dome         63        4        4       0  
+12 CAR @ NO  2025-12-14 16:25    dome         51       15       24       0  
+13 IND @ SEA 2025-12-14 16:25    outdoors     51        9       24       0  
+14 TEN @ SF  2025-12-14 16:25    outdoors     48        1        2       0  
+15 MIN @ DAL 2025-12-14 20:20    closed       38        2        9       0  
+16 MIA @ PIT 2025-12-15 20:15    outdoors     17        3       15       0  
+# ℹ 2 more variables: flag_wind <lgl>, flag_cold <lgl>
+── Step 3: Save ────────────────────────────────────────────────────────────────
+✔ output/10b_game_slate_2025_w15.csv (16 games)
+
+── Content flags ──
+
+ℹ CLE @ CHI: 6F, wind 8 mph (gust 15)
+ℹ BAL @ CIN: 6F, wind 9 mph (gust 16)
+ℹ LAC @ KC: 16F, wind 1 mph (gust 4)
+ℹ MIA @ PIT: 17F, wind 3 mph (gust 15)
+
+── Step 10b (part 1) complete -- player slate + features are part 2 ────────────
+== Rscript R/10b2_player_slate.R 2025 15 ==
+
+── Step 10b (part 2): RB player slate -- 2025 week 15 ──────────────────────────
+
+── Step 1: Load artifacts and target-week games ────────────────────────────────
+ℹ 16 games | mode: HINDCAST (gate available)
+
+── Step 2: Slate roster ────────────────────────────────────────────────────────
+ℹ Point-in-time roster: 2025 week 15 (114 active RBs)
+✔ Slate roster: 58 players (ex-ante: 153; cold adds: 11)
+
+── Step 3: Player rolling features ─────────────────────────────────────────────
+
+── Step 4: Team plays and snap-share rolling ───────────────────────────────────
+
+── Step 5: Defense features (recomputed from data/rb_plays.rds) ────────────────
+
+── Step 6: Assemble slate rows ─────────────────────────────────────────────────
+✔ Slate: 58 rows | injuries matched: 1
+
+── Step 7: VALIDATION GATE -- slate vs frozen table, exact match ───────────────
+                  feature  n na_mismatch max_abs_diff flag_mismatch
+1       prior_epa_per_opp 58           0            0             0
+2    baseline_epa_per_opp 58           0            0            NA
+3     rolling_epa_per_opp 58           0            0            NA
+4           form_residual 58           0            0            NA
+5          wt_carry_share 58           0            0            NA
+6         wt_target_share 58           0            0            NA
+7           wt_snap_share 58           0            0            NA
+8     wt_team_total_plays 58           0            0            NA
+9        def_rush_epa_adj 58           0            0            NA
+10 def_short_pass_epa_adj 58           0            0            NA
+11  def_deep_pass_epa_adj 58           0            0            NA
+12    games_played_so_far 58           0            0            NA
+✔ GATE PASSED: max |diff| = 0e+00 across 58 players x 12 features
+
+── Step 8: Save ────────────────────────────────────────────────────────────────
+✔ output/10b2_rb_slate_2025_w15.csv (58 rows)
+
+── Step 10b2 complete (RB) -- WR/QB clones next ────────────────────────────────
+== Rscript R/10b3_wr_slate.R 2025 15 ==
+
+── Step 10b3: WR player slate -- 2025 week 15 ──────────────────────────────────
+
+── Step 1: Load artifacts and target-week games ────────────────────────────────
+ℹ 16 games | mode: HINDCAST (gate available)
+
+── Step 2: Slate roster ────────────────────────────────────────────────────────
+ℹ Point-in-time roster: 2025 week 15 (167 active WRs)
+✔ Slate roster: 75 players (ex-ante: 224; cold adds: 10)
+
+── Step 3: Player rolling features + priors ────────────────────────────────────
+
+── Step 4: Team plays and snap-share rolling ───────────────────────────────────
+
+── Step 5: Defense features (recomputed from data/wr_plays.rds) ────────────────
+
+── Step 6: Assemble slate rows ─────────────────────────────────────────────────
+✔ Slate: 75 rows | injuries matched: 4
+
+── Step 7: VALIDATION GATE -- slate vs frozen table, exact match ───────────────
+                   feature  n na_mismatch max_abs_diff
+1        prior_epa_per_opp 75           0            0
+2     baseline_epa_per_opp 75           0            0
+3      rolling_epa_per_opp 75           0            0
+4            form_residual 75           0            0
+5          wt_target_share 75           0            0
+6       wt_air_yards_share 75           0            0
+7  wt_air_yards_per_target 75           0            0
+8            wt_snap_share 75           0            0
+9      wt_team_total_plays 75           0            0
+10  def_short_pass_epa_adj 75           0            0
+11   def_deep_pass_epa_adj 75           0            0
+12     games_played_so_far 75           0            0
+✔ GATE PASSED: max |diff| = 0e+00 across 75 players x 12 features
+
+── Step 8: Save ────────────────────────────────────────────────────────────────
+✔ output/10b3_wr_slate_2025_w15.csv (75 rows)
+
+── Step 10b3 complete (WR) ─────────────────────────────────────────────────────
+== Rscript R/10b4_qb_slate.R 2025 15 ==
+
+── Step 10b4: QB player slate -- 2025 week 15 ──────────────────────────────────
+
+── Step 1: Load artifacts and target-week games ────────────────────────────────
+ℹ 16 games | mode: HINDCAST (gate available)
+
+── Step 2: Slate roster ────────────────────────────────────────────────────────
+ℹ Point-in-time roster: 2025 week 15 (66 active QBs)
+✔ Slate roster: 32 QBs (ex-ante: 81; cold adds: 12)
+
+── Step 3: Player rolling features + priors ────────────────────────────────────
+
+── Step 4: Team totals and snap-share rolling ──────────────────────────────────
+
+── Step 5: Defense features (from data/qb_def_adj.rds) ─────────────────────────
+
+── Step 6: Assemble slate rows ─────────────────────────────────────────────────
+✔ Slate: 32 rows | injuries matched: 0
+
+── Step 7: VALIDATION GATE -- slate vs frozen table, exact match ───────────────
+                    feature  n na_mismatch max_abs_diff
+1     prior_pass_epa_per_db 32           0            0
+2  baseline_pass_epa_per_db 32           0            0
+3   rolling_pass_epa_per_db 32           0            0
+4             form_residual 32           0            0
+5         prior_rush_epa_pg 32           0            0
+6          prior_carries_pg 32           0            0
+7  prior_rush_epa_per_carry 32           0            0
+8              wt_dropbacks 32           0            0
+9                wt_carries 32           0            0
+10           wt_carry_share 32           0            0
+11           wt_rush_epa_pg 32           0            0
+12    wt_rush_epa_per_carry 32           0            0
+13            wt_snap_share 32           0            0
+14      wt_team_total_plays 32           0            0
+15        wt_team_pass_rate 32           0            0
+16   def_short_pass_epa_adj 32           0            0
+17    def_deep_pass_epa_adj 32           0            0
+18         def_rush_epa_adj 32           0            0
+19      games_played_so_far 32           0            0
+✔ GATE PASSED: max |diff| = 0e+00 across 32 QBs x 19 features
+
+── Step 8: Save ────────────────────────────────────────────────────────────────
+✔ output/10b4_qb_slate_2025_w15.csv (32 rows)
+
+── Step 10b4 complete (QB) ─────────────────────────────────────────────────────
+== Rscript R/10c_weekly_score.R 2025 15 ==
+
+── Step 10c: score slate 2025 week 15 ──────────────────────────────────────────
+✔ Slates: RB=58 WR=75 QB=32
+ℹ Mode: hindcast | as-of 2025-12-10 20:15 EST | 16/16 games still to kick off
+✔ Scoring: RB=58 WR=75 QB=32 players
+ℹ Deployment models trained through 2025-W18
+✔ Artifacts loaded | rho RB=0.046 WR=0.121
+
+── Point predictions + intervals ───────────────────────────────────────────────
+✔ Predictions: RB tot mean=-0.89 | WR 1.22 | QB 0.8 EPA
+
+── Simulation translation (2000 draws per player-week) ─────────────────────────
+✔ RB simulation complete
+✔ WR simulation complete
+✔ QB simulation complete
+
+── Recalibration maps ──────────────────────────────────────────────────────────
+✔ Maps applied: RB=raw/platt WR=strat_platt/strat_platt QB=raw/platt
+
+── Save scored slate ───────────────────────────────────────────────────────────
+✔ output/10c_scored_slate_2025_w15.csv (165 rows)
+✔ output/10c_ledger_2025_w15.csv (+165 rows, mode=hindcast)
+✔ output/10c_scored_detail_2025_w15.csv
+
+── Reconciliation vs backtest chain ────────────────────────────────────────────
+ℹ Matched 165 player-weeks (0 slate rows without backtest counterpart -- did not play / no observed FP)
+
+── Reconciliation summary (bounds: r >= 0.95, |mean| <= 2pp, rows > 10pp flagged) ──
+
+# A tibble: 6 × 11
+  position threshold     n pearson_r mean_diff_pp mad_pp max_abs_pp n_over_flag
+  <chr>    <chr>     <int> <chr>     <chr>        <chr>  <chr>            <int>
+1 QB       boom         32 0.9734    -0.08        +1.20  +5.46                0
+2 QB       start        32 0.9790    -0.26        +1.77  +8.40                0
+3 RB       boom         58 0.9913    +0.11        +1.09  +4.46                0
+4 RB       start        58 0.9945    +0.02        +1.50  +4.05                0
+5 WR       boom         75 0.9743    -0.79        +1.38  +5.96                0
+6 WR       start        75 0.9787    -1.52        +2.13  +7.54                0
+# ℹ 3 more variables: pass_r <lgl>, pass_mean <lgl>, pass_rows <lgl>
+✔ output/10c_reconciliation_2025_w15.csv (330 rows)
+✔ output/10c_reconciliation_summary_2025_w15.csv
+✔ ALL RECONCILIATION BOUNDS PASSED
+
+── Step 10c complete -- 2025 week 15 ───────────────────────────────────────────
+== Rscript R/10d0_ecr_fetch.R 2025 15 ==
+
+── Step 10d0: FantasyPros ECR fetch -- 2025 week 15 ────────────────────────────
+ℹ No fantasypros-api-key in keychain -- ECR fetch skipped (10d gap piece will skip too).
+== Rscript R/10d_content_tables.R 2025 15 ==
+
+── Step 10d: content products for 2025 week 15 ─────────────────────────────────
+✔ Scored slate: 165 players
+✔ Board CSVs written (start / boom / streamer)
+ℹ No ECR feed at data/ecr/ecr_2025_w15.csv -- gap table skipped (drop a CSV or run 10d0 once the API key is active)
+
+── Receipts (stated odds vs outcomes, from the locked ledger) ──────────────────
+✔ Receipts: 165 graded (0 DNP) | 0 pending | start hits: 51 | booms: 23
+# A tibble: 4 × 5
+  band_start     n stated hit_rate delta_pp
+  <fct>      <int>  <dbl>    <dbl>    <dbl>
+1 under 10%     19 0.0920    0         -9.2
+2 10-25%        63 0.178     0.175     -0.3
+3 25-50%        74 0.363     0.459      9.6
+4 50%+           9 0.559     0.667     10.7
+✔ output/10d_boards_2025_w15.md
+✔ output/10d_receipts_2025_w15.md
+
+── Board images ────────────────────────────────────────────────────────────────
+✔ output/img/10d_start_rb_2025_w15.png
+✔ output/img/10d_start_wr_2025_w15.png
+✔ output/img/10d_start_qb_2025_w15.png
+✔ output/img/10d_boom_flex_2025_w15.png
+
+── Step 10d complete -- 2025 week 15 ───────────────────────────────────────────
