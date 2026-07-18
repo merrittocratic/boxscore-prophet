@@ -562,10 +562,25 @@ rather than an emergency rebuild.
                           explainable rookie row at 10.05pp (fold-vs-
                           all-data refit, Egbuka W13). QB chain
                           untouched (const mechanism, no seam).
-10d_content_tables.R      emit content products: forward boards
-                          (leaderboards by threshold) + backward receipts
-                          (last week's stated p vs outcomes); editorial
-                          caps applied in the extreme tails
+10d_content_tables.R      BUILT 2026-07-18: from the 10c scored slate --
+                          (1) flagship start boards per position (P(15+
+                          PPR) RB/WR, P(20+ std) QB), (2) flex boom
+                          board (RB+WR by P(20+)) + QB boom, (3)
+                          streamer/waiver board (exante_low volume
+                          stratum: RB pred_vol < 10, WR < 5), (4)
+                          receipts when the week has been played
+                          (stated-band calibration + worst-miss /
+                          longshot-hit callouts), (5) ECR gap via
+                          file-drop feed data/ecr/ecr_<wtag>.csv --
+                          FEED SOURCING STILL OPEN (FantasyPros),
+                          join skips gracefully. Outputs: CSVs +
+                          markdown boards + 4 rendered X board PNGs
+                          (output/img/, 1280x1080, validated palette,
+                          image order = raw-probability order matching
+                          the CSVs). EDITORIAL CAPS pre-committed:
+                          displayed probabilities clamped to [2%, 95%]
+                          (never publish a certainty); raw values stay
+                          in the CSVs. Hindcast demo: 2025-W15.
 ```
 
 Laptop = stage, MacMini (Earnest) = production; same scripts, cron on the
