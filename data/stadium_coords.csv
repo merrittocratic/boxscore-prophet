@@ -1,0 +1,33 @@
+team,stadium,lat,lon,roof_static
+ARI,State Farm Stadium,33.528,-112.263,retractable
+ATL,Mercedes-Benz Stadium,33.755,-84.401,retractable
+BAL,M&T Bank Stadium,39.278,-76.623,outdoor
+BUF,Highmark Stadium,42.774,-78.787,outdoor
+CAR,Bank of America Stadium,35.226,-80.853,outdoor
+CHI,Soldier Field,41.862,-87.617,outdoor
+CIN,Paycor Stadium,39.095,-84.516,outdoor
+CLE,Huntington Bank Field,41.506,-81.700,outdoor
+DAL,AT&T Stadium,32.748,-97.093,retractable
+DEN,Empower Field at Mile High,39.744,-105.020,outdoor
+DET,Ford Field,42.340,-83.046,dome
+GB,Lambeau Field,44.501,-88.062,outdoor
+HOU,NRG Stadium,29.685,-95.411,retractable
+IND,Lucas Oil Stadium,39.760,-86.164,retractable
+JAX,EverBank Stadium,30.324,-81.637,outdoor
+KC,GEHA Field at Arrowhead,39.049,-94.484,outdoor
+LV,Allegiant Stadium,36.091,-115.184,dome
+LAC,SoFi Stadium,33.953,-118.339,dome
+LA,SoFi Stadium,33.953,-118.339,dome
+MIA,Hard Rock Stadium,25.958,-80.239,outdoor
+MIN,U.S. Bank Stadium,44.974,-93.258,dome
+NE,Gillette Stadium,42.091,-71.264,outdoor
+NO,Caesars Superdome,29.951,-90.081,dome
+NYG,MetLife Stadium,40.813,-74.074,outdoor
+NYJ,MetLife Stadium,40.813,-74.074,outdoor
+PHI,Lincoln Financial Field,39.901,-75.168,outdoor
+PIT,Acrisure Stadium,40.447,-80.016,outdoor
+SEA,Lumen Field,47.595,-122.332,outdoor
+SF,Levi's Stadium,37.403,-121.970,outdoor
+TB,Raymond James Stadium,27.976,-82.503,outdoor
+TEN,Nissan Stadium,36.166,-86.771,outdoor
+WAS,Northwest Stadium,38.908,-76.864,outdoor

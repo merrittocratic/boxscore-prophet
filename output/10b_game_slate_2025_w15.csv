@@ -1,0 +1,17 @@
+game_id,season,week,gameday,weekday,gametime,away_team,home_team,location,roof,stadium.x,stadium.y,lat,lon,roof_eff,is_indoor,is_neutral,temp_c,wind_kmh,gust_kmh,precip_mm,weather_src,flag_wind,flag_cold,temp_f,wind_mph,gust_mph
+2025_15_ATL_TB,2025,15,2025-12-11,Thursday,20:15,ATL,TB,Home,outdoors,Raymond James Stadium,Raymond James Stadium,27.976,-82.503,outdoors,FALSE,FALSE,13.5,4.3,14,0,historical_forecast,FALSE,FALSE,56,3,9
+2025_15_CLE_CHI,2025,15,2025-12-14,Sunday,13:00,CLE,CHI,Home,outdoors,Soldier Field,Soldier Field,41.862,-87.617,outdoors,FALSE,FALSE,-14.5,13.1,23.8,0,historical_forecast,FALSE,TRUE,6,8,15
+2025_15_BAL_CIN,2025,15,2025-12-14,Sunday,13:00,BAL,CIN,Home,outdoors,Paycor Stadium,Paycor Stadium,39.095,-84.516,outdoors,FALSE,FALSE,-14.2,14.8,25.2,0,historical_forecast,FALSE,TRUE,6,9,16
+2025_15_ARI_HOU,2025,15,2025-12-14,Sunday,13:00,ARI,HOU,Home,closed,NRG Stadium,NRG Stadium,29.685,-95.411,closed,TRUE,FALSE,12.6,22.9,39.2,0,historical_forecast,FALSE,FALSE,55,14,24
+2025_15_NYJ_JAX,2025,15,2025-12-14,Sunday,13:00,NYJ,JAX,Home,outdoors,TIAA Bank Stadium,EverBank Stadium,30.324,-81.637,outdoors,FALSE,FALSE,22.8,15.2,32.4,0,historical_forecast,FALSE,FALSE,73,9,20
+2025_15_LAC_KC,2025,15,2025-12-14,Sunday,13:00,LAC,KC,Home,outdoors,GEHA Field at Arrowhead Stadium,GEHA Field at Arrowhead,39.049,-94.484,outdoors,FALSE,FALSE,-9,1.8,6.8,0,historical_forecast,FALSE,TRUE,16,1,4
+2025_15_BUF_NE,2025,15,2025-12-14,Sunday,13:00,BUF,NE,Home,outdoors,Gillette Stadium,Gillette Stadium,42.091,-71.264,outdoors,FALSE,FALSE,-0.2,12.5,20.5,0.4,historical_forecast,FALSE,FALSE,32,8,13
+2025_15_WAS_NYG,2025,15,2025-12-14,Sunday,13:00,WAS,NYG,Home,outdoors,MetLife Stadium,MetLife Stadium,40.813,-74.074,outdoors,FALSE,FALSE,-1.9,17.1,31,0,historical_forecast,FALSE,FALSE,29,11,19
+2025_15_LV_PHI,2025,15,2025-12-14,Sunday,13:00,LV,PHI,Home,outdoors,Lincoln Financial Field,Lincoln Financial Field,39.901,-75.168,outdoors,FALSE,FALSE,-1.9,22,37.4,0,historical_forecast,FALSE,FALSE,29,14,23
+2025_15_GB_DEN,2025,15,2025-12-14,Sunday,16:25,GB,DEN,Home,outdoors,Empower Field at Mile High,Empower Field at Mile High,39.744,-105.02,outdoors,FALSE,FALSE,18.8,1.8,4.7,0,historical_forecast,FALSE,FALSE,66,1,3
+2025_15_DET_LA,2025,15,2025-12-14,Sunday,16:25,DET,LA,Home,dome,SoFi Stadium,SoFi Stadium,33.953,-118.339,dome,TRUE,FALSE,17,6.8,7.2,0,historical_forecast,FALSE,FALSE,63,4,4
+2025_15_CAR_NO,2025,15,2025-12-14,Sunday,16:25,CAR,NO,Home,dome,Mercedes-Benz Superdome,Caesars Superdome,29.951,-90.081,dome,TRUE,FALSE,10.7,23.5,39.2,0,historical_forecast,FALSE,FALSE,51,15,24
+2025_15_IND_SEA,2025,15,2025-12-14,Sunday,16:25,IND,SEA,Home,outdoors,Lumen Field,Lumen Field,47.595,-122.332,outdoors,FALSE,FALSE,10.4,14.3,38.5,0,historical_forecast,FALSE,FALSE,51,9,24
+2025_15_TEN_SF,2025,15,2025-12-14,Sunday,16:25,TEN,SF,Home,outdoors,Levi's Stadium,Levi's Stadium,37.403,-121.97,outdoors,FALSE,FALSE,9.1,2.3,3.6,0,historical_forecast,FALSE,FALSE,48,1,2
+2025_15_MIN_DAL,2025,15,2025-12-14,Sunday,20:20,MIN,DAL,Home,closed,AT&T Stadium,AT&T Stadium,32.748,-97.093,closed,TRUE,FALSE,3.6,3.5,14.8,0,historical_forecast,FALSE,FALSE,38,2,9
+2025_15_MIA_PIT,2025,15,2025-12-15,Monday,20:15,MIA,PIT,Home,outdoors,Acrisure Stadium,Acrisure Stadium,40.447,-80.016,outdoors,FALSE,FALSE,-8.6,5.4,23.8,0,historical_forecast,FALSE,TRUE,17,3,15

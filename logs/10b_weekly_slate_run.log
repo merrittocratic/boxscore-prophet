@@ -1,0 +1,41 @@
+
+── Step 10b (part 1): game slate + weather -- 2025 week 15 ─────────────────────
+
+── Step 1: Schedule and venues ─────────────────────────────────────────────────
+✔ 16 games | 4 indoor | 12 outdoor
+
+── Step 2: Kickoff-hour weather at stadium coordinates ─────────────────────────
+
+── Slate with weather (outdoor flags: wind >= 24km/h, temp <= -7C) ──
+
+# A tibble: 16 × 10
+   matchup   gameday    gametime roof_eff temp_f wind_mph gust_mph precip_mm
+   <chr>     <chr>      <chr>    <chr>     <dbl>    <dbl>    <dbl>     <dbl>
+ 1 ATL @ TB  2025-12-11 20:15    outdoors     56        3        9       0  
+ 2 CLE @ CHI 2025-12-14 13:00    outdoors      6        8       15       0  
+ 3 BAL @ CIN 2025-12-14 13:00    outdoors      6        9       16       0  
+ 4 ARI @ HOU 2025-12-14 13:00    closed       55       14       24       0  
+ 5 NYJ @ JAX 2025-12-14 13:00    outdoors     73        9       20       0  
+ 6 LAC @ KC  2025-12-14 13:00    outdoors     16        1        4       0  
+ 7 BUF @ NE  2025-12-14 13:00    outdoors     32        8       13       0.4
+ 8 WAS @ NYG 2025-12-14 13:00    outdoors     29       11       19       0  
+ 9 LV @ PHI  2025-12-14 13:00    outdoors     29       14       23       0  
+10 GB @ DEN  2025-12-14 16:25    outdoors     66        1        3       0  
+11 DET @ LA  2025-12-14 16:25    dome         63        4        4       0  
+12 CAR @ NO  2025-12-14 16:25    dome         51       15       24       0  
+13 IND @ SEA 2025-12-14 16:25    outdoors     51        9       24       0  
+14 TEN @ SF  2025-12-14 16:25    outdoors     48        1        2       0  
+15 MIN @ DAL 2025-12-14 20:20    closed       38        2        9       0  
+16 MIA @ PIT 2025-12-15 20:15    outdoors     17        3       15       0  
+# ℹ 2 more variables: flag_wind <lgl>, flag_cold <lgl>
+── Step 3: Save ────────────────────────────────────────────────────────────────
+✔ output/10b_game_slate_2025_w15.csv (16 games)
+
+── Content flags ──
+
+ℹ CLE @ CHI: 6F, wind 8 mph (gust 15)
+ℹ BAL @ CIN: 6F, wind 9 mph (gust 16)
+ℹ LAC @ KC: 16F, wind 1 mph (gust 4)
+ℹ MIA @ PIT: 17F, wind 3 mph (gust 15)
+
+── Step 10b (part 1) complete -- player slate + features are part 2 ────────────

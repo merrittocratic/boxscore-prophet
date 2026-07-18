@@ -471,11 +471,18 @@ through the saved translation + recalibration artifacts. Weekly retrain
                           coverage under pred scaling holds at 80/90
                           (+1.2/+0.3pp RB, +1.4/+0.1pp WR), +2.5pp
                           conservative at 50. QB const mechanism: no seam.
-10b_weekly_slate.R        build EX-ANTE feature rows for week W+1 from
-                          data through W: schedule (nflreadr), active
-                          rosters, rolling features carried forward, cold
-                          -start handling; router assigns RB two-product
-                          roster; Earnest depth-chart shock override hook
+10b_weekly_slate.R        PART 1 BUILT 2026-07-18: game slate + kickoff-
+                          hour weather at stadium coords (data/
+                          stadium_coords.csv; Open-Meteo forecast API
+                          live, HISTORICAL FORECAST archive for hindcast
+                          -- never ERA5/observed; content flags at 15mph
+                          wind / 20F). PART 2 next: player slate --
+                          rosters, ex-ante rolling features carried
+                          forward, cold starts, pred-volume router,
+                          injury practice-report state (load_injuries),
+                          Earnest depth-chart override hook. Ablation
+                          ladder for MODELED features pre-registered in
+                          building_in_public_log.md
 10c_weekly_score.R        point preds + intervals for the slate ->
                           simulation translation (saved resid pools +
                           copula rhos) -> recal maps (library(splines);
