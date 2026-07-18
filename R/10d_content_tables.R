@@ -29,6 +29,8 @@ suppressPackageStartupMessages({
   library(cli)
 })
 
+source("R/10d_name_helpers.R")
+
 args <- commandArgs(trailingOnly = TRUE)
 TARGET_SEASON <- if (length(args) >= 1) as.integer(args[1]) else 2025L
 TARGET_WEEK   <- if (length(args) >= 2) as.integer(args[2]) else 15L
@@ -147,17 +149,39 @@ ecr_path <- sprintf("data/ecr/ecr_%s.csv", WTAG)
 ecr_gap <- NULL
 if (file.exists(ecr_path)) {
   ecr <- readr::read_csv(ecr_path, show_col_types = FALSE)
-  ecr_gap <- start_board |>
-    inner_join(ecr |> select(player_name, position, ecr_rank),
-               by = c("player_name", "position")) |>
+  if (!"player_name_norm" %in% names(ecr)) {   # manual drops lack the column
+    ecr <- ecr |> mutate(player_name_norm = normalize_player_name(player_name))
+  }
+  ecr_slim <- ecr |>
+    select(player_name_norm, position, ecr_rank) |>
+    distinct(player_name_norm, position, .keep_all = TRUE)
+
+  joined <- start_board |>
+    mutate(player_name_norm = normalize_player_name(player_name)) |>
+    left_join(ecr_slim, by = c("player_name_norm", "position"))
+
+  # Join coverage: unmatched slate players inside ECR's ranked depth are
+  # name mismatches (alias candidates for 10d_name_helpers.R); unmatched
+  # beyond the depth are free-tier truncation, not name problems.
+  ecr_depth <- ecr_slim |> count(position, name = "depth")
+  unmatched <- joined |>
+    filter(is.na(ecr_rank)) |>
+    left_join(ecr_depth, by = "position") |>
+    filter(rank <= depth)
+  if (nrow(unmatched) > 0) {
+    cli_alert_warning("ECR join: {nrow(unmatched)} in-depth slate players unmatched (alias candidates): {paste(head(unmatched$player_name, 8), collapse = ', ')}")
+  }
+
+  ecr_gap <- joined |>
+    filter(!is.na(ecr_rank)) |>
     mutate(rank_gap = ecr_rank - rank) |>   # positive = model higher than market
     arrange(desc(abs(rank_gap))) |>
     select(position, player_name, posteam, model_rank = rank, ecr_rank,
            rank_gap, start_pct)
   readr::write_csv(ecr_gap, sprintf("output/10d_ecr_gap_%s.csv", WTAG))
-  cli_alert_success("ECR gap: {nrow(ecr_gap)} matched players")
+  cli_alert_success("ECR gap: {nrow(ecr_gap)} matched | depth by pos: {paste(ecr_depth$position, ecr_depth$depth, collapse = ', ')}")
 } else {
-  cli_alert_info("No ECR feed at {ecr_path} -- gap table skipped (feed sourcing TBD)")
+  cli_alert_info("No ECR feed at {ecr_path} -- gap table skipped (drop a CSV or run 10d0 once the API key is active)")
 }
 
 # ===========================================================================
@@ -290,6 +314,8 @@ if (!is.null(ecr_gap)) {
     md_table(ecr_gap |> slice_head(n = 15) |>
                mutate(rank_gap = sprintf("%+d", rank_gap)),
              c("Pos", "Player", "Team", "Model rank", "ECR", "Gap", "Start")),
+    "",
+    "*Consensus ranks: Expert Consensus Rankings courtesy of [FantasyPros](https://www.fantasypros.com).*",
     "")
 }
 

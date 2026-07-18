@@ -1,2 +1,5 @@
 .DS_Store
 .claude/settings.local.json
+
+# FantasyPros ECR feed drops: licensed data, never redistribute via the repo
+data/ecr/

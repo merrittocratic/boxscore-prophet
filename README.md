@@ -571,9 +571,22 @@ rather than an emergency rebuild.
                           receipts when the week has been played
                           (stated-band calibration + worst-miss /
                           longshot-hit callouts), (5) ECR gap via
-                          file-drop feed data/ecr/ecr_<wtag>.csv --
-                          FEED SOURCING STILL OPEN (FantasyPros),
-                          join skips gracefully. Outputs: CSVs +
+                          data/ecr/ecr_<wtag>.csv, fed by
+                          10d0_ecr_fetch.R (FantasyPros public API v2;
+                          key in macOS keychain as fantasypros-api-key;
+                          skips itself while API approval is pending;
+                          manual CSV drop also works). Names joined
+                          through the shared normalizer
+                          (10d_name_helpers.R: suffix/punctuation
+                          stripping + alias table; unmatched in-depth
+                          players logged as alias candidates each
+                          week). data/ecr/ is GITIGNORED: licensed
+                          rankings data is never committed; the
+                          published gap piece carries FantasyPros
+                          attribution per their terms. Free-tier
+                          truncation depth is logged per fetch -- HOF
+                          upgrade only if it cuts the streamer tier.
+                          Outputs: CSVs +
                           markdown boards + 4 rendered X board PNGs
                           (output/img/, 1280x1080, validated palette,
                           image order = raw-probability order matching
