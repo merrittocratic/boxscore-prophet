@@ -77,9 +77,17 @@ RB_EFF_FEATURES <- c(
   "def_rush_epa_adj", "def_short_pass_epa_adj", "def_deep_pass_epa_adj",
   "wt_snap_share", "games_played_so_far", "def_used_fallback_int"
 )
+# Rung-1 injury state features (11b layer; shipped 2026-07-18 after the 11c
+# A/B passed the frozen rubric). RB VOLUME model only.
+RB_INJURY_FEATURES <- c(
+  "own_q_int", "own_practice_int", "weeks_missed", "return_from_absence",
+  "above_new_out_share", "above_q_share", "above_long_out_share"
+)
+
 RB_VOL_FEATURES <- c(
   "wt_carry_share", "wt_target_share", "wt_snap_share", "wt_team_total_plays",
-  "def_rush_epa_adj", "draft_tier_int", "is_cold_start_int", "games_played_so_far"
+  "def_rush_epa_adj", "draft_tier_int", "is_cold_start_int", "games_played_so_far",
+  RB_INJURY_FEATURES
 )
 
 WR_EFF_FEATURES <- c(
@@ -287,7 +295,11 @@ tune_rows <- list()
 
 cli_h1("RB deployment fold (03a-v2 procedure)")
 
-rb_ft <- readRDS("data/rb_feature_table.rds") |> encode_features()
+rb_ft <- readRDS("data/rb_feature_table.rds") |>
+  encode_features() |>
+  left_join(readRDS("data/injury_states_rb.rds"),
+            by = c("player_id", "season", "week"))
+stopifnot(!any(is.na(rb_ft$own_practice_int[!is.na(rb_ft$player_id)])))
 rb_sp <- split_fit_cal(rb_ft)
 cli_alert_info("RB rows: fit={nrow(rb_sp$fit)} cal={nrow(rb_sp$cal)}")
 

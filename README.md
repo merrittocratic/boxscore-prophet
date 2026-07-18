@@ -617,6 +617,25 @@ RECEIPTS TIMING (Steve 2026-07-18): Monday-with-pending -- the Monday run
 publishes receipts with MNF statements listed as "still on the board";
 the Tuesday full run finalizes the week's receipt CSVs.
 
+## Ablation ladder rung 1 SHIPPED (2026-07-18): RB injury state machine
+
+11a diagnostic -> 11b ex-ante layer (Friday-lock masked; shared core in
+11b_injury_state_fns.R) -> 11c/11d A/B under the frozen rubric. RB
+SHIPS: fresh-shock bias +3.83 -> +0.96 touches, vol RMSE -14% on those
+weeks, rubric clean. WR = published null; QB = skipped w/ diagnostic
+receipt (~1 dropback vs 9 RMSE). INTEGRATION: 06b0 RB source = 11c
+injury-arm fold predictions; 06b/06c rebuilt (new picks: RB15 platt,
+RB20 platt_vol, WR strat_platt x2 -- all smooth); 10a trains
+RB_INJURY_FEATURES into the RB volume model (injury_states_rb.rds
+join); 10b2 computes slate-side states with the SAME shared core and
+gates them exact-match vs the training layer (|diff| = 0 at W15/W14/
+W13/W02); 10c reconciliation passes all bounds on three hindcast
+weeks. Cadence semantics: Tuesday slates score as no-designations
+(= the trained "not listed Friday" healthy state); the injury signal
+enters at Thu/Sat/Sun rescores as reports land. 2025 injury rows have
+no date_modified (unmaskable, ~7% approximation documented in 11b).
+Next rungs: 2 Vegas lines (cheap control), 3 weather adjustment layer.
+
 ## Reproducibility
 
 - Data: nflreadr play-by-play and player stats, seasons 2014-2025, REG only

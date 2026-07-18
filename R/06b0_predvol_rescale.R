@@ -81,8 +81,10 @@ rescale_file <- function(in_path, out_path, label) {
 
 cli_h1("06b0: rescale fold-prediction tot intervals to pred-vol scaling")
 
-rescale_file("output/03a_v2_lgbm_fold_predictions.csv",
-             "output/03a_v2_lgbm_fold_predictions_predvol.csv", "RB (03a-v2)")
+# RB source = the rung-1 injury arm (11c) since 2026-07-18: the shipped RB
+# backtest chain includes the ex-ante injury state features (volume model).
+rescale_file("output/11c_rb_injury_fold_predictions.csv",
+             "output/11c_rb_injury_fold_predictions_predvol.csv", "RB (11c injury arm)")
 rescale_file("output/04c_wr_asym_fold_predictions.csv",
              "output/04c_wr_asym_fold_predictions_predvol.csv", "WR (04c)")
 

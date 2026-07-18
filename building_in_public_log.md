@@ -77,6 +77,49 @@ Contract-year, revenge-game, primetime effects: run each through the
 fold harness, publish the results INCLUDING the nulls. "We tested
 revenge games so you don't have to."
 
+## 2026-07-18: Ladder rung 1 -- the injury state machine ships for RB (and the WR null)
+
+The first pre-registered feature family went through the frozen harness
+end to end in one day. Order of operations, receipts at every step:
+
+1. DIAGNOSE FIRST (11a): before writing a single feature, we measured
+   the shipped volume model's residuals inside injury states built from
+   OBSERVED absences. RB confirmed the pre-registered thesis: the week a
+   higher-usage back goes down, his backup is underprojected by +2.55
+   touches, with clean dose-response in the vacated share. Returning
+   backs are overprojected by -1.24 (stale rolling shares meet the snap
+   ramp). WR came back flat everywhere (vacated targets scatter across
+   the route tree), and the QB check found ~1 dropback of signal against
+   a 9-dropback noise floor. The family was always an RB volume story.
+
+2. EX-ANTE LAYER (11b): weekly report sequences -- not within-week
+   practice logs, which the archive does not carry -- with a hard
+   Friday-lock rule: report rows modified after lock (7.1% of 2014-2024,
+   mostly Saturday downgrades) are masked. The Friday-knowable version
+   of the fresh-shock state shows +3.83 touches of bias -- HIGHER than
+   the observed-state number, because a shock official by Friday is the
+   certain kind. What is not knowable Friday belongs to the live
+   override layer, never the trained features.
+
+3. A/B UNDER THE FROZEN RUBRIC (11c/11d): same folds, same tuning
+   procedure, injury features into the volume model only. RB verdict:
+   fresh-shock bias +3.83 -> +0.96, volume RMSE on those weeks -14%,
+   return-week bias halved, steady state untouched, pooled coverage and
+   the low-usage veto unchanged, widths a hair sharper. Ships. WR
+   verdict: nothing moved -- the null, published with its receipt.
+
+4. INTEGRATION with the same paranoia as the original runner: one shared
+   implementation computes the states for training and for the slate,
+   and the slate builder's exact-match gate now includes the seven
+   injury columns -- passing at |diff| = 0 on four hindcast weeks.
+
+The cadence note that matters for readers: injury designations do not
+exist on Tuesday. The Tuesday board scores every back as if healthy;
+the injury signal enters at the Thursday/Saturday/Sunday re-scores as
+reports land -- which is also exactly how the training data saw the
+world at Friday lock. The Sunday-morning board is the one that knows
+who is out.
+
 ## 2026-07-18: The reconciliation gate that found a train/serve skew
 
 10c (score a slate end-to-end, reconcile against the backtest chain)

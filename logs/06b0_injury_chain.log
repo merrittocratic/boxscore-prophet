@@ -1,0 +1,6 @@
+
+── 06b0: rescale fold-prediction tot intervals to pred-vol scaling ─────────────
+✔ RB (11c injury arm): 11621 rows -> output/11c_rb_injury_fold_predictions_predvol.csv | mean 80% tot width 9.23 -> 9.5 EPA | median ratio 1.043
+✔ WR (04c): 21094 rows -> output/04c_wr_asym_fold_predictions_predvol.csv | mean 80% tot width 10.07 -> 10.31 EPA | median ratio 1.048
+
+── 06b0 complete -- feed via RB_PRED_FILE / WR_PRED_FILE into 06b ──────────────

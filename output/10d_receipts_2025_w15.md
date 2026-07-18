@@ -6,18 +6,18 @@ Every week we grade the probabilities we published before kickoff.
 
 | Stated band | n | Avg stated | Actual hit rate |
 |---|---|---|---|
-| under 10% | 19 | 9% | 0% |
-| 10-25% | 63 | 18% | 17% |
-| 25-50% | 74 | 36% | 46% |
-| 50%+ |  9 | 56% | 67% |
+| under 10% | 25 | 9% | 0% |
+| 10-25% | 58 | 18% | 19% |
+| 25-50% | 74 | 36% | 47% |
+| 50%+ |  8 | 56% | 62% |
 
 ## The model's worst misses (highest stated odds that did not hit)
 
 | Pos | Player | Team | Stated | Actual |
 |---|---|---|---|---|
-| RB | Ashton Jeanty | LV | 60% | 8.2 FP |
-| RB | Jonathan Taylor | IND | 59% | 13.1 FP |
-| RB | Breece Hall | NYJ | 52% | 5.7 FP |
+| RB | Jonathan Taylor | IND | 61% | 13.1 FP |
+| RB | Ashton Jeanty | LV | 57% | 8.2 FP |
+| RB | Breece Hall | NYJ | 54% | 5.7 FP |
 
 ## Longshots that hit (lowest stated odds that cleared the bar)
 

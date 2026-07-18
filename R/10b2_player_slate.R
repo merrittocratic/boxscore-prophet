@@ -373,6 +373,34 @@ inj <- tryCatch(
 slate <- slate |> left_join(inj, by = "player_id")
 cli_alert_success("Slate: {nrow(slate)} rows | injuries matched: {sum(!is.na(slate$report_status))}")
 
+# --- Rung-1 injury STATE features (shipped 2026-07-18): computed with the
+# SAME shared core as the training layer (R/11b_injury_state_fns.R); the
+# injury gate in step 7 proves the two call sites agree exactly.
+# Hindcast applies the Friday-lock mask (reproduce training); live pulls
+# are pre-lock by nature and run unmasked.
+source("R/11b_injury_state_fns.R")
+
+inj_slim_states <- clean_injury_reports(
+  nflreadr::load_injuries(TARGET_SEASON),
+  lock_table = if (hindcast) build_lock_table(TARGET_SEASON) else NULL,
+  mask = hindcast
+)
+
+state_base <- bind_rows(
+  ft |> filter(!is.na(player_id),
+               !(season == TARGET_SEASON & week == TARGET_WEEK)) |>
+    select(player_id, season, week, posteam, share = wt_carry_share),
+  slate |> transmute(player_id, season = TARGET_SEASON, week = TARGET_WEEK,
+                     posteam, share = wt_carry_share)
+)
+
+inj_states_slate <- build_injury_states(state_base, inj_slim_states, above = TRUE) |>
+  filter(season == TARGET_SEASON, week == TARGET_WEEK)
+
+slate <- slate |>
+  left_join(inj_states_slate |> select(-season, -week), by = "player_id")
+cli_alert_success("Injury states: return={sum(slate$return_from_absence)} | above_new_out>0: {sum(slate$above_new_out_share > 0)} | own Q: {sum(slate$own_q_int)}")
+
 # ===========================================================================
 # 7. VALIDATION GATE (hindcast only): exact match vs frozen table
 # ===========================================================================
@@ -413,6 +441,24 @@ if (hindcast) {
     cli_alert_success("GATE PASSED: max |diff| = {format(worst, scientific = TRUE)} across {nrow(cmp)} players x {length(feat_cols)} features")
   } else {
     cli_abort("GATE FAILED: max |diff| = {worst}, NA mismatches = {na_bad} -- carry-forward drifted from frozen logic, DO NOT PROCEED")
+  }
+
+  # Injury-state gate: slate-side states must reproduce the training layer
+  # (data/injury_states_rb.rds) exactly for shared players
+  inj_truth <- readRDS("data/injury_states_rb.rds") |>
+    filter(season == TARGET_SEASON, week == TARGET_WEEK)
+  inj_cols <- c("own_q_int", "own_practice_int", "weeks_missed",
+                "return_from_absence", "above_new_out_share",
+                "above_q_share", "above_long_out_share")
+  icmp <- inj_truth |> select(player_id, all_of(inj_cols)) |>
+    inner_join(slate |> select(player_id, all_of(inj_cols)),
+               by = "player_id", suffix = c("_truth", "_slate"))
+  imax <- max(map_dbl(inj_cols, ~ max(abs(icmp[[paste0(.x, "_truth")]] -
+                                            icmp[[paste0(.x, "_slate")]]))))
+  if (imax < 1e-9) {
+    cli_alert_success("INJURY GATE PASSED: max |diff| = {format(imax, scientific = TRUE)} across {nrow(icmp)} players x {length(inj_cols)} features")
+  } else {
+    cli_abort("INJURY GATE FAILED: max |diff| = {imax} -- slate injury states drifted from the training layer, DO NOT PROCEED")
   }
 }
 
