@@ -52,6 +52,8 @@ SURFACE      <- "#fcfcfb"
 INK          <- "#1F2937"
 INK_MUTED    <- "#6B7280"
 
+`%||%` <- function(a, b) if (is.null(a)) b else a
+
 cap_pct <- function(p) round(100 * pmin(pmax(p, DISPLAY_FLOOR), DISPLAY_CEIL))
 
 inj_tag <- function(report_status) {
@@ -162,42 +164,87 @@ if (file.exists(ecr_path)) {
 # 4. RECEIPTS (played weeks only)
 # ===========================================================================
 
-cli_h1("Receipts (stated odds vs outcomes)")
+cli_h1("Receipts (stated odds vs outcomes, from the locked ledger)")
+
+# The graded statement is the LAST pre-kickoff probability per player (the
+# 10c ledger; every ledger row is pre-kickoff by construction). Games not
+# yet resolved at AS_OF are published as PENDING (Monday-with-pending,
+# Steve 2026-07-18); the Tuesday full run finalizes them.
+as_of_env <- Sys.getenv("AS_OF", "")
+RECEIPT_AS_OF <- if (nzchar(as_of_env)) {
+  as.POSIXct(as_of_env, tz = "America/New_York")
+} else {
+  Sys.time()
+}
+RESOLVE_LAG_S <- 6 * 3600   # a game is gradeable this long after kickoff
+
+ledger_path <- sprintf("output/10c_ledger_%s.csv", WTAG)
 
 fp_obs <- tryCatch({
-  nflreadr::load_player_stats(seasons = TARGET_SEASON, stat_type = "offense") |>
+  nflreadr::load_player_stats(seasons = TARGET_SEASON) |>
     filter(season_type == "REG", week == TARGET_WEEK, !is.na(player_id)) |>
     select(player_id, fantasy_points_ppr, fantasy_points)
 }, error = function(e) NULL)
 
 receipts <- NULL
-if (!is.null(fp_obs) && nrow(fp_obs) > 0) {
-  receipts <- boards_base |>
-    inner_join(fp_obs, by = "player_id") |>
+pending  <- NULL
+if (file.exists(ledger_path)) {
+  locked <- readr::read_csv(ledger_path, show_col_types = FALSE) |>
+    group_by(player_id) |>
+    slice_max(run_ts, n = 1, with_ties = FALSE) |>
+    ungroup() |>
+    mutate(start_pct = cap_pct(p_start_recal),
+           boom_pct  = cap_pct(p_boom_recal))
+
+  graded <- locked |>
+    left_join(fp_obs %||% tibble(player_id = character(),
+                                 fantasy_points_ppr = numeric(),
+                                 fantasy_points = numeric()),
+              by = "player_id") |>
     mutate(
-      fp_actual  = if_else(position == "QB", fantasy_points, fantasy_points_ppr),
-      hit_start  = fp_actual >= thresh_start,
-      hit_boom   = fp_actual >= thresh_boom,
-      band_start = cut(p_start_recal, RECEIPT_BANDS, labels = BAND_LABELS,
-                       include.lowest = TRUE)
-    ) |>
-    select(position, player_id, player_name, posteam, defteam,
+      fp_played  = if_else(position == "QB", fantasy_points, fantasy_points_ppr),
+      # A game is only gradeable once it has KICKED OFF before AS_OF --
+      # outcome rows must never resolve a game the clock says is future
+      # (matters for replays/hindcast tests; production stats simply lag).
+      started    = kickoff_et < RECEIPT_AS_OF,
+      game_over  = kickoff_et + RESOLVE_LAG_S < RECEIPT_AS_OF,
+      resolved   = started & (!is.na(fp_played) | game_over),
+      dnp        = resolved & is.na(fp_played),
+      fp_actual  = coalesce(fp_played, 0)   # resolved w/o stat line = inactive
+    )
+
+  receipts <- graded |>
+    filter(resolved) |>
+    mutate(hit_start  = fp_actual >= thresh_start,
+           hit_boom   = fp_actual >= thresh_boom,
+           band_start = cut(p_start_recal, RECEIPT_BANDS, labels = BAND_LABELS,
+                            include.lowest = TRUE)) |>
+    select(position, player_id, player_name, posteam, defteam, kickoff_et,
            thresh_start, thresh_boom, p_start_recal, p_boom_recal,
-           start_pct, boom_pct, fp_actual, hit_start, hit_boom, band_start)
+           start_pct, boom_pct, fp_actual, dnp, hit_start, hit_boom, band_start)
 
-  receipt_bands <- receipts |>
-    group_by(band_start) |>
-    summarise(n = n(),
-              stated = mean(p_start_recal),
-              hit_rate = mean(hit_start), .groups = "drop") |>
-    mutate(delta_pp = round(100 * (hit_rate - stated), 1))
+  pending <- graded |>
+    filter(!resolved) |>
+    select(position, player_id, player_name, posteam, defteam, kickoff_et,
+           start_pct, boom_pct)
 
-  readr::write_csv(receipts, sprintf("output/10d_receipts_%s.csv", WTAG))
-  readr::write_csv(receipt_bands, sprintf("output/10d_receipt_bands_%s.csv", WTAG))
-  cli_alert_success("Receipts: {nrow(receipts)} graded players | start hits: {sum(receipts$hit_start)} | booms: {sum(receipts$hit_boom)}")
-  print(receipt_bands, n = Inf)
+  if (nrow(receipts) > 0) {
+    receipt_bands <- receipts |>
+      group_by(band_start) |>
+      summarise(n = n(),
+                stated = mean(p_start_recal),
+                hit_rate = mean(hit_start), .groups = "drop") |>
+      mutate(delta_pp = round(100 * (hit_rate - stated), 1))
+    readr::write_csv(receipts, sprintf("output/10d_receipts_%s.csv", WTAG))
+    readr::write_csv(receipt_bands, sprintf("output/10d_receipt_bands_%s.csv", WTAG))
+    cli_alert_success("Receipts: {nrow(receipts)} graded ({sum(receipts$dnp)} DNP) | {nrow(pending)} pending | start hits: {sum(receipts$hit_start)} | booms: {sum(receipts$hit_boom)}")
+    print(receipt_bands, n = Inf)
+  } else {
+    cli_alert_info("Nothing resolved yet at as-of {format(RECEIPT_AS_OF, '%Y-%m-%d %H:%M')} -- {nrow(pending)} statements pending")
+    receipts <- NULL
+  }
 } else {
-  cli_alert_info("No outcomes for {TARGET_SEASON} week {TARGET_WEEK} yet -- forward mode, receipts skipped")
+  cli_alert_info("No ledger at {ledger_path} -- run 10c for this week first; receipts skipped")
 }
 
 # ===========================================================================
@@ -278,6 +325,16 @@ if (!is.null(receipts)) {
                                    stated = paste0(start_pct, "%"),
                                    actual = sprintf("%.1f FP", fp_actual)),
              c("Pos", "Player", "Team", "Stated", "Actual")), "")
+  if (!is.null(pending) && nrow(pending) > 0) {
+    rmd <- c(rmd,
+      "## Still on the board (games not yet played)", "",
+      "These statements are locked and will be graded as-is.", "",
+      md_table(pending |> arrange(desc(start_pct)) |>
+                 transmute(position, player_name, posteam, defteam,
+                           start = paste0(start_pct, "%"),
+                           boom = paste0(boom_pct, "%")),
+               c("Pos", "Player", "Team", "Opp", "Start", "Boom")), "")
+  }
   writeLines(paste(rmd, collapse = "\n"), sprintf("output/10d_receipts_%s.md", WTAG))
   cli_alert_success("output/10d_receipts_{WTAG}.md")
 }

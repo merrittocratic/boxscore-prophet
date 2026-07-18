@@ -584,9 +584,25 @@ rather than an emergency rebuild.
 ```
 
 Laptop = stage, MacMini (Earnest) = production; same scripts, cron on the
-MacMini. In-season cadence: Tuesday night data pull + retrain + score;
-re-score Sunday morning on inactives (10b/10c only, models frozen for the
-week).
+MacMini via scripts/weekly_run.sh (modes: full | rescore; season/week
+auto-detect = week of the earliest future REG kickoff).
+
+IN-SEASON CADENCE (decided 2026-07-18, kickoff-aware). 10c only scores
+games whose kickoff is still in the future (AS_OF env overrides the clock
+for tests/replays; a fully-past week auto-runs as hindcast) and appends
+every run to output/10c_ledger_<wtag>.csv. A played game is NEVER
+re-scored: receipts grade the LATEST pre-kickoff ledger row per player.
+
+    # Earnest crontab (times ET; MacMini local tz)
+    30 23 * * 2  weekly_run.sh full      # Tue: retrain + W+1 slate; models freeze
+    0  15 * * 4  weekly_run.sh rescore   # Thu: TNF lock (Wed injury desigs + weather)
+    0  15 * * 6  weekly_run.sh rescore   # Sat: late-season Sat slates (no-op refresh otherwise)
+    0  8  * * 0  weekly_run.sh rescore   # Sun: main lock, before 9:30am ET internationals
+    0  15 * * 1  weekly_run.sh rescore   # Mon: MNF lock + Monday receipts
+
+RECEIPTS TIMING (Steve 2026-07-18): Monday-with-pending -- the Monday run
+publishes receipts with MNF statements listed as "still on the board";
+the Tuesday full run finalizes the week's receipt CSVs.
 
 ## Reproducibility
 

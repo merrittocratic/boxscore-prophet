@@ -38,6 +38,7 @@ suppressPackageStartupMessages({
   library(tidyverse)
   library(lightgbm)
   library(splines)   # ns() terms inside the saved translation fits
+  library(nflreadr)  # schedules -> kickoff times for the re-score partition
   library(cli)
 })
 
@@ -93,6 +94,50 @@ rb_slate <- slate_file("10b2_rb_slate")
 wr_slate <- slate_file("10b3_wr_slate")
 qb_slate <- slate_file("10b4_qb_slate")
 cli_alert_success("Slates: RB={nrow(rb_slate)} WR={nrow(wr_slate)} QB={nrow(qb_slate)}")
+
+# ---------------------------------------------------------------------------
+# Kickoff-aware partition (in-season re-scores). A game that has kicked off
+# is NEVER re-scored: its published number is whatever the ledger holds from
+# the last pre-kickoff run. AS_OF resolution:
+#   - env AS_OF ("YYYY-MM-DD HH:MM", ET) -> explicit clock (tests, replays)
+#   - unset + at least one future kickoff -> Sys.time() (live production)
+#   - unset + all kickoffs in the past -> hindcast mode, full slate scored
+#     (the historical-validation path; reconciliation only runs here)
+# ---------------------------------------------------------------------------
+
+kickoffs <- nflreadr::load_schedules(TARGET_SEASON) |>
+  filter(game_type == "REG", week == TARGET_WEEK) |>
+  transmute(game_id,
+            kickoff_et = as.POSIXct(paste(gameday, coalesce(gametime, "13:00")),
+                                    tz = "America/New_York"))
+
+as_of_env <- Sys.getenv("AS_OF", "")
+if (nzchar(as_of_env)) {
+  AS_OF <- as.POSIXct(as_of_env, tz = "America/New_York")
+  if (is.na(AS_OF)) cli_abort("Could not parse AS_OF='{as_of_env}' (want 'YYYY-MM-DD HH:MM', ET)")
+  RUN_MODE <- "rescore"
+} else if (all(kickoffs$kickoff_et < Sys.time())) {
+  AS_OF <- min(kickoffs$kickoff_et) - 86400   # as-if the day before the week
+  RUN_MODE <- "hindcast"
+} else {
+  AS_OF <- Sys.time()
+  RUN_MODE <- "live"
+}
+
+live_games <- kickoffs |> filter(kickoff_et > AS_OF)
+n_skipped  <- nrow(kickoffs) - nrow(live_games)
+cli_alert_info("Mode: {RUN_MODE} | as-of {format(AS_OF, '%Y-%m-%d %H:%M %Z')} | {nrow(live_games)}/{nrow(kickoffs)} games still to kick off")
+if (n_skipped > 0) {
+  cli_alert_warning("Skipping {n_skipped} already-kicked game{?s}: {paste(setdiff(kickoffs$game_id, live_games$game_id), collapse = ', ')}")
+}
+if (nrow(live_games) == 0) {
+  cli_abort("No games left to score at this AS_OF -- nothing to do.")
+}
+
+rb_slate <- rb_slate |> semi_join(live_games, by = "game_id")
+wr_slate <- wr_slate |> semi_join(live_games, by = "game_id")
+qb_slate <- qb_slate |> semi_join(live_games, by = "game_id")
+cli_alert_success("Scoring: RB={nrow(rb_slate)} WR={nrow(wr_slate)} QB={nrow(qb_slate)} players")
 
 dp <- readRDS("data/deployment_params.rds")
 cli_alert_info("Deployment models trained through {dp$rb$trained_through$season}-W{dp$rb$trained_through$week}")
@@ -410,6 +455,18 @@ out_scored <- sprintf("output/10c_scored_slate_%s.csv", WTAG)
 readr::write_csv(scored_all, out_scored)
 cli_alert_success("{out_scored} ({nrow(scored_all)} rows)")
 
+# Locked-probabilities ledger: every run appends the rows it scored (all
+# pre-kickoff by construction). Receipts (10d) grade the LATEST run per
+# player -- the final statement made before that player's game kicked off.
+ledger_path <- sprintf("output/10c_ledger_%s.csv", WTAG)
+ledger_rows <- scored_all |>
+  left_join(kickoffs, by = "game_id") |>
+  mutate(run_ts = format(Sys.time(), "%Y-%m-%d %H:%M:%S", tz = "America/New_York"),
+         as_of  = format(AS_OF, "%Y-%m-%d %H:%M:%S"),
+         run_mode = RUN_MODE)
+readr::write_csv(ledger_rows, ledger_path, append = file.exists(ledger_path))
+cli_alert_success("{ledger_path} (+{nrow(ledger_rows)} rows, mode={RUN_MODE})")
+
 # Full per-position detail (all interval columns) for downstream 10d use
 out_detail <- sprintf("output/10c_scored_detail_%s.csv", WTAG)
 readr::write_csv(bind_rows(rb_scored |> mutate(across(everything(), as.character)),
@@ -423,6 +480,12 @@ cli_alert_success("{out_detail}")
 # ===========================================================================
 
 cli_h1("Reconciliation vs backtest chain")
+
+if (n_skipped > 0) {
+  cli_alert_info("Partial slate ({RUN_MODE} mode, {n_skipped} games skipped) -- reconciliation only runs on full-slate hindcasts.")
+  cli_h1("Step 10c complete -- {TARGET_SEASON} week {TARGET_WEEK} ({RUN_MODE})")
+  quit(save = "no", status = 0)
+}
 
 bt_rbwr_path <- "output/06c_recal_probabilities.csv"
 bt_qb_path   <- "output/09b_qb_recal_probabilities.csv"
