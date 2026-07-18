@@ -476,13 +476,25 @@ through the saved translation + recalibration artifacts. Weekly retrain
                           stadium_coords.csv; Open-Meteo forecast API
                           live, HISTORICAL FORECAST archive for hindcast
                           -- never ERA5/observed; content flags at 15mph
-                          wind / 20F). PART 2 next: player slate --
-                          rosters, ex-ante rolling features carried
-                          forward, cold starts, pred-volume router,
-                          injury practice-report state (load_injuries),
-                          Earnest depth-chart override hook. Ablation
-                          ladder for MODELED features pre-registered in
+                          wind / 20F). Ablation ladder for MODELED
+                          features pre-registered in
                           building_in_public_log.md
+10b2_player_slate.R       PART 2, RB BUILT 2026-07-18: ex-ante feature
+                          rows for a target week, standalone next-value
+                          carry-forward of the frozen rolling logic
+                          (frozen scripts untouched). VALIDATION GATE:
+                          hindcast rows must reproduce the frozen
+                          table's ex-ante rows EXACTLY -- passed at
+                          max |diff| = 0 for 2025-W15 AND 2025-W02
+                          (fallback branch), 58 players x 12 features
+                          each. Priors recomputed from saved raw plays
+                          (table-lift shortcut left NAs for sub-floor
+                          players -- first gate run caught it). Includes
+                          injury-report join + depth-chart override hook
+                          (data/overrides/depth_overrides.csv). NEXT:
+                          WR/QB clones of the same machinery, then
+                          ex-ante roster mode hardening for true future
+                          weeks (cold-start additions from rosters)
 10c_weekly_score.R        point preds + intervals for the slate ->
                           simulation translation (saved resid pools +
                           copula rhos) -> recal maps (library(splines);
