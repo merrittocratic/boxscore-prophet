@@ -77,6 +77,27 @@ Contract-year, revenge-game, primetime effects: run each through the
 fold harness, publish the results INCLUDING the nulls. "We tested
 revenge games so you don't have to."
 
+## 2026-07-18: The gate that caught a ghost roster (and the A/B that sized it)
+
+The slate builder's exact-match validation gate -- built to prove the
+deployment feature carry-forward reproduces the frozen backtest logic --
+caught something else entirely: the WR feature table contained 3,734
+NA-player pseudo-rows (~17%), one per team-game, from unattributed
+targets slipping through an NA in the roster ID list. Those ghost rows
+had been part of WR model training and interval calibration all along.
+
+Instead of assuming the effect was small OR panic-rebuilding, we ran the
+house play: a pre-committed A/B (filtered refit vs shipped, identical
+hyperparameters, identical evaluation rows, decision rule stated before
+the run). Verdict: immaterial -- 80% coverage moved +0.53pp pooled,
++0.15pp on the low-usage veto stratum, width under +2%, and the ghost
+rows turned out to be mildly STABILIZING calibration mass. The shipped
+chain stands; the filter gets fixed in the next feature-table version.
+
+Two lessons worth publishing: validation gates find bugs they were not
+built for, and "measure it before you rebuild it" turned a scary-looking
+17% contamination number into a half-point of nothing.
+
 ## 2026-07-17: Two rosters survive, two engines do not
 
 The two-product architecture resolved: the upside engine (hierarchical

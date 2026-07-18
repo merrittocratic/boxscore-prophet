@@ -1,0 +1,38 @@
+
+── Step 4d: WR NA-contamination A/B (B arm: filtered refit) ────────────────────
+✔ Filtered WR table: 17665 rows (NA-player rows removed)
+
+── Walk-forward fold loop (204 folds, refit-only) ──────────────────────────────
+ℹ Fold 050 done
+ℹ Fold 100 done
+ℹ Fold 150 done
+ℹ Fold 200 done
+ℹ Fold 204 done
+
+── A/B comparison (identical real-player rows) ─────────────────────────────────
+ℹ A rows: 17223 | B rows: 17223 | joined: 17223
+
+── Coverage and width, A (shipped) vs B (filtered), same rows ──
+
+      stratum nominal cov_a cov_b wid_a wid_b cov_diff_pp wid_pct
+1      pooled     0.5 0.495 0.498  5.44  5.50       +0.36  +1.06%
+2      pooled     0.8 0.792 0.798 10.31 10.50       +0.53  +1.84%
+3      pooled     0.9 0.895 0.899 13.55 13.79       +0.41  +1.77%
+4 low_opp_3_5     0.5 0.497 0.496  4.37  4.36       -0.05  -0.36%
+5 low_opp_3_5     0.8 0.796 0.797  8.29  8.33       +0.15  +0.38%
+6 low_opp_3_5     0.9 0.901 0.901 10.90 10.94       +0.01  +0.34%
+── Prediction movement (pred_tot, |B - A|, EPA) ──
+
+ℹ median = 0.123 | p90 = 0.389 | max = 3.552
+ℹ RMSE vs observed: A = 4.3289 | B = 4.3324
+
+── Decision (pre-committed rule) ───────────────────────────────────────────────
+ℹ pooled 80%: coverage diff +0.53pp | width +1.84%
+ℹ low_opp_3_5 80%: coverage diff +0.15pp | width +0.38%
+✔ IMMATERIAL: both gates within bounds -- keep shipped chain; fix filter in next feature-table version
+
+── Save outputs ────────────────────────────────────────────────────────────────
+✔ output/04d_wr_nona_fold_predictions.csv (17223 rows)
+✔ output/04d_wr_nona_ab_table.csv
+
+── Step 4d complete ────────────────────────────────────────────────────────────

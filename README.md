@@ -512,10 +512,16 @@ rows, ~17% of the table) -- unattributed targets pass the play filter
 because wr_ids includes an NA gsis_id, so `NA %in% wr_ids` is TRUE.
 These rows were part of WR model TRAINING and conformal calibration
 (04b/04c/10a do not filter player_id); the published FP chain is clean
-(06b filters them before scoring). Slate builders exclude them. Whether
-to rebuild the WR chain with the filter fixed is an open decision --
-expected effect is small (the rows behave like plausible low-usage
-aggregates) but it should be sized, not assumed.
+(06b filters them before scoring). Slate builders exclude them.
+
+SIZED 2026-07-18 (04d A/B, pre-committed rule, receipt in
+output/04d_wr_nona_ab_table.csv): IMMATERIAL. Filtered refit vs shipped
+on identical real-player rows: 80% coverage +0.53pp pooled / +0.15pp
+low-usage; width +1.84% / +0.38%; median prediction movement 0.12 EPA;
+RMSE a wash. The NA rows acted as mildly stabilizing calibration mass
+(removing them WIDENS intervals slightly). Decision: shipped chain
+stands; the wr_ids NA filter goes into the next feature-table version
+rather than an emergency rebuild.
 10c_weekly_score.R        point preds + intervals for the slate ->
                           simulation translation (saved resid pools +
                           copula rhos) -> recal maps (library(splines);
