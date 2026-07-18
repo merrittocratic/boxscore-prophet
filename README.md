@@ -491,10 +491,31 @@ through the saved translation + recalibration artifacts. Weekly retrain
                           (table-lift shortcut left NAs for sub-floor
                           players -- first gate run caught it). Includes
                           injury-report join + depth-chart override hook
-                          (data/overrides/depth_overrides.csv). NEXT:
-                          WR/QB clones of the same machinery, then
-                          ex-ante roster mode hardening for true future
-                          weeks (cold-start additions from rosters)
+                          (data/overrides/depth_overrides.csv)
+10b3_wr_slate.R           WR clone, gate passed |diff|=0 (2025-W15: 75
+                          players x 12 features; W02 fallback branch ok)
+10b4_qb_slate.R           QB clone, gate passed |diff|=0 (2025-W15: 32
+                          QBs x 19 features; W02 ok). Requires
+                          data/qb_def_adj.rds -- additive save added to
+                          08a (rush def component measures ALL rushers,
+                          whose raw plays were not otherwise persisted).
+                          08a rerun verified byte-identical artifacts:
+                          feature regeneration is deterministic, safe
+                          for the weekly cadence.
+                          NEXT: ex-ante roster hardening for true future
+                          weeks (cold-start additions from rosters),
+                          then 10c scoring.
+
+KNOWN DATA-QUALITY FLAG (found by the 10b3 gate, 2026-07-18): the frozen
+WR feature table carries one NA-player pseudo-row per team-game (3,734
+rows, ~17% of the table) -- unattributed targets pass the play filter
+because wr_ids includes an NA gsis_id, so `NA %in% wr_ids` is TRUE.
+These rows were part of WR model TRAINING and conformal calibration
+(04b/04c/10a do not filter player_id); the published FP chain is clean
+(06b filters them before scoring). Slate builders exclude them. Whether
+to rebuild the WR chain with the filter fixed is an open decision --
+expected effect is small (the rows behave like plausible low-usage
+aggregates) but it should be sized, not assumed.
 10c_weekly_score.R        point preds + intervals for the slate ->
                           simulation translation (saved resid pools +
                           copula rhos) -> recal maps (library(splines);

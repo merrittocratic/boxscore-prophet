@@ -1,0 +1,85 @@
+
+── QB Feature Layer v1.0 | Seasons 2014-2025 ───────────────────────────────────
+
+── Step 1: Pull raw data ───────────────────────────────────────────────────────
+ℹ PBP seasons 2013-2025
+ℹ Rosters seasons 2013-2025
+ℹ Draft picks (all available seasons)
+ℹ Snap counts seasons 2014-2025
+
+── Step 2: Column check ────────────────────────────────────────────────────────
+✔ All required PBP columns present
+
+── Step 3: Build lookup tables ─────────────────────────────────────────────────
+ℹ 363 unique QB gsis_ids across all seasons
+
+── Step 4: Filter PBP to QB plays ──────────────────────────────────────────────
+✔ QB pass plays (attempts + sacks): 249860
+✔ QB rush plays: 21210 (11711 scrambles) | 5268 kneel-downs excluded
+
+── Step 5: Build observed outcome table ────────────────────────────────────────
+✔ Outcome table: 7232 QB player-game rows (all dropback counts)
+ℹ Rows with zero carries: 1625 (22.5%)
+
+── Step 6: Pass efficiency prior features ──────────────────────────────────────
+ℹ Position prior pass EPA/dropback: 2014=0.002 | 2015=-0.002 | 2016=0 | 2017=0.06 | 2018=-0.05 | 2019=0.036 | 2020=0.003 | 2021=0.075 | 2022=-0.001 | 2023=-0.021 | 2024=-0.048 | 2025=0.002
+✔ Pass efficiency prior: 2124 cold-start rows (29.4%)
+
+── Step 7: Rush production prior features ──────────────────────────────────────
+✔ Rush priors: 4943 rows with per-game prior, 3497 with per-carry prior
+
+── Step 8: Rolling volume and rush features ────────────────────────────────────
+✔ Rolling volume and rush features built
+
+── Step 9: Snap share features ─────────────────────────────────────────────────
+ℹ wt_snap_share: 6300 non-NA of 7232 rows (87.1%)
+
+── Step 10: Defensive component vector ─────────────────────────────────────────
+ℹ League avg off EPA/play: deep_pass=0.393 | rush=-0.054 | short_pass=-0.135
+ℹ League avg def EPA/play (anchor seasons): short_pass=-0.134 | deep_pass=0.393 | rush=-0.053
+✔ Defensive vector built; 1152 fallback rows
+
+── Step 11: Assemble feature table ─────────────────────────────────────────────
+ℹ MIN_DROPBACKS=15: dropping 850 relief/mop-up rows, keeping 6382
+✔ Feature table: 6382 rows x 39 columns
+
+── Step 12: Save outputs ───────────────────────────────────────────────────────
+✔ data/qb_feature_table.rds
+✔ output/qb_feature_table_v1.0.csv
+
+── Step 13: Validation summary ─────────────────────────────────────────────────
+ℹ Rows:                    6382
+ℹ Unique players:          189
+ℹ Season-weeks:            209
+ℹ Seasons present:         2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025
+ℹ Cold-start rows:         24.4%
+ℹ Def fallback rows:       18.2%
+ℹ Pass recon max err:      3.552714e-15
+ℹ Additive recon max err:  0e+00
+✔ pass eff x dropbacks reconstructs pass_epa -- PASS
+✔ pass_epa + rush_epa reconstructs total_epa -- PASS
+
+── Rush tier distribution (starter games) ──
+
+       rush_tier    n  pct
+1   statue (0-3) 4496 70.4
+2    mover (4-7) 1447 22.7
+3 scrambler (8+)  439  6.9
+── Per-column NA audit ─────────────────────────────────────────────────────────
+ℹ   prior_rush_epa_per_carry: 3069 NA (48.1%)
+ℹ   prior_rush_epa_pg: 1712 NA (26.8%)
+ℹ   prior_carries_pg: 1712 NA (26.8%)
+ℹ   prior_pass_epa_per_db: 1556 NA (24.4%)
+ℹ   rush_epa_per_carry_obs: 1140 NA (17.9%)
+ℹ   wt_rush_epa_per_carry: 844 NA (13.2%)
+ℹ   wt_snap_share: 649 NA (10.2%)
+ℹ   rolling_pass_epa_per_db: 575 NA (9%)
+ℹ   form_residual: 575 NA (9%)
+ℹ   wt_dropbacks: 575 NA (9%)
+ℹ   wt_carries: 575 NA (9%)
+ℹ   wt_carry_share: 575 NA (9%)
+ℹ   wt_rush_epa_pg: 575 NA (9%)
+ℹ   wt_team_total_plays: 388 NA (6.1%)
+ℹ   wt_team_pass_rate: 388 NA (6.1%)
+
+── Done -- QB feature layer v1.0 frozen ────────────────────────────────────────

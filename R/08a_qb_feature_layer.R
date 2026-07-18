@@ -617,6 +617,11 @@ saveRDS(qb_pass_plays, "data/qb_pass_plays.rds")
 saveRDS(qb_rush_plays, "data/qb_rush_plays.rds")
 saveRDS(qb_outcomes,   "data/qb_outcomes.rds")
 saveRDS(def_final,     "data/qb_def_rolling_final.rds")
+# def_adj persisted for the deployment slate builder (10b4): the rush
+# component measures ALL rushers, whose raw plays are not otherwise saved,
+# and the slate's next-value carry-forward needs the per-game adjusted
+# inputs. Additive artifact only -- no frozen values change.
+saveRDS(def_adj,       "data/qb_def_adj.rds")
 saveRDS(feature_table, "data/qb_feature_table.rds")
 readr::write_csv(feature_table, "output/qb_feature_table_v1.0.csv")
 
