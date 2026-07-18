@@ -1,0 +1,7 @@
+state,n,mean_resid,median_resid,mean_pred
+above_new_out,213,3.83,3.4,10.9
+return+above_out,93,1.41,1.38,10.3
+above_q_only,266,0.98,-0.63,11.3
+return_week,2030,-0.97,-1.97,12.5
+above_long_out,495,0.54,-0.77,11.4
+steady,8524,-0.31,-1.01,15.2

@@ -1,0 +1,105 @@
+
+── Step 4c: WR Asymmetric Conformal (04b learner, signed-residual intervals) ───
+✔ WR feature table: 21608 rows | 204 folds | expected test rows: 21094
+ℹ Hyperparameters: per-fold tuned values reused from 04b tune log (no re-tuning)
+ℹ ARM B: volume features extended with 7 injury-state features
+
+── Walk-forward fold loop (204 folds, refit-only) ──────────────────────────────
+ℹ Fold 025 [2015-W13] done (0.1s/fold)
+ℹ Fold 050 [2017-W04] done (0.1s/fold)
+ℹ Fold 075 [2018-W12] done (0.2s/fold)
+ℹ Fold 100 [2020-W03] done (0.3s/fold)
+ℹ Fold 125 [2021-W11] done (0.3s/fold)
+ℹ Fold 150 [2022-W18] done (0.2s/fold)
+ℹ Fold 175 [2024-W07] done (0.3s/fold)
+ℹ Fold 200 [2025-W14] done (0.3s/fold)
+ℹ Fold 204 [2025-W18] done (0.5s/fold)
+
+── Integrity + asymmetry diagnostics ───────────────────────────────────────────
+✔ Row count: 21094 / 21094
+ℹ alpha range [0.274, 0.831] | median 0.485
+ℹ Combined 80%: mean up-arm 5.04 vs down-arm 5.03 (up > down = right skew captured)
+ℹ Efficiency 80%: up 0.842 vs down 0.836
+ℹ Median shift (med_tot - pred_tot): 0.169 EPA
+
+── 4c-WR Pooled Coverage ───────────────────────────────────────────────────────
+# A tibble: 9 × 6
+  component  stratum nominal empirical     delta sharpness
+  <chr>      <chr>     <dbl>     <dbl>     <dbl>     <dbl>
+1 efficiency pooled      0.5     0.498 -0.00152      0.836
+2 efficiency pooled      0.8     0.797 -0.00347      1.68 
+3 efficiency pooled      0.9     0.898 -0.00188      2.29 
+4 volume     pooled      0.5     0.502  0.00175      3.11 
+5 volume     pooled      0.8     0.799 -0.000626     6.25 
+6 volume     pooled      0.9     0.901  0.00106      8.35 
+7 combined   pooled      0.5     0.498 -0.00232      5.31 
+8 combined   pooled      0.8     0.796 -0.00413     10.1  
+9 combined   pooled      0.9     0.899 -0.00126     13.2  
+
+── 4c-WR Low-Usage Bucket (targets 3-5) ────────────────────────────────────────
+# A tibble: 9 × 6
+  component  stratum     nominal empirical     delta sharpness
+  <chr>      <chr>         <dbl>     <dbl>     <dbl>     <dbl>
+1 efficiency low_opp_3_5     0.5     0.442 -0.0580       0.836
+2 efficiency low_opp_3_5     0.8     0.734 -0.0657       1.68 
+3 efficiency low_opp_3_5     0.9     0.855 -0.0445       2.29 
+4 volume     low_opp_3_5     0.5     0.556  0.0559       3.11 
+5 volume     low_opp_3_5     0.8     0.812  0.0120       6.25 
+6 volume     low_opp_3_5     0.9     0.904  0.00436      8.34 
+7 combined   low_opp_3_5     0.5     0.500 -0.000283     4.35 
+8 combined   low_opp_3_5     0.8     0.805  0.00466      8.24 
+9 combined   low_opp_3_5     0.9     0.910  0.0100      10.8  
+
+── Stratified combined coverage at 80% ──
+
+# A tibble: 3 × 6
+  stratum        n empirical    delta sharpness delta_pp
+  <fct>      <int>     <dbl>    <dbl>     <dbl> <chr>   
+1 low  (3-5) 10592     0.805  0.00466      8.24 +0.5pp  
+2 mid  (6-9)  7571     0.789 -0.0111      11.1  -1.1pp  
+3 high (10+)  2931     0.782 -0.0180      14.1  -1.8pp  
+── Save arm B outputs ──────────────────────────────────────────────────────────
+✔ output/11d_wr_injury_* written
+
+── Frozen rubric: ARM A (shipped 04c) vs ARM B (+injury states) ────────────────
+
+── 80% coverage + width -- veto: low-usage |delta| > 10pp ──
+
+# A tibble: 6 × 9
+  arm       component stratum      n empirical    delta sharpness delta_pp veto 
+  <chr>     <chr>     <chr>    <int>     <dbl>    <dbl>     <dbl> <chr>    <chr>
+1 A_shipped combined  pooled   17223     0.792 -0.00775     10.3  -0.8pp   pass 
+2 A_shipped combined  low_usa…  7812     0.796 -0.00430      8.29 -0.4pp   pass 
+3 A_shipped volume    pooled   17223     0.765 -0.0345       6.24 -3.5pp   pass 
+4 B_injury  combined  pooled   17223     0.791 -0.00873     10.3  -0.9pp   pass 
+5 B_injury  combined  low_usa…  7812     0.794 -0.00558      8.26 -0.6pp   pass 
+6 B_injury  volume    pooled   17223     0.766 -0.0338       6.25 -3.4pp   pass 
+── Transition-state slice ──────────────────────────────────────────────────────
+# A tibble: 6 × 10
+  state                n mean_vol_resid_A_shipped mean_vol_resid_B_injury
+  <chr>            <int>                    <dbl>                   <dbl>
+1 return+above_out   170                     0.4                     0   
+2 above_new_out      369                     0.38                   -0.07
+3 return_week       3314                    -0.23                   -0.2 
+4 above_q_only       628                    -0.11                   -0.15
+5 steady           11789                    -0.07                   -0.07
+6 above_long_out     953                     0.04                    0   
+  vol_rmse_A_shipped vol_rmse_B_injury cov80_A_shipped cov80_B_injury d_rmse
+               <dbl>             <dbl>           <dbl>          <dbl>  <dbl>
+1               2.36              2.34            0.8            0.79  -0.03
+2               2.52              2.5             0.83           0.82  -0.02
+3               2.41              2.41            0.8            0.79  -0.01
+4               2.32              2.33            0.82           0.82   0.01
+5               2.86              2.86            0.79           0.79   0   
+6               2.3               2.3             0.81           0.81   0   
+  d_cov_pp
+     <dbl>
+1    -0.59
+2    -0.81
+3    -0.24
+4    -0.16
+5    -0.02
+6    -0.21
+✔ output/11d_wr_rubric_table.csv + output/11d_wr_transition_slice.csv
+
+── 11d WR arm B complete -- expected null; judge per header rule ───────────────

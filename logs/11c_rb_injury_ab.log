@@ -1,0 +1,536 @@
+
+── Step 3A-v2: Nested-Walk-Forward-Tuned LightGBM ──────────────────────────────
+ℹ Grid: 32 combos per component per fold (eff and vol tuned separately)
+ℹ Inner split: last 20% season-weeks as RMSE holdout (same as cal split)
+ℹ Construction: FROZEN Mechanism A power-law (identical to 3A/3B)
+ℹ Rubric: FROZEN (unchanged veto, decision rule, folds)
+✔ Feature table: 11918 rows | Fold map: 204 folds | Expected test rows: 11621
+ℹ ARM B: volume features extended with 7 injury-state features
+
+── Walk-forward fold loop (204 folds x 32 combos x 2 components) ───────────────
+ℹ Fold 01 [2014-W06]: 63 rows | eff: leaves=7 minnode=50 lr=0.02 rds=95 | vol: leaves=15 minnode=20 lr=0.02 rds=89 | 1s
+ℹ Fold 02 [2014-W07]: 58 rows | eff: leaves=7 minnode=10 lr=0.05 rds=10 | vol: leaves=7 minnode=20 lr=0.05 rds=94 | 1s
+ℹ Fold 03 [2014-W08]: 57 rows | eff: leaves=15 minnode=10 lr=0.05 rds=10 | vol: leaves=15 minnode=10 lr=0.02 rds=125 | 1s
+ℹ Fold 04 [2014-W09]: 53 rows | eff: leaves=7 minnode=20 lr=0.05 rds=85 | vol: leaves=7 minnode=20 lr=0.05 rds=59 | 1s
+ℹ Fold 05 [2014-W10]: 53 rows | eff: leaves=7 minnode=100 lr=0.05 rds=10 | vol: leaves=7 minnode=10 lr=0.02 rds=141 | 1s
+ℹ Fold 06 [2014-W11]: 51 rows | eff: leaves=7 minnode=100 lr=0.02 rds=40 | vol: leaves=7 minnode=10 lr=0.02 rds=140 | 1s
+ℹ Fold 07 [2014-W12]: 60 rows | eff: leaves=7 minnode=20 lr=0.02 rds=10 | vol: leaves=7 minnode=10 lr=0.02 rds=176 | 1s
+ℹ Fold 08 [2014-W13]: 61 rows | eff: leaves=15 minnode=20 lr=0.05 rds=10 | vol: leaves=7 minnode=100 lr=0.05 rds=121 | 1s
+ℹ Fold 09 [2014-W14]: 58 rows | eff: leaves=7 minnode=100 lr=0.02 rds=115 | vol: leaves=7 minnode=100 lr=0.05 rds=110 | 1s
+ℹ Fold 10 [2014-W15]: 64 rows | eff: leaves=7 minnode=100 lr=0.05 rds=10 | vol: leaves=7 minnode=100 lr=0.05 rds=100 | 1s
+ℹ Fold 11 [2014-W16]: 62 rows | eff: leaves=7 minnode=10 lr=0.02 rds=19 | vol: leaves=15 minnode=50 lr=0.02 rds=150 | 1s
+ℹ Fold 12 [2014-W17]: 70 rows | eff: leaves=7 minnode=100 lr=0.02 rds=65 | vol: leaves=15 minnode=50 lr=0.05 rds=86 | 1s
+ℹ Fold 13 [2015-W01]: 60 rows | eff: leaves=15 minnode=50 lr=0.05 rds=10 | vol: leaves=7 minnode=100 lr=0.02 rds=165 | 1s
+ℹ Fold 14 [2015-W02]: 60 rows | eff: leaves=31 minnode=20 lr=0.05 rds=10 | vol: leaves=7 minnode=100 lr=0.05 rds=56 | 1s
+ℹ Fold 15 [2015-W03]: 67 rows | eff: leaves=31 minnode=10 lr=0.02 rds=45 | vol: leaves=7 minnode=100 lr=0.02 rds=88 | 1s
+ℹ Fold 16 [2015-W04]: 57 rows | eff: leaves=7 minnode=10 lr=0.02 rds=36 | vol: leaves=7 minnode=100 lr=0.02 rds=65 | 1s
+ℹ Fold 17 [2015-W05]: 59 rows | eff: leaves=7 minnode=20 lr=0.05 rds=10 | vol: leaves=7 minnode=10 lr=0.05 rds=33 | 1s
+ℹ Fold 18 [2015-W06]: 55 rows | eff: leaves=15 minnode=20 lr=0.02 rds=24 | vol: leaves=7 minnode=10 lr=0.02 rds=99 | 1s
+ℹ Fold 19 [2015-W07]: 59 rows | eff: leaves=7 minnode=20 lr=0.02 rds=50 | vol: leaves=15 minnode=10 lr=0.05 rds=44 | 1s
+ℹ Fold 20 [2015-W08]: 49 rows | eff: leaves=7 minnode=10 lr=0.05 rds=16 | vol: leaves=7 minnode=20 lr=0.02 rds=182 | 2s
+ℹ Fold 21 [2015-W09]: 45 rows | eff: leaves=7 minnode=10 lr=0.05 rds=16 | vol: leaves=7 minnode=10 lr=0.05 rds=132 | 2s
+ℹ Fold 22 [2015-W10]: 51 rows | eff: leaves=7 minnode=10 lr=0.05 rds=56 | vol: leaves=7 minnode=10 lr=0.02 rds=187 | 2s
+ℹ Fold 23 [2015-W11]: 55 rows | eff: leaves=15 minnode=10 lr=0.02 rds=75 | vol: leaves=7 minnode=10 lr=0.02 rds=209 | 2s
+ℹ Fold 24 [2015-W12]: 61 rows | eff: leaves=15 minnode=10 lr=0.02 rds=42 | vol: leaves=7 minnode=50 lr=0.05 rds=90 | 2s
+ℹ Fold 25 [2015-W13]: 68 rows | eff: leaves=15 minnode=10 lr=0.05 rds=22 | vol: leaves=7 minnode=100 lr=0.05 rds=83 | 2s
+ℹ Fold 26 [2015-W14]: 64 rows | eff: leaves=31 minnode=10 lr=0.05 rds=19 | vol: leaves=15 minnode=100 lr=0.05 rds=69 | 2s
+ℹ Fold 27 [2015-W15]: 64 rows | eff: leaves=31 minnode=10 lr=0.05 rds=20 | vol: leaves=31 minnode=50 lr=0.05 rds=35 | 2s
+ℹ Fold 28 [2015-W16]: 70 rows | eff: leaves=31 minnode=10 lr=0.02 rds=42 | vol: leaves=63 minnode=20 lr=0.05 rds=38 | 1s
+ℹ Fold 29 [2015-W17]: 68 rows | eff: leaves=7 minnode=10 lr=0.02 rds=44 | vol: leaves=15 minnode=100 lr=0.02 rds=79 | 1s
+ℹ Fold 30 [2016-W01]: 54 rows | eff: leaves=7 minnode=100 lr=0.05 rds=10 | vol: leaves=15 minnode=100 lr=0.02 rds=85 | 1s
+ℹ Fold 31 [2016-W02]: 60 rows | eff: leaves=7 minnode=100 lr=0.05 rds=29 | vol: leaves=15 minnode=100 lr=0.02 rds=76 | 1s
+ℹ Fold 32 [2016-W03]: 62 rows | eff: leaves=7 minnode=50 lr=0.05 rds=10 | vol: leaves=15 minnode=10 lr=0.05 rds=49 | 1s
+ℹ Fold 33 [2016-W04]: 56 rows | eff: leaves=31 minnode=50 lr=0.05 rds=10 | vol: leaves=7 minnode=10 lr=0.05 rds=75 | 2s
+ℹ Fold 34 [2016-W05]: 52 rows | eff: leaves=31 minnode=10 lr=0.05 rds=10 | vol: leaves=7 minnode=20 lr=0.05 rds=120 | 2s
+ℹ Fold 35 [2016-W06]: 57 rows | eff: leaves=15 minnode=100 lr=0.02 rds=25 | vol: leaves=7 minnode=20 lr=0.05 rds=108 | 2s
+ℹ Fold 36 [2016-W07]: 55 rows | eff: leaves=15 minnode=100 lr=0.02 rds=25 | vol: leaves=7 minnode=20 lr=0.05 rds=107 | 2s
+ℹ Fold 37 [2016-W08]: 47 rows | eff: leaves=7 minnode=50 lr=0.05 rds=30 | vol: leaves=7 minnode=20 lr=0.02 rds=308 | 2s
+ℹ Fold 38 [2016-W09]: 47 rows | eff: leaves=15 minnode=20 lr=0.05 rds=10 | vol: leaves=7 minnode=20 lr=0.02 rds=265 | 2s
+ℹ Fold 39 [2016-W10]: 53 rows | eff: leaves=31 minnode=10 lr=0.02 rds=31 | vol: leaves=7 minnode=20 lr=0.05 rds=94 | 2s
+ℹ Fold 40 [2016-W11]: 50 rows | eff: leaves=63 minnode=10 lr=0.05 rds=11 | vol: leaves=15 minnode=10 lr=0.05 rds=55 | 2s
+ℹ Fold 41 [2016-W12]: 59 rows | eff: leaves=31 minnode=20 lr=0.05 rds=15 | vol: leaves=15 minnode=10 lr=0.05 rds=64 | 2s
+ℹ Fold 42 [2016-W13]: 56 rows | eff: leaves=63 minnode=20 lr=0.05 rds=11 | vol: leaves=7 minnode=10 lr=0.02 rds=270 | 3s
+ℹ Fold 43 [2016-W14]: 56 rows | eff: leaves=31 minnode=10 lr=0.05 rds=25 | vol: leaves=7 minnode=50 lr=0.02 rds=319 | 3s
+ℹ Fold 44 [2016-W15]: 61 rows | eff: leaves=63 minnode=10 lr=0.02 rds=65 | vol: leaves=15 minnode=50 lr=0.02 rds=205 | 3s
+ℹ Fold 45 [2016-W16]: 61 rows | eff: leaves=31 minnode=10 lr=0.05 rds=49 | vol: leaves=7 minnode=50 lr=0.02 rds=260 | 3s
+ℹ Fold 46 [2016-W17]: 66 rows | eff: leaves=15 minnode=10 lr=0.05 rds=49 | vol: leaves=7 minnode=50 lr=0.02 rds=270 | 3s
+ℹ Fold 47 [2017-W01]: 63 rows | eff: leaves=15 minnode=20 lr=0.05 rds=40 | vol: leaves=7 minnode=10 lr=0.05 rds=117 | 3s
+ℹ Fold 48 [2017-W02]: 68 rows | eff: leaves=31 minnode=10 lr=0.02 rds=71 | vol: leaves=7 minnode=50 lr=0.05 rds=87 | 3s
+ℹ Fold 49 [2017-W03]: 64 rows | eff: leaves=15 minnode=20 lr=0.05 rds=10 | vol: leaves=7 minnode=20 lr=0.02 rds=182 | 2s
+ℹ Fold 50 [2017-W04]: 67 rows | eff: leaves=63 minnode=10 lr=0.02 rds=49 | vol: leaves=7 minnode=50 lr=0.05 rds=112 | 3s
+ℹ Fold 51 [2017-W05]: 56 rows | eff: leaves=15 minnode=10 lr=0.02 rds=78 | vol: leaves=7 minnode=50 lr=0.05 rds=92 | 3s
+ℹ Fold 52 [2017-W06]: 53 rows | eff: leaves=31 minnode=20 lr=0.05 rds=29 | vol: leaves=7 minnode=20 lr=0.05 rds=121 | 3s
+ℹ Fold 53 [2017-W07]: 60 rows | eff: leaves=63 minnode=10 lr=0.05 rds=22 | vol: leaves=7 minnode=10 lr=0.02 rds=275 | 3s
+ℹ Fold 54 [2017-W08]: 52 rows | eff: leaves=63 minnode=10 lr=0.02 rds=38 | vol: leaves=7 minnode=10 lr=0.02 rds=306 | 3s
+ℹ Fold 55 [2017-W09]: 56 rows | eff: leaves=7 minnode=50 lr=0.05 rds=42 | vol: leaves=7 minnode=10 lr=0.02 rds=243 | 3s
+ℹ Fold 56 [2017-W10]: 60 rows | eff: leaves=7 minnode=50 lr=0.05 rds=42 | vol: leaves=7 minnode=10 lr=0.02 rds=265 | 3s
+ℹ Fold 57 [2017-W11]: 59 rows | eff: leaves=31 minnode=10 lr=0.05 rds=19 | vol: leaves=7 minnode=10 lr=0.05 rds=118 | 3s
+ℹ Fold 58 [2017-W12]: 64 rows | eff: leaves=63 minnode=20 lr=0.05 rds=15 | vol: leaves=7 minnode=10 lr=0.02 rds=215 | 3s
+ℹ Fold 59 [2017-W13]: 64 rows | eff: leaves=7 minnode=100 lr=0.02 rds=80 | vol: leaves=7 minnode=20 lr=0.02 rds=226 | 3s
+ℹ Fold 60 [2017-W14]: 62 rows | eff: leaves=7 minnode=20 lr=0.02 rds=106 | vol: leaves=7 minnode=20 lr=0.02 rds=215 | 3s
+ℹ Fold 61 [2017-W15]: 68 rows | eff: leaves=7 minnode=10 lr=0.02 rds=125 | vol: leaves=7 minnode=20 lr=0.02 rds=227 | 3s
+ℹ Fold 62 [2017-W16]: 63 rows | eff: leaves=7 minnode=10 lr=0.05 rds=40 | vol: leaves=7 minnode=20 lr=0.05 rds=98 | 3s
+ℹ Fold 63 [2017-W17]: 63 rows | eff: leaves=63 minnode=10 lr=0.05 rds=22 | vol: leaves=7 minnode=50 lr=0.02 rds=262 | 3s
+ℹ Fold 64 [2018-W01]: 61 rows | eff: leaves=7 minnode=50 lr=0.02 rds=105 | vol: leaves=7 minnode=20 lr=0.05 rds=87 | 4s
+ℹ Fold 65 [2018-W02]: 64 rows | eff: leaves=7 minnode=10 lr=0.02 rds=174 | vol: leaves=7 minnode=50 lr=0.05 rds=113 | 4s
+ℹ Fold 66 [2018-W03]: 60 rows | eff: leaves=7 minnode=20 lr=0.05 rds=55 | vol: leaves=7 minnode=50 lr=0.05 rds=113 | 3s
+ℹ Fold 67 [2018-W04]: 59 rows | eff: leaves=7 minnode=100 lr=0.05 rds=46 | vol: leaves=31 minnode=10 lr=0.05 rds=82 | 4s
+ℹ Fold 68 [2018-W05]: 56 rows | eff: leaves=7 minnode=100 lr=0.02 rds=136 | vol: leaves=15 minnode=20 lr=0.02 rds=204 | 4s
+ℹ Fold 69 [2018-W06]: 57 rows | eff: leaves=7 minnode=100 lr=0.02 rds=135 | vol: leaves=31 minnode=50 lr=0.02 rds=144 | 4s
+ℹ Fold 70 [2018-W07]: 54 rows | eff: leaves=7 minnode=50 lr=0.05 rds=77 | vol: leaves=31 minnode=50 lr=0.02 rds=210 | 4s
+ℹ Fold 71 [2018-W08]: 49 rows | eff: leaves=7 minnode=50 lr=0.05 rds=77 | vol: leaves=15 minnode=20 lr=0.02 rds=190 | 4s
+ℹ Fold 72 [2018-W09]: 53 rows | eff: leaves=7 minnode=10 lr=0.05 rds=39 | vol: leaves=7 minnode=20 lr=0.02 rds=355 | 4s
+ℹ Fold 73 [2018-W10]: 54 rows | eff: leaves=7 minnode=20 lr=0.05 rds=52 | vol: leaves=7 minnode=10 lr=0.02 rds=351 | 4s
+ℹ Fold 74 [2018-W11]: 46 rows | eff: leaves=7 minnode=20 lr=0.05 rds=53 | vol: leaves=7 minnode=20 lr=0.05 rds=118 | 4s
+ℹ Fold 75 [2018-W12]: 56 rows | eff: leaves=7 minnode=20 lr=0.05 rds=44 | vol: leaves=7 minnode=20 lr=0.05 rds=165 | 4s
+ℹ Fold 76 [2018-W13]: 64 rows | eff: leaves=7 minnode=20 lr=0.05 rds=44 | vol: leaves=7 minnode=20 lr=0.05 rds=165 | 4s
+ℹ Fold 77 [2018-W14]: 60 rows | eff: leaves=7 minnode=20 lr=0.05 rds=51 | vol: leaves=7 minnode=50 lr=0.05 rds=118 | 4s
+ℹ Fold 78 [2018-W15]: 60 rows | eff: leaves=7 minnode=10 lr=0.02 rds=107 | vol: leaves=7 minnode=20 lr=0.02 rds=259 | 4s
+ℹ Fold 79 [2018-W16]: 62 rows | eff: leaves=7 minnode=20 lr=0.02 rds=125 | vol: leaves=7 minnode=10 lr=0.02 rds=270 | 3s
+ℹ Fold 80 [2018-W17]: 64 rows | eff: leaves=7 minnode=10 lr=0.05 rds=35 | vol: leaves=7 minnode=10 lr=0.02 rds=232 | 4s
+ℹ Fold 81 [2019-W01]: 63 rows | eff: leaves=7 minnode=10 lr=0.05 rds=35 | vol: leaves=15 minnode=10 lr=0.05 rds=54 | 3s
+ℹ Fold 82 [2019-W02]: 61 rows | eff: leaves=7 minnode=10 lr=0.02 rds=83 | vol: leaves=7 minnode=10 lr=0.02 rds=220 | 3s
+ℹ Fold 83 [2019-W03]: 59 rows | eff: leaves=7 minnode=20 lr=0.05 rds=81 | vol: leaves=15 minnode=10 lr=0.05 rds=60 | 3s
+ℹ Fold 84 [2019-W04]: 57 rows | eff: leaves=7 minnode=10 lr=0.02 rds=143 | vol: leaves=7 minnode=10 lr=0.05 rds=103 | 3s
+ℹ Fold 85 [2019-W05]: 57 rows | eff: leaves=7 minnode=10 lr=0.02 rds=136 | vol: leaves=7 minnode=10 lr=0.02 rds=264 | 4s
+ℹ Fold 86 [2019-W06]: 50 rows | eff: leaves=7 minnode=20 lr=0.02 rds=95 | vol: leaves=7 minnode=10 lr=0.02 rds=264 | 4s
+ℹ Fold 87 [2019-W07]: 51 rows | eff: leaves=7 minnode=10 lr=0.02 rds=130 | vol: leaves=7 minnode=20 lr=0.02 rds=230 | 4s
+ℹ Fold 88 [2019-W08]: 53 rows | eff: leaves=7 minnode=20 lr=0.05 rds=28 | vol: leaves=7 minnode=20 lr=0.05 rds=160 | 4s
+ℹ Fold 89 [2019-W09]: 49 rows | eff: leaves=7 minnode=10 lr=0.05 rds=52 | vol: leaves=7 minnode=20 lr=0.05 rds=114 | 4s
+ℹ Fold 90 [2019-W10]: 47 rows | eff: leaves=7 minnode=10 lr=0.02 rds=90 | vol: leaves=7 minnode=10 lr=0.05 rds=118 | 4s
+ℹ Fold 91 [2019-W11]: 57 rows | eff: leaves=7 minnode=10 lr=0.02 rds=100 | vol: leaves=7 minnode=10 lr=0.05 rds=140 | 4s
+ℹ Fold 92 [2019-W12]: 55 rows | eff: leaves=7 minnode=10 lr=0.05 rds=34 | vol: leaves=15 minnode=20 lr=0.05 rds=63 | 4s
+ℹ Fold 93 [2019-W13]: 59 rows | eff: leaves=7 minnode=10 lr=0.05 rds=47 | vol: leaves=7 minnode=10 lr=0.05 rds=141 | 4s
+ℹ Fold 94 [2019-W14]: 63 rows | eff: leaves=7 minnode=10 lr=0.05 rds=30 | vol: leaves=7 minnode=20 lr=0.02 rds=228 | 4s
+ℹ Fold 95 [2019-W15]: 61 rows | eff: leaves=31 minnode=10 lr=0.02 rds=40 | vol: leaves=7 minnode=50 lr=0.02 rds=340 | 4s
+ℹ Fold 96 [2019-W16]: 62 rows | eff: leaves=31 minnode=10 lr=0.02 rds=40 | vol: leaves=7 minnode=20 lr=0.02 rds=233 | 4s
+ℹ Fold 97 [2019-W17]: 59 rows | eff: leaves=7 minnode=10 lr=0.05 rds=32 | vol: leaves=7 minnode=20 lr=0.02 rds=273 | 4s
+ℹ Fold 98 [2020-W01]: 69 rows | eff: leaves=7 minnode=10 lr=0.05 rds=33 | vol: leaves=15 minnode=20 lr=0.02 rds=175 | 4s
+ℹ Fold 99 [2020-W02]: 62 rows | eff: leaves=7 minnode=10 lr=0.02 rds=85 | vol: leaves=15 minnode=20 lr=0.05 rds=88 | 5s
+ℹ Fold 100 [2020-W03]: 56 rows | eff: leaves=7 minnode=10 lr=0.02 rds=102 | vol: leaves=15 minnode=20 lr=0.05 rds=119 | 4s
+ℹ Fold 101 [2020-W04]: 60 rows | eff: leaves=7 minnode=10 lr=0.02 rds=97 | vol: leaves=15 minnode=20 lr=0.05 rds=119 | 4s
+ℹ Fold 102 [2020-W05]: 53 rows | eff: leaves=7 minnode=50 lr=0.02 rds=75 | vol: leaves=15 minnode=20 lr=0.02 rds=233 | 5s
+ℹ Fold 103 [2020-W06]: 59 rows | eff: leaves=15 minnode=100 lr=0.05 rds=16 | vol: leaves=7 minnode=20 lr=0.05 rds=136 | 5s
+ℹ Fold 104 [2020-W07]: 52 rows | eff: leaves=15 minnode=50 lr=0.05 rds=19 | vol: leaves=7 minnode=50 lr=0.02 rds=291 | 5s
+ℹ Fold 105 [2020-W08]: 55 rows | eff: leaves=15 minnode=20 lr=0.02 rds=42 | vol: leaves=7 minnode=50 lr=0.05 rds=123 | 5s
+ℹ Fold 106 [2020-W09]: 59 rows | eff: leaves=15 minnode=20 lr=0.02 rds=42 | vol: leaves=7 minnode=50 lr=0.05 rds=104 | 5s
+ℹ Fold 107 [2020-W10]: 52 rows | eff: leaves=63 minnode=20 lr=0.05 rds=10 | vol: leaves=7 minnode=20 lr=0.05 rds=106 | 5s
+ℹ Fold 108 [2020-W11]: 56 rows | eff: leaves=7 minnode=10 lr=0.02 rds=65 | vol: leaves=7 minnode=50 lr=0.02 rds=234 | 5s
+ℹ Fold 109 [2020-W12]: 62 rows | eff: leaves=7 minnode=20 lr=0.02 rds=127 | vol: leaves=15 minnode=20 lr=0.05 rds=54 | 4s
+ℹ Fold 110 [2020-W13]: 60 rows | eff: leaves=7 minnode=10 lr=0.05 rds=52 | vol: leaves=7 minnode=50 lr=0.05 rds=75 | 4s
+ℹ Fold 111 [2020-W14]: 65 rows | eff: leaves=7 minnode=10 lr=0.05 rds=52 | vol: leaves=7 minnode=50 lr=0.05 rds=75 | 4s
+ℹ Fold 112 [2020-W15]: 54 rows | eff: leaves=7 minnode=10 lr=0.02 rds=66 | vol: leaves=7 minnode=50 lr=0.05 rds=75 | 4s
+ℹ Fold 113 [2020-W16]: 55 rows | eff: leaves=15 minnode=50 lr=0.05 rds=13 | vol: leaves=7 minnode=50 lr=0.02 rds=180 | 4s
+ℹ Fold 114 [2020-W17]: 58 rows | eff: leaves=7 minnode=10 lr=0.02 rds=145 | vol: leaves=15 minnode=50 lr=0.02 rds=144 | 4s
+ℹ Fold 115 [2021-W01]: 59 rows | eff: leaves=63 minnode=100 lr=0.05 rds=29 | vol: leaves=15 minnode=20 lr=0.05 rds=53 | 4s
+ℹ Fold 116 [2021-W02]: 58 rows | eff: leaves=7 minnode=100 lr=0.05 rds=38 | vol: leaves=15 minnode=20 lr=0.05 rds=53 | 4s
+ℹ Fold 117 [2021-W03]: 58 rows | eff: leaves=15 minnode=10 lr=0.05 rds=50 | vol: leaves=15 minnode=50 lr=0.05 rds=51 | 4s
+ℹ Fold 118 [2021-W04]: 61 rows | eff: leaves=7 minnode=10 lr=0.02 rds=145 | vol: leaves=15 minnode=10 lr=0.02 rds=120 | 5s
+ℹ Fold 119 [2021-W05]: 64 rows | eff: leaves=7 minnode=20 lr=0.05 rds=79 | vol: leaves=15 minnode=100 lr=0.02 rds=156 | 5s
+ℹ Fold 120 [2021-W06]: 51 rows | eff: leaves=7 minnode=20 lr=0.05 rds=63 | vol: leaves=15 minnode=50 lr=0.05 rds=42 | 5s
+ℹ Fold 121 [2021-W07]: 50 rows | eff: leaves=7 minnode=100 lr=0.05 rds=53 | vol: leaves=15 minnode=50 lr=0.05 rds=48 | 5s
+ℹ Fold 122 [2021-W08]: 58 rows | eff: leaves=7 minnode=100 lr=0.05 rds=24 | vol: leaves=15 minnode=50 lr=0.05 rds=49 | 4s
+ℹ Fold 123 [2021-W09]: 54 rows | eff: leaves=7 minnode=100 lr=0.05 rds=47 | vol: leaves=31 minnode=100 lr=0.02 rds=128 | 5s
+ℹ Fold 124 [2021-W10]: 56 rows | eff: leaves=31 minnode=100 lr=0.05 rds=12 | vol: leaves=15 minnode=100 lr=0.02 rds=125 | 4s
+ℹ Fold 125 [2021-W11]: 53 rows | eff: leaves=7 minnode=100 lr=0.05 rds=34 | vol: leaves=15 minnode=50 lr=0.02 rds=138 | 4s
+ℹ Fold 126 [2021-W12]: 57 rows | eff: leaves=7 minnode=100 lr=0.05 rds=33 | vol: leaves=15 minnode=50 lr=0.02 rds=138 | 4s
+ℹ Fold 127 [2021-W13]: 50 rows | eff: leaves=15 minnode=20 lr=0.05 rds=27 | vol: leaves=15 minnode=10 lr=0.02 rds=110 | 4s
+ℹ Fold 128 [2021-W14]: 51 rows | eff: leaves=15 minnode=10 lr=0.02 rds=104 | vol: leaves=15 minnode=10 lr=0.05 rds=54 | 4s
+ℹ Fold 129 [2021-W15]: 59 rows | eff: leaves=63 minnode=50 lr=0.05 rds=19 | vol: leaves=31 minnode=10 lr=0.02 rds=125 | 5s
+ℹ Fold 130 [2021-W16]: 62 rows | eff: leaves=7 minnode=50 lr=0.02 rds=90 | vol: leaves=15 minnode=20 lr=0.02 rds=125 | 5s
+ℹ Fold 131 [2021-W17]: 61 rows | eff: leaves=7 minnode=20 lr=0.05 rds=41 | vol: leaves=15 minnode=10 lr=0.02 rds=127 | 4s
+ℹ Fold 132 [2021-W18]: 61 rows | eff: leaves=7 minnode=50 lr=0.05 rds=61 | vol: leaves=15 minnode=10 lr=0.02 rds=115 | 4s
+ℹ Fold 133 [2022-W01]: 61 rows | eff: leaves=15 minnode=10 lr=0.05 rds=25 | vol: leaves=15 minnode=10 lr=0.02 rds=140 | 5s
+ℹ Fold 134 [2022-W02]: 60 rows | eff: leaves=7 minnode=20 lr=0.05 rds=20 | vol: leaves=15 minnode=10 lr=0.02 rds=140 | 5s
+ℹ Fold 135 [2022-W03]: 61 rows | eff: leaves=7 minnode=20 lr=0.05 rds=35 | vol: leaves=31 minnode=10 lr=0.02 rds=136 | 5s
+ℹ Fold 136 [2022-W04]: 57 rows | eff: leaves=7 minnode=20 lr=0.05 rds=33 | vol: leaves=15 minnode=10 lr=0.02 rds=156 | 5s
+ℹ Fold 137 [2022-W05]: 61 rows | eff: leaves=7 minnode=100 lr=0.05 rds=24 | vol: leaves=15 minnode=10 lr=0.05 rds=54 | 5s
+ℹ Fold 138 [2022-W06]: 49 rows | eff: leaves=7 minnode=100 lr=0.05 rds=29 | vol: leaves=7 minnode=10 lr=0.02 rds=270 | 5s
+ℹ Fold 139 [2022-W07]: 52 rows | eff: leaves=7 minnode=50 lr=0.02 rds=110 | vol: leaves=15 minnode=10 lr=0.02 rds=144 | 5s
+ℹ Fold 140 [2022-W08]: 57 rows | eff: leaves=7 minnode=50 lr=0.02 rds=81 | vol: leaves=15 minnode=10 lr=0.05 rds=75 | 5s
+ℹ Fold 141 [2022-W09]: 48 rows | eff: leaves=15 minnode=100 lr=0.05 rds=23 | vol: leaves=15 minnode=20 lr=0.02 rds=180 | 5s
+ℹ Fold 142 [2022-W10]: 48 rows | eff: leaves=15 minnode=100 lr=0.02 rds=58 | vol: leaves=15 minnode=10 lr=0.02 rds=180 | 5s
+ℹ Fold 143 [2022-W11]: 53 rows | eff: leaves=31 minnode=50 lr=0.05 rds=11 | vol: leaves=15 minnode=20 lr=0.05 rds=77 | 5s
+ℹ Fold 144 [2022-W12]: 61 rows | eff: leaves=7 minnode=50 lr=0.05 rds=32 | vol: leaves=7 minnode=10 lr=0.05 rds=130 | 5s
+ℹ Fold 145 [2022-W13]: 53 rows | eff: leaves=31 minnode=10 lr=0.05 rds=18 | vol: leaves=15 minnode=10 lr=0.02 rds=200 | 5s
+ℹ Fold 146 [2022-W14]: 49 rows | eff: leaves=31 minnode=10 lr=0.05 rds=18 | vol: leaves=15 minnode=20 lr=0.02 rds=185 | 5s
+ℹ Fold 147 [2022-W15]: 56 rows | eff: leaves=31 minnode=20 lr=0.05 rds=14 | vol: leaves=15 minnode=20 lr=0.05 rds=74 | 5s
+ℹ Fold 148 [2022-W16]: 60 rows | eff: leaves=63 minnode=20 lr=0.05 rds=11 | vol: leaves=7 minnode=10 lr=0.05 rds=126 | 6s
+ℹ Fold 149 [2022-W17]: 61 rows | eff: leaves=15 minnode=100 lr=0.05 rds=17 | vol: leaves=7 minnode=20 lr=0.02 rds=260 | 6s
+ℹ Fold 150 [2022-W18]: 66 rows | eff: leaves=15 minnode=100 lr=0.02 rds=30 | vol: leaves=15 minnode=10 lr=0.02 rds=225 | 5s
+ℹ Fold 151 [2023-W01]: 58 rows | eff: leaves=15 minnode=100 lr=0.02 rds=34 | vol: leaves=7 minnode=20 lr=0.02 rds=217 | 5s
+ℹ Fold 152 [2023-W02]: 55 rows | eff: leaves=7 minnode=50 lr=0.05 rds=22 | vol: leaves=15 minnode=20 lr=0.02 rds=157 | 5s
+ℹ Fold 153 [2023-W03]: 62 rows | eff: leaves=31 minnode=50 lr=0.05 rds=15 | vol: leaves=15 minnode=20 lr=0.02 rds=200 | 6s
+ℹ Fold 154 [2023-W04]: 59 rows | eff: leaves=7 minnode=50 lr=0.02 rds=125 | vol: leaves=15 minnode=20 lr=0.05 rds=64 | 6s
+ℹ Fold 155 [2023-W05]: 51 rows | eff: leaves=7 minnode=20 lr=0.02 rds=66 | vol: leaves=7 minnode=10 lr=0.05 rds=175 | 6s
+ℹ Fold 156 [2023-W06]: 49 rows | eff: leaves=7 minnode=20 lr=0.02 rds=66 | vol: leaves=7 minnode=10 lr=0.05 rds=175 | 6s
+ℹ Fold 157 [2023-W07]: 46 rows | eff: leaves=15 minnode=50 lr=0.05 rds=15 | vol: leaves=15 minnode=10 lr=0.02 rds=155 | 5s
+ℹ Fold 158 [2023-W08]: 60 rows | eff: leaves=7 minnode=20 lr=0.02 rds=77 | vol: leaves=7 minnode=20 lr=0.02 rds=301 | 6s
+ℹ Fold 159 [2023-W09]: 48 rows | eff: leaves=31 minnode=50 lr=0.02 rds=28 | vol: leaves=15 minnode=50 lr=0.02 rds=180 | 6s
+ℹ Fold 160 [2023-W10]: 50 rows | eff: leaves=15 minnode=100 lr=0.02 rds=36 | vol: leaves=31 minnode=10 lr=0.02 rds=125 | 5s
+ℹ Fold 161 [2023-W11]: 52 rows | eff: leaves=15 minnode=100 lr=0.02 rds=36 | vol: leaves=31 minnode=10 lr=0.02 rds=125 | 5s
+ℹ Fold 162 [2023-W12]: 57 rows | eff: leaves=31 minnode=50 lr=0.02 rds=40 | vol: leaves=31 minnode=20 lr=0.02 rds=124 | 5s
+ℹ Fold 163 [2023-W13]: 46 rows | eff: leaves=63 minnode=20 lr=0.05 rds=10 | vol: leaves=15 minnode=50 lr=0.02 rds=158 | 5s
+ℹ Fold 164 [2023-W14]: 54 rows | eff: leaves=15 minnode=100 lr=0.05 rds=17 | vol: leaves=15 minnode=50 lr=0.05 rds=56 | 5s
+ℹ Fold 165 [2023-W15]: 67 rows | eff: leaves=31 minnode=20 lr=0.05 rds=22 | vol: leaves=15 minnode=50 lr=0.05 rds=70 | 6s
+ℹ Fold 166 [2023-W16]: 58 rows | eff: leaves=31 minnode=20 lr=0.05 rds=20 | vol: leaves=15 minnode=50 lr=0.05 rds=70 | 6s
+ℹ Fold 167 [2023-W17]: 59 rows | eff: leaves=7 minnode=100 lr=0.05 rds=24 | vol: leaves=15 minnode=50 lr=0.05 rds=84 | 6s
+ℹ Fold 168 [2023-W18]: 56 rows | eff: leaves=7 minnode=100 lr=0.02 rds=95 | vol: leaves=31 minnode=20 lr=0.05 rds=70 | 6s
+ℹ Fold 169 [2024-W01]: 53 rows | eff: leaves=31 minnode=100 lr=0.02 rds=44 | vol: leaves=15 minnode=10 lr=0.05 rds=91 | 7s
+ℹ Fold 170 [2024-W02]: 58 rows | eff: leaves=63 minnode=10 lr=0.02 rds=19 | vol: leaves=7 minnode=10 lr=0.02 rds=380 | 7s
+ℹ Fold 171 [2024-W03]: 57 rows | eff: leaves=63 minnode=10 lr=0.02 rds=19 | vol: leaves=7 minnode=10 lr=0.02 rds=380 | 7s
+ℹ Fold 172 [2024-W04]: 64 rows | eff: leaves=15 minnode=10 lr=0.05 rds=20 | vol: leaves=15 minnode=50 lr=0.05 rds=90 | 6s
+ℹ Fold 173 [2024-W05]: 53 rows | eff: leaves=63 minnode=10 lr=0.02 rds=32 | vol: leaves=15 minnode=50 lr=0.05 rds=84 | 6s
+ℹ Fold 174 [2024-W06]: 55 rows | eff: leaves=7 minnode=100 lr=0.05 rds=24 | vol: leaves=15 minnode=50 lr=0.02 rds=175 | 6s
+ℹ Fold 175 [2024-W07]: 56 rows | eff: leaves=7 minnode=20 lr=0.05 rds=20 | vol: leaves=31 minnode=20 lr=0.02 rds=190 | 7s
+ℹ Fold 176 [2024-W08]: 55 rows | eff: leaves=7 minnode=20 lr=0.05 rds=20 | vol: leaves=31 minnode=20 lr=0.02 rds=190 | 6s
+ℹ Fold 177 [2024-W09]: 59 rows | eff: leaves=7 minnode=20 lr=0.02 rds=66 | vol: leaves=31 minnode=20 lr=0.02 rds=149 | 6s
+ℹ Fold 178 [2024-W10]: 44 rows | eff: leaves=31 minnode=20 lr=0.02 rds=28 | vol: leaves=15 minnode=50 lr=0.05 rds=94 | 7s
+ℹ Fold 179 [2024-W11]: 49 rows | eff: leaves=63 minnode=20 lr=0.05 rds=18 | vol: leaves=7 minnode=50 lr=0.02 rds=337 | 7s
+ℹ Fold 180 [2024-W12]: 43 rows | eff: leaves=31 minnode=20 lr=0.02 rds=35 | vol: leaves=7 minnode=20 lr=0.02 rds=340 | 6s
+ℹ Fold 181 [2024-W13]: 58 rows | eff: leaves=31 minnode=20 lr=0.02 rds=35 | vol: leaves=7 minnode=20 lr=0.02 rds=340 | 7s
+ℹ Fold 182 [2024-W14]: 46 rows | eff: leaves=15 minnode=50 lr=0.05 rds=10 | vol: leaves=31 minnode=20 lr=0.05 rds=70 | 6s
+ℹ Fold 183 [2024-W15]: 60 rows | eff: leaves=63 minnode=20 lr=0.05 rds=10 | vol: leaves=7 minnode=50 lr=0.02 rds=320 | 7s
+ℹ Fold 184 [2024-W16]: 55 rows | eff: leaves=31 minnode=10 lr=0.02 rds=42 | vol: leaves=15 minnode=50 lr=0.05 rds=109 | 7s
+ℹ Fold 185 [2024-W17]: 57 rows | eff: leaves=7 minnode=100 lr=0.05 rds=29 | vol: leaves=7 minnode=50 lr=0.05 rds=183 | 7s
+ℹ Fold 186 [2024-W18]: 58 rows | eff: leaves=63 minnode=10 lr=0.05 rds=10 | vol: leaves=15 minnode=50 lr=0.02 rds=204 | 7s
+ℹ Fold 187 [2025-W01]: 51 rows | eff: leaves=7 minnode=50 lr=0.02 rds=100 | vol: leaves=7 minnode=100 lr=0.02 rds=325 | 8s
+ℹ Fold 188 [2025-W02]: 58 rows | eff: leaves=31 minnode=10 lr=0.02 rds=46 | vol: leaves=7 minnode=100 lr=0.05 rds=151 | 7s
+ℹ Fold 189 [2025-W03]: 61 rows | eff: leaves=31 minnode=20 lr=0.02 rds=28 | vol: leaves=7 minnode=100 lr=0.02 rds=348 | 7s
+ℹ Fold 190 [2025-W04]: 57 rows | eff: leaves=15 minnode=10 lr=0.05 rds=19 | vol: leaves=7 minnode=20 lr=0.05 rds=196 | 7s
+ℹ Fold 191 [2025-W05]: 53 rows | eff: leaves=15 minnode=10 lr=0.05 rds=19 | vol: leaves=7 minnode=20 lr=0.05 rds=196 | 7s
+ℹ Fold 192 [2025-W06]: 52 rows | eff: leaves=31 minnode=50 lr=0.05 rds=10 | vol: leaves=15 minnode=20 lr=0.05 rds=98 | 7s
+ℹ Fold 193 [2025-W07]: 52 rows | eff: leaves=7 minnode=10 lr=0.05 rds=19 | vol: leaves=15 minnode=50 lr=0.05 rds=79 | 7s
+ℹ Fold 194 [2025-W08]: 49 rows | eff: leaves=31 minnode=20 lr=0.02 rds=28 | vol: leaves=7 minnode=100 lr=0.05 rds=143 | 7s
+ℹ Fold 195 [2025-W09]: 47 rows | eff: leaves=31 minnode=20 lr=0.02 rds=40 | vol: leaves=15 minnode=50 lr=0.05 rds=101 | 7s
+ℹ Fold 196 [2025-W10]: 47 rows | eff: leaves=31 minnode=20 lr=0.02 rds=40 | vol: leaves=7 minnode=100 lr=0.05 rds=210 | 7s
+ℹ Fold 197 [2025-W11]: 54 rows | eff: leaves=7 minnode=100 lr=0.02 rds=40 | vol: leaves=15 minnode=50 lr=0.05 rds=94 | 7s
+ℹ Fold 198 [2025-W12]: 50 rows | eff: leaves=63 minnode=20 lr=0.02 rds=17 | vol: leaves=7 minnode=20 lr=0.05 rds=158 | 7s
+ℹ Fold 199 [2025-W13]: 58 rows | eff: leaves=7 minnode=100 lr=0.02 rds=54 | vol: leaves=7 minnode=20 lr=0.05 rds=166 | 8s
+ℹ Fold 200 [2025-W14]: 51 rows | eff: leaves=7 minnode=50 lr=0.02 rds=79 | vol: leaves=7 minnode=20 lr=0.02 rds=416 | 8s
+ℹ Fold 201 [2025-W15]: 58 rows | eff: leaves=7 minnode=50 lr=0.02 rds=79 | vol: leaves=7 minnode=20 lr=0.02 rds=416 | 8s
+ℹ Fold 202 [2025-W16]: 60 rows | eff: leaves=7 minnode=20 lr=0.02 rds=92 | vol: leaves=7 minnode=50 lr=0.05 rds=180 | 8s
+ℹ Fold 203 [2025-W17]: 55 rows | eff: leaves=7 minnode=20 lr=0.05 rds=38 | vol: leaves=15 minnode=10 lr=0.05 rds=88 | 7s
+ℹ Fold 204 [2025-W18]: 60 rows | eff: leaves=7 minnode=10 lr=0.02 rds=67 | vol: leaves=7 minnode=50 lr=0.05 rds=197 | 8s
+
+── Harness Integrity Report ────────────────────────────────────────────────────
+✔ All 204 folds completed
+✔ Row count: 11621 / 11621
+✔ Zero NA predictions
+✔ Inner tuning: all 32 combos per component per fold scored on inner holdout only
+✔ Outer test: each fold scored exactly once after param selection
+ℹ alpha_fold range [0.2, 0.832] | median 0.53
+
+── Selected Hyperparameters (tuning audit) ─────────────────────────────────────
+# A tibble: 204 × 11
+     fold eff_num_leaves eff_lr eff_min_node eff_rounds eff_inner_rmse
+    <int>          <int>  <dbl>        <int>      <int>          <dbl>
+  1     1              7   0.02           50         95          0.314
+  2     2              7   0.05           10          8          0.369
+  3     3             15   0.05           10          6          0.289
+  4     4              7   0.05           20         85          0.291
+  5     5              7   0.05          100         10          0.329
+  6     6              7   0.02          100         40          0.336
+  7     7              7   0.02           20         10          0.340
+  8     8             15   0.05           20          3          0.308
+  9     9              7   0.02          100        115          0.287
+ 10    10              7   0.05          100          5          0.280
+ 11    11              7   0.02           10         19          0.278
+ 12    12              7   0.02          100         65          0.282
+ 13    13             15   0.05           50          5          0.287
+ 14    14             31   0.05           20          9          0.282
+ 15    15             31   0.02           10         45          0.268
+ 16    16              7   0.02           10         36          0.276
+ 17    17              7   0.05           20          3          0.294
+ 18    18             15   0.02           20         24          0.322
+ 19    19              7   0.02           20         50          0.331
+ 20    20              7   0.05           10         16          0.337
+ 21    21              7   0.05           10         16          0.320
+ 22    22              7   0.05           10         56          0.318
+ 23    23             15   0.02           10         75          0.301
+ 24    24             15   0.02           10         42          0.320
+ 25    25             15   0.05           10         22          0.320
+ 26    26             31   0.05           10         19          0.313
+ 27    27             31   0.05           10         20          0.324
+ 28    28             31   0.02           10         42          0.338
+ 29    29              7   0.02           10         44          0.335
+ 30    30              7   0.05          100          6          0.334
+ 31    31              7   0.05          100         29          0.334
+ 32    32              7   0.05           50          7          0.329
+ 33    33             31   0.05           50          2          0.336
+ 34    34             31   0.05           10          5          0.334
+ 35    35             15   0.02          100         25          0.317
+ 36    36             15   0.02          100         25          0.315
+ 37    37              7   0.05           50         30          0.327
+ 38    38             15   0.05           20         10          0.312
+ 39    39             31   0.02           10         31          0.306
+ 40    40             63   0.05           10         11          0.300
+ 41    41             31   0.05           20         15          0.301
+ 42    42             63   0.05           20         11          0.294
+ 43    43             31   0.05           10         25          0.302
+ 44    44             63   0.02           10         65          0.298
+ 45    45             31   0.05           10         49          0.300
+ 46    46             15   0.05           10         49          0.299
+ 47    47             15   0.05           20         40          0.306
+ 48    48             31   0.02           10         71          0.303
+ 49    49             15   0.05           20          6          0.316
+ 50    50             63   0.02           10         49          0.328
+ 51    51             15   0.02           10         78          0.330
+ 52    52             31   0.05           20         29          0.327
+ 53    53             63   0.05           10         22          0.330
+ 54    54             63   0.02           10         38          0.324
+ 55    55              7   0.05           50         42          0.326
+ 56    56              7   0.05           50         42          0.325
+ 57    57             31   0.05           10         19          0.329
+ 58    58             63   0.05           20         15          0.330
+ 59    59              7   0.02          100         80          0.327
+ 60    60              7   0.02           20        106          0.338
+ 61    61              7   0.02           10        125          0.337
+ 62    62              7   0.05           10         40          0.329
+ 63    63             63   0.05           10         22          0.328
+ 64    64              7   0.02           50        105          0.32 
+ 65    65              7   0.02           10        174          0.324
+ 66    66              7   0.05           20         55          0.324
+ 67    67              7   0.05          100         46          0.323
+ 68    68              7   0.02          100        136          0.327
+ 69    69              7   0.02          100        135          0.333
+ 70    70              7   0.05           50         77          0.334
+ 71    71              7   0.05           50         77          0.331
+ 72    72              7   0.05           10         39          0.325
+ 73    73              7   0.05           20         52          0.327
+ 74    74              7   0.05           20         53          0.327
+ 75    75              7   0.05           20         44          0.319
+ 76    76              7   0.05           20         44          0.319
+ 77    77              7   0.05           20         51          0.321
+ 78    78              7   0.02           10        107          0.321
+ 79    79              7   0.02           20        125          0.319
+ 80    80              7   0.05           10         35          0.324
+ 81    81              7   0.05           10         35          0.324
+ 82    82              7   0.02           10         83          0.327
+ 83    83              7   0.05           20         81          0.328
+ 84    84              7   0.02           10        143          0.330
+ 85    85              7   0.02           10        136          0.326
+ 86    86              7   0.02           20         95          0.325
+ 87    87              7   0.02           10        130          0.324
+ 88    88              7   0.05           20         28          0.322
+ 89    89              7   0.05           10         52          0.328
+ 90    90              7   0.02           10         90          0.331
+ 91    91              7   0.02           10        100          0.330
+ 92    92              7   0.05           10         34          0.328
+ 93    93              7   0.05           10         47          0.323
+ 94    94              7   0.05           10         30          0.324
+ 95    95             31   0.02           10         40          0.327
+ 96    96             31   0.02           10         40          0.329
+ 97    97              7   0.05           10         32          0.329
+ 98    98              7   0.05           10         33          0.328
+ 99    99              7   0.02           10         85          0.327
+100   100              7   0.02           10        102          0.324
+101   101              7   0.02           10         97          0.321
+102   102              7   0.02           50         75          0.321
+103   103             15   0.05          100         16          0.317
+104   104             15   0.05           50         19          0.317
+105   105             15   0.02           20         42          0.316
+106   106             15   0.02           20         42          0.314
+107   107             63   0.05           20          9          0.320
+108   108              7   0.02           10         65          0.322
+109   109              7   0.02           20        127          0.319
+110   110              7   0.05           10         52          0.328
+111   111              7   0.05           10         52          0.329
+112   112              7   0.02           10         66          0.328
+113   113             15   0.05           50         13          0.326
+114   114              7   0.02           10        145          0.325
+115   115             63   0.05          100         29          0.326
+116   116              7   0.05          100         38          0.322
+117   117             15   0.05           10         50          0.323
+118   118              7   0.02           10        145          0.323
+119   119              7   0.05           20         79          0.322
+120   120              7   0.05           20         63          0.319
+121   121              7   0.05          100         53          0.319
+122   122              7   0.05          100         24          0.320
+123   123              7   0.05          100         47          0.321
+124   124             31   0.05          100         12          0.322
+125   125              7   0.05          100         34          0.323
+126   126              7   0.05          100         33          0.320
+127   127             15   0.05           20         27          0.320
+128   128             15   0.02           10        104          0.324
+129   129             63   0.05           50         19          0.323
+130   130              7   0.02           50         90          0.323
+131   131              7   0.05           20         41          0.326
+132   132              7   0.05           50         61          0.323
+133   133             15   0.05           10         25          0.325
+134   134              7   0.05           20         20          0.322
+135   135              7   0.05           20         35          0.320
+136   136              7   0.05           20         33          0.319
+137   137              7   0.05          100         24          0.318
+138   138              7   0.05          100         29          0.311
+139   139              7   0.02           50        110          0.310
+140   140              7   0.02           50         81          0.307
+141   141             15   0.05          100         23          0.309
+142   142             15   0.02          100         58          0.309
+143   143             31   0.05           50         11          0.308
+144   144              7   0.05           50         32          0.307
+145   145             31   0.05           10         18          0.31 
+146   146             31   0.05           10         18          0.310
+147   147             31   0.05           20         14          0.313
+148   148             63   0.05           20         11          0.316
+149   149             15   0.05          100         17          0.314
+150   150             15   0.02          100         30          0.316
+151   151             15   0.02          100         34          0.317
+152   152              7   0.05           50         22          0.317
+153   153             31   0.05           50         15          0.318
+154   154              7   0.02           50        125          0.319
+155   155              7   0.02           20         66          0.319
+156   156              7   0.02           20         66          0.322
+157   157             15   0.05           50         15          0.320
+158   158              7   0.02           20         77          0.320
+159   159             31   0.02           50         28          0.320
+160   160             15   0.02          100         36          0.318
+161   161             15   0.02          100         36          0.317
+162   162             31   0.02           50         40          0.315
+163   163             63   0.05           20          8          0.315
+164   164             15   0.05          100         17          0.310
+165   165             31   0.05           20         22          0.309
+166   166             31   0.05           20         20          0.312
+167   167              7   0.05          100         24          0.310
+168   168              7   0.02          100         95          0.312
+169   169             31   0.02          100         44          0.313
+170   170             63   0.02           10         19          0.313
+171   171             63   0.02           10         19          0.313
+172   172             15   0.05           10         20          0.315
+173   173             63   0.02           10         32          0.319
+174   174              7   0.05          100         24          0.319
+175   175              7   0.05           20         20          0.320
+176   176              7   0.05           20         20          0.323
+177   177              7   0.02           20         66          0.320
+178   178             31   0.02           20         28          0.321
+179   179             63   0.05           20         18          0.321
+180   180             31   0.02           20         35          0.321
+181   181             31   0.02           20         35          0.322
+182   182             15   0.05           50         10          0.322
+183   183             63   0.05           20          9          0.322
+184   184             31   0.02           10         42          0.323
+185   185              7   0.05          100         29          0.321
+186   186             63   0.05           10          8          0.320
+187   187              7   0.02           50        100          0.321
+188   188             31   0.02           10         46          0.319
+189   189             31   0.02           20         28          0.319
+190   190             15   0.05           10         19          0.319
+191   191             15   0.05           10         19          0.317
+192   192             31   0.05           50          9          0.316
+193   193              7   0.05           10         19          0.314
+194   194             31   0.02           20         28          0.315
+195   195             31   0.02           20         40          0.315
+196   196             31   0.02           20         40          0.315
+197   197              7   0.02          100         40          0.316
+198   198             63   0.02           20         17          0.315
+199   199              7   0.02          100         54          0.318
+200   200              7   0.02           50         79          0.316
+201   201              7   0.02           50         79          0.316
+202   202              7   0.02           20         92          0.317
+203   203              7   0.05           20         38          0.317
+204   204              7   0.02           10         67          0.319
+# ℹ 5 more variables: vol_num_leaves <int>, vol_lr <dbl>, vol_min_node <int>,
+#   vol_rounds <int>, vol_inner_rmse <dbl>
+
+── Summary across 31 folds ──
+
+ℹ --- EFFICIENCY ---
+ℹ   num_leaves: mode=7 | counts: 7=111 | 15=36 | 31=37 | 63=20
+ℹ   min_data_in_leaf: mode=10 | counts: 10=75 | 20=59 | 50=31 | 100=39
+ℹ   lr: counts: 0.02=89 | 0.05=115
+ℹ   rounds (refit): median=360 | range [20, 1740]
+ℹ --- VOLUME ---
+ℹ   num_leaves: mode=7 | counts: 7=112 | 15=76 | 31=15 | 63=1
+ℹ   min_data_in_leaf: mode=20 | counts: 10=63 | 20=68 | 50=53 | 100=20
+ℹ   lr: counts: 0.02=104 | 0.05=100
+ℹ   rounds (refit): median=1360 | range [330, 4160]
+
+── Default (3A) vs data-chosen (3A-v2) ──
+
+ℹ 3A used: num_leaves=31, min_data_in_leaf=20, lr=0.05, rounds=200 (fixed)
+ℹ 3A-v2 efficiency modal: leaves=7 | minnode=10 | lr_mode=0.05
+ℹ 3A-v2 volume modal:     leaves=7 | minnode=20 | lr_mode=0.02
+
+── 3A-v2 Pooled Coverage (all 11621 test rows) ─────────────────────────────────
+# A tibble: 9 × 6
+  component  stratum nominal empirical     delta sharpness
+  <chr>      <chr>     <dbl>     <dbl>     <dbl>     <dbl>
+1 efficiency pooled      0.5     0.501  0.000559     0.360
+2 efficiency pooled      0.8     0.796 -0.00411      0.726
+3 efficiency pooled      0.9     0.899 -0.00128      0.991
+4 volume     pooled      0.5     0.500 -0.000129     7.25 
+5 volume     pooled      0.8     0.799 -0.00102     13.5  
+6 volume     pooled      0.9     0.898 -0.00163     17.9  
+7 combined   pooled      0.5     0.499 -0.000817     4.65 
+8 combined   pooled      0.8     0.796 -0.00351      9.23 
+9 combined   pooled      0.9     0.898 -0.00197     12.5  
+
+── 3A-v2 Low-Usage Bucket (opp 5-8) ────────────────────────────────────────────
+ℹ Low-usage rows: 3049
+# A tibble: 9 × 6
+  component  stratum     nominal empirical    delta sharpness
+  <chr>      <chr>         <dbl>     <dbl>    <dbl>     <dbl>
+1 efficiency low_opp_5_8     0.5     0.383 -0.117       0.360
+2 efficiency low_opp_5_8     0.8     0.670 -0.130       0.726
+3 efficiency low_opp_5_8     0.9     0.801 -0.0994      0.992
+4 volume     low_opp_5_8     0.5     0.379 -0.121       7.25 
+5 volume     low_opp_5_8     0.8     0.791 -0.00859    13.5  
+6 volume     low_opp_5_8     0.9     0.906  0.00587    17.9  
+7 combined   low_opp_5_8     0.5     0.503  0.00312     3.15 
+8 combined   low_opp_5_8     0.8     0.792 -0.00761     6.23 
+9 combined   low_opp_5_8     0.9     0.889 -0.0109      8.43 
+
+── Stratified combined coverage at 80% (sharpness honesty check) ──
+
+# A tibble: 3 × 6
+  stratum         n empirical     delta sharpness delta_pp
+  <fct>       <int>     <dbl>     <dbl>     <dbl> <chr>   
+1 low  (5-8)   3049     0.792 -0.00761       6.23 -0.8pp  
+2 mid  (9-13)  3009     0.800 -0.000399      8.26 -0.0pp  
+3 high (14+)   5563     0.797 -0.00295      11.4  -0.3pp  
+── Save arm B outputs ──────────────────────────────────────────────────────────
+✔ output/11c_rb_injury_* written
+
+── Frozen rubric: ARM A (shipped) vs ARM B (+injury states) ────────────────────
+
+── 80% coverage + width (delta pp / width) -- veto: low-usage |delta| > 10pp ──
+
+# A tibble: 6 × 10
+  arm       component stratum      n empirical    delta sharpness delta_pp width
+  <chr>     <chr>     <chr>    <int>     <dbl>    <dbl>     <dbl> <chr>    <dbl>
+1 A_shipped combined  pooled   11621     0.797 -3.17e-3      9.24 -0.3pp    9.24
+2 A_shipped combined  low_usa…  3049     0.792 -7.61e-3      6.23 -0.8pp    6.23
+3 A_shipped volume    pooled   11621     0.800 -2.41e-4     13.6  -0.0pp   13.6 
+4 B_injury  combined  pooled   11621     0.796 -3.51e-3      9.23 -0.4pp    9.23
+5 B_injury  combined  low_usa…  3049     0.792 -7.61e-3      6.23 -0.8pp    6.23
+6 B_injury  volume    pooled   11621     0.799 -1.02e-3     13.5  -0.1pp   13.5 
+# ℹ 1 more variable: veto <chr>
+── Transition-state slice: vol residual + RMSE + combined 80% coverage ─────────
+# A tibble: 6 × 13
+  state                n mean_vol_resid_A_shipped mean_vol_resid_B_injury
+  <chr>            <int>                    <dbl>                   <dbl>
+1 above_new_out      213                     3.83                    0.96
+2 return+above_out    93                     1.41                   -0.35
+3 above_q_only       266                     0.98                    0.16
+4 return_week       2030                    -0.97                   -0.47
+5 above_long_out     495                     0.54                    0.1 
+6 steady            8524                    -0.31                   -0.28
+  vol_rmse_A_shipped vol_rmse_B_injury cov80_A_shipped cov80_B_injury
+               <dbl>             <dbl>           <dbl>          <dbl>
+1               7.35              6.3             0.76           0.77
+2               5.08              4.94            0.8            0.78
+3               5.79              5.66            0.78           0.77
+4               5.23              5.13            0.79           0.79
+5               5.39              5.23            0.83           0.83
+6               5.63              5.61            0.8            0.8 
+  width80_A_shipped width80_B_injury d_resid d_rmse d_cov_pp
+              <dbl>            <dbl>   <dbl>  <dbl>    <dbl>
+1              9.53             9.5    -2.87  -1.04     1.88
+2              8.46             8.46   -1.76  -0.15    -1.08
+3              8.52             8.51   -0.81  -0.13    -0.75
+4              8.29             8.28    0.5   -0.1      0   
+5              8.44             8.44   -0.45  -0.16     0   
+6              9.54             9.52    0.03  -0.02    -0.06
+✔ output/11c_rubric_table.csv + output/11c_transition_slice.csv
+
+── 11c arm B complete -- judge per pre-stated rule in the header ───────────────
