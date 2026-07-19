@@ -1,0 +1,221 @@
+
+── 13a step 1: Vegas lines from load_schedules (2014-2025) ─────────────────────
+ℹ Sign check: home margin ~ spread_line slope = 1.043 (want ~ +1)
+ℹ Line coverage: 100% of team-games
+
+── 13a step 2: shipped fold residuals by Vegas bucket ──────────────────────────
+✔ Joined rows: QB=6065 | RB=11289 | TE=6405 | WR=16745
+
+── Cell 1: volume residual (obs - pred opportunities; QB = dropbacks) ──
+
+ position       bucket    n mean_vol_resid   se          axis
+       QB  low_implied 1614          -1.03 0.22 implied_total
+       QB  mid_implied 3333          -0.52 0.15 implied_total
+       QB high_implied 1118          -0.14 0.25 implied_total
+       QB      big_dog 1006          -0.80 0.29        spread
+       QB          dog 1616          -0.02 0.22        spread
+       QB        close 1093          -0.52 0.27        spread
+       QB          fav 1470          -0.85 0.23        spread
+       QB      big_fav  880          -1.02 0.28        spread
+       RB  low_implied 2930          -0.45 0.10 implied_total
+       RB  mid_implied 6200          -0.23 0.07 implied_total
+       RB high_implied 2159          -0.15 0.12 implied_total
+       RB      big_dog 1826          -0.84 0.12        spread
+       RB          dog 2941          -0.30 0.10        spread
+       RB        close 2013          -0.28 0.13        spread
+       RB          fav 2735          +0.12 0.11        spread
+       RB      big_fav 1774          -0.25 0.13        spread
+       TE  low_implied 1633          -0.05 0.06 implied_total
+       TE  mid_implied 3556          -0.10 0.04 implied_total
+       TE high_implied 1216          +0.07 0.07 implied_total
+       TE      big_dog 1022          -0.10 0.07        spread
+       TE          dog 1686          +0.01 0.06        spread
+       TE        close 1210          -0.01 0.07        spread
+       TE          fav 1531          -0.12 0.06        spread
+       TE      big_fav  956          -0.05 0.07        spread
+       WR  low_implied 4462          -0.19 0.04 implied_total
+       WR  mid_implied 9185          -0.03 0.03 implied_total
+       WR high_implied 3098          -0.06 0.05 implied_total
+       WR      big_dog 2802          -0.15 0.05        spread
+       WR          dog 4522          +0.00 0.04        spread
+       WR        close 3001          -0.04 0.05        spread
+       WR          fav 4016          -0.10 0.04        spread
+       WR      big_fav 2404          -0.17 0.06        spread
+── QB carries residual by spread bucket (secondary) ──
+
+  bucket    n mean_carry_resid
+ big_dog 1006            +0.24
+     dog 1616            +0.14
+   close 1093            +0.13
+     fav 1470            +0.08
+ big_fav  880            -0.06
+── Continuous slopes (per 7 spread points / per 3 implied-total points) ──
+
+ position     n vol_slope_per_7pt_spread vol_spearman_spread
+       QB  6065                   -0.202              -0.033
+       RB 11289                    0.238               0.041
+       TE  6405                   -0.019              -0.010
+       WR 16745                   -0.011              -0.010
+ vol_slope_per_3pt_itotal tot_slope_per_3pt_itotal tot_spearman_itotal
+                    0.328                    1.489               0.180
+                    0.079                    0.406               0.124
+                    0.040                    0.361               0.125
+                    0.055                    0.377               0.111
+── Cell 2: total-EPA residual by implied-total bucket ──
+
+ position       bucket    n mean_tot_resid   se
+       QB  low_implied 1614          -2.67 0.26
+       QB  mid_implied 3333          -0.09 0.18
+       QB high_implied 1118          +2.42 0.31
+       RB  low_implied 2930          -0.35 0.07
+       RB  mid_implied 6200          +0.29 0.05
+       RB high_implied 2159          +1.16 0.09
+       TE  low_implied 1633          -0.42 0.09
+       TE  mid_implied 3556          +0.04 0.06
+       TE high_implied 1216          +0.78 0.11
+       WR  low_implied 4462          -0.51 0.06
+       WR  mid_implied 9185          +0.23 0.05
+       WR high_implied 3098          +0.76 0.08
+── 13a step 3: shipped-product calibration by Vegas bucket ─────────────────────
+
+── Cell 3: shipped probability honesty by Vegas bucket (delta pp = emp - stated) ──
+
+ position       bucket    n stated   emp threshold delta_pp          axis
+       QB  low_implied 1437  0.095 0.056      boom     -3.8 implied_total
+       QB  mid_implied 2865  0.146 0.136      boom     -0.9 implied_total
+       QB high_implied  964  0.193 0.276      boom     +8.3 implied_total
+       QB      big_dog  885  0.099 0.067      boom     -3.2        spread
+       QB          dog 1408  0.127 0.112      boom     -1.5        spread
+       QB        close  950  0.139 0.141      boom     +0.3        spread
+       QB          fav 1272  0.159 0.167      boom     +0.8        spread
+       QB      big_fav  751  0.183 0.232      boom     +4.8        spread
+       QB  low_implied 1437  0.235 0.165     start     -7.0 implied_total
+       QB  mid_implied 2865  0.316 0.302     start     -1.5 implied_total
+       QB high_implied  964  0.381 0.497     start    +11.6 implied_total
+       QB      big_dog  885  0.240 0.183     start     -5.7        spread
+       QB          dog 1408  0.288 0.268     start     -2.1        spread
+       QB        close  950  0.306 0.272     start     -3.4        spread
+       QB          fav 1272  0.335 0.346     start     +1.1        spread
+       QB      big_fav  751  0.369 0.457     start     +8.8        spread
+       RB  low_implied 2587  0.142 0.098      boom     -4.3 implied_total
+       RB  mid_implied 5282  0.145 0.145      boom     -0.0 implied_total
+       RB high_implied 1856  0.147 0.199      boom     +5.2 implied_total
+       RB      big_dog 1588  0.141 0.091      boom     -5.0        spread
+       RB          dog 2534  0.144 0.134      boom     -1.0        spread
+       RB        close 1731  0.147 0.132      boom     -1.5        spread
+       RB          fav 2360  0.146 0.170      boom     +2.4        spread
+       RB      big_fav 1512  0.144 0.183      boom     +4.0        spread
+       RB  low_implied 2587  0.270 0.218     start     -5.2 implied_total
+       RB  mid_implied 5282  0.277 0.285     start     +0.8 implied_total
+       RB high_implied 1856  0.281 0.342     start     +6.1 implied_total
+       RB      big_dog 1588  0.268 0.211     start     -5.7        spread
+       RB          dog 2534  0.275 0.271     start     -0.4        spread
+       RB        close 1731  0.280 0.259     start     -2.1        spread
+       RB          fav 2360  0.278 0.318     start     +3.9        spread
+       RB      big_fav 1512  0.276 0.318     start     +4.2        spread
+       TE  low_implied 1434  0.107 0.087      boom     -2.0 implied_total
+       TE  mid_implied 3072  0.117 0.106      boom     -1.1 implied_total
+       TE high_implied 1031  0.132 0.192      boom     +6.0 implied_total
+       TE      big_dog  875  0.113 0.082      boom     -3.1        spread
+       TE          dog 1464  0.112 0.099      boom     -1.3        spread
+       TE        close 1061  0.114 0.107      boom     -0.7        spread
+       TE          fav 1330  0.123 0.138      boom     +1.6        spread
+       TE      big_fav  807  0.127 0.166      boom     +4.0        spread
+       TE  low_implied 1434  0.275 0.221     start     -5.4 implied_total
+       TE  mid_implied 3072  0.289 0.279     start     -1.0 implied_total
+       TE high_implied 1031  0.308 0.374     start     +6.7 implied_total
+       TE      big_dog  875  0.283 0.213     start     -7.0        spread
+       TE          dog 1464  0.282 0.268     start     -1.4        spread
+       TE        close 1061  0.283 0.280     start     -0.3        spread
+       TE          fav 1330  0.296 0.301     start     +0.4        spread
+       TE      big_fav  807  0.301 0.352     start     +5.0        spread
+       WR  low_implied 3945  0.116 0.083      boom     -3.2 implied_total
+       WR  mid_implied 7876  0.134 0.139      boom     +0.4 implied_total
+       WR high_implied 2671  0.144 0.184      boom     +4.0 implied_total
+       WR      big_dog 2443  0.117 0.090      boom     -2.7        spread
+       WR          dog 3942  0.128 0.126      boom     -0.3        spread
+       WR        close 2603  0.133 0.131      boom     -0.3        spread
+       WR          fav 3452  0.139 0.144      boom     +0.5        spread
+       WR      big_fav 2052  0.139 0.176      boom     +3.7        spread
+       WR  low_implied 3945  0.241 0.190     start     -5.1 implied_total
+       WR  mid_implied 7876  0.269 0.281     start     +1.3 implied_total
+       WR high_implied 2671  0.282 0.338     start     +5.7 implied_total
+       WR      big_dog 2443  0.241 0.199     start     -4.2        spread
+       WR          dog 3942  0.260 0.258     start     -0.2        spread
+       WR        close 2603  0.267 0.272     start     +0.4        spread
+       WR          fav 3452  0.274 0.291     start     +1.7        spread
+       WR      big_fav 2052  0.273 0.318     start     +4.5        spread
+── 13a verdict (pre-committed rule) ────────────────────────────────────────────
+! CALIBRATION TRIGGER (32 cells):
+ position       bucket    n     stated        emp threshold delta_pp
+       QB      big_dog  885 0.23982373 0.18305085     start     -5.7
+       QB        close  950 0.30555211 0.27157895     start     -3.4
+       QB      big_fav  751 0.36856458 0.45672437     start     +8.8
+       RB      big_dog 1588 0.26828480 0.21095718     start     -5.7
+       RB          fav 2360 0.27835385 0.31779661     start     +3.9
+       RB      big_fav 1512 0.27610092 0.31812169     start     +4.2
+       TE      big_dog  875 0.28258790 0.21257143     start     -7.0
+       TE      big_fav  807 0.30145638 0.35192069     start     +5.0
+       WR      big_dog 2443 0.24120745 0.19934507     start     -4.2
+       WR      big_fav 2052 0.27332849 0.31822612     start     +4.5
+       QB      big_dog  885 0.09880783 0.06666667      boom     -3.2
+       QB      big_fav  751 0.18347265 0.23169108      boom     +4.8
+       RB      big_dog 1588 0.14112773 0.09130982      boom     -5.0
+       RB      big_fav 1512 0.14350966 0.18320106      boom     +4.0
+       TE      big_dog  875 0.11295073 0.08228571      boom     -3.1
+       TE      big_fav  807 0.12650233 0.16604709      boom     +4.0
+       WR      big_fav 2052 0.13854057 0.17592593      boom     +3.7
+       QB  low_implied 1437 0.23474635 0.16492693     start     -7.0
+       QB high_implied  964 0.38068620 0.49688797     start    +11.6
+       RB  low_implied 2587 0.26957641 0.21762659     start     -5.2
+       RB high_implied 1856 0.28092334 0.34159483     start     +6.1
+       TE  low_implied 1434 0.27512715 0.22105997     start     -5.4
+       TE high_implied 1031 0.30780530 0.37439379     start     +6.7
+       WR  low_implied 3945 0.24069271 0.18986058     start     -5.1
+       WR high_implied 2671 0.28174391 0.33845002     start     +5.7
+       QB  low_implied 1437 0.09461822 0.05636743      boom     -3.8
+       QB high_implied  964 0.19259118 0.27593361      boom     +8.3
+       RB  low_implied 2587 0.14159274 0.09818322      boom     -4.3
+       RB high_implied 1856 0.14699066 0.19935345      boom     +5.2
+       TE high_implied 1031 0.13186645 0.19204656      boom     +6.0
+       WR  low_implied 3945 0.11589187 0.08339670      boom     -3.2
+       WR high_implied 2671 0.14423433 0.18382628      boom     +4.0
+          axis
+        spread
+        spread
+        spread
+        spread
+        spread
+        spread
+        spread
+        spread
+        spread
+        spread
+        spread
+        spread
+        spread
+        spread
+        spread
+        spread
+        spread
+ implied_total
+ implied_total
+ implied_total
+ implied_total
+ implied_total
+ implied_total
+ implied_total
+ implied_total
+ implied_total
+ implied_total
+ implied_total
+ implied_total
+ implied_total
+ implied_total
+ implied_total
+! RUNG 2 VERDICT: PROCEED to 13b feature A/B on the triggered position(s) -- point-in-time line source required before anything trains.
+
+── Save receipts ───────────────────────────────────────────────────────────────
+✔ output/13a_vegas_{vol_residuals,epa_residuals,calibration,slopes}.csv
+
+── 13a complete ────────────────────────────────────────────────────────────────

@@ -1,0 +1,48 @@
+
+── 13b Vegas A/B -- RB (arm B: EFF + team_spread, implied_total) ───────────────
+ℹ Line source: data/vegas_open_lines.rds (tag 'open')
+ℹ Vegas NA rows: 1342 of 11918 (LightGBM handles NA natively)
+✔ RB: 11918 rows | 204 folds | expected test rows 11621 | shipped arm rows 11621
+
+── Walk-forward loop (204 folds x 32 combos, EFF only) ─────────────────────────
+ℹ Fold 025 [2015-W13] (0.8s/fold)
+ℹ Fold 050 [2017-W04] (1.1s/fold)
+ℹ Fold 075 [2018-W12] (1.8s/fold)
+ℹ Fold 100 [2020-W03] (1.3s/fold)
+ℹ Fold 125 [2021-W11] (1.7s/fold)
+ℹ Fold 150 [2022-W18] (2s/fold)
+ℹ Fold 175 [2024-W07] (2.4s/fold)
+ℹ Fold 200 [2025-W14] (2.8s/fold)
+ℹ Fold 204 [2025-W18] (2.5s/fold)
+
+── Integrity ───────────────────────────────────────────────────────────────────
+✔ Row count 11621 / 11621
+ℹ VOL reproduction: 11621 matched rows, max |pred_vol diff| = 3.552714e-15
+
+── A/B scoring ─────────────────────────────────────────────────────────────────
+✔ Matched A/B rows: 11621 (arm A 11621, arm B 11621)
+
+── PRIMARY: combined residual by implied-total bucket ──
+
+           ib    n  arm_a arm_b
+  low_implied 2405 -0.322 0.008
+  mid_implied 5996  0.270 0.320
+ high_implied 1904  1.046 0.500
+ℹ Gradient (high - low): arm A = 1.368 EPA | arm B = 0.492 EPA | shrink = 64%
+
+── RUBRIC: arm B coverage (80%) ──
+
+ℹ Pooled: arm B -0.1pp w=9.179 | arm A -0.4pp w=9.23
+ℹ Low-usage (opp 5-8): arm B -0.4pp (n=3049)
+ℹ Combined RMSE: arm A 3.896 | arm B 3.873 (-0.57%)
+
+── 13b verdict -- RB (pre-committed rule) ──────────────────────────────────────
+ℹ 1. Rubric intact:    PASS (pooled -0.1pp, low -0.4pp)
+ℹ 2. Gradient >=50%:   PASS (1.37 -> 0.49 EPA)
+ℹ 3. Sharpness +2% cap: PASS (9.23 -> 9.18)
+✔ RB PASSES rung 2 at the EPA layer -- Vegas features earn their spot (deployment blocked on a point-in-time line source).
+
+── Save receipts ───────────────────────────────────────────────────────────────
+✔ output/13b_rb_vegas_open_*.csv
+
+── 13b RB complete ─────────────────────────────────────────────────────────────

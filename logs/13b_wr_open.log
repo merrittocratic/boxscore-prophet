@@ -1,0 +1,49 @@
+
+── 13b Vegas A/B -- WR (arm B: EFF + team_spread, implied_total) ───────────────
+ℹ Line source: data/vegas_open_lines.rds (tag 'open')
+ℹ Vegas NA rows: 2442 of 21608 (LightGBM handles NA natively)
+✔ WR: 21608 rows | 204 folds | expected test rows 21094 | shipped arm rows 17223
+
+── Walk-forward loop (204 folds x 32 combos, EFF only) ─────────────────────────
+ℹ Fold 025 [2015-W13] (1.7s/fold)
+ℹ Fold 050 [2017-W04] (3.2s/fold)
+ℹ Fold 075 [2018-W12] (3.5s/fold)
+ℹ Fold 100 [2020-W03] (3.9s/fold)
+ℹ Fold 125 [2021-W11] (5.7s/fold)
+ℹ Fold 150 [2022-W18] (5.5s/fold)
+ℹ Fold 175 [2024-W07] (6.8s/fold)
+ℹ Fold 200 [2025-W14] (7s/fold)
+ℹ Fold 204 [2025-W18] (7.5s/fold)
+
+── Integrity ───────────────────────────────────────────────────────────────────
+✔ Row count 21094 / 21094
+! Excluding 204 duplicated player-week keys from A/B joins (feature-table dup, see header of next 12a version)
+ℹ VOL reproduction: 17223 matched rows, max |pred_vol diff| = 1.776357e-15
+
+── A/B scoring ─────────────────────────────────────────────────────────────────
+✔ Matched A/B rows: 17223 (arm A 17223, arm B 21094)
+
+── PRIMARY: combined residual by implied-total bucket ──
+
+           ib    n  arm_a arm_b
+  low_implied 3676 -0.395 0.093
+  mid_implied 8853  0.195 0.132
+ high_implied 2757  0.691 0.249
+ℹ Gradient (high - low): arm A = 1.085 EPA | arm B = 0.156 EPA | shrink = 85.6%
+
+── RUBRIC: arm B coverage (80%) ──
+
+ℹ Pooled: arm B -0.9pp w=10.266 | arm A -0.8pp w=10.309
+ℹ Low-usage (opp 3-5): arm B -0.4pp (n=7812)
+ℹ Combined RMSE: arm A 4.329 | arm B 4.314 (-0.34%)
+
+── 13b verdict -- WR (pre-committed rule) ──────────────────────────────────────
+ℹ 1. Rubric intact:    PASS (pooled -0.9pp, low -0.4pp)
+ℹ 2. Gradient >=50%:   PASS (1.09 -> 0.16 EPA)
+ℹ 3. Sharpness +2% cap: PASS (10.31 -> 10.27)
+✔ WR PASSES rung 2 at the EPA layer -- Vegas features earn their spot (deployment blocked on a point-in-time line source).
+
+── Save receipts ───────────────────────────────────────────────────────────────
+✔ output/13b_wr_vegas_open_*.csv
+
+── 13b WR complete ─────────────────────────────────────────────────────────────

@@ -1,0 +1,49 @@
+
+── 13b Vegas A/B -- TE (arm B: EFF + team_spread, implied_total) ───────────────
+ℹ Line source: data/vegas_open_lines.rds (tag 'open')
+ℹ Vegas NA rows: 841 of 6765 (LightGBM handles NA natively)
+✔ TE: 6765 rows | 204 folds | expected test rows 6599 | shipped arm rows 6599
+
+── Walk-forward loop (204 folds x 32 combos, EFF only) ─────────────────────────
+ℹ Fold 025 [2015-W13] (0.5s/fold)
+ℹ Fold 050 [2017-W04] (0.4s/fold)
+ℹ Fold 075 [2018-W12] (1s/fold)
+ℹ Fold 100 [2020-W03] (0.8s/fold)
+ℹ Fold 125 [2021-W11] (1.2s/fold)
+ℹ Fold 150 [2022-W18] (1s/fold)
+ℹ Fold 175 [2024-W07] (1.2s/fold)
+ℹ Fold 200 [2025-W14] (1.6s/fold)
+ℹ Fold 204 [2025-W18] (1.6s/fold)
+
+── Integrity ───────────────────────────────────────────────────────────────────
+✔ Row count 6599 / 6599
+! Excluding 1 duplicated player-week key from A/B joins (feature-table dup, see header of next 12a version)
+ℹ VOL reproduction: 6597 matched rows, max |pred_vol diff| = 1.776357e-15
+
+── A/B scoring ─────────────────────────────────────────────────────────────────
+✔ Matched A/B rows: 6597 (arm A 6599, arm B 6599)
+
+── PRIMARY: combined residual by implied-total bucket ──
+
+           ib    n  arm_a  arm_b
+  low_implied 1318 -0.469 -0.233
+  mid_implied 3389  0.028  0.041
+ high_implied 1066  0.704  0.362
+ℹ Gradient (high - low): arm A = 1.173 EPA | arm B = 0.595 EPA | shrink = 49.3%
+
+── RUBRIC: arm B coverage (80%) ──
+
+ℹ Pooled: arm B -0.4pp w=8.638 | arm A -0.4pp w=8.704
+ℹ Low-usage (opp 3-5): arm B -0.5pp (n=3939)
+ℹ Combined RMSE: arm A 3.603 | arm B 3.59 (-0.36%)
+
+── 13b verdict -- TE (pre-committed rule) ──────────────────────────────────────
+ℹ 1. Rubric intact:    PASS (pooled -0.4pp, low -0.5pp)
+ℹ 2. Gradient >=50%:   FAIL (1.17 -> 0.6 EPA)
+ℹ 3. Sharpness +2% cap: PASS (8.7 -> 8.64)
+! TE does NOT pass -- publish the receipt as-is.
+
+── Save receipts ───────────────────────────────────────────────────────────────
+✔ output/13b_te_vegas_open_*.csv
+
+── 13b TE complete ─────────────────────────────────────────────────────────────

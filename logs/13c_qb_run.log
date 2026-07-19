@@ -1,0 +1,50 @@
+
+── 13c QB Vegas A/B (arm B: PASS_EFF + team_spread, implied_total) ─────────────
+ℹ Vegas NA rows: 178 of 6382
+✔ QB: 6382 rows | 204 folds | expected test rows 6229 | shipped rows 6229
+
+── Walk-forward loop (204 folds; pass_eff retuned, others refit) ───────────────
+ℹ Fold 025 [2015-W13] (0.4s/fold)
+ℹ Fold 050 [2017-W04] (0.8s/fold)
+ℹ Fold 075 [2018-W12] (1.5s/fold)
+ℹ Fold 100 [2020-W03] (1.6s/fold)
+ℹ Fold 125 [2021-W11] (1.7s/fold)
+ℹ Fold 150 [2022-W18] (1.8s/fold)
+ℹ Fold 175 [2024-W07] (2.4s/fold)
+ℹ Fold 200 [2025-W14] (2.7s/fold)
+ℹ Fold 204 [2025-W18] (2.8s/fold)
+
+── Integrity ───────────────────────────────────────────────────────────────────
+✔ Row count 6229 / 6229
+ℹ Non-tuned component reproduction: 6229 rows, max |diff| = 7.105427e-15
+
+── A/B scoring ─────────────────────────────────────────────────────────────────
+✔ Matched A/B rows: 6229
+
+── PRIMARY: combined residual by implied-total bucket ──
+
+           ib    n  arm_a  arm_b
+  low_implied 1614 -2.667 -1.209
+  mid_implied 3333 -0.089 -0.107
+ high_implied 1118  2.424  0.319
+ℹ Gradient: arm A = 5.091 | arm B = 1.528 | shrink = 70%
+
+── RUBRIC: arm B coverage ──
+
+ℹ Pooled 80%: arm B -0.4pp w=26.71 | arm A -0.5pp w=27.13
+    exante_tier empirical  delta sharpness
+   statue (0-3)     0.793 -0.007    26.755
+    mover (4-7)     0.804  0.004    26.618
+ scrambler (8+)     0.788 -0.012    26.539
+ℹ Combined RMSE: A 10.587 | B 10.386 (-1.89%)
+
+── 13c verdict (pre-committed rule) ────────────────────────────────────────────
+ℹ 1. Rubric intact:     PASS (pooled -0.4pp; tier max +1.2pp)
+ℹ 2. Gradient >= 50%:   PASS (5.09 -> 1.53 EPA)
+ℹ 3. Sharpness +2% cap: PASS (27.13 -> 26.71)
+✔ QB PASSES rung 2 at the EPA layer (deployment blocked on point-in-time lines).
+
+── Save receipts ───────────────────────────────────────────────────────────────
+✔ output/13c_qb_vegas_*.csv
+
+── 13c complete ────────────────────────────────────────────────────────────────

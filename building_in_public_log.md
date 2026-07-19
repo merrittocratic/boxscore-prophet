@@ -4,6 +4,50 @@ Narrative-grade decision log: the moments worth writing about, with the
 receipts pinned. Technical detail lives in README decision entries; this
 file records why the roadmap bent where it did.
 
+## 2026-07-19: The cheap control that wasn't -- Vegas knows something our models don't
+
+Rung 2 of the ablation ladder was pre-registered as the boring one:
+"Vegas lines: the cheap control. Expect flat RMSE on the solved
+component; run it to have the receipt." We ran it to have the receipt.
+The receipt says we were wrong, and the way we were wrong is precise.
+
+The volume models ARE flat against Vegas -- the decomposition's claim
+that volume is solved survived contact at all four positions. But the
+per-touch EFFICIENCY layer carries a clean monotone bias in implied team
+total: the models underpredict scoring environment they cannot see. A QB
+in a 27-point-implied game outperforms his prediction by +2.4 EPA on
+average; in an 18-point-implied game he underperforms by -2.7. That
+gradient flows through the simulation into the published tails, where
+high-total games understate start/boom odds by 4-12pp and low-total
+games overstate them. Vegas prices the joint environment -- own-offense
+quality, matchup, pace -- and our defense adjustments alone do not.
+
+The A/B (spread + implied total added to the efficiency features only,
+everything else frozen and verified to reproduce the shipped models at
+machine precision): all four positions pass the pre-committed bar, with
+residual gradients shrinking 61-80% while intervals get slightly
+NARROWER. Honest and sharper at once -- the feature is informative, not
+a width tax.
+
+One discipline note: the ablation above used closing lines, which cannot
+be reconstructed at Friday lock, and the pre-registered rule is
+absolute: not point-in-time reconstructable, not in the trained feature
+set. So before spending a dollar on timestamped odds archives, we
+tested the free variant: OPENING lines, posted Sunday night -- stale by
+up to a week, but unambiguously known at our lock.
+
+The openers kept the signal. WR passed at 85.6% gradient shrink
+(better than its closing-line arm), QB at 69.1% (gave back less than a
+point), RB at 64%. TE missed the pre-committed 50% bar at 49.3% -- and
+we are publishing that as the FAIL it is, with the owner's decision
+layered explicitly on top: TE ships anyway, because the alternative was
+paying ~$100 to move an estimated sub-point of shrink, which is buying
+a pass mark rather than a better product. The bar stays where it was
+pre-registered; the decision to override it is signed and dated rather
+than laundered through a rounded number.
+
+Total spent on the data that fixes a 12-point calibration hole: $0.
+
 ## 2026-07-19: The fourth position -- why TEs are not small WRs
 
 TE was the neglected position, and the temptation was to fold it into the

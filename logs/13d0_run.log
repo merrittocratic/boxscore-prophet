@@ -1,0 +1,13 @@
+
+── 13d0: opener lines from aussportsbetting archive ────────────────────────────
+There were 50 or more warnings (use warnings() to see the first 50)
+✔ Odds rows: 4927 | NA .. NA
+ℹ Match rate 2014-2024: 99.86% (4 unmatched of 2879)
+ℹ 2025 season opener coverage: 0% (expected ~0 -- snapshot predates the season)
+ℹ Closer fingerprint: cor(spread_line, -home_line_close) = 0.9974 | cor(total) = 0.9956
+ℹ Sign check: home margin ~ -home_line_open slope = 1.049 (want ~ +1)
+ℹ Open->close movement: spread sd=1.91 p90=3 | total sd=1.93 p90=3
+✔ data/vegas_open_lines.rds (6302 team-game rows, 5750 with openers)
+✔ output/13d0_opener_join_receipt.csv
+
+── 13d0 complete ───────────────────────────────────────────────────────────────

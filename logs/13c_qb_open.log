@@ -1,0 +1,51 @@
+
+── 13c QB Vegas A/B (arm B: PASS_EFF + team_spread, implied_total) ─────────────
+ℹ Line source: data/vegas_open_lines.rds (tag 'open')
+ℹ Vegas NA rows: 731 of 6382
+✔ QB: 6382 rows | 204 folds | expected test rows 6229 | shipped rows 6229
+
+── Walk-forward loop (204 folds; pass_eff retuned, others refit) ───────────────
+ℹ Fold 025 [2015-W13] (0.3s/fold)
+ℹ Fold 050 [2017-W04] (0.8s/fold)
+ℹ Fold 075 [2018-W12] (1.4s/fold)
+ℹ Fold 100 [2020-W03] (1.5s/fold)
+ℹ Fold 125 [2021-W11] (1.7s/fold)
+ℹ Fold 150 [2022-W18] (2s/fold)
+ℹ Fold 175 [2024-W07] (2.5s/fold)
+ℹ Fold 200 [2025-W14] (2.7s/fold)
+ℹ Fold 204 [2025-W18] (2.8s/fold)
+
+── Integrity ───────────────────────────────────────────────────────────────────
+✔ Row count 6229 / 6229
+ℹ Non-tuned component reproduction: 6229 rows, max |diff| = 7.105427e-15
+
+── A/B scoring ─────────────────────────────────────────────────────────────────
+✔ Matched A/B rows: 6229
+
+── PRIMARY: combined residual by implied-total bucket ──
+
+           ib    n  arm_a  arm_b
+  low_implied 1318 -2.531 -1.047
+  mid_implied 3206 -0.233 -0.412
+ high_implied  988  2.144  0.399
+ℹ Gradient: arm A = 4.675 | arm B = 1.446 | shrink = 69.1%
+
+── RUBRIC: arm B coverage ──
+
+ℹ Pooled 80%: arm B -0.4pp w=26.83 | arm A -0.5pp w=27.13
+    exante_tier empirical  delta sharpness
+   statue (0-3)     0.794 -0.006    26.853
+    mover (4-7)     0.805  0.005    26.750
+ scrambler (8+)     0.770 -0.030    26.755
+ℹ Combined RMSE: A 10.587 | B 10.496 (-0.86%)
+
+── 13c verdict (pre-committed rule) ────────────────────────────────────────────
+ℹ 1. Rubric intact:     PASS (pooled -0.4pp; tier max +3.0pp)
+ℹ 2. Gradient >= 50%:   PASS (4.67 -> 1.45 EPA)
+ℹ 3. Sharpness +2% cap: PASS (27.13 -> 26.83)
+✔ QB PASSES rung 2 at the EPA layer (deployment blocked on point-in-time lines).
+
+── Save receipts ───────────────────────────────────────────────────────────────
+✔ output/13c_qb_vegas_open_*.csv
+
+── 13c complete ────────────────────────────────────────────────────────────────

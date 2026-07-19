@@ -499,6 +499,75 @@ Inserting it before QB shifted the shared draw stream and jittered a
 published QB row 2.6pp over the 10pp reconciliation flag. Position sim
 order is now part of the published-number contract.
 
+### D18. Rung 2 (Vegas lines): "expect flat" FAILED -- signal at all four positions (2026-07-19)
+
+The pre-registered expectation was wrong, and the receipt is the story.
+The 13a diagnostic (pre-committed proceed rule, upper-bound probe with
+nflverse CLOSING lines) found the volume models flat vs Vegas (the
+decomposition's "volume is solved" held everywhere) but a monotone
+TOTAL-EPA residual gradient in implied team total at every position --
+QB -2.67 -> +2.42 EPA across implied buckets, RB -0.35 -> +1.16, TE
+-0.42 -> +0.78, WR -0.51 -> +0.76 -- which propagates to +-4-12pp
+conditional dishonesty in the published FP tails (32 trigger cells; QB
+start in high-implied games understated by 11.6pp). The efficiency
+models see opponent defense but not the Vegas-priced environment.
+
+A/B (13b RB/WR/TE, 13c QB; arm B = c(team_spread, implied_total) added
+to the EFFICIENCY feature set only, volume/other components REFIT from
+shipped tune logs and verified to reproduce shipped predictions at
+~1e-15). Pre-committed acceptance: rubric intact, gradient shrink >=
+50%, sharpness within +2%. ALL FOUR POSITIONS PASS:
+
+  pos  gradient (EPA)     shrink   RMSE     80% width
+  QB   5.09 -> 1.53       70%      -1.9%    27.13 -> 26.71
+  RB   1.51 -> 0.47       69%      -0.9%     9.23 -> 9.17
+  WR   1.27 -> 0.26       80%      -0.6%    10.31 -> 10.24
+  TE   1.20 -> 0.47       61%      -0.7%     8.70 -> 8.63
+
+Intervals NARROW while honesty improves -- Vegas is genuinely
+informative for per-touch efficiency, not width-buying.
+
+LINE-SOURCE RESOLUTION (2026-07-19, same day): OPENING lines -- posted
+Sunday night/Monday, unambiguously available at Tuesday build and
+Friday lock -- were tested as the free point-in-time-honest variant
+before buying anything. Source: aussportsbetting historical file
+(openers + closers, 2006-2024; fetched via Wayback, Cloudflare gates
+the live site; data/vegas/ gitignored like data/ecr). Join validated
+at 99.86% match with closer-fingerprint r=0.997 vs nflverse (13d0).
+Open->close movement: spread sd 1.9 pts, p90 = 3.
+
+Opener A/B, same pre-committed bar (closer-arm shrink in parens):
+
+  pos  opener shrink   verdict
+  WR   85.6% (80%)     PASS -- opener BEATS the closer arm
+  QB   69.1% (70%)     PASS -- opener costs ~nothing
+  RB   64.0% (69%)     PASS
+  TE   49.3% (61%)     FAIL by 0.7 points on the 50% bar
+
+TE DECISION (Steve, 2026-07-19, recorded as an owner's call -- the
+50% bar itself is NOT widened): TE ships with the opener feature
+despite the near-miss. Rationale: rubric and sharpness pass, RMSE
+improves (-0.36%), gradient still halves (1.17 -> 0.60 EPA), and the
+alternative was ~$100 of timestamped-archive data whose estimated
+effect on TE is under one point of shrink -- paying for a pass mark,
+not product quality. Conditional on the other three passing; they did.
+
+NO ODDS PURCHASE. Recurring line-data cost: $0. Ship-step notes:
+production needs a weekly line fetch at Tuesday build (train-on-opener
+vs serve-on-Tuesday-line skew is 1-2 days of movement, smaller than
+open->close -- size it in the ship step per the 06b0 lesson); the 2025
+season has no openers in the archive (trained-feature NAs there;
+backfill options exist if it matters).
+
+Harness finds along the way: (1) the TE feature table carries ONE
+duplicated player-week (Conklin 2021-W18, a 12a snap-crosswalk dup; two
+pfr_ids -> one gsis_id duplicates the row and the second copy's rolling
+window sees the first). Sized: 1 row of 6,765, immaterial; 12a/10b5
+dedupe queued for the next feature-table version. (2) The WR arm
+initially failed reproduction because the harness filtered the
+NA-player ghost rows the shipped chain trained with -- reproducing a
+frozen procedure means reproducing its quirks.
+
 ## Deployment runner (10-series) -- design, in progress 2026-07-17
 
 The backtest chain trains a model per fold; deployment is ONE MORE FOLD:

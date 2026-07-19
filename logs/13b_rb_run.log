@@ -1,0 +1,47 @@
+
+── 13b Vegas A/B -- RB (arm B: EFF + team_spread, implied_total) ───────────────
+ℹ Vegas NA rows: 358 of 11918 (LightGBM handles NA natively)
+✔ RB: 11918 rows | 204 folds | expected test rows 11621 | shipped arm rows 11621
+
+── Walk-forward loop (204 folds x 32 combos, EFF only) ─────────────────────────
+ℹ Fold 025 [2015-W13] (0.9s/fold)
+ℹ Fold 050 [2017-W04] (1.2s/fold)
+ℹ Fold 075 [2018-W12] (1.7s/fold)
+ℹ Fold 100 [2020-W03] (1.4s/fold)
+ℹ Fold 125 [2021-W11] (1.9s/fold)
+ℹ Fold 150 [2022-W18] (1.9s/fold)
+ℹ Fold 175 [2024-W07] (2.6s/fold)
+ℹ Fold 200 [2025-W14] (3.2s/fold)
+ℹ Fold 204 [2025-W18] (3.3s/fold)
+
+── Integrity ───────────────────────────────────────────────────────────────────
+✔ Row count 11621 / 11621
+ℹ VOL reproduction: 11621 matched rows, max |pred_vol diff| = 3.552714e-15
+
+── A/B scoring ─────────────────────────────────────────────────────────────────
+✔ Matched A/B rows: 11621 (arm A 11621, arm B 11621)
+
+── PRIMARY: combined residual by implied-total bucket ──
+
+           ib    n  arm_a arm_b
+  low_implied 2930 -0.349 0.059
+  mid_implied 6200  0.292 0.349
+ high_implied 2159  1.161 0.528
+ℹ Gradient (high - low): arm A = 1.51 EPA | arm B = 0.47 EPA | shrink = 68.9%
+
+── RUBRIC: arm B coverage (80%) ──
+
+ℹ Pooled: arm B -0.2pp w=9.17 | arm A -0.4pp w=9.23
+ℹ Low-usage (opp 5-8): arm B -0.5pp (n=3049)
+ℹ Combined RMSE: arm A 3.896 | arm B 3.863 (-0.85%)
+
+── 13b verdict -- RB (pre-committed rule) ──────────────────────────────────────
+ℹ 1. Rubric intact:    PASS (pooled -0.2pp, low -0.5pp)
+ℹ 2. Gradient >=50%:   PASS (1.51 -> 0.47 EPA)
+ℹ 3. Sharpness +2% cap: PASS (9.23 -> 9.17)
+✔ RB PASSES rung 2 at the EPA layer -- Vegas features earn their spot (deployment blocked on a point-in-time line source).
+
+── Save receipts ───────────────────────────────────────────────────────────────
+✔ output/13b_rb_vegas_*.csv
+
+── 13b RB complete ─────────────────────────────────────────────────────────────
