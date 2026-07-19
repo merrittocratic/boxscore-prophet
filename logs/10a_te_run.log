@@ -1,0 +1,51 @@
+
+── RB deployment fold (03a-v2 procedure) ───────────────────────────────────────
+ℹ RB rows: fit=9671 cal=2247
+ℹ rb_eff: leaves=63 minnode=100 lr=0.02 rounds=49 inner_rmse=0.3209
+ℹ rb_vol: leaves=15 minnode=50 lr=0.05 rounds=80 inner_rmse=5.2666
+✔ RB conformal: alpha=0.574 | 80% widths: eff=0.74 vol=12.65
+[1] "data/deploy_models/rb_eff.txt"
+[1] "data/deploy_models/rb_vol.txt"
+
+── WR deployment fold (04b tuning + 04c asymmetric conformal) ──────────────────
+ℹ WR rows: fit=17384 cal=4224
+ℹ wr_eff: leaves=15 minnode=20 lr=0.05 rounds=65 inner_rmse=0.721
+ℹ wr_vol: leaves=31 minnode=100 lr=0.05 rounds=89 inner_rmse=2.4642
+✔ WR conformal: alpha=0.473 | tot 80% asym: lo=-2.279 hi=2.216 (right skew: FALSE)
+[1] "data/deploy_models/wr_eff.txt"
+[1] "data/deploy_models/wr_vol.txt"
+
+── TE deployment fold (12b tuning + 12c asymmetric conformal) ──────────────────
+ℹ TE rows: fit=5421 cal=1344
+ℹ te_eff: leaves=7 minnode=10 lr=0.02 rounds=126 inner_rmse=0.6798
+ℹ te_vol: leaves=7 minnode=100 lr=0.02 rounds=222 inner_rmse=2.2318
+✔ TE conformal: alpha=0.582 | tot 80% asym: lo=-1.473 hi=1.688 (right skew: TRUE)
+[1] "data/deploy_models/te_eff.txt"
+[1] "data/deploy_models/te_vol.txt"
+
+── QB deployment fold (08c procedure, 4 components) ────────────────────────────
+ℹ QB rows: fit=5120 cal=1262
+ℹ qb_pass_eff: leaves=7 minnode=100 lr=0.05 rounds=99 inner_rmse=0.3257
+ℹ qb_db_vol: leaves=15 minnode=20 lr=0.05 rounds=61 inner_rmse=8.4576
+ℹ qb_carry_vol: leaves=15 minnode=100 lr=0.02 rounds=95 inner_rmse=2.1951
+ℹ qb_rush_dir: leaves=7 minnode=100 lr=0.02 rounds=110 inner_rmse=2.5739
+✔ QB conformal: tot 80% width=26.9 EPA (backtest 27.1)
+
+── Save deployment artifacts ───────────────────────────────────────────────────
+✔ data/deployment_params.rds
+✔ data/deploy_models/ (10 model files)
+✔ output/10a_deploy_tune_log.csv
+
+── Verification: fresh reload + sanity scoring ─────────────────────────────────
+✔ rb_eff: reload + predict ok (2247 rows, mean=-0.062)
+✔ rb_vol: reload + predict ok (2247 rows, mean=14.627)
+✔ wr_eff: reload + predict ok (4224 rows, mean=-0.122)
+✔ wr_vol: reload + predict ok (4224 rows, mean=6.164)
+✔ te_eff: reload + predict ok (1344 rows, mean=0.191)
+✔ te_vol: reload + predict ok (1344 rows, mean=5.522)
+✔ qb_pass_eff: reload + predict ok (1262 rows, mean=0.015)
+✔ qb_db_vol: reload + predict ok (1262 rows, mean=35.021)
+✔ qb_carry_vol: reload + predict ok (1262 rows, mean=3.121)
+✔ qb_rush_dir: reload + predict ok (1262 rows, mean=0.698)
+
+── Step 10a complete -- deployment models trained through 2025-W18 ─────────────

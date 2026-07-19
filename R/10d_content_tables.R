@@ -3,12 +3,14 @@
 #
 # Products (Steve's 2026-07-17 runner content decisions):
 #   1. Flagship START board per position -- ranked by P(15+ PPR) for RB/WR,
-#      P(20+ standard) for QB. CSV + markdown + X board image.
-#   2. BOOM board -- P(20+ PPR) flex (RB+WR combined) + QB P(25+). The X
-#      content hook ("these players have 30%+ odds of an elite week").
+#      P(12+ PPR) for TE (12_te rate-matched cuts), P(20+ standard) for QB.
+#      CSV + markdown + X board image.
+#   2. BOOM board -- flex (RB+WR+TE, Steve 2026-07-19) + QB P(25+). Bars
+#      are position-calibrated (RB/WR 20+, TE 17+ -- equal rarity by
+#      construction) and disclosed per row + footnote. The X content hook.
 #   3. STREAMER/WAIVER board -- the exante_low volume stratum (RB pred_vol
-#      < 10 touches, WR < 5 targets -- the 06c strata cuts), ranked by
-#      start odds. The conditional-recal payoff population.
+#      < 10 touches, WR < 5 targets, TE < 4 targets -- the 06c/12e strata
+#      cuts), ranked by start odds. The conditional-recal payoff population.
 #   4. RECEIPTS -- when the target week has been played: stated pre-kickoff
 #      probabilities vs outcomes, calibration by stated-odds band, biggest
 #      hit/miss callouts. The trust engine; Monday post-mortem input.
@@ -39,13 +41,16 @@ WTAG <- sprintf("%d_w%02d", TARGET_SEASON, TARGET_WEEK)
 DISPLAY_FLOOR <- 0.02
 DISPLAY_CEIL  <- 0.95
 BOARD_N       <- 12L    # rows on rendered X images
-STREAMER_CUT  <- c(RB = 10, WR = 5)   # 06c exante_low upper bounds
+STREAMER_CUT  <- c(RB = 10, WR = 5, TE = 4)   # 06c/12e exante_low upper bounds
 RECEIPT_BANDS <- c(0, 0.10, 0.25, 0.50, 1)
 BAND_LABELS   <- c("under 10%", "10-25%", "25-50%", "50%+")
 
-VOL_LABEL   <- c(RB = "proj touches", WR = "proj targets", QB = "proj dropbacks")
-START_LABEL <- c(RB = "P(15+ PPR)", WR = "P(15+ PPR)", QB = "P(20+ std)")
-BOOM_LABEL  <- c(RB = "P(20+ PPR)", WR = "P(20+ PPR)", QB = "P(25+ std)")
+VOL_LABEL   <- c(RB = "proj touches", WR = "proj targets", TE = "proj targets",
+                 QB = "proj dropbacks")
+START_LABEL <- c(RB = "P(15+ PPR)", WR = "P(15+ PPR)", TE = "P(12+ PPR)",
+                 QB = "P(20+ std)")
+BOOM_LABEL  <- c(RB = "P(20+ PPR)", WR = "P(20+ PPR)", TE = "P(17+ PPR)",
+                 QB = "P(25+ std)")
 
 # Validated board accents (dataviz palette check, light surface #fcfcfb)
 ACCENT_START <- "#2F6DB3"
@@ -111,12 +116,17 @@ start_board <- boards_base |>
          start_pct, boom_pct, disp_vol, report_status,
          p_start_recal, p_boom_recal, pred_vol)
 
+# TE included per Steve 2026-07-19. Bars differ by position (RB/WR 20+,
+# TE 17+ -- position-calibrated, see D17); the board carries a per-row
+# bar column and the footnote states it, so ranking across bars is
+# disclosed rather than hidden.
 boom_flex <- boards_base |>
-  filter(position %in% c("RB", "WR")) |>
+  filter(position %in% c("RB", "WR", "TE")) |>
+  mutate(boom_bar = thresh_boom) |>
   arrange(desc(p_boom_recal)) |>
   mutate(rank = row_number()) |>
   select(position, rank, player_id, player_name, player_disp, posteam, defteam,
-         boom_pct, start_pct, disp_vol, p_boom_recal)
+         boom_pct, start_pct, disp_vol, boom_bar, p_boom_recal)
 
 boom_qb <- start_board |>
   filter(position == "QB") |>
@@ -124,7 +134,7 @@ boom_qb <- start_board |>
   mutate(rank = row_number())
 
 streamer_board <- boards_base |>
-  filter(position %in% c("RB", "WR"),
+  filter(position %in% c("RB", "WR", "TE"),
          pred_vol < STREAMER_CUT[position]) |>
   group_by(position) |>
   arrange(desc(p_start_recal), .by_group = TRUE) |>
@@ -284,7 +294,7 @@ md_table <- function(df, headers) {
 
 md <- c(sprintf("# BOXSCORE PROPHET -- %d Week %d boards", TARGET_SEASON, TARGET_WEEK), "")
 
-for (pos in c("RB", "WR", "QB")) {
+for (pos in c("RB", "WR", "TE", "QB")) {
   b <- start_board |> filter(position == pos) |> slice_head(n = 20)
   md <- c(md,
     sprintf("## %s start board -- %s", pos, START_LABEL[pos]), "",
@@ -295,11 +305,14 @@ for (pos in c("RB", "WR", "QB")) {
     "")
 }
 
-md <- c(md, sprintf("## Flex boom board -- %s", BOOM_LABEL["RB"]), "",
+md <- c(md, "## Flex boom board -- P(elite week), position-calibrated bars", "",
   md_table(boom_flex |> slice_head(n = 15) |>
              transmute(rank, position, player_disp, posteam, defteam,
-                       boom = paste0(boom_pct, "%"), disp_vol),
-           c("#", "Pos", "Player", "Team", "Opp", "Boom", "proj vol")),
+                       boom = paste0(boom_pct, "%"),
+                       bar = paste0(boom_bar, "+"), disp_vol),
+           c("#", "Pos", "Player", "Team", "Opp", "Boom", "Bar", "proj vol")),
+  "",
+  "*Elite-week bars are position-calibrated: RB/WR 20+ PPR, TE 17+ PPR (equal rarity by construction).*",
   "")
 
 md <- c(md, "## Streamer / waiver board (low projected volume, live start odds)", "",
@@ -320,7 +333,7 @@ if (!is.null(ecr_gap)) {
 }
 
 md <- c(md, "---",
-  sprintf("*Displayed probabilities are editorially capped at %d-%d%%: the model never publishes a certainty. QB uses standard (4pt pass TD) scoring; RB/WR are PPR.*",
+  sprintf("*Displayed probabilities are editorially capped at %d-%d%%: the model never publishes a certainty. QB uses standard (4pt pass TD) scoring; RB/WR/TE are PPR. TE start/boom bars are 12/17 (position-calibrated), RB/WR are 15/20.*",
           round(100 * DISPLAY_FLOOR), round(100 * DISPLAY_CEIL)))
 
 writeLines(paste(md, collapse = "\n"), sprintf("output/10d_boards_%s.md", WTAG))
@@ -406,7 +419,7 @@ board_image <- function(df, value_col, order_col, accent, title, subtitle, out_p
   cli_alert_success(out_path)
 }
 
-for (pos in c("RB", "WR", "QB")) {
+for (pos in c("RB", "WR", "TE", "QB")) {
   board_image(
     start_board |> filter(position == pos),
     "start_pct", "p_start_recal", ACCENT_START,
@@ -420,7 +433,7 @@ board_image(
   boom_flex,
   "boom_pct", "p_boom_recal", ACCENT_BOOM,
   sprintf("Week %d flex boom board", TARGET_WEEK),
-  sprintf("Chance of an elite week: %s, RB + WR combined", BOOM_LABEL["RB"]),
+  "Chance of an elite week: RB/WR P(20+ PPR), TE P(17+ PPR)",
   sprintf("output/img/10d_boom_flex_%s.png", WTAG)
 )
 

@@ -407,6 +407,18 @@ R/
                                     simulation (thresholds 20/25)
   09b_qb_recalibration.R        [9] QB walk-forward recalibration (raw at
                                     20+, Platt at 25+)
+  12_te_feasibility.R           [12] TE feasibility: thresholds 12/17,
+                                    blocking state, aDOT, elite concentration
+  12a_te_feature_layer.R        [12] TE feature table (frozen v1.0; WR clone
+                                    + wt_tgt_per_snap role feature, 7-air-yard
+                                    defensive split, NA-receiver filter)
+  12b_te_lgbm_tuned.R           [12] TE projection model (04b clone)
+  12c_te_asymmetric_conformal.R [12] TE asymmetric intervals (04c clone)
+  12d0_te_predvol_rescale.R     [12] pred-vol rescale (06b0 clone)
+  12d_te_fp_simulation.R        [12] TE FP simulation at 12/17 (06b clone,
+                                    single position, predvol input default)
+  12e_te_recalibration.R        [12] TE walk-forward recalibration (06c
+                                    clone; platt_vol at 12+, strat_platt 17+)
   read_stathead.R               data utility
 
 data/    RDS intermediates (feature tables, outcomes, fold map)
@@ -448,6 +460,44 @@ observed 10th pctile is 6 opportunities, predicted is 9), so the streamer
 band always hit the pooled fallback and ran +3.25pp cold where the router
 actually cuts (< 10). Fix: RB low boundary moved 8 -> 10 in 6c and the
 bake-off re-run under the unchanged judge.
+
+### D17. TE ships as a WR-spine derivative: role feature, position-calibrated thresholds (2026-07-19)
+
+TE was the last uncovered position. Feasibility first (12_te_feasibility.R,
+house discipline): the WR 15/20 cuts hit at only 17.4%/7.5% of TE starter
+games (vs the 26.9%/13.4% reference rates), 26.5% of high-snap TE weeks
+fall under the 3-target floor (vs 10.7% WR -- the blocking state; snap
+share does not imply targets for TEs), TE median aDOT is 6.9 vs WR 10.4,
+and the top 12 TEs take 41.8% of positional FP (vs 21.1% WR). One stated
+expectation FAILED honestly: TD-gating of booms is NOT worse than WR once
+thresholds are rate-matched (boom w/o TD 3.0% vs 2.8%) -- no extra TD
+machinery built.
+
+Build = the frozen WR chain with three receipt-backed changes:
+  1. Thresholds 12 (start) / 17 (boom), rate-matched to RB/WR hit rates.
+  2. wt_tgt_per_snap role feature in the volume model, built on the SNAPS
+     table with zero-target blocking games filled as 0 (the outcome table
+     never sees those weeks).
+  3. Defensive short/deep split at 7 air yards (WR's 10 starves the deep
+     component for TEs).
+Everything else frozen: same fold map, grids, Mechanism A, asym conformal,
+spline + simulation translation, conditional recal bake-off.
+
+Results: 12b passes the rubric (pooled 80% -0.4pp, low-usage veto -0.4pp);
+12c passes identically (TE EPA intervals are nearly symmetric -- the FP
+right-skew lives in the TD residual pools, low-tier skew 1.78, captured by
+12d); simulation beats normal 3.9->1.5pp (12+) and 2.6->0.9pp (17+)
+n-weighted |delta|; 12e picks platt_vol (12+) and strat_platt (17+) under
+the unchanged judge, fixing the high-volume stratum from +2.1pp to +0.2pp.
+Watch item: exante_low (pred_vol <= 4) holds only 315 rows -- volume-model
+shrinkage, the same signature the RB 8->10 re-cut fixed; re-cut if the
+streamer board runs thin. The TE feature table is built with the
+NA-receiver filter, so the WR ghost-row flag does not apply to TE.
+
+RNG lesson (found by the recon gate): the TE simulation runs LAST in 10c.
+Inserting it before QB shifted the shared draw stream and jittered a
+published QB row 2.6pp over the 10pp reconciliation flag. Position sim
+order is now part of the published-number contract.
 
 ## Deployment runner (10-series) -- design, in progress 2026-07-17
 
@@ -494,6 +544,12 @@ through the saved translation + recalibration artifacts. Weekly retrain
                           (data/overrides/depth_overrides.csv)
 10b3_wr_slate.R           WR clone, gate passed |diff|=0 (2025-W15: 75
                           players x 12 features; W02 fallback branch ok)
+10b5_te_slate.R           TE clone (2026-07-19), gate passed |diff|=0
+                          for 2025-W13/14/15 (33/30/37 players x 13
+                          features incl. wt_tgt_per_snap, rebuilt on the
+                          snaps table with zero-target fill exactly as
+                          12a). TE table has no NA pseudo-rows (12a
+                          filters NA receivers).
 10b4_qb_slate.R           QB clone, gate passed |diff|=0 (2025-W15: 32
                           QBs x 19 features; W02 ok). Requires
                           data/qb_def_adj.rds -- additive save added to
@@ -644,6 +700,23 @@ Next rungs: 2 Vegas lines (cheap control), 3 weather adjustment layer.
 - Seeds: 42 everywhere randomness exists (simulation, tuning)
 - Every model stage writes its coverage/calibration tables to `output/` and
   its console log to `logs/`
+
+## Status update (2026-07-19): TE joins the product
+
+All FOUR positions now content-ready and wired through deployment. TE
+chain (12-series, D17): thresholds 12/17, rubric passed (-0.4pp pooled and
+low-usage), sim beats normal 3.9->1.5pp / 2.6->0.9pp, conditional recal
+picks platt_vol / strat_platt, slate gate |diff|=0 x3 weeks, 10c recon all
+bounds passed x3 weeks with RB/WR/QB published numbers byte-stable (TE
+simulates last -- RNG order is part of the published-number contract).
+10a now trains 10 deploy models; weekly_run.sh runs 12a + 10b5 in cadence.
+TE editorial (Steve 2026-07-19): start board + streamer board (cut:
+pred_vol < 4) + flex boom board (RB/WR/TE combined; bars are position-
+calibrated 20/20/17 -- equal rarity by construction -- and disclosed per
+row and in the footnote). Watch items:
+TE exante_low stratum thin (315 rows, RB-recut signature); TE injury-state
+layer untested (11-family A/B is the natural next rung); star shrinkage
+applies (top-12 TEs take 41.8% of positional FP).
 
 ## Status (2026-07-17, end of session)
 

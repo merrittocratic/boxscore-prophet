@@ -53,17 +53,21 @@ WTAG <- sprintf("%d_w%02d", TARGET_SEASON, TARGET_WEEK)
 N_SIM     <- 2000
 CDF_PROBS <- c(0.05, 0.10, 0.25, 0.50, 0.75, 0.90, 0.95)
 
-# Thresholds (content spec): RB/WR PPR 15/20, QB standard 20/25
+# Thresholds (content spec): RB/WR PPR 15/20, TE PPR 12/17 (12_te
+# feasibility rate-matched cuts), QB standard 20/25
 THRESH <- list(
   RB = c(start = 15, boom = 20),
   WR = c(start = 15, boom = 20),
+  TE = c(start = 12, boom = 17),
   QB = c(start = 20, boom = 25)
 )
 
-# Volume tiers for residual pools -- frozen 06b/09a conventions
+# Volume tiers for residual pools -- frozen 06b/09a/12d conventions
 tier_rb   <- function(opp) cut(opp, c(-Inf, 9, 14, Inf),
                                labels = c("low", "mid", "high"), right = FALSE)
 tier_wr   <- function(opp) cut(opp, c(-Inf, 6, 10, Inf),
+                               labels = c("low", "mid", "high"), right = FALSE)
+tier_te   <- function(opp) cut(opp, c(-Inf, 5, 8, Inf),
                                labels = c("low", "mid", "high"), right = FALSE)
 rush_tier <- function(carries) cut(carries, c(-Inf, 4, 8, Inf),
                                    labels = c("statue", "mover", "scrambler"),
@@ -92,8 +96,9 @@ slate_file <- function(stem) {
 
 rb_slate <- slate_file("10b2_rb_slate")
 wr_slate <- slate_file("10b3_wr_slate")
+te_slate <- slate_file("10b5_te_slate")
 qb_slate <- slate_file("10b4_qb_slate")
-cli_alert_success("Slates: RB={nrow(rb_slate)} WR={nrow(wr_slate)} QB={nrow(qb_slate)}")
+cli_alert_success("Slates: RB={nrow(rb_slate)} WR={nrow(wr_slate)} TE={nrow(te_slate)} QB={nrow(qb_slate)}")
 
 # ---------------------------------------------------------------------------
 # Kickoff-aware partition (in-season re-scores). A game that has kicked off
@@ -136,8 +141,9 @@ if (nrow(live_games) == 0) {
 
 rb_slate <- rb_slate |> semi_join(live_games, by = "game_id")
 wr_slate <- wr_slate |> semi_join(live_games, by = "game_id")
+te_slate <- te_slate |> semi_join(live_games, by = "game_id")
 qb_slate <- qb_slate |> semi_join(live_games, by = "game_id")
-cli_alert_success("Scoring: RB={nrow(rb_slate)} WR={nrow(wr_slate)} QB={nrow(qb_slate)} players")
+cli_alert_success("Scoring: RB={nrow(rb_slate)} WR={nrow(wr_slate)} TE={nrow(te_slate)} QB={nrow(qb_slate)} players")
 
 dp <- readRDS("data/deployment_params.rds")
 cli_alert_info("Deployment models trained through {dp$rb$trained_through$season}-W{dp$rb$trained_through$week}")
@@ -164,13 +170,17 @@ predict_component <- function(df, spec) {
 
 # Translation + recal + sim artifacts
 fp_fits    <- readRDS("data/fp_translation_fits.rds")        # $rb, $wr
+te_fit     <- readRDS("data/te_fp_translation_fit.rds")
 qb_fit     <- readRDS("data/qb_fp_translation_fit.rds")
 fp_maps    <- readRDS("data/fp_recal_maps.rds")              # RB_15+ etc.
+te_maps    <- readRDS("data/te_fp_recal_maps.rds")           # TE_12+ etc.
 qb_maps    <- readRDS("data/qb_fp_recal_maps.rds")           # QB_20+ etc.
 
 pools_csv  <- readr::read_csv("output/06b_resid_pools.csv",    show_col_types = FALSE)
+te_pools_csv <- readr::read_csv("output/12d_te_resid_pools.csv", show_col_types = FALSE)
 qb_pools_csv <- readr::read_csv("output/09a_qb_resid_pools.csv", show_col_types = FALSE)
 sim_params <- readr::read_csv("output/06b_sim_params.csv",     show_col_types = FALSE)
+te_sim_csv <- readr::read_csv("output/12d_te_sim_params.csv",  show_col_types = FALSE)
 qb_sim_csv <- readr::read_csv("output/09a_qb_sim_params.csv",  show_col_types = FALSE)
 
 pool_list <- function(df, pos, tiers) {
@@ -178,12 +188,14 @@ pool_list <- function(df, pos, tiers) {
 }
 pools_rb <- pool_list(pools_csv, "RB", c("low", "mid", "high"))
 pools_wr <- pool_list(pools_csv, "WR", c("low", "mid", "high"))
+pools_te <- pool_list(te_pools_csv, "TE", c("low", "mid", "high"))
 pools_qb <- pool_list(qb_pools_csv, "QB", c("statue", "mover", "scrambler"))
 stopifnot(all(lengths(pools_rb) > 0), all(lengths(pools_wr) > 0),
-          all(lengths(pools_qb) > 0))
+          all(lengths(pools_te) > 0), all(lengths(pools_qb) > 0))
 
 rho_rb <- sim_params$rho[sim_params$position == "RB"]
 rho_wr <- sim_params$rho[sim_params$position == "WR"]
+rho_te <- te_sim_csv$rho[te_sim_csv$position == "TE"]
 
 QB_COMP_ORDER <- c("pass_eff", "db", "rush", "carry")   # 09a draw order
 rho_qb <- as.matrix(qb_sim_csv[match(QB_COMP_ORDER, qb_sim_csv$component),
@@ -282,6 +294,21 @@ wr_scored <- bind_cols(
   asym_cols(wr_pred_tot, dp$wr$tot$qset, "tot", scale = wr_sc)
 ) |> mutate(position = "WR", .before = 1)
 
+# --- TE: asymmetric signed qsets + power-law (12c mechanism, WR clone) ---
+te_enc <- encode_features(te_slate)
+te_pred_eff <- predict_component(te_enc, dp$te$eff)
+te_pred_vol <- predict_component(te_enc, dp$te$vol)
+te_pred_tot <- te_pred_eff * te_pred_vol
+te_sc       <- vol_scale(te_pred_vol, dp$te$tot$alpha, "TE")
+
+te_scored <- bind_cols(
+  te_slate |> select(player_id, player_name, posteam, defteam, game_id,
+                     season, week, report_status, practice_status),
+  tibble(pred_eff = te_pred_eff),
+  asym_cols(te_pred_vol, dp$te$vol$qset, "vol"),
+  asym_cols(te_pred_tot, dp$te$tot$qset, "tot", scale = te_sc)
+) |> mutate(position = "TE", .before = 1)
+
 # --- QB: four symmetric components + const-additive combined (08c) ---
 qb_enc <- encode_features(qb_slate)
 qb_pred <- map(dp$qb$components, function(spec) predict_component(qb_enc, spec))
@@ -297,7 +324,7 @@ qb_scored <- bind_cols(
   sym_cols(qb_pred_tot,       dp$qb$qs$tot,      "tot")
 ) |> mutate(position = "QB", .before = 1)
 
-cli_alert_success("Predictions: RB tot mean={round(mean(rb_pred_tot), 2)} | WR {round(mean(wr_pred_tot), 2)} | QB {round(mean(qb_pred_tot), 2)} EPA")
+cli_alert_success("Predictions: RB tot mean={round(mean(rb_pred_tot), 2)} | WR {round(mean(wr_pred_tot), 2)} | TE {round(mean(te_pred_tot), 2)} | QB {round(mean(qb_pred_tot), 2)} EPA")
 
 # ===========================================================================
 # 3. SIMULATION TRANSLATION (cloned 06b / 09a draw logic)
@@ -393,6 +420,13 @@ simulate_qb <- function(scored, fit, pools, chol_m, thresh) {
 qb_scored <- simulate_qb(qb_scored, qb_fit, pools_qb, chol_qb, THRESH$QB)
 cli_alert_success("QB simulation complete")
 
+# TE simulates LAST by design: inserting it earlier shifts the shared RNG
+# stream and jitters already-published RB/WR/QB probabilities (found on the
+# first TE recon run -- a QB row moved 2.6pp and tripped the 10pp row flag;
+# RB/WR/QB draw order is now byte-stable vs the pre-TE shipped chain).
+te_scored <- simulate_rbwr(te_scored, te_fit, pools_te, tier_te, rho_te, THRESH$TE)
+cli_alert_success("TE simulation complete")
+
 # ===========================================================================
 # 4. RECALIBRATION MAPS -> FINAL PROBABILITIES
 # ===========================================================================
@@ -413,14 +447,15 @@ apply_maps <- function(scored, map_start, map_boom, vol) {
 
 rb_scored <- apply_maps(rb_scored, fp_maps[["RB_15+"]], fp_maps[["RB_20+"]], rb_scored$pred_vol)
 wr_scored <- apply_maps(wr_scored, fp_maps[["WR_15+"]], fp_maps[["WR_20+"]], wr_scored$pred_vol)
+te_scored <- apply_maps(te_scored, te_maps[["TE_12+"]], te_maps[["TE_17+"]], te_scored$pred_vol)
 qb_scored <- apply_maps(qb_scored, qb_maps[["QB_20+"]], qb_maps[["QB_25+"]], qb_scored$pred_carry)
 
-for (d in list(rb_scored, wr_scored, qb_scored)) {
+for (d in list(rb_scored, wr_scored, te_scored, qb_scored)) {
   stopifnot(!any(is.na(d$p_start_recal)), !any(is.na(d$p_boom_recal)),
             all(d$p_boom_recal <= d$p_start_recal + 1e-12))
 }
 
-cli_alert_success("Maps applied: RB={fp_maps[['RB_15+']]$method}/{fp_maps[['RB_20+']]$method} WR={fp_maps[['WR_15+']]$method}/{fp_maps[['WR_20+']]$method} QB={qb_maps[['QB_20+']]$method}/{qb_maps[['QB_25+']]$method}")
+cli_alert_success("Maps applied: RB={fp_maps[['RB_15+']]$method}/{fp_maps[['RB_20+']]$method} WR={fp_maps[['WR_15+']]$method}/{fp_maps[['WR_20+']]$method} TE={te_maps[['TE_12+']]$method}/{te_maps[['TE_17+']]$method} QB={qb_maps[['QB_20+']]$method}/{qb_maps[['QB_25+']]$method}")
 
 # ===========================================================================
 # 5. SAVE SCORED SLATE
@@ -447,6 +482,7 @@ slim <- function(d, vol_col) {
 scored_all <- bind_rows(
   slim(rb_scored, "pred_vol"),
   slim(wr_scored, "pred_vol"),
+  slim(te_scored, "pred_vol"),
   slim(qb_scored, "pred_carry")
 ) |>
   arrange(position, desc(p_start_recal))
@@ -471,6 +507,7 @@ cli_alert_success("{ledger_path} (+{nrow(ledger_rows)} rows, mode={RUN_MODE})")
 out_detail <- sprintf("output/10c_scored_detail_%s.csv", WTAG)
 readr::write_csv(bind_rows(rb_scored |> mutate(across(everything(), as.character)),
                            wr_scored |> mutate(across(everything(), as.character)),
+                           te_scored |> mutate(across(everything(), as.character)),
                            qb_scored |> mutate(across(everything(), as.character))),
                  out_detail)
 cli_alert_success("{out_detail}")
@@ -488,6 +525,7 @@ if (n_skipped > 0) {
 }
 
 bt_rbwr_path <- "output/06c_recal_probabilities.csv"
+bt_te_path   <- "output/12e_te_recal_probabilities.csv"
 bt_qb_path   <- "output/09b_qb_recal_probabilities.csv"
 
 bt_col <- function(stem, method) {
@@ -496,11 +534,13 @@ bt_col <- function(stem, method) {
 
 bt_rbwr <- readr::read_csv(bt_rbwr_path, show_col_types = FALSE) |>
   filter(season == TARGET_SEASON, week == TARGET_WEEK)
+bt_te <- readr::read_csv(bt_te_path, show_col_types = FALSE) |>
+  filter(season == TARGET_SEASON, week == TARGET_WEEK)
 bt_qb <- readr::read_csv(bt_qb_path, show_col_types = FALSE) |>
   filter(season == TARGET_SEASON, week == TARGET_WEEK) |>
   mutate(position = "QB")
 
-if (nrow(bt_rbwr) + nrow(bt_qb) == 0) {
+if (nrow(bt_rbwr) + nrow(bt_te) + nrow(bt_qb) == 0) {
   cli_alert_warning("No backtest rows for {TARGET_SEASON} week {TARGET_WEEK} -- future week, reconciliation skipped.")
 } else {
 
@@ -515,6 +555,7 @@ if (nrow(bt_rbwr) + nrow(bt_qb) == 0) {
   bt_all <- bind_rows(
     pick_bt(bt_rbwr, "RB", fp_maps[["RB_15+"]], fp_maps[["RB_20+"]]),
     pick_bt(bt_rbwr, "WR", fp_maps[["WR_15+"]], fp_maps[["WR_20+"]]),
+    pick_bt(bt_te,   "TE", te_maps[["TE_12+"]], te_maps[["TE_17+"]]),
     pick_bt(bt_qb,   "QB", qb_maps[["QB_20+"]], qb_maps[["QB_25+"]])
   )
 

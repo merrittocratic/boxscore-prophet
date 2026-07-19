@@ -1,0 +1,70 @@
+
+── Step 12c: TE Asymmetric Conformal (04b learner, signed-residual intervals) ──
+✔ TE feature table: 6765 rows | 204 folds | expected test rows: 6599
+ℹ Hyperparameters: per-fold tuned values reused from 04b tune log (no re-tuning)
+
+── Walk-forward fold loop (204 folds, refit-only) ──────────────────────────────
+ℹ Fold 025 [2015-W13] done (0s/fold)
+ℹ Fold 050 [2017-W04] done (0s/fold)
+ℹ Fold 075 [2018-W12] done (0s/fold)
+ℹ Fold 100 [2020-W03] done (0s/fold)
+ℹ Fold 125 [2021-W11] done (0.1s/fold)
+ℹ Fold 150 [2022-W18] done (0.1s/fold)
+ℹ Fold 175 [2024-W07] done (0.1s/fold)
+ℹ Fold 200 [2025-W14] done (0.1s/fold)
+ℹ Fold 204 [2025-W18] done (0.1s/fold)
+
+── Integrity + asymmetry diagnostics ───────────────────────────────────────────
+✔ Row count: 6599 / 6599
+ℹ alpha range [0.2, 0.9] | median 0.607
+ℹ Combined 80%: mean up-arm 4.33 vs down-arm 4.37 (up > down = right skew captured)
+ℹ Efficiency 80%: up 0.854 vs down 0.826
+ℹ Median shift (med_tot - pred_tot): -0.004 EPA
+
+── 12c-TE Pooled Coverage ──────────────────────────────────────────────────────
+# A tibble: 9 × 6
+  component  stratum nominal empirical      delta sharpness
+  <chr>      <chr>     <dbl>     <dbl>      <dbl>     <dbl>
+1 efficiency pooled      0.5     0.499 -0.00129       0.835
+2 efficiency pooled      0.8     0.796 -0.00367       1.68 
+3 efficiency pooled      0.9     0.900  0.000288      2.27 
+4 volume     pooled      0.5     0.500 -0.0000758     2.62 
+5 volume     pooled      0.8     0.801  0.00103       5.47 
+6 volume     pooled      0.9     0.897 -0.00259       7.29 
+7 combined   pooled      0.5     0.504  0.00402       4.42 
+8 combined   pooled      0.8     0.796 -0.00397       8.70 
+9 combined   pooled      0.9     0.899 -0.000773     11.7  
+
+── 12c-TE Low-Usage Bucket (targets 3-5) ───────────────────────────────────────
+# A tibble: 9 × 6
+  component  stratum     nominal empirical    delta sharpness
+  <chr>      <chr>         <dbl>     <dbl>    <dbl>     <dbl>
+1 efficiency low_opp_3_5     0.5     0.450 -0.0496      0.836
+2 efficiency low_opp_3_5     0.8     0.752 -0.0482      1.68 
+3 efficiency low_opp_3_5     0.9     0.870 -0.0299      2.27 
+4 volume     low_opp_3_5     0.5     0.579  0.0785      2.61 
+5 volume     low_opp_3_5     0.8     0.834  0.0335      5.45 
+6 volume     low_opp_3_5     0.9     0.911  0.0107      7.28 
+7 combined   low_opp_3_5     0.5     0.502  0.00216     3.61 
+8 combined   low_opp_3_5     0.8     0.796 -0.00350     7.11 
+9 combined   low_opp_3_5     0.9     0.896 -0.00403     9.56 
+
+── Stratified combined coverage at 80% ──
+
+# A tibble: 3 × 6
+  stratum        n empirical    delta sharpness delta_pp
+  <fct>      <int>     <dbl>    <dbl>     <dbl> <chr>   
+1 low  (3-5)  3941     0.796 -0.00350      7.11 -0.4pp  
+2 mid  (6-9)  2116     0.789 -0.0108      10.3  -1.1pp  
+3 high (10+)   542     0.819  0.0192      13.9  +1.9pp  
+── Rubric Decision: 12c vs 12b ─────────────────────────────────────────────────
+ℹ 12b (symmetric):  pooled -0.4pp w=8.688 | low -0.4pp
+ℹ 12c (asymmetric): pooled -0.4pp w=8.704 | low -0.4pp
+✔ 12c passes rubric: pooled -0.4pp, low -0.4pp
+
+── Save outputs ────────────────────────────────────────────────────────────────
+✔ output/12c_te_asym_fold_predictions.csv (6599 rows)
+✔ output/12c_te_asym_pooled_coverage.csv
+✔ output/12c_te_asym_low_usage_coverage.csv
+
+── Step 12c complete ───────────────────────────────────────────────────────────

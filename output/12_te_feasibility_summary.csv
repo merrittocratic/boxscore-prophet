@@ -1,0 +1,15 @@
+metric,value
+te_start_thresh_rate_matched,12
+te_boom_thresh_rate_matched,17
+te_hit_at_wr15,0.17439591775476512
+te_hit_at_wr20,0.07459102506378508
+te_highsnap_under_floor,0.26541216121331274
+wr_highsnap_under_floor,0.1072159672466735
+te_td_share_of_fp,0.1824075538186989
+wr_td_share_of_fp,0.1667164391477805
+te_starter_rows,6663
+te_unique_players,292
+te_adot_median,6.857142857142857
+wr_adot_median,10.363636363636363
+te_lag1_target_cor,0.5460052116373243
+wr_lag1_target_cor,0.5811128309916818

@@ -1,0 +1,13 @@
+position,threshold,method,strat_w_mean_abs_delta_pp,w_mean_abs_delta_pp,brier
+TE,12+,iso,1.9625,1.3026,0.18866
+TE,12+,platt,2.0023,1.8455,0.18788
+TE,12+,platt_vol,1.3003,1.2764,0.18705
+TE,12+,raw,2.0518,1.8473,0.18793
+TE,12+,strat_iso,1.6771,1.0744,0.18890
+TE,12+,strat_platt,1.8193,1.5846,0.18808
+TE,17+,iso,1.2349,0.8699,0.09791
+TE,17+,platt,0.8627,0.7672,0.09743
+TE,17+,platt_vol,0.9162,0.9092,0.09708
+TE,17+,raw,1.0914,0.8409,0.09745
+TE,17+,strat_iso,1.0797,0.7547,0.09791
+TE,17+,strat_platt,0.8508,0.7550,0.09749

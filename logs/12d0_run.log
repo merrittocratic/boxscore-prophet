@@ -1,0 +1,5 @@
+
+── 12d0: rescale TE fold-prediction tot intervals to pred-vol scaling ──────────
+✔ TE (12c): 6599 rows -> output/12c_te_asym_fold_predictions_predvol.csv | mean 80% tot width 8.7 -> 8.9 EPA | median ratio 1.061
+
+── 12d0 complete -- 12d reads the _predvol file by default ─────────────────────

@@ -58,6 +58,7 @@ run() {
 if [ "$MODE" = "full" ]; then
   run R/build_rb_feature_layer.R
   run R/04a_wr_feature_layer.R
+  run R/12a_te_feature_layer.R
   run R/08a_qb_feature_layer.R          # also refreshes data/qb_def_adj.rds
   run R/10a_deployment_models.R         # weekly retrain; frozen after tonight
 fi
@@ -65,6 +66,7 @@ fi
 run R/10b_weekly_slate.R   "$SEASON" "$WEEK"   # game slate + kickoff weather
 run R/10b2_player_slate.R  "$SEASON" "$WEEK"
 run R/10b3_wr_slate.R      "$SEASON" "$WEEK"
+run R/10b5_te_slate.R      "$SEASON" "$WEEK"
 run R/10b4_qb_slate.R      "$SEASON" "$WEEK"
 run R/10c_weekly_score.R   "$SEASON" "$WEEK"
 run R/10d0_ecr_fetch.R     "$SEASON" "$WEEK"   # skips itself if no API key yet

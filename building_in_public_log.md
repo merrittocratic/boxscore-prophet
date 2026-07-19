@@ -4,6 +4,39 @@ Narrative-grade decision log: the moments worth writing about, with the
 receipts pinned. Technical detail lives in README decision entries; this
 file records why the roadmap bent where it did.
 
+## 2026-07-19: The fourth position -- why TEs are not small WRs
+
+TE was the neglected position, and the temptation was to fold it into the
+WR model with a position flag. The feasibility diagnostic (house rule:
+data before model work) said no, for a structural reason: 26.5% of TE
+weeks with 50%+ offensive snaps produce fewer than 3 targets, versus
+10.7% for WRs. A WR on the field is running a route; a TE on the field
+might be a sixth lineman. Snap share -- a load-bearing WR feature --
+does not imply target volume for TEs. The fix is a role feature (rolling
+targets-per-snap) built on the snaps table so the zero-target blocking
+weeks the outcome table never sees still enter the window.
+
+Two more things the data insisted on: TE thresholds are 12/17, not 15/20
+(the WR cuts hit at barely half the reference rates), and the "TE booms
+are TD-gated" intuition is FALSE once thresholds are rate-matched --
+boom-without-a-TD rates are identical to WR (3.0% vs 2.8%). We published
+the failed expectation with the receipt, per house rule.
+
+The build itself was the frozen WR chain end to end: rubric passed at
+-0.4pp, simulation beat the normal approximation by more than half, the
+conditional recalibration bake-off picked volume-aware maps under the
+unchanged judge, and the slate gate reproduced the frozen table at
+|diff| = 0 for three straight weeks.
+
+One lesson for the contract with readers: inserting the TE simulation
+into the scoring script BEFORE QB shifted the shared random-number
+stream and moved an already-published QB probability 2.6pp -- enough to
+trip the pre-committed 10pp reconciliation flag. Published numbers must
+be invariant to adding a position, so TE simulates last, and simulation
+order is now an explicit part of the published-number contract. The
+reconciliation gate caught it, again, on a failure mode nobody designed
+it for.
+
 ## 2026-07-18: The decomposition picks the roadmap (ablation ladder pre-registration)
 
 The pipeline reached content-ready on all three positions with every

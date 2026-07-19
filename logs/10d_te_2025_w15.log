@@ -1,0 +1,26 @@
+
+── Step 10d: content products for 2025 week 15 ─────────────────────────────────
+✔ Scored slate: 202 players
+✔ Board CSVs written (start / boom / streamer)
+ℹ No ECR feed at data/ecr/ecr_2025_w15.csv -- gap table skipped (drop a CSV or run 10d0 once the API key is active)
+
+── Receipts (stated odds vs outcomes, from the locked ledger) ──────────────────
+✔ Receipts: 200 graded (0 DNP) | 0 pending | start hits: 61 | booms: 30
+# A tibble: 4 × 5
+  band_start     n stated hit_rate delta_pp
+  <fct>      <int>  <dbl>    <dbl>    <dbl>
+1 under 10%     25 0.0902    0         -9  
+2 10-25%        73 0.181     0.178     -0.3
+3 25-50%        90 0.364     0.433      6.9
+4 50%+          12 0.572     0.75      17.8
+✔ output/10d_boards_2025_w15.md
+✔ output/10d_receipts_2025_w15.md
+
+── Board images ────────────────────────────────────────────────────────────────
+✔ output/img/10d_start_rb_2025_w15.png
+✔ output/img/10d_start_wr_2025_w15.png
+✔ output/img/10d_start_te_2025_w15.png
+✔ output/img/10d_start_qb_2025_w15.png
+✔ output/img/10d_boom_flex_2025_w15.png
+
+── Step 10d complete -- 2025 week 15 ───────────────────────────────────────────

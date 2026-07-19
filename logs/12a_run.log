@@ -1,0 +1,70 @@
+
+── TE Feature Layer v1.0 | Seasons 2014, 2015, 2016, 2017, 2018, 2019, 2020, 202
+
+── Step 1: Pull raw data ───────────────────────────────────────────────────────
+ℹ PBP seasons 2013-2014-2015-2016-2017-2018-2019-2020-2021-2022-2023-2024-2025
+ℹ Rosters seasons 2013-2014-2015-2016-2017-2018-2019-2020-2021-2022-2023-2024-2025
+ℹ Draft picks (all available seasons)
+ℹ Snap counts seasons 2014-2015-2016-2017-2018-2019-2020-2021-2022-2023-2024-2025
+
+── Step 2: Column inventory ────────────────────────────────────────────────────
+✔ All required PBP and snap columns present
+
+── Step 3: Build lookup tables ─────────────────────────────────────────────────
+ℹ 716 unique TE gsis_ids across all seasons
+
+── Step 4: Filter PBP to TE plays ──────────────────────────────────────────────
+✔ TE plays: 49360 total (20084 deep, 29276 short at air_yards >= 7), all seasons
+
+── Step 5: Build observed outcome table ────────────────────────────────────────
+✔ Outcome table: 12697 player-game rows (seasons 2014+2015+2016+2017+2018+2019+2020+2021+2022+2023+2024+2025)
+
+── Step 6: Efficiency prior features ───────────────────────────────────────────
+ℹ Position prior EPA/target: 2014=0.197 | 2015=0.184 | 2016=0.152 | 2017=0.215 | 2018=0.14 | 2019=0.228 | 2020=0.211 | 2021=0.223 | 2022=0.182 | 2023=0.175 | 2024=0.203 | 2025=0.197
+✔ Efficiency prior: 3706 cold-start rows (29.2%)
+
+── Step 7: Volume features ─────────────────────────────────────────────────────
+✔ Volume features built
+
+── Step 8: Snap share + targets-per-snap role features ─────────────────────────
+ℹ Snap counts: 17312 player-game records, 320 unique players
+ℹ Zero-target games with 25%+ snaps entering role windows: 2053 (11.9% of snap games)
+ℹ wt_snap_share: 10990 non-NA of 12701 rows (86.5%)
+ℹ wt_tgt_per_snap: 10974 non-NA of 12701 rows (86.4%)
+
+── Step 9: Defensive component vector ──────────────────────────────────────────
+ℹ League avg off EPA/TE target: deep_pass=0.386 | short_pass=0.071
+ℹ League avg def EPA/TE target (anchor seasons): short=0.074, deep=0.385
+✔ Defensive vector built; 1152 fallback rows
+
+── Step 10: Assemble feature table ─────────────────────────────────────────────
+ℹ MIN_OPPORTUNITIES=3: dropping 5936 rows, keeping 6765
+✔ Feature table: 6765 rows x 32 columns
+
+── Step 11: Save outputs ───────────────────────────────────────────────────────
+✔ data/te_feature_table.rds
+✔ output/te_feature_table_v1.0.csv
+
+── Step 12: Validation summary ─────────────────────────────────────────────────
+ℹ Rows:                  6765
+ℹ Unique players:        298
+ℹ Season-weeks:          209
+ℹ Seasons present:       2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025
+ℹ Cold-start rows:       19.4%
+ℹ Def fallback rows:     18.3%
+ℹ EPA recon max err:     1.776357e-15
+✔ efficiency x volume reconstructs total_epa -- PASS
+
+── Per-column NA audit ─────────────────────────────────────────────────────────
+ℹ   prior_epa_per_opp: 1315 NA (19.4%)
+ℹ   wt_tgt_per_snap: 682 NA (10.1%)
+ℹ   wt_snap_share: 678 NA (10%)
+ℹ   rolling_epa_per_opp: 527 NA (7.8%)
+ℹ   form_residual: 527 NA (7.8%)
+ℹ   wt_target_share: 527 NA (7.8%)
+ℹ   wt_air_yards_share: 527 NA (7.8%)
+ℹ   wt_air_yards_per_target: 527 NA (7.8%)
+ℹ   wt_team_total_plays: 401 NA (5.9%)
+ℹ   player_name: 154 NA (2.3%)
+
+── Done -- TE feature layer v1.0 frozen ────────────────────────────────────────

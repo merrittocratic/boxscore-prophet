@@ -9,6 +9,7 @@
 # replicates its backtest script exactly:
 #   RB: 03a-v2 (eff + vol, symmetric conformal, Mechanism A power-law alpha)
 #   WR: 04b tuning + 04c asymmetric signed-residual conformal
+#   TE: 12b tuning + 12c asymmetric conformal (WR procedure + role feature)
 #   QB: 08c (pass_eff/db/carry/rush, symmetric conformal, const combined)
 #
 # DEPLOYMENT SEAM (documented, decided 2026-07-17): the RB/WR combined
@@ -99,6 +100,22 @@ WR_EFF_FEATURES <- c(
 )
 WR_VOL_FEATURES <- c(
   "wt_target_share", "wt_air_yards_share", "wt_snap_share", "wt_team_total_plays",
+  "def_short_pass_epa_adj", "def_deep_pass_epa_adj",
+  "draft_tier_int", "is_cold_start_int", "games_played_so_far"
+)
+
+# TE feature sets (12b/12c): WR sets + wt_tgt_per_snap in the volume model
+# (role signal separating route-running TEs from blockers; 12_te receipts)
+TE_EFF_FEATURES <- c(
+  "prior_epa_per_opp", "baseline_epa_per_opp", "rolling_epa_per_opp", "form_residual",
+  "is_cold_start_int", "draft_tier_int",
+  "def_short_pass_epa_adj", "def_deep_pass_epa_adj",
+  "wt_air_yards_per_target",
+  "wt_snap_share", "games_played_so_far", "def_used_fallback_int"
+)
+TE_VOL_FEATURES <- c(
+  "wt_target_share", "wt_air_yards_share", "wt_snap_share", "wt_tgt_per_snap",
+  "wt_team_total_plays",
   "def_short_pass_epa_adj", "def_deep_pass_epa_adj",
   "draft_tier_int", "is_cold_start_int", "games_played_so_far"
 )
@@ -352,6 +369,35 @@ save_model(wr_eff$model, "wr_eff")
 save_model(wr_vol$model, "wr_vol")
 
 # ===========================================================================
+# TE DEPLOYMENT FOLD (12b tuning + 12c asymmetric conformal -- WR procedure)
+# ===========================================================================
+
+cli_h1("TE deployment fold (12b tuning + 12c asymmetric conformal)")
+
+te_ft <- readRDS("data/te_feature_table.rds") |> encode_features()
+te_sp <- split_fit_cal(te_ft)
+cli_alert_info("TE rows: fit={nrow(te_sp$fit)} cal={nrow(te_sp$cal)}")
+
+te_eff <- train_component(te_sp$fit, te_sp$cal, TE_EFF_FEATURES, "epa_per_opp_obs", "te_eff")
+te_vol <- train_component(te_sp$fit, te_sp$cal, TE_VOL_FEATURES, "opportunities",   "te_vol")
+tune_rows <- c(tune_rows, list(te_eff$tune, te_vol$tune))
+
+# Asymmetric signed-residual conformal (12c)
+te_qset_eff <- signed_quantile_set(te_sp$cal$epa_per_opp_obs - te_eff$pred_cal)
+te_qset_vol <- signed_quantile_set(as.numeric(te_sp$cal$opportunities) - te_vol$pred_cal)
+
+te_pred_cal_tot <- te_eff$pred_cal * te_vol$pred_cal
+te_resid_tot    <- te_sp$cal$total_epa - te_pred_cal_tot
+te_cal_opp      <- as.numeric(te_sp$cal$opportunities)
+te_alpha        <- fit_power_alpha(te_cal_opp, abs(te_resid_tot))
+te_qset_tot     <- signed_quantile_set(te_resid_tot / te_cal_opp^te_alpha)
+
+cli_alert_success("TE conformal: alpha={round(te_alpha, 3)} | tot 80% asym: lo={round(te_qset_tot$lo[2], 3)} hi={round(te_qset_tot$hi[2], 3)} (right skew: {te_qset_tot$hi[2] > abs(te_qset_tot$lo[2])})")
+
+save_model(te_eff$model, "te_eff")
+save_model(te_vol$model, "te_vol")
+
+# ===========================================================================
 # QB DEPLOYMENT FOLD (08c procedure)
 # ===========================================================================
 
@@ -410,6 +456,14 @@ deployment_params <- list(
                params = wr_vol$best, qset = wr_qset_vol),
     tot = list(mechanism = "power_law_asym", alpha = wr_alpha, qset = wr_qset_tot)
   ),
+  te = list(
+    trained_through = trained_through(te_ft),
+    eff = list(features = TE_EFF_FEATURES, model_file = "data/deploy_models/te_eff.txt",
+               params = te_eff$best, qset = te_qset_eff),
+    vol = list(features = TE_VOL_FEATURES, model_file = "data/deploy_models/te_vol.txt",
+               params = te_vol$best, qset = te_qset_vol),
+    tot = list(mechanism = "power_law_asym", alpha = te_alpha, qset = te_qset_tot)
+  ),
   qb = list(
     trained_through = trained_through(qb_ft),
     components = imap(QB_COMPONENTS, function(cmp, nm) {
@@ -437,10 +491,11 @@ cli_alert_success("output/10a_deploy_tune_log.csv")
 cli_h1("Verification: fresh reload + sanity scoring")
 
 dp <- readRDS("data/deployment_params.rds")
-for (pos in c("rb", "wr")) {
+cal_sets <- list(rb = rb_sp$cal, wr = wr_sp$cal, te = te_sp$cal)
+for (pos in c("rb", "wr", "te")) {
   for (cmp in c("eff", "vol")) {
     m <- lightgbm::lgb.load(dp[[pos]][[cmp]]$model_file)
-    X <- make_matrix(if (pos == "rb") rb_sp$cal else wr_sp$cal, dp[[pos]][[cmp]]$features)
+    X <- make_matrix(cal_sets[[pos]], dp[[pos]][[cmp]]$features)
     p <- predict(m, X)
     stopifnot(all(is.finite(p)))
     cli_alert_success("{pos}_{cmp}: reload + predict ok ({length(p)} rows, mean={round(mean(p), 3)})")

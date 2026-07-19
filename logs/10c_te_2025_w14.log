@@ -1,0 +1,47 @@
+
+── Step 10c: score slate 2025 week 14 ──────────────────────────────────────────
+✔ Slates: RB=51 WR=77 TE=30 QB=28
+ℹ Mode: hindcast | as-of 2025-12-03 20:15 EST | 14/14 games still to kick off
+✔ Scoring: RB=51 WR=77 TE=30 QB=28 players
+ℹ Deployment models trained through 2025-W18
+✔ Artifacts loaded | rho RB=0.048 WR=0.121
+
+── Point predictions + intervals ───────────────────────────────────────────────
+✔ Predictions: RB tot mean=-0.92 | WR 1.29 | TE 1.09 | QB 0.7 EPA
+
+── Simulation translation (2000 draws per player-week) ─────────────────────────
+✔ RB simulation complete
+✔ WR simulation complete
+✔ QB simulation complete
+✔ TE simulation complete
+
+── Recalibration maps ──────────────────────────────────────────────────────────
+✔ Maps applied: RB=platt/platt_vol WR=strat_platt/strat_platt TE=platt_vol/strat_platt QB=raw/platt
+
+── Save scored slate ───────────────────────────────────────────────────────────
+✔ output/10c_scored_slate_2025_w14.csv (186 rows)
+✔ output/10c_ledger_2025_w14.csv (+186 rows, mode=hindcast)
+✔ output/10c_scored_detail_2025_w14.csv
+
+── Reconciliation vs backtest chain ────────────────────────────────────────────
+ℹ Matched 186 player-weeks (0 slate rows without backtest counterpart -- did not play / no observed FP)
+
+── Reconciliation summary (bounds: r >= 0.95, |mean| <= 2pp, rows > 10pp flagged) ──
+
+# A tibble: 8 × 11
+  position threshold     n pearson_r mean_diff_pp mad_pp max_abs_pp n_over_flag
+  <chr>    <chr>     <int> <chr>     <chr>        <chr>  <chr>            <int>
+1 QB       boom         28 0.9811    -0.09        +1.03  +4.53                0
+2 QB       start        28 0.9815    -0.10        +1.73  +5.45                0
+3 RB       boom         51 0.9913    +0.03        +1.18  +4.88                0
+4 RB       start        51 0.9907    +0.04        +1.92  +5.90                0
+5 TE       boom         30 0.9821    +0.27        +1.29  +4.19                0
+6 TE       start        30 0.9929    +0.04        +1.22  +3.60                0
+7 WR       boom         77 0.9853    -0.08        +1.04  +4.16                0
+8 WR       start        77 0.9884    -0.33        +1.40  +4.77                0
+# ℹ 3 more variables: pass_r <lgl>, pass_mean <lgl>, pass_rows <lgl>
+✔ output/10c_reconciliation_2025_w14.csv (372 rows)
+✔ output/10c_reconciliation_summary_2025_w14.csv
+✔ ALL RECONCILIATION BOUNDS PASSED
+
+── Step 10c complete -- 2025 week 14 ───────────────────────────────────────────
