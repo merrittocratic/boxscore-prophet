@@ -149,8 +149,24 @@ if (nrow(ecr) == 0) {
 
 ecr <- ecr |> mutate(player_name_norm = normalize_player_name(player_name))
 
+# NEVER overwrite a better file with a worse one: a transient API failure
+# (position-level 403/timeout) must not silently degrade an existing
+# complete drop. "Better" = covers at least as many positions AND at least
+# as many rows. (Found 2026-07-26: a key-reset propagation window returned
+# 403 for 2 of 4 positions and the partial fetch clobbered the full file.)
 dir.create("data/ecr", showWarnings = FALSE)
 out_path <- sprintf("data/ecr/ecr_%s.csv", WTAG)
+
+if (file.exists(out_path)) {
+  old <- readr::read_csv(out_path, show_col_types = FALSE)
+  if (n_distinct(old$position) > n_distinct(ecr$position) || nrow(old) > nrow(ecr)) {
+    cli_alert_warning(
+      "Existing {out_path} is more complete ({nrow(old)} rows / {n_distinct(old$position)} positions vs fetched {nrow(ecr)} / {n_distinct(ecr$position)}) -- keeping the existing file."
+    )
+    quit(save = "no", status = 0)
+  }
+}
+
 readr::write_csv(ecr, out_path)
 cli_alert_success("{out_path} ({nrow(ecr)} rows: {paste(count(ecr, position)$n, collapse = '/')} by position)")
 
