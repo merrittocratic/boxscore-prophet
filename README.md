@@ -742,6 +742,34 @@ RECEIPTS TIMING (Steve 2026-07-18): Monday-with-pending -- the Monday run
 publishes receipts with MNF statements listed as "still on the board";
 the Tuesday full run finalizes the week's receipt CSVs.
 
+SINGLE-WRITER RULE FOR DEPLOY ARTIFACTS (Steve 2026-07-26). The
+regenerable training artifacts -- data/deployment_params.rds and
+data/deploy_models/*.txt -- are binaries that every 10a run rewrites,
+and git cannot merge binaries. Convention:
+  - IN-SEASON: only EARNEST commits them (his Tuesday full run is the
+    production trainer, so the committed artifacts always equal what
+    production scores with -- the artifacts-as-receipts property).
+  - MANFRED may run 10a any time for testing but treats the local
+    outputs as scratch: `git checkout -- data/deployment_params.rds
+    data/deploy_models/` before committing anything else.
+  - EXCEPTION: a coordinated model-change ship pass (a new position, a
+    ladder rung landing) retrains and commits from the laptop; Earnest
+    must hold a clean working tree when it lands (his next weekly run
+    then takes over as writer).
+  - CONFLICT RECOVERY (either machine): the local binary is never worth
+    merging -- `git stash` (or checkout) the local copy, pull, drop the
+    stash; rerun 10a if a fresh artifact is needed. First observed
+    2026-07-26 when a MacMini test run's artifact collided with the
+    TE-ship commit on pull.
+  - RUN OUTPUTS (ledgers, receipts, boards, run logs): production-
+    cadence runs COMMIT their outputs -- they are the published record.
+    TEST runs clean up after themselves (preview first):
+      git clean -n -- 'output/*_<season>_w<wk>*' 'logs/'
+      git clean -f -- 'output/*_<season>_w<wk>*' 'logs/'
+    A test-run ledger left lying around and later swept into a commit
+    would masquerade as a published statement -- never `git add -A`
+    on the MacMini outside the production cadence.
+
 ## Ablation ladder rung 1 SHIPPED (2026-07-18): RB injury state machine
 
 11a diagnostic -> 11b ex-ante layer (Friday-lock masked; shared core in
