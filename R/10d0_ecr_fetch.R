@@ -3,11 +3,14 @@
 # file-drop feed: data/ecr/ecr_<season>_w<week>.csv
 # (columns: player_name, position, ecr_rank [, ecr_best, ecr_worst, team]).
 #
-# KEY: macOS keychain, never in the repo or environment files:
-#   security add-generic-password -a fantasypros -s fantasypros-api-key -w '<key>'
-# Missing key or failed request -> EXIT 0 with a skip message: the weekly
-# runner must not fall over while API approval is pending (10d already
-# skips the gap piece gracefully when the CSV is absent).
+# KEY (parallel pathways, Steve 2026-07-26; never in the repo or env files):
+#   MacMini (Earnest, headless cron): macOS keychain --
+#     security add-generic-password -a fantasypros -s fantasypros-api-key -w '<key>'
+#   Laptop (Manfred, interactive): 1Password item "Fantasy Pros API Key",
+#     credential field, via `op` CLI (desktop-app integration unlocks it).
+# Lookup tries keychain first, then op. Missing key on both paths or a
+# failed request -> EXIT 0 with a skip message: the weekly runner must not
+# fall over (10d already skips the gap piece gracefully sans CSV).
 #
 # TERMS (accepted 2026-07-18, personal free tier): non-commercial use;
 # attribution required when publishing derivative analysis (10d bakes a
@@ -45,21 +48,39 @@ POSITIONS <- tribble(
   ~position, ~scoring,
   "RB", "PPR",
   "WR", "PPR",
+  "TE", "PPR",
   "QB", "STD"
 )
 
 cli_h1("Step 10d0: FantasyPros ECR fetch -- {TARGET_SEASON} week {TARGET_WEEK}")
 
-api_key <- tryCatch(
-  system2("security", c("find-generic-password", "-s", "fantasypros-api-key", "-w"),
-          stdout = TRUE, stderr = FALSE),
-  warning = function(w) character(0), error = function(e) character(0)
-)
-if (length(api_key) == 0 || !nzchar(api_key[1])) {
-  cli_alert_info("No fantasypros-api-key in keychain -- ECR fetch skipped (10d gap piece will skip too).")
+# Parallel credential pathways: keychain (MacMini) then 1Password (laptop).
+get_key <- function() {
+  k <- tryCatch(
+    system2("security", c("find-generic-password", "-s", "fantasypros-api-key", "-w"),
+            stdout = TRUE, stderr = FALSE),
+    warning = function(w) character(0), error = function(e) character(0)
+  )
+  if (length(k) > 0 && nzchar(k[1])) return(list(key = k[1], src = "keychain"))
+  # shQuote: system2 does not quote args, so the spaced item name would
+  # splat into four separate arguments without it
+  k <- tryCatch(
+    system2("op", c("item", "get", shQuote("Fantasy Pros API Key"),
+                    "--fields", "credential", "--reveal"),
+            stdout = TRUE, stderr = FALSE),
+    warning = function(w) character(0), error = function(e) character(0)
+  )
+  if (length(k) > 0 && nzchar(k[1])) return(list(key = k[1], src = "1password"))
+  NULL
+}
+
+key_hit <- get_key()
+if (is.null(key_hit)) {
+  cli_alert_info("No FantasyPros key in keychain or 1Password -- ECR fetch skipped (10d gap piece will skip too).")
   quit(save = "no", status = 0)
 }
-api_key <- api_key[1]
+api_key <- key_hit$key
+cli_alert_info("API key loaded from {key_hit$src}")
 
 # Candidate field names for the consensus rank -- the exact schema is
 # unverified until the free-tier key arrives; take the first present.
