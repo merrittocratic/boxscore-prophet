@@ -173,6 +173,17 @@ shipped  <- readr::read_csv("output/08c_qb_fold_predictions.csv", show_col_types
   filter(!is.na(player_id))
 if (nrow(tune_log) != nrow(fold_map)) cli_abort("Tune log / fold map mismatch")
 
+# REUSE_TUNE_LOG: skip the pass_eff grid and refit from a previous run's
+# logged per-fold params (deterministic, seed 42). Used by the ship pass to
+# MATERIALIZE the winning arm with full interval columns without re-tuning.
+REUSE_TUNE_LOG <- Sys.getenv("REUSE_TUNE_LOG", "")
+pe_log <- NULL
+if (nzchar(REUSE_TUNE_LOG)) {
+  pe_log <- readr::read_csv(REUSE_TUNE_LOG, show_col_types = FALSE)
+  if (nrow(pe_log) != nrow(fold_map)) cli_abort("REUSE_TUNE_LOG fold count mismatch")
+  cli_alert_info("pass_eff params reused from {REUSE_TUNE_LOG} (no grid search)")
+}
+
 PASS_EFF_B <- c(PASS_EFF_FEATURES, VEGAS_FEATURES)
 missing <- setdiff(c(PASS_EFF_B, DB_VOL_FEATURES, CARRY_VOL_FEATURES,
                      RUSH_DIRECT_FEATURES), names(ft))
@@ -207,11 +218,18 @@ for (f in seq_len(nrow(fold_map))) {
   fit_data  <- train_data |> semi_join(fit_sws, by = c("season", "week"))
   cal_data  <- train_data |> semi_join(cal_sws, by = c("season", "week"))
 
-  # ARM B pass_eff: fresh nested tune with Vegas features
-  best_pe <- tune_lgbm_component(
-    make_matrix(fit_data, PASS_EFF_B), fit_data$pass_epa_per_db_obs,
-    make_matrix(cal_data, PASS_EFF_B), cal_data$pass_epa_per_db_obs
-  )
+  # ARM B pass_eff: fresh nested tune with Vegas features (or logged params)
+  if (!is.null(pe_log)) {
+    pl <- pe_log[f, ]
+    best_pe <- list(num_leaves = pl$pe_leaves, lr = pl$pe_lr,
+                    min_data_in_leaf = pl$pe_min_node, rounds = pl$pe_rounds,
+                    inner_rmse = pl$pe_inner_rmse)
+  } else {
+    best_pe <- tune_lgbm_component(
+      make_matrix(fit_data, PASS_EFF_B), fit_data$pass_epa_per_db_obs,
+      make_matrix(cal_data, PASS_EFF_B), cal_data$pass_epa_per_db_obs
+    )
+  }
   mod_pe <- fit_lgbm(make_matrix(fit_data, PASS_EFF_B), fit_data$pass_epa_per_db_obs,
                      best_pe$num_leaves, best_pe$lr, best_pe$min_data_in_leaf,
                      max(REFIT_ROUNDS_MIN, best_pe$rounds))
@@ -244,6 +262,9 @@ for (f in seq_len(nrow(fold_map))) {
   pred_test_tot <- p_test$pe * p_test$db + p_test$ru
 
   qs_tot <- q3(abs(cal_data$total_epa - pred_cal_tot))
+  # pass_eff conformal arms (08c mechanism) -- the component that changed;
+  # 09a needs its 7-point frame. db/rush/carry arms merge from shipped (13e).
+  qs_pe <- q3(abs(cal_data$pass_epa_per_db_obs - p_cal$pe))
 
   base <- test_data |>
     select(player_id, season, week, dropbacks, carries, wt_carries, total_epa,
@@ -255,6 +276,8 @@ for (f in seq_len(nrow(fold_map))) {
     cv <- c("50", "80", "90")[i]
     base[[paste0("lo_", cv, "_tot")]] <- pred_test_tot - qs_tot[i]
     base[[paste0("hi_", cv, "_tot")]] <- pred_test_tot + qs_tot[i]
+    base[[paste0("lo_", cv, "_pass_eff")]] <- p_test$pe - qs_pe[i]
+    base[[paste0("hi_", cv, "_pass_eff")]] <- p_test$pe + qs_pe[i]
   }
   fold_results[[f]] <- base |> mutate(fold = f)
 

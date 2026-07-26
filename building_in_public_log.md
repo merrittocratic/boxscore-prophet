@@ -4,6 +4,38 @@ Narrative-grade decision log: the moments worth writing about, with the
 receipts pinned. Technical detail lives in README decision entries; this
 file records why the roadmap bent where it did.
 
+## 2026-07-26: Shipping the market -- three layers deep, with a gate that kept saying no
+
+The Vegas rung shipped today, and the story of the ship pass is the
+story of a closure gate refusing to be satisfied -- twice -- and being
+right both times.
+
+We pre-committed the finish line before integrating anything: the
+published probabilities had to be conditionally honest by Vegas bucket
+(no cell off by 3+ points). Attempt one: the efficiency features from
+the ablation. The gate said no -- and the investigation found that
+touchdowns-per-EPA is itself environment-dependent: hold a player's
+EPA and touches fixed, and he scores ~0.3 more fantasy points in a
+projected shootout than the translation curve expects. More red-zone
+trips per unit of EPA. No efficiency feature can ever see that, so the
+implied total went into the translation regression. Attempt two: the
+gate said no again -- game-script cells remained, built from
+compounded sub-threshold biases (big-underdog RBs over-projected by
+0.8 carries, favored QBs by a dropback) that no single layer owned.
+The recalibration layer -- the designated principled finish -- gained
+Vegas-aware maps under an extended judge, with a twist we want on the
+record: the second candidate round was declared TERMINAL before it
+ran. Adaptive iteration on a judge is a slope; you stay honest by
+announcing where you stop.
+
+Final score: 32 dishonest cells down to 2, both under 4 points, both
+published as known limitations (QB starts in projected-close games,
+TE starts on big underdogs -- game-script shape, a future ladder
+family). Six of eight deployed recalibration maps now read the market.
+The remaining closer-line residue is the measured price of using free
+opening lines: we know exactly what late-week information costs us,
+and it is not worth $100 a month.
+
 ## 2026-07-19: The cheap control that wasn't -- Vegas knows something our models don't
 
 Rung 2 of the ablation ladder was pre-registered as the boring one:

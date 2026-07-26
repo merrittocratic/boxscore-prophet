@@ -67,14 +67,34 @@ te_fp <- te_outcomes |> inner_join(fp_weekly, by = c("player_id", "season", "wee
 
 cli_alert_success("TE join: {nrow(te_fp)} rows")
 
+# Rung-2 ship (2026-07-26): opener implied total in the translation (see
+# 06b header note); centered so missing openers (2025) adjust by zero.
+vegas_open <- readRDS("data/vegas_open_lines.rds") |>
+  select(game_id, posteam, implied_total)
+IT_CENTER <- median(vegas_open$implied_total, na.rm = TRUE)
+te_fp <- te_fp |>
+  left_join(vegas_open, by = c("game_id", "posteam")) |>
+  mutate(it_c = coalesce(implied_total, IT_CENTER) - IT_CENTER)
+cli_alert_info("Opener implied total: center {round(IT_CENTER, 2)} | coverage {round(100 * mean(!is.na(te_fp$implied_total)), 1)}%")
+
 # ===========================================================================
 # 3. FIT REGRESSION, BUILD TIER-CONDITIONAL RESIDUAL POOLS
 # ===========================================================================
 
 cli_h1("Step 3: Fit EPA -> PPR regression, pool residuals by volume tier")
 
-fit_te     <- lm(fantasy_points_ppr ~ ns(total_epa, df = 4) + opportunities, data = te_fp)
+fit_te     <- lm(fantasy_points_ppr ~ ns(total_epa, df = 4) + opportunities + it_c, data = te_fp)
 fit_te_lin <- lm(fantasy_points_ppr ~ total_epa + opportunities, data = te_fp)
+attr(fit_te, "it_center") <- IT_CENTER
+
+env_check <- tibble(res = te_fp$fantasy_points_ppr - predict(fit_te, te_fp),
+                    it = te_fp$implied_total) |>
+  filter(!is.na(it)) |>
+  mutate(bucket = cut(it, c(-Inf, 20, 26, Inf), labels = c("low", "mid", "high"))) |>
+  group_by(bucket) |>
+  summarise(mean_res = round(mean(res), 3), n = n(), .groups = "drop")
+cli_h2("Translation residual mean by implied-total bucket (want ~0)")
+print(env_check, n = Inf)
 
 decile_check <- tibble(res = residuals(fit_te), epa = te_fp$total_epa) |>
   mutate(dec = ntile(epa, 10)) |>
@@ -105,12 +125,21 @@ print(pool_diag, n = Inf)
 
 cli_h1("Step 4: Load fold predictions")
 
-TE_PRED_FILE <- Sys.getenv("TE_PRED_FILE", "output/12c_te_asym_fold_predictions_predvol.csv")
+TE_PRED_FILE <- Sys.getenv("TE_PRED_FILE", "output/13e_te_fold_predictions_predvol.csv")
 OUT_PREFIX   <- Sys.getenv("FP_OUT_PREFIX", "12d")
 cli_alert_info("TE predictions: {TE_PRED_FILE} | output prefix: {OUT_PREFIX}")
 
 te_preds <- readr::read_csv(TE_PRED_FILE, show_col_types = FALSE) |>
   filter(!is.na(player_id))
+
+te_key <- readRDS("data/te_feature_table.rds") |>
+  filter(!is.na(player_id)) |>
+  distinct(player_id, season, week, game_id, posteam)
+te_preds <- te_preds |>
+  left_join(te_key, by = c("player_id", "season", "week")) |>
+  left_join(vegas_open, by = c("game_id", "posteam")) |>
+  mutate(it_c = coalesce(implied_total, IT_CENTER) - IT_CENTER) |>
+  select(-game_id, -posteam, -implied_total)
 
 cli_alert_success("TE preds: {nrow(te_preds)} rows")
 
@@ -171,7 +200,8 @@ for (s in seq_len(N_SIM)) {
     if (length(idx)) res[idx] <- sample(pools_te[[tr]], length(idx), replace = TRUE)
   }
 
-  fp <- predict(fit_te, tibble(total_epa = epa_draw, opportunities = opp_draw)) + res
+  fp <- predict(fit_te, tibble(total_epa = epa_draw, opportunities = opp_draw,
+                               it_c = te_preds$it_c)) + res
   hit_start <- hit_start + (fp >= THRESH_START)
   hit_boom  <- hit_boom  + (fp >= THRESH_BOOM)
 }

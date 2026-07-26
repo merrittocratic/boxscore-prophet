@@ -1,0 +1,10 @@
+
+── Step 10d0: FantasyPros ECR fetch -- 2026 week 1 ─────────────────────────────
+ℹ API key loaded from 1password
+✔ RB (PPR): 10 ranked players (deepest rank 10)
+✔ WR (PPR): 10 ranked players (deepest rank 10)
+✔ TE (PPR): 10 ranked players (deepest rank 10)
+✔ QB (STD): 10 ranked players (deepest rank 10)
+✔ data/ecr/ecr_2026_w01.csv (40 rows: 10/10/10/10 by position)
+
+── Step 10d0 complete ──────────────────────────────────────────────────────────

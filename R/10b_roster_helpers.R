@@ -87,3 +87,53 @@ build_exante_roster <- function(pos, target_season, target_week,
 
   combined |> filter(!is.na(player_id))
 }
+
+# ---------------------------------------------------------------------------
+# Vegas slate lines (rung 2, 2026-07-26). Returns one row per slated
+# (game_id, posteam) with team_spread + implied_total.
+#
+# HINDCAST: read the opener sidecar (data/vegas_open_lines.rds) -- the
+# exact source the deployed models trained on; the slate Vegas gate then
+# asserts identity trivially and honestly.
+# FUTURE (live week): current lines from load_schedules at build time --
+# the "Tuesday line". Trained-on-opener vs served-on-Tuesday skew is
+# bounded above by the open->close movement (spread sd 1.9 pts, 13d0
+# receipt) and sized in output/13g; the recal layer absorbs the residue
+# (pred-vol seam precedent). Falls back to the sidecar when schedules
+# lines are not yet posted.
+# ---------------------------------------------------------------------------
+vegas_slate_lines <- function(games_long, target_season, hindcast) {
+  sidecar <- readRDS("data/vegas_open_lines.rds")
+
+  if (hindcast) {
+    out <- games_long |>
+      select(game_id, posteam) |>
+      left_join(sidecar, by = c("game_id", "posteam"))
+    cli::cli_alert_info("Vegas lines (hindcast, opener sidecar): {sum(!is.na(out$team_spread))}/{nrow(out)} team-games")
+    return(out)
+  }
+
+  sched <- nflreadr::load_schedules(target_season) |>
+    dplyr::filter(game_type == "REG")
+  live <- dplyr::bind_rows(
+    sched |> dplyr::transmute(game_id, posteam = home_team,
+                              team_spread =  spread_line, total_line),
+    sched |> dplyr::transmute(game_id, posteam = away_team,
+                              team_spread = -spread_line, total_line)
+  ) |>
+    dplyr::mutate(implied_total = (total_line + team_spread) / 2) |>
+    dplyr::select(game_id, posteam, team_spread, implied_total)
+
+  out <- games_long |>
+    select(game_id, posteam) |>
+    left_join(live, by = c("game_id", "posteam")) |>
+    left_join(sidecar, by = c("game_id", "posteam"), suffix = c("", "_sidecar")) |>
+    mutate(
+      team_spread   = coalesce(team_spread, team_spread_sidecar),
+      implied_total = coalesce(implied_total, implied_total_sidecar)
+    ) |>
+    select(game_id, posteam, team_spread, implied_total)
+  n_na <- sum(is.na(out$team_spread))
+  cli::cli_alert_info("Vegas lines (live, schedules-at-build): {nrow(out) - n_na}/{nrow(out)} team-games{if (n_na > 0) cli::format_inline(' ({n_na} unposted -> NA features)') else ''}")
+  out
+}

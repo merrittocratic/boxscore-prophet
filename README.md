@@ -568,6 +568,62 @@ initially failed reproduction because the harness filtered the
 NA-player ghost rows the shipped chain trained with -- reproducing a
 frozen procedure means reproducing its quirks.
 
+### D19. Rung 2 SHIPPED: three-layer Vegas integration, published floor (2026-07-26)
+
+The ship pass that landed the D18 ablation, with two defects found and
+fixed on the way -- the closure gate (13f, pre-committed: zero cells
+with |stated-empirical| >= 3pp at n >= 500) refused the first two
+attempts and each refusal located a real mechanism:
+
+LAYER 1 (efficiency, from D18): opener team_spread + implied_total in
+the EFF models (pass_eff for QB). 13e promotes the opener arms to the
+canonical fold predictions (untouched components verified to reproduce
+shipped at ~1e-15; QB pass_eff arms materialized via logged params).
+LAYER 2 (translation, found by 13f round 1): conditional on the SAME
+EPA and volume, FP ran +0.05 per implied point -- TD-per-EPA is
+environment-dependent, invisible to any EPA-layer feature. Fix: opener
+implied total (centered; NA 2025 -> neutral zero; center stored as
+attr(fit, "it_center")) in the 06b/12d/09a translation regressions.
+Post-fix translation residuals flat (+-0.04 FP) by environment.
+LAYER 3 (recal, found by 13f round 2): 3-7pp game-script cells
+remained -- compounded SUB-TRIGGER biases (e.g. big-dog RBs +0.8
+carries over-projected), no single layer owning them. Fix: Vegas-aware
+recal candidates (platt_vegas, platt_vol_vegas: logit(p) + spread +
+|spread| + implied, smooth only) under an EXTENDED pre-committed judge
+(union of volume/spread/implied cells; Brier sanity unchanged).
+TERMINAL-ROUND declaration capped the adaptive iteration: the |spread|
+term (round 2 of 2) was declared the last in-rung candidate change
+BEFORE it ran. Picks: RB15/20 platt_vegas, WR15 strat_platt, WR20
+strat_iso, TE12 platt_vol_vegas, TE17 platt_vegas, QB20
+platt_vol_vegas, QB25 platt -- six of eight maps Vegas-aware.
+
+RESULT (the published rung-2 floor): conditional-dishonesty trigger
+cells 32 -> 2 on ex-ante (opener) buckets: QB starts in projected-close
+games -3.9pp, TE starts on big underdogs -3.8pp. Closer-bucket view: 5
+cells <= 4.9pp, mostly the open->close information gap (the measured
+cost of $0 lines). The two floor cells are KNOWN LIMITATIONS, published
+-- adjacent to the pre-registered game-script/opponent-front ladder
+family, not patched further in-rung by declaration.
+
+DEPLOYMENT: 10a joins the opener sidecar (data/vegas_open_lines.rds,
+same pattern as injury states) + Vegas features in EFF lists; slates
+carry team_spread/implied_total via vegas_slate_lines() (hindcast =
+sidecar, live = schedules-at-build with sidecar fallback; train-on-
+opener vs serve-at-build skew bounded by open->close movement, spread
+sd 1.9 pts, absorbed by the recal layer per the pred-vol seam
+precedent); deployed recal map signature widened uniformly to
+function(p, pred_vol, team_spread, implied_total) with centers sealed
+in the closures; 10c feeds the slate Vegas columns through (sim it_c
+from attr(fit, "it_center") -- the first recon run caught the missing
+term; regression fixed). Slate gates |diff|=0 x 12 (4 positions x 3
+weeks); recon W13/W14 all bounds pass; W15 aggregates pass (r .963-.997,
+|mean| <= .76pp) with ONE explained row-flag (Robinson WR boom -10.9pp:
+~5pp normal all-data-vs-fold raw divergence amplified by a steep
+high-stratum strat_iso step -- the documented iso-cliff class, same as
+the accepted Egbuka flag in rung 1; 1 of 404 comparisons). WR20
+strat_iso cliff behavior stays on the watch list. 2025-season openers
+remain NA (neutral) pending backfill at rollover.
+
 ## Deployment runner (10-series) -- design, in progress 2026-07-17
 
 The backtest chain trains a model per fold; deployment is ONE MORE FOLD:

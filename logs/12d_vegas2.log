@@ -1,0 +1,84 @@
+
+── Step 1: Pull weekly PPR fantasy points (nflreadr) ───────────────────────────
+Warning message:
+The `stat_type` argument of `load_player_stats()` is deprecated as of nflreadr
+1.5.0.
+ℹ Please use `load_player_stats()` instead. 
+✔ PPR fantasy points: 207959 player-game rows
+
+── Step 2: Join to TE outcome table ────────────────────────────────────────────
+✔ TE join: 12697 rows
+ℹ Opener implied total: center 22.75 | coverage 88.2%
+
+── Step 3: Fit EPA -> PPR regression, pool residuals by volume tier ────────────
+
+── Translation residual mean by implied-total bucket (want ~0) ──
+
+# A tibble: 3 × 3
+  bucket mean_res     n
+  <fct>     <dbl> <int>
+1 low      -0.049  2650
+2 mid       0.013  6510
+3 high     -0.023  2034
+── Spline residual mean by EPA decile (should be ~0 everywhere) ──
+
+# A tibble: 1 × 10
+    `1`   `2`   `3`   `4`   `5`   `6`   `7`   `8`   `9`  `10`
+  <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+1  0.26 -0.24 -0.29 -0.21  0.05  0.24  0.21  0.09  0.01 -0.13
+── TE residual pools (sd and skewness by volume tier) ──
+
+# A tibble: 3 × 4
+  tier      n    sd  skew
+  <chr> <int> <dbl> <dbl>
+1 low    8929  1.89 1.76 
+2 mid    2457  3.06 0.772
+3 high   1311  4.00 0.943
+── Step 4: Load fold predictions ───────────────────────────────────────────────
+ℹ TE predictions: output/13e_te_fold_predictions_predvol.csv | output prefix: 12d
+✔ TE preds: 6597 rows
+
+── Step 5: Estimate EPA-error / volume-error correlation ───────────────────────
+ℹ Copula rho: TE=0.106
+
+── Step 6: Simulate FP distributions (2000 draws per player-week) ──────────────
+✔ Probabilities: 6597 rows (6597 with observed FP)
+
+── Step 7: Calibration -- simulation vs normal approximation ───────────────────
+
+── TE P(12+) -- delta by bin, normal vs simulation ──
+
+# A tibble: 8 × 5
+  bin       n_norm delta_norm_pp n_sim delta_sim_pp
+  <fct>      <int> <chr>         <int> <chr>       
+1 [0,0.1)        3 -9.3             27 +5.7        
+2 [0.1,0.2)   1287 -2.0           1500 -1.4        
+3 [0.2,0.3)   1789 -4.7           2066 -3.3        
+4 [0.3,0.4)   1736 -4.8           1671 +0.7        
+5 [0.4,0.5)   1026 -2.1            906 -1.0        
+6 [0.5,0.6)    553 -4.4            352 -0.2        
+7 [0.6,0.7)    182 -6.9             70 +0.7        
+8 [0.7,0.8)     21 -11.4             5 -12.7       
+── TE P(17+) -- delta by bin, normal vs simulation ──
+
+# A tibble: 6 × 5
+  bin       n_norm delta_norm_pp n_sim delta_sim_pp
+  <fct>      <int> <chr>         <int> <chr>       
+1 [0,0.1)     4202 +1.8           3548 +0.2        
+2 [0.1,0.2)   1727 +4.0           2201 +1.8        
+3 [0.2,0.3)    545 +4.1            698 +1.9        
+4 [0.3,0.4)    107 +7.0            138 +4.3        
+5 [0.4,0.5)     15 -15.9            11 -6.2        
+6 [0.5,0.6)      1 +49.1             1 +49.7       
+── n-weighted mean |delta| (pp): normal vs simulation ──
+
+# A tibble: 2 × 3
+  threshold norm  sim  
+  <chr>     <chr> <chr>
+1 12+       3.9   1.7  
+2 17+       2.7   1.0  
+── Step 8: Save outputs ────────────────────────────────────────────────────────
+✔ output/12d_te_fp_sim_probabilities.csv (6597 rows)
+✔ data/te_fp_translation_fit.rds
+
+── Step 12d complete -- TE simulation translation layer ────────────────────────

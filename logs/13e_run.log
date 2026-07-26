@@ -1,0 +1,9 @@
+
+── 13e: promote opener arms to canonical fold predictions ──────────────────────
+✔ RB: output/13e_rb_fold_predictions.csv (11621 rows; vol identity 0e+00)
+✔ WR: output/13e_wr_fold_predictions.csv (17223 rows; vol identity 0e+00)
+! TE: dropping 1 duplicated player-week key
+✔ TE: output/13e_te_fold_predictions.csv (6597 rows; vol identity 0e+00)
+✔ QB: output/13e_qb_fold_predictions.csv (6229 rows; component identity 0e+00)
+
+── 13e complete -- canonical Vegas-era fold predictions written ────────────────

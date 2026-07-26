@@ -1,0 +1,122 @@
+
+── Step 6c: Walk-forward recalibration (volume-conditional bake-off) ───────────
+ℹ Opener covariates: 88.7% coverage | it center 22.75
+✔ 28844 scored player-weeks | seasons 2014-2025
+ℹ Burn-in: seasons < 2016 | eval window: 2016+
+
+── Ex-ante stratum counts (all seasons) ──
+
+# A tibble: 6 × 3
+  position stratum         n
+  <chr>    <fct>       <int>
+1 RB       exante_low   1989
+2 RB       exante_mid   3897
+3 RB       exante_high  5735
+4 WR       exante_low   2556
+5 WR       exante_mid  13646
+6 WR       exante_high  1021
+── Walk-forward weekly refits ──────────────────────────────────────────────────
+ℹ 175 evaluation season-weeks x 2 positions x 2 thresholds x 5 methods
+✔ Recalibrated 24635 eval-window rows
+
+── Evaluation on 2016+ (out-of-time) ───────────────────────────────────────────
+
+── Judge metric (EXTENDED: vol + spread + implied cells) + pooled |delta| (pp) + Brier ──
+
+# A tibble: 32 × 6
+   position threshold method          ext_pp pooled_pp brier  
+   <chr>    <chr>     <chr>           <chr>  <chr>     <chr>  
+ 1 RB       15+       platt_vegas     1.69   1.00      0.17628
+ 2 RB       15+       platt_vol       1.71   0.73      0.17659
+ 3 RB       15+       platt_vol_vegas 1.71   1.19      0.17618
+ 4 RB       15+       raw             1.73   0.81      0.17636
+ 5 RB       15+       platt           1.77   0.88      0.17647
+ 6 RB       15+       iso             1.98   1.25      0.17718
+ 7 RB       15+       strat_iso       1.98   1.26      0.17738
+ 8 RB       15+       strat_platt     2.01   1.25      0.17655
+ 9 RB       20+       platt_vegas     1.09   0.75      0.11096
+10 RB       20+       platt           1.10   0.47      0.11105
+11 RB       20+       platt_vol       1.17   0.56      0.11111
+12 RB       20+       platt_vol_vegas 1.23   0.97      0.11090
+13 RB       20+       strat_platt     1.24   0.68      0.11107
+14 RB       20+       strat_iso       1.38   0.85      0.11152
+15 RB       20+       iso             1.44   0.92      0.11139
+16 RB       20+       raw             2.05   1.69      0.11129
+17 WR       15+       strat_platt     1.13   0.67      0.17776
+18 WR       15+       iso             1.24   0.79      0.17803
+19 WR       15+       platt_vegas     1.28   0.87      0.17755
+20 WR       15+       strat_iso       1.29   0.79      0.17815
+21 WR       15+       platt           1.32   0.87      0.17773
+22 WR       15+       raw             1.32   0.90      0.17768
+23 WR       15+       platt_vol       1.57   1.04      0.17798
+24 WR       15+       platt_vol_vegas 1.62   1.11      0.17746
+25 WR       20+       iso             0.80   0.44      0.10647
+26 WR       20+       strat_iso       0.80   0.52      0.10651
+27 WR       20+       strat_platt     0.95   0.77      0.10625
+28 WR       20+       platt_vegas     1.02   0.81      0.10611
+29 WR       20+       platt           1.04   0.84      0.10624
+30 WR       20+       platt_vol       1.05   0.90      0.10641
+31 WR       20+       platt_vol_vegas 1.17   1.04      0.10618
+32 WR       20+       raw             1.81   1.72      0.10658
+── Method picks (pre-committed rule) ──
+
+# A tibble: 4 × 4
+  position threshold pick        reason                                    
+  <chr>    <chr>     <chr>       <chr>                                     
+1 RB       15+       platt_vegas lowest extended weighted |delta|, Brier ok
+2 RB       20+       platt_vegas lowest extended weighted |delta|, Brier ok
+3 WR       15+       strat_platt lowest extended weighted |delta|, Brier ok
+4 WR       20+       strat_iso   lowest extended weighted |delta|, Brier ok
+── Stratum-level honesty (mean stated vs empirical, pp delta) ──
+
+# A tibble: 36 × 8
+   position threshold method      stratum         n pred  emp   delta_pp
+   <chr>    <chr>     <chr>       <fct>       <int> <chr> <chr> <chr>   
+ 1 RB       15+       raw         exante_low   1632 0.101 0.091 -1.0    
+ 2 RB       15+       raw         exante_mid   3295 0.186 0.178 -0.8    
+ 3 RB       15+       raw         exante_high  4972 0.409 0.404 -0.5    
+ 4 RB       15+       iso         exante_low   1632 0.109 0.091 -1.7    
+ 5 RB       15+       iso         exante_mid   3295 0.179 0.178 -0.1    
+ 6 RB       15+       iso         exante_high  4972 0.392 0.404 +1.2    
+ 7 RB       15+       platt_vegas exante_low   1632 0.104 0.091 -1.3    
+ 8 RB       15+       platt_vegas exante_mid   3295 0.184 0.178 -0.6    
+ 9 RB       15+       platt_vegas exante_high  4972 0.389 0.404 +1.4    
+10 RB       20+       raw         exante_low   1632 0.027 0.028 +0.1    
+11 RB       20+       raw         exante_mid   3295 0.063 0.074 +1.1    
+12 RB       20+       raw         exante_high  4972 0.199 0.226 +2.6    
+13 RB       20+       iso         exante_low   1632 0.034 0.028 -0.6    
+14 RB       20+       iso         exante_mid   3295 0.078 0.074 -0.5    
+15 RB       20+       iso         exante_high  4972 0.224 0.226 +0.2    
+16 RB       20+       platt_vegas exante_low   1632 0.036 0.028 -0.8    
+17 RB       20+       platt_vegas exante_mid   3295 0.079 0.074 -0.5    
+18 RB       20+       platt_vegas exante_high  4972 0.223 0.226 +0.3    
+19 WR       15+       raw         exante_low   2149 0.112 0.099 -1.3    
+20 WR       15+       raw         exante_mid  11772 0.280 0.280 -0.0    
+21 WR       15+       raw         exante_high   815 0.542 0.513 -2.9    
+22 WR       15+       iso         exante_low   2149 0.099 0.099 +0.1    
+23 WR       15+       iso         exante_mid  11772 0.273 0.280 +0.7    
+24 WR       15+       iso         exante_high   815 0.517 0.513 -0.4    
+25 WR       15+       strat_platt exante_low   2149 0.096 0.099 +0.3    
+26 WR       15+       strat_platt exante_mid  11772 0.274 0.280 +0.5    
+27 WR       15+       strat_platt exante_high   815 0.504 0.513 +0.9    
+28 WR       20+       raw         exante_low   2149 0.030 0.027 -0.2    
+29 WR       20+       raw         exante_mid  11772 0.116 0.138 +2.2    
+30 WR       20+       raw         exante_high   815 0.313 0.315 +0.3    
+31 WR       20+       iso         exante_low   2149 0.030 0.027 -0.2    
+32 WR       20+       iso         exante_mid  11772 0.134 0.138 +0.4    
+33 WR       20+       iso         exante_high   815 0.330 0.315 -1.5    
+34 WR       20+       strat_iso   exante_low   2149 0.025 0.027 +0.2    
+35 WR       20+       strat_iso   exante_mid  11772 0.134 0.138 +0.4    
+36 WR       20+       strat_iso   exante_high   815 0.330 0.315 -1.5    
+── Deployment maps (refit on all seasons) ──────────────────────────────────────
+
+── Save outputs ────────────────────────────────────────────────────────────────
+✔ output/06c_recal_probabilities.csv (24635 rows)
+✔ output/06c_recal_calibration.csv
+✔ output/06c_recal_calibration_strat.csv
+✔ output/06c_recal_summary.csv
+✔ output/06c_recal_strata.csv
+✔ output/06c_recal_map_grid.csv
+✔ data/fp_recal_maps.rds (deployment maps)
+
+── Step 6c complete ────────────────────────────────────────────────────────────

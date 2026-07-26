@@ -108,6 +108,52 @@ fit_platt_vol <- function(p, hit, vol) {
   }
 }
 
+# Smooth Vegas-conditional maps (2026-07-26 extension; judge rule
+# pre-committed before the run -- see 06c header for the full statement).
+fit_platt_vegas <- function(p, hit, sp, it, it_center) {
+  clamp <- local({ eps <- P_EPS; function(q) pmin(pmax(q, eps), 1 - eps) })
+  ctr   <- it_center
+  df  <- tibble(x = qlogis(clamp(p)),
+                sp_c = coalesce(sp, 0),
+                asp_c = abs(coalesce(sp, 0)),
+                it_c = coalesce(it, ctr) - ctr,
+                y = hit)
+  fit <- tryCatch(glm(y ~ x + sp_c + asp_c + it_c, family = binomial, data = df),
+                  error = function(e) NULL, warning = function(w) {
+                    suppressWarnings(glm(y ~ x + sp_c + asp_c + it_c, family = binomial, data = df))
+                  })
+  if (is.null(fit)) return(NULL)
+  function(pnew, spnew, itnew) {
+    as.numeric(predict(fit, newdata = data.frame(
+      x = qlogis(clamp(pnew)),
+      sp_c = coalesce(spnew, 0),
+      asp_c = abs(coalesce(spnew, 0)),
+      it_c = coalesce(itnew, ctr) - ctr), type = "response"))
+  }
+}
+
+fit_platt_vol_vegas <- function(p, hit, vol, sp, it, it_center) {
+  clamp <- local({ eps <- P_EPS; function(q) pmin(pmax(q, eps), 1 - eps) })
+  ctr   <- it_center
+  df  <- tibble(x = qlogis(clamp(p)), v = vol,
+                sp_c = coalesce(sp, 0),
+                asp_c = abs(coalesce(sp, 0)),
+                it_c = coalesce(it, ctr) - ctr,
+                y = hit)
+  fit <- tryCatch(glm(y ~ x + v + sp_c + asp_c + it_c, family = binomial, data = df),
+                  error = function(e) NULL, warning = function(w) {
+                    suppressWarnings(glm(y ~ x + v + sp_c + asp_c + it_c, family = binomial, data = df))
+                  })
+  if (is.null(fit)) return(NULL)
+  function(pnew, vnew, spnew, itnew) {
+    as.numeric(predict(fit, newdata = data.frame(
+      x = qlogis(clamp(pnew)), v = vnew,
+      sp_c = coalesce(spnew, 0),
+      asp_c = abs(coalesce(spnew, 0)),
+      it_c = coalesce(itnew, ctr) - ctr), type = "response"))
+  }
+}
+
 `%||%` <- function(a, b) if (is.null(a)) b else a
 
 # ===========================================================================
@@ -123,6 +169,24 @@ probs <- readr::read_csv("output/09a_qb_fp_sim_probabilities.csv",
          p_start = p_start_sim, p_boom = p_boom_sim, hit_start, hit_boom) |>
   mutate(stratum = stratum_of(pred_carry)) |>
   arrange(season, week)
+
+# Opener Vegas covariates (2026-07-26 extension) via feature-table keys
+vegas_open <- readRDS("data/vegas_open_lines.rds")
+IT_CENTER  <- median(vegas_open$implied_total, na.rm = TRUE)
+vkeys <- readRDS("data/qb_feature_table.rds") |> filter(!is.na(player_id)) |>
+  distinct(player_id, season, week, game_id, posteam)
+probs <- probs |>
+  left_join(vkeys, by = c("player_id", "season", "week")) |>
+  left_join(vegas_open, by = c("game_id", "posteam")) |>
+  select(-game_id, -posteam)
+cli_alert_info("Opener covariates: {round(100 * mean(!is.na(probs$team_spread)), 1)}% coverage")
+
+spread_bucket <- function(s) cut(s, c(-Inf, -6.5, -2.5, 2.5, 6.5, Inf),
+  labels = c("big_dog", "dog", "close", "fav", "big_fav"))
+itotal_bucket <- function(it) cut(it, c(-Inf, 20, 26, Inf),
+  labels = c("low_implied", "mid_implied", "high_implied"))
+probs <- probs |>
+  mutate(sb = spread_bucket(team_spread), ib = itotal_bucket(implied_total))
 
 cli_alert_success("{nrow(probs)} scored QB-weeks | seasons {min(probs$season)}-{max(probs$season)}")
 
@@ -146,7 +210,8 @@ recal_one <- function(df, p_col, hit_col) {
   n <- nrow(df)
   out <- list(platt = rep(NA_real_, n), iso = rep(NA_real_, n),
               strat_platt = rep(NA_real_, n), strat_iso = rep(NA_real_, n),
-              platt_vol = rep(NA_real_, n))
+              platt_vol = rep(NA_real_, n),
+              platt_vegas = rep(NA_real_, n), platt_vol_vegas = rep(NA_real_, n))
   for (i in seq_len(nrow(eval_weeks))) {
     s <- eval_weeks$season[i]; w <- eval_weeks$week[i]
     idx_test  <- which(df$season == s & df$week == w)
@@ -154,8 +219,10 @@ recal_one <- function(df, p_col, hit_col) {
     idx_train <- which(df$season < s | (df$season == s & df$week < w))
     p_tr <- df[[p_col]][idx_train]; h_tr <- df[[hit_col]][idx_train]
     s_tr <- df$stratum[idx_train];  v_tr <- df$pred_carry[idx_train]
+    sp_tr <- df$team_spread[idx_train]; it_tr <- df$implied_total[idx_train]
     p_te <- df[[p_col]][idx_test]
     s_te <- df$stratum[idx_test];   v_te <- df$pred_carry[idx_test]
+    sp_te <- df$team_spread[idx_test]; it_te <- df$implied_total[idx_test]
 
     f_platt <- fit_platt(p_tr, h_tr)
     out$platt[idx_test] <- f_platt(p_te)
@@ -165,11 +232,18 @@ recal_one <- function(df, p_col, hit_col) {
     f_pv <- fit_platt_vol(p_tr, h_tr, v_tr)
     out$platt_vol[idx_test] <-
       if (is.null(f_pv)) f_platt(p_te) else f_pv(p_te, v_te)
+    f_pg <- fit_platt_vegas(p_tr, h_tr, sp_tr, it_tr, IT_CENTER)
+    out$platt_vegas[idx_test] <-
+      if (is.null(f_pg)) f_platt(p_te) else f_pg(p_te, sp_te, it_te)
+    f_pvg <- fit_platt_vol_vegas(p_tr, h_tr, v_tr, sp_tr, it_tr, IT_CENTER)
+    out$platt_vol_vegas[idx_test] <-
+      if (is.null(f_pvg)) f_platt(p_te) else f_pvg(p_te, v_te, sp_te, it_te)
   }
   as_tibble(out)
 }
 
-CAND_METHODS <- c("platt", "iso", "strat_platt", "strat_iso", "platt_vol")
+CAND_METHODS <- c("platt", "iso", "strat_platt", "strat_iso", "platt_vol",
+                  "platt_vegas", "platt_vol_vegas")
 
 d_sorted <- probs |> arrange(season, week)
 recal <- bind_cols(
@@ -199,12 +273,13 @@ col_for <- function(thresh, method) {
   if (method == "raw") stem else paste0(stem, "_", method)
 }
 
-calibrate <- function(df, prob_col, hit_col, method, thresh, by_stratum = FALSE) {
+calibrate <- function(df, prob_col, hit_col, method, thresh, group_col = NULL) {
   g <- df |>
     filter(!is.na(.data[[prob_col]])) |>
     mutate(bin = cut(.data[[prob_col]], seq(0, 1, 0.1),
                      include.lowest = TRUE, right = FALSE))
-  g <- if (by_stratum) group_by(g, stratum, bin) else group_by(g, bin)
+  if (!is.null(group_col)) g <- g |> filter(!is.na(.data[[group_col]]))
+  g <- if (!is.null(group_col)) group_by(g, cell = .data[[group_col]], bin) else group_by(g, bin)
   g |>
     summarise(n = n(), pred = mean(.data[[prob_col]]),
               emp = mean(.data[[hit_col]]), .groups = "drop") |>
@@ -219,11 +294,19 @@ cal_all <- pmap(grid, function(thresh, method) {
             if (thresh == "20+") "hit_start" else "hit_boom", method, thresh)
 }) |> list_rbind()
 
-cal_strat <- pmap(grid, function(thresh, method) {
-  calibrate(recal, col_for(thresh, method),
-            if (thresh == "20+") "hit_start" else "hit_boom", method, thresh,
-            by_stratum = TRUE)
-}) |> list_rbind()
+cal_by <- function(group_col) {
+  pmap(grid, function(thresh, method) {
+    calibrate(recal, col_for(thresh, method),
+              if (thresh == "20+") "hit_start" else "hit_boom", method, thresh,
+              group_col = group_col)
+  }) |> list_rbind()
+}
+cal_strat <- cal_by("stratum")
+cal_sb    <- cal_by("sb")
+cal_ib    <- cal_by("ib")
+ext_cells <- bind_rows(cal_strat |> mutate(axis = "volume"),
+                       cal_sb    |> mutate(axis = "spread"),
+                       cal_ib    |> mutate(axis = "implied"))
 
 brier <- pmap(grid, function(thresh, method) {
   p <- recal[[col_for(thresh, method)]]
@@ -236,21 +319,21 @@ summary_tbl <- cal_all |>
   group_by(position, threshold, method) |>
   summarise(w_mean_abs_delta = weighted.mean(abs(delta), n), .groups = "drop") |>
   left_join(
-    cal_strat |>
+    ext_cells |>
       group_by(position, threshold, method) |>
-      summarise(strat_w_mean_abs_delta = weighted.mean(abs(delta), n),
+      summarise(ext_w_mean_abs_delta = weighted.mean(abs(delta), n),
                 .groups = "drop"),
     by = c("position", "threshold", "method")
   ) |>
   left_join(brier, by = c("position", "threshold", "method"))
 
-cli_h2("Judge metric (stratified) + pooled |delta| (pp) + Brier, by method")
+cli_h2("Judge metric (EXTENDED: vol + spread + implied cells) + pooled |delta| (pp) + Brier")
 print(summary_tbl |>
         mutate(pooled_pp = sprintf("%.2f", 100 * w_mean_abs_delta),
-               strat_pp  = sprintf("%.2f", 100 * strat_w_mean_abs_delta),
+               ext_pp    = sprintf("%.2f", 100 * ext_w_mean_abs_delta),
                brier     = sprintf("%.5f", brier)) |>
-        select(threshold, method, strat_pp, pooled_pp, brier) |>
-        arrange(threshold, strat_pp), n = Inf)
+        select(threshold, method, ext_pp, pooled_pp, brier) |>
+        arrange(threshold, ext_pp), n = Inf)
 
 picks <- summary_tbl |>
   group_by(position, threshold) |>
@@ -258,8 +341,8 @@ picks <- summary_tbl |>
     raw_brier <- .x$brier[.x$method == "raw"]
     cand <- .x |> filter(method != "raw", brier <= raw_brier + 1e-4)
     if (!nrow(cand)) return(tibble(pick = "raw", reason = "no method beat raw Brier"))
-    best <- cand |> slice_min(strat_w_mean_abs_delta, n = 1, with_ties = FALSE)
-    tibble(pick = best$method, reason = "lowest stratified weighted |delta|, Brier ok")
+    best <- cand |> slice_min(ext_w_mean_abs_delta, n = 1, with_ties = FALSE)
+    tibble(pick = best$method, reason = "lowest extended weighted |delta|, Brier ok")
   }) |>
   ungroup()
 
@@ -301,22 +384,36 @@ deploy_maps <- pmap(picks, function(position, threshold, pick, reason) {
   h <- all_rows[[if (threshold == "20+") "hit_start" else "hit_boom"]]
   s <- all_rows$stratum
   v <- all_rows$pred_carry
+  sp <- all_rows$team_spread
+  it <- all_rows$implied_total
   breaks <- STRATA_BREAKS
   labs   <- STRATA_LABELS
+  # Uniform signature (widened 2026-07-26): function(p, pred_vol,
+  # team_spread, implied_total); non-Vegas methods ignore the extras.
   fn <- switch(pick,
-    raw         = function(pnew, vnew) pnew,
-    platt       = { f <- fit_platt(p, h);    function(pnew, vnew) f(pnew) },
-    iso         = { f <- fit_isotonic(p, h); function(pnew, vnew) f(pnew) },
+    raw         = function(pnew, vnew, spnew, itnew) pnew,
+    platt       = { f <- fit_platt(p, h)
+                    function(pnew, vnew, spnew, itnew) f(pnew) },
+    iso         = { f <- fit_isotonic(p, h)
+                    function(pnew, vnew, spnew, itnew) f(pnew) },
     strat_platt = { f <- fit_strat(p, h, s, fit_platt)
-                    function(pnew, vnew)
+                    function(pnew, vnew, spnew, itnew)
                       f(pnew, cut(vnew, breaks, labels = labs, right = FALSE)) },
     strat_iso   = { f <- fit_strat(p, h, s, fit_isotonic)
-                    function(pnew, vnew)
+                    function(pnew, vnew, spnew, itnew)
                       f(pnew, cut(vnew, breaks, labels = labs, right = FALSE)) },
     platt_vol   = { f <- fit_platt_vol(p, h, v) %||% fit_platt(p, h)
                     if (identical(names(formals(f)), "pnew"))
-                      function(pnew, vnew) f(pnew)
-                    else f }
+                      function(pnew, vnew, spnew, itnew) f(pnew)
+                    else function(pnew, vnew, spnew, itnew) f(pnew, vnew) },
+    platt_vegas = { f <- fit_platt_vegas(p, h, sp, it, IT_CENTER) %||% fit_platt(p, h)
+                    if (identical(names(formals(f)), "pnew"))
+                      function(pnew, vnew, spnew, itnew) f(pnew)
+                    else function(pnew, vnew, spnew, itnew) f(pnew, spnew, itnew) },
+    platt_vol_vegas = { f <- fit_platt_vol_vegas(p, h, v, sp, it, IT_CENTER) %||% fit_platt(p, h)
+                    if (identical(names(formals(f)), "pnew"))
+                      function(pnew, vnew, spnew, itnew) f(pnew)
+                    else function(pnew, vnew, spnew, itnew) f(pnew, vnew, spnew, itnew) }
   )
   list(position = position, threshold = threshold, method = pick,
        strata_breaks = breaks, map = fn)
@@ -332,7 +429,8 @@ vol_refs <- all_rows |>
 map_grid <- map(deploy_maps, function(m) {
   pmap(vol_refs, function(stratum, pred_vol_ref) {
     p_seq   <- seq(0, 1, 0.01)
-    p_recal <- m$map(p_seq, rep(pred_vol_ref, length(p_seq)))
+    p_recal <- m$map(p_seq, rep(pred_vol_ref, length(p_seq)),
+                     rep(0, length(p_seq)), rep(NA_real_, length(p_seq)))
     tibble(position = "QB", threshold = m$threshold, method = m$method,
            stratum = as.character(stratum), pred_vol_ref = pred_vol_ref,
            p_raw = p_seq, p_recal = p_recal)
@@ -349,11 +447,11 @@ readr::write_csv(recal,     "output/09b_qb_recal_probabilities.csv")
 readr::write_csv(cal_all,   "output/09b_qb_recal_calibration.csv")
 readr::write_csv(cal_strat, "output/09b_qb_recal_calibration_strat.csv")
 readr::write_csv(summary_tbl |>
-                   mutate(across(c(w_mean_abs_delta, strat_w_mean_abs_delta),
+                   mutate(across(c(w_mean_abs_delta, ext_w_mean_abs_delta),
                                  ~ sprintf("%.4f", 100 * .x), .names = "{.col}_pp"),
                           brier = sprintf("%.5f", brier)) |>
                    select(position, threshold, method,
-                          strat_w_mean_abs_delta_pp, w_mean_abs_delta_pp, brier),
+                          ext_w_mean_abs_delta_pp, w_mean_abs_delta_pp, brier),
                  "output/09b_qb_recal_summary.csv")
 readr::write_csv(strata_tbl, "output/09b_qb_recal_strata.csv")
 readr::write_csv(map_grid,   "output/09b_qb_recal_map_grid.csv")

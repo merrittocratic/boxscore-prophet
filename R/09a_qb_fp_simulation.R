@@ -80,10 +80,21 @@ cli_alert_success("Fantasy points: {nrow(fp_weekly)} player-game rows")
 cli_h1("Step 2: Join to QB starter rows")
 
 qb_rows <- readRDS("data/qb_feature_table.rds") |>
-  select(player_id, season, week, pass_epa, rush_epa, dropbacks, carries) |>
+  select(player_id, season, week, game_id, posteam,
+         pass_epa, rush_epa, dropbacks, carries) |>
   inner_join(fp_weekly, by = c("player_id", "season", "week"))
 
 cli_alert_success("QB join: {nrow(qb_rows)} starter rows with fantasy points")
+
+# Rung-2 ship (2026-07-26): opener implied total in the translation (see
+# 06b header note); centered so missing openers (2025) adjust by zero.
+vegas_open <- readRDS("data/vegas_open_lines.rds") |>
+  select(game_id, posteam, implied_total)
+IT_CENTER <- median(vegas_open$implied_total, na.rm = TRUE)
+qb_rows <- qb_rows |>
+  left_join(vegas_open, by = c("game_id", "posteam")) |>
+  mutate(it_c = coalesce(implied_total, IT_CENTER) - IT_CENTER)
+cli_alert_info("Opener implied total: center {round(IT_CENTER, 2)} | coverage {round(100 * mean(!is.na(qb_rows$implied_total)), 1)}%")
 
 # ===========================================================================
 # 3. FIT TRANSLATION REGRESSION, BUILD TIER-CONDITIONAL RESIDUAL POOLS
@@ -98,8 +109,18 @@ cli_h1("Step 3: Fit FP translation, pool residuals by rushing tier")
 # that EPA does not credit -- a high-volume zero-EPA game still banks
 # ~10 FP of yards. First fit without it showed a monotone residual trend
 # (-4.4 FP bottom decile to +4.5 top); with it the trend flattens.
-fit_qb <- lm(fantasy_points ~ ns(pass_epa, df = 4) + dropbacks + rush_epa + carries,
+fit_qb <- lm(fantasy_points ~ ns(pass_epa, df = 4) + dropbacks + rush_epa + carries + it_c,
              data = qb_rows)
+attr(fit_qb, "it_center") <- IT_CENTER
+
+env_check_qb <- tibble(res = qb_rows$fantasy_points - predict(fit_qb, qb_rows),
+                       it = qb_rows$implied_total) |>
+  filter(!is.na(it)) |>
+  mutate(bucket = cut(it, c(-Inf, 20, 26, Inf), labels = c("low", "mid", "high"))) |>
+  group_by(bucket) |>
+  summarise(mean_res = round(mean(res), 3), n = n(), .groups = "drop")
+cli_h2("Translation residual mean by implied-total bucket (want ~0)")
+print(env_check_qb, n = Inf)
 
 # Linear total-EPA fit retained as the v1 "norm" comparison baseline
 fit_qb_lin <- lm(fantasy_points ~ I(pass_epa + rush_epa) + carries, data = qb_rows)
@@ -138,8 +159,18 @@ pools_qb <- tibble(resid = residuals(fit_qb), tier = rush_tier(qb_rows$carries))
 
 cli_h1("Step 4: Load 08c fold predictions")
 
-qb_preds <- readr::read_csv("output/08c_qb_fold_predictions.csv",
+# QB source = rung-2 Vegas opener arm (13e canonical) since 2026-07-26
+qb_preds <- readr::read_csv("output/13e_qb_fold_predictions.csv",
                             show_col_types = FALSE) |> filter(!is.na(player_id))
+
+qb_key <- readRDS("data/qb_feature_table.rds") |>
+  filter(!is.na(player_id)) |>
+  distinct(player_id, season, week, game_id, posteam)
+qb_preds <- qb_preds |>
+  left_join(qb_key, by = c("player_id", "season", "week")) |>
+  left_join(vegas_open, by = c("game_id", "posteam")) |>
+  mutate(it_c = coalesce(implied_total, IT_CENTER) - IT_CENTER) |>
+  select(-game_id, -posteam, -implied_total)
 
 cli_alert_success("QB preds: {nrow(qb_preds)} rows")
 
@@ -226,7 +257,8 @@ for (s in seq_len(N_SIM)) {
     if (length(idx)) res[idx] <- sample(pools_qb[[tr]], length(idx), replace = TRUE)
   }
 
-  fp <- predict(fit_qb, tibble(pass_epa  = pass_epa_draw,
+  fp <- predict(fit_qb, tibble(it_c = qb_preds$it_c,
+                               pass_epa  = pass_epa_draw,
                                dropbacks = db_draw,
                                rush_epa  = rush_draw,
                                carries   = carry_draw)) + res

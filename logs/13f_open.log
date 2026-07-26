@@ -1,0 +1,98 @@
+
+── 13f: Vegas-bucket closure check (vs the 13a receipts) ───────────────────────
+ℹ Stratifier: OPENER lines (ex-ante-fair variant)
+ℹ Deployed methods: RB_15+ raw | RB_20+ platt | WR_15+ strat_platt | WR_20+ strat_iso | TE_12+ platt_vol | TE_17+ platt | QB_20+ raw | QB_25+ platt
+
+── All cells: before (13a) vs after (rebuilt chain), delta pp ──
+
+          axis position threshold       bucket    n before after
+ implied_total       QB      boom high_implied  839   +8.3  +2.2
+ implied_total       QB      boom  low_implied 1154   -3.8  -0.4
+ implied_total       QB      boom  mid_implied 2720   -0.9  -0.8
+ implied_total       QB     start high_implied  839  +11.6  +3.8
+ implied_total       QB     start  low_implied 1154   -7.0  -1.6
+ implied_total       QB     start  mid_implied 2720   -1.5  -1.7
+ implied_total       RB      boom high_implied 1606   +5.2  +1.1
+ implied_total       RB      boom  low_implied 2082   -4.3  -2.2
+ implied_total       RB      boom  mid_implied 5053   -0.0  +0.6
+ implied_total       RB     start high_implied 1606   +6.1  +0.5
+ implied_total       RB     start  low_implied 2082   -5.2  -3.3
+ implied_total       RB     start  mid_implied 5053   +0.8  +0.1
+ implied_total       TE      boom high_implied  891   +6.0  +1.8
+ implied_total       TE      boom  low_implied 1132   -2.0  -1.0
+ implied_total       TE      boom  mid_implied 2882   -1.1  -0.1
+ implied_total       TE     start high_implied  891   +6.7  +3.2
+ implied_total       TE     start  low_implied 1132   -5.4  -5.2
+ implied_total       TE     start  mid_implied 2882   -1.0  +0.3
+ implied_total       WR      boom high_implied 2343   +4.0  +1.4
+ implied_total       WR      boom  low_implied 3200   -3.2  -0.3
+ implied_total       WR      boom  mid_implied 7490   +0.4  -0.0
+ implied_total       WR     start high_implied 2343   +5.7  +2.9
+ implied_total       WR     start  low_implied 3200   -5.1  -0.5
+ implied_total       WR     start  mid_implied 7490   +1.3  +0.2
+        spread       QB      boom      big_dog  743   -3.2  -0.5
+        spread       QB      boom      big_fav  617   +4.8  +0.5
+        spread       QB      boom        close  992   +0.3  -1.4
+        spread       QB      boom          dog 1241   -1.5  +0.7
+        spread       QB      boom          fav 1120   +0.8  -0.2
+        spread       QB     start      big_dog  743   -5.7  -0.1
+        spread       QB     start      big_fav  617   +8.8  +3.9
+        spread       QB     start        close  992   -3.4  -5.7
+        spread       QB     start          dog 1241   -2.1  +1.1
+        spread       QB     start          fav 1120   +1.1  -1.3
+        spread       RB      boom      big_dog 1337   -5.0  -2.4
+        spread       RB      boom      big_fav 1245   +4.0  +1.3
+        spread       RB      boom        close 1785   -1.5  -0.5
+        spread       RB      boom          dog 2261   -1.0  -0.4
+        spread       RB      boom          fav 2113   +2.4  +1.5
+        spread       RB     start      big_dog 1337   -5.7  -3.5
+        spread       RB     start      big_fav 1245   +4.2  -0.3
+        spread       RB     start        close 1785   -2.1  -1.1
+        spread       RB     start          dog 2261   -0.4  -0.8
+        spread       RB     start          fav 2113   +3.9  +1.5
+        spread       TE      boom      big_dog  718   -3.1  -2.4
+        spread       TE      boom      big_fav  659   +4.0  +2.0
+        spread       TE      boom        close 1053   -0.7  -0.1
+        spread       TE      boom          dog 1289   -1.3  -0.7
+        spread       TE      boom          fav 1186   +1.6  +1.5
+        spread       TE     start      big_dog  718   -7.0  -7.0
+        spread       TE     start      big_fav  659   +5.0  +4.8
+        spread       TE     start        close 1053   -0.3  -0.7
+        spread       TE     start          dog 1289   -1.4  +0.3
+        spread       TE     start          fav 1186   +0.4  +0.1
+        spread       WR      boom      big_dog 2065   -2.7  +0.2
+        spread       WR      boom      big_fav 1697   +3.7  +2.2
+        spread       WR      boom        close 2716   -0.3  +0.2
+        spread       WR      boom          dog 3491   -0.3  -0.3
+        spread       WR      boom          fav 3064   +0.5  -0.5
+        spread       WR     start      big_dog 2065   -4.2  +0.1
+        spread       WR     start      big_fav 1697   +4.5  +2.2
+        spread       WR     start        close 2716   +0.4  +0.4
+        spread       WR     start          dog 3491   -0.2  +0.5
+        spread       WR     start          fav 3064   +1.7  +0.1
+── 13f verdict (pre-committed closure bound) ───────────────────────────────────
+ℹ Worst cell at n>=500: TE start big_dog -7.0pp (was -7.0pp)
+✖ NOT CLOSED: 9 cells still fire the trigger -- investigate before deployment.
+ position       bucket    n    stated       emp threshold delta_pp
+       QB        close  992 0.3006255 0.2439516     start     -5.7
+       QB      big_fav  617 0.4290956 0.4683955     start     +3.9
+       RB      big_dog 1337 0.2492816 0.2139117     start     -3.5
+       TE      big_dog  718 0.2673272 0.1977716     start     -7.0
+       TE      big_fav  659 0.3145735 0.3626707     start     +4.8
+       QB high_implied  839 0.4485989 0.4862932     start     +3.8
+       RB  low_implied 2082 0.2486266 0.2151777     start     -3.3
+       TE  low_implied 1132 0.2619343 0.2102473     start     -5.2
+       TE high_implied  891 0.3170522 0.3490460     start     +3.2
+          axis
+        spread
+        spread
+        spread
+        spread
+        spread
+ implied_total
+ implied_total
+ implied_total
+ implied_total
+✔ output/13f_vegas_closure_openbuckets.csv
+
+── 13f complete ────────────────────────────────────────────────────────────────

@@ -1,0 +1,78 @@
+
+── Step 12e: Walk-forward recalibration (volume-conditional bake-off) ──────────
+✔ 6597 scored player-weeks | seasons 2014-2025
+ℹ Burn-in: seasons < 2016 | eval window: 2016+
+
+── Ex-ante stratum counts (all seasons) ──
+
+# A tibble: 3 × 3
+  position stratum         n
+  <chr>    <fct>       <int>
+1 TE       exante_low    315
+2 TE       exante_mid   5525
+3 TE       exante_high   757
+── Walk-forward weekly refits ──────────────────────────────────────────────────
+ℹ 175 evaluation season-weeks x 2 positions x 2 thresholds x 5 methods
+✔ Recalibrated 5632 eval-window rows
+
+── Evaluation on 2016+ (out-of-time) ───────────────────────────────────────────
+
+── Judge metric (stratified) + pooled |delta| (pp) + Brier, by method ──
+
+# A tibble: 12 × 6
+   position threshold method      strat_pp pooled_pp brier  
+   <chr>    <chr>     <chr>       <chr>    <chr>     <chr>  
+ 1 TE       12+       platt_vol   1.27     1.17      0.18687
+ 2 TE       12+       strat_platt 1.76     1.41      0.18743
+ 3 TE       12+       raw         1.98     1.78      0.18729
+ 4 TE       12+       platt       1.99     1.60      0.18723
+ 5 TE       12+       iso         2.55     1.53      0.18838
+ 6 TE       12+       strat_iso   2.56     1.79      0.18852
+ 7 TE       17+       strat_platt 0.78     0.63      0.09687
+ 8 TE       17+       platt_vol   0.84     0.84      0.09684
+ 9 TE       17+       platt       0.93     0.69      0.09679
+10 TE       17+       iso         1.03     1.02      0.09735
+11 TE       17+       strat_iso   1.03     0.98      0.09743
+12 TE       17+       raw         1.08     0.86      0.09688
+── Method picks (pre-committed rule) ──
+
+# A tibble: 2 × 4
+  position threshold pick        reason                                      
+  <chr>    <chr>     <chr>       <chr>                                       
+1 TE       12+       platt_vol   lowest stratified weighted |delta|, Brier ok
+2 TE       17+       strat_platt lowest stratified weighted |delta|, Brier ok
+── Stratum-level honesty (mean stated vs empirical, pp delta) ──
+
+# A tibble: 18 × 8
+   position threshold method      stratum         n pred  emp   delta_pp
+   <chr>    <chr>     <chr>       <fct>       <int> <chr> <chr> <chr>   
+ 1 TE       12+       raw         exante_low    295 0.132 0.105 -2.7    
+ 2 TE       12+       raw         exante_mid   4650 0.276 0.258 -1.8    
+ 3 TE       12+       raw         exante_high   687 0.510 0.528 +1.9    
+ 4 TE       12+       iso         exante_low    295 0.140 0.105 -3.4    
+ 5 TE       12+       iso         exante_mid   4650 0.260 0.258 -0.2    
+ 6 TE       12+       iso         exante_high   687 0.487 0.528 +4.1    
+ 7 TE       12+       platt_vol   exante_low    295 0.128 0.105 -2.3    
+ 8 TE       12+       platt_vol   exante_mid   4650 0.264 0.258 -0.6    
+ 9 TE       12+       platt_vol   exante_high   687 0.525 0.528 +0.3    
+10 TE       17+       raw         exante_low    295 0.029 0.017 -1.2    
+11 TE       17+       raw         exante_mid   4650 0.093 0.099 +0.6    
+12 TE       17+       raw         exante_high   687 0.253 0.285 +3.3    
+13 TE       17+       iso         exante_low    295 0.013 0.017 +0.4    
+14 TE       17+       iso         exante_mid   4650 0.100 0.099 -0.1    
+15 TE       17+       iso         exante_high   687 0.265 0.285 +2.0    
+16 TE       17+       strat_platt exante_low    295 0.032 0.017 -1.5    
+17 TE       17+       strat_platt exante_mid   4650 0.101 0.099 -0.1    
+18 TE       17+       strat_platt exante_high   687 0.268 0.285 +1.8    
+── Deployment maps (refit on all seasons) ──────────────────────────────────────
+
+── Save outputs ────────────────────────────────────────────────────────────────
+✔ output/12e_te_recal_probabilities.csv (5632 rows)
+✔ output/12e_te_recal_calibration.csv
+✔ output/12e_te_recal_calibration_strat.csv
+✔ output/12e_te_recal_summary.csv
+✔ output/12e_te_recal_strata.csv
+✔ output/12e_te_recal_map_grid.csv
+✔ data/te_fp_recal_maps.rds (deployment maps)
+
+── Step 12e complete ───────────────────────────────────────────────────────────

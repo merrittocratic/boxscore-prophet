@@ -1,0 +1,6 @@
+
+── 06b0: rescale fold-prediction tot intervals to pred-vol scaling ─────────────
+✔ RB (13e Vegas arm): 11621 rows -> output/13e_rb_fold_predictions_predvol.csv | mean 80% tot width 9.18 -> 9.45 EPA | median ratio 1.043
+✔ WR (13e Vegas arm): 17223 rows -> output/13e_wr_fold_predictions_predvol.csv | mean 80% tot width 10.27 -> 10.54 EPA | median ratio 1.047
+
+── 06b0 complete -- feed via RB_PRED_FILE / WR_PRED_FILE into 06b ──────────────

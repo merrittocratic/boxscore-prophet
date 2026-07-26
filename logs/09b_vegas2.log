@@ -1,0 +1,74 @@
+
+── Step 9b: QB walk-forward recalibration (rush-conditional bake-off) ──────────
+✔ 6229 scored QB-weeks | seasons 2014-2025
+
+── Ex-ante stratum counts (all seasons) ──
+
+# A tibble: 3 × 2
+  stratum              n
+  <fct>            <int>
+1 exante_statue     5199
+2 exante_mover       898
+3 exante_scrambler   132
+── Walk-forward weekly refits ──────────────────────────────────────────────────
+ℹ 175 evaluation season-weeks x 2 thresholds x 5 methods
+✔ Recalibrated 5347 eval-window rows
+
+── Evaluation on 2016+ (out-of-time) ───────────────────────────────────────────
+
+── Judge metric (stratified) + pooled |delta| (pp) + Brier, by method ──
+
+# A tibble: 12 × 5
+   threshold method      strat_pp pooled_pp brier  
+   <chr>     <chr>       <chr>    <chr>     <chr>  
+ 1 20+       strat_platt 1.50     0.65      0.19428
+ 2 20+       platt       1.64     0.91      0.19426
+ 3 20+       platt_vol   1.76     0.80      0.19444
+ 4 20+       strat_iso   1.95     1.13      0.19544
+ 5 20+       iso         2.00     1.05      0.19529
+ 6 20+       raw         2.09     1.18      0.19408
+ 7 25+       iso         0.81     0.71      0.11388
+ 8 25+       strat_iso   0.95     0.79      0.11441
+ 9 25+       strat_platt 1.03     0.77      0.11348
+10 25+       platt       1.18     0.34      0.11328
+11 25+       raw         1.23     0.72      0.11320
+12 25+       platt_vol   1.48     0.88      0.11341
+── Method picks (pre-committed rule) ──
+
+# A tibble: 2 × 4
+  position threshold pick  reason                                      
+  <chr>    <chr>     <chr> <chr>                                       
+1 QB       20+       raw   no method beat raw Brier                    
+2 QB       25+       platt lowest stratified weighted |delta|, Brier ok
+── Stratum-level honesty (mean stated vs empirical, pp delta) ──
+
+# A tibble: 15 × 7
+   threshold method stratum              n pred  emp   delta_pp
+   <chr>     <chr>  <fct>            <int> <chr> <chr> <chr>   
+ 1 20+       raw    exante_statue     4406 0.276 0.266 -1.0    
+ 2 20+       raw    exante_mover       809 0.407 0.440 +3.3    
+ 3 20+       raw    exante_scrambler   132 0.584 0.515 -6.9    
+ 4 20+       iso    exante_statue     4406 0.266 0.266 +0.0    
+ 5 20+       iso    exante_mover       809 0.399 0.440 +4.1    
+ 6 20+       iso    exante_scrambler   132 0.583 0.515 -6.8    
+ 7 25+       raw    exante_statue     4406 0.128 0.120 -0.8    
+ 8 25+       raw    exante_mover       809 0.212 0.220 +0.8    
+ 9 25+       raw    exante_scrambler   132 0.351 0.280 -7.0    
+10 25+       iso    exante_statue     4406 0.119 0.120 +0.0    
+11 25+       iso    exante_mover       809 0.208 0.220 +1.2    
+12 25+       iso    exante_scrambler   132 0.347 0.280 -6.6    
+13 25+       platt  exante_statue     4406 0.121 0.120 -0.1    
+14 25+       platt  exante_mover       809 0.204 0.220 +1.6    
+15 25+       platt  exante_scrambler   132 0.349 0.280 -6.9    
+── Deployment maps (refit on all seasons) ──────────────────────────────────────
+
+── Save outputs ────────────────────────────────────────────────────────────────
+✔ output/09b_qb_recal_probabilities.csv (5347 rows)
+✔ output/09b_qb_recal_calibration.csv
+✔ output/09b_qb_recal_calibration_strat.csv
+✔ output/09b_qb_recal_summary.csv
+✔ output/09b_qb_recal_strata.csv
+✔ output/09b_qb_recal_map_grid.csv
+✔ data/qb_fp_recal_maps.rds (deployment maps)
+
+── Step 9b complete ────────────────────────────────────────────────────────────

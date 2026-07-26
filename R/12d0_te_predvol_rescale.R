@@ -54,7 +54,8 @@ rescale_file <- function(in_path, out_path, label) {
 
 cli_h1("12d0: rescale TE fold-prediction tot intervals to pred-vol scaling")
 
-rescale_file("output/12c_te_asym_fold_predictions.csv",
-             "output/12c_te_asym_fold_predictions_predvol.csv", "TE (12c)")
+# TE source = the rung-2 Vegas opener arm (13e canonical) since 2026-07-26.
+rescale_file("output/13e_te_fold_predictions.csv",
+             "output/13e_te_fold_predictions_predvol.csv", "TE (13e Vegas arm)")
 
 cli_h1("12d0 complete -- 12d reads the _predvol file by default")

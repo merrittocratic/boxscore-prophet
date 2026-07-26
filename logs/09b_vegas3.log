@@ -1,0 +1,82 @@
+
+── Step 9b: QB walk-forward recalibration (rush-conditional bake-off) ──────────
+ℹ Opener covariates: 88.5% coverage
+✔ 6229 scored QB-weeks | seasons 2014-2025
+
+── Ex-ante stratum counts (all seasons) ──
+
+# A tibble: 3 × 2
+  stratum              n
+  <fct>            <int>
+1 exante_statue     5199
+2 exante_mover       898
+3 exante_scrambler   132
+── Walk-forward weekly refits ──────────────────────────────────────────────────
+ℹ 175 evaluation season-weeks x 2 thresholds x 5 methods
+✔ Recalibrated 5347 eval-window rows
+
+── Evaluation on 2016+ (out-of-time) ───────────────────────────────────────────
+
+── Judge metric (EXTENDED: vol + spread + implied cells) + pooled |delta| (pp) + Brier ──
+
+# A tibble: 16 × 5
+   threshold method          ext_pp pooled_pp brier  
+   <chr>     <chr>           <chr>  <chr>     <chr>  
+ 1 20+       platt_vol_vegas 2.00   1.35      0.19278
+ 2 20+       strat_platt     2.28   0.65      0.19428
+ 3 20+       platt           2.33   0.91      0.19426
+ 4 20+       platt_vol       2.47   0.80      0.19444
+ 5 20+       platt_vegas     2.57   0.89      0.19351
+ 6 20+       raw             2.57   1.18      0.19408
+ 7 20+       iso             2.61   1.05      0.19529
+ 8 20+       strat_iso       2.75   1.13      0.19544
+ 9 25+       platt_vegas     1.19   0.45      0.11279
+10 25+       strat_platt     1.24   0.77      0.11348
+11 25+       platt           1.30   0.34      0.11328
+12 25+       iso             1.35   0.71      0.11388
+13 25+       raw             1.55   0.72      0.11320
+14 25+       strat_iso       1.58   0.79      0.11441
+15 25+       platt_vol       1.66   0.88      0.11341
+16 25+       platt_vol_vegas 1.68   1.10      0.11287
+── Method picks (pre-committed rule) ──
+
+# A tibble: 2 × 4
+  position threshold pick            reason                                    
+  <chr>    <chr>     <chr>           <chr>                                     
+1 QB       20+       platt_vol_vegas lowest extended weighted |delta|, Brier ok
+2 QB       25+       platt_vegas     lowest extended weighted |delta|, Brier ok
+── Stratum-level honesty (mean stated vs empirical, pp delta) ──
+
+# A tibble: 18 × 7
+   threshold method          stratum              n pred  emp   delta_pp
+   <chr>     <chr>           <fct>            <int> <chr> <chr> <chr>   
+ 1 20+       raw             exante_statue     4406 0.276 0.266 -1.0    
+ 2 20+       raw             exante_mover       809 0.407 0.440 +3.3    
+ 3 20+       raw             exante_scrambler   132 0.584 0.515 -6.9    
+ 4 20+       iso             exante_statue     4406 0.266 0.266 +0.0    
+ 5 20+       iso             exante_mover       809 0.399 0.440 +4.1    
+ 6 20+       iso             exante_scrambler   132 0.583 0.515 -6.8    
+ 7 20+       platt_vol_vegas exante_statue     4406 0.270 0.266 -0.4    
+ 8 20+       platt_vol_vegas exante_mover       809 0.402 0.440 +3.8    
+ 9 20+       platt_vol_vegas exante_scrambler   132 0.598 0.515 -8.3    
+10 25+       raw             exante_statue     4406 0.128 0.120 -0.8    
+11 25+       raw             exante_mover       809 0.212 0.220 +0.8    
+12 25+       raw             exante_scrambler   132 0.351 0.280 -7.0    
+13 25+       iso             exante_statue     4406 0.119 0.120 +0.0    
+14 25+       iso             exante_mover       809 0.208 0.220 +1.2    
+15 25+       iso             exante_scrambler   132 0.347 0.280 -6.6    
+16 25+       platt_vegas     exante_statue     4406 0.123 0.120 -0.4    
+17 25+       platt_vegas     exante_mover       809 0.185 0.220 +3.5    
+18 25+       platt_vegas     exante_scrambler   132 0.298 0.280 -1.8    
+── Deployment maps (refit on all seasons) ──────────────────────────────────────
+
+── Save outputs ────────────────────────────────────────────────────────────────
+✔ output/09b_qb_recal_probabilities.csv (5347 rows)
+✔ output/09b_qb_recal_calibration.csv
+✔ output/09b_qb_recal_calibration_strat.csv
+✔ output/09b_qb_recal_summary.csv
+✔ output/09b_qb_recal_strata.csv
+✔ output/09b_qb_recal_map_grid.csv
+✔ data/qb_fp_recal_maps.rds (deployment maps)
+
+── Step 9b complete ────────────────────────────────────────────────────────────

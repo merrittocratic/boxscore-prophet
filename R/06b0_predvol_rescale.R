@@ -81,11 +81,12 @@ rescale_file <- function(in_path, out_path, label) {
 
 cli_h1("06b0: rescale fold-prediction tot intervals to pred-vol scaling")
 
-# RB source = the rung-1 injury arm (11c) since 2026-07-18: the shipped RB
-# backtest chain includes the ex-ante injury state features (volume model).
-rescale_file("output/11c_rb_injury_fold_predictions.csv",
-             "output/11c_rb_injury_fold_predictions_predvol.csv", "RB (11c injury arm)")
-rescale_file("output/04c_wr_asym_fold_predictions.csv",
-             "output/04c_wr_asym_fold_predictions_predvol.csv", "WR (04c)")
+# RB/WR source = the rung-2 Vegas opener arms (13e canonical) since
+# 2026-07-26: injury states (RB vol) + opener Vegas features (eff) are both
+# in the shipped chain. Pre-Vegas receipts remain in git history.
+rescale_file("output/13e_rb_fold_predictions.csv",
+             "output/13e_rb_fold_predictions_predvol.csv", "RB (13e Vegas arm)")
+rescale_file("output/13e_wr_fold_predictions.csv",
+             "output/13e_wr_fold_predictions_predvol.csv", "WR (13e Vegas arm)")
 
 cli_h1("06b0 complete -- feed via RB_PRED_FILE / WR_PRED_FILE into 06b")

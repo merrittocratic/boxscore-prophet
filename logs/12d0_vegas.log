@@ -1,0 +1,5 @@
+
+── 12d0: rescale TE fold-prediction tot intervals to pred-vol scaling ──────────
+✔ TE (13e Vegas arm): 6597 rows -> output/13e_te_fold_predictions_predvol.csv | mean 80% tot width 8.64 -> 8.86 EPA | median ratio 1.061
+
+── 12d0 complete -- 12d reads the _predvol file by default ─────────────────────

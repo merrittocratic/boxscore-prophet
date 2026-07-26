@@ -79,6 +79,7 @@ RECON_MAX_MEAN_PP <- 2.0
 RECON_ROW_FLAG_PP <- 10.0
 
 fmt_pp <- function(x) sprintf("%+.2f", 100 * x)
+`%||%` <- function(a, b) if (is.null(a)) b else a
 
 # ===========================================================================
 # 1. LOAD SLATES + DEPLOYMENT ARTIFACTS
@@ -265,7 +266,8 @@ rb_sc       <- vol_scale(rb_pred_vol, dp$rb$tot$alpha, "RB")
 
 rb_scored <- bind_cols(
   rb_slate |> select(player_id, player_name, posteam, defteam, game_id,
-                     season, week, report_status, practice_status),
+                     season, week, report_status, practice_status,
+                     team_spread, implied_total),
   tibble(pred_eff = rb_pred_eff),
   sym_cols(rb_pred_vol, dp$rb$vol$qs, "vol"),
   tibble(pred_tot = rb_pred_tot)
@@ -288,7 +290,8 @@ wr_sc       <- vol_scale(wr_pred_vol, dp$wr$tot$alpha, "WR")
 
 wr_scored <- bind_cols(
   wr_slate |> select(player_id, player_name, posteam, defteam, game_id,
-                     season, week, report_status, practice_status),
+                     season, week, report_status, practice_status,
+                     team_spread, implied_total),
   tibble(pred_eff = wr_pred_eff),
   asym_cols(wr_pred_vol, dp$wr$vol$qset, "vol"),
   asym_cols(wr_pred_tot, dp$wr$tot$qset, "tot", scale = wr_sc)
@@ -303,7 +306,8 @@ te_sc       <- vol_scale(te_pred_vol, dp$te$tot$alpha, "TE")
 
 te_scored <- bind_cols(
   te_slate |> select(player_id, player_name, posteam, defteam, game_id,
-                     season, week, report_status, practice_status),
+                     season, week, report_status, practice_status,
+                     team_spread, implied_total),
   tibble(pred_eff = te_pred_eff),
   asym_cols(te_pred_vol, dp$te$vol$qset, "vol"),
   asym_cols(te_pred_tot, dp$te$tot$qset, "tot", scale = te_sc)
@@ -316,7 +320,8 @@ qb_pred_tot <- qb_pred$pass_eff * qb_pred$db_vol + qb_pred$rush_dir
 
 qb_scored <- bind_cols(
   qb_slate |> select(player_id, player_name, posteam, defteam, game_id,
-                     season, week, report_status, practice_status),
+                     season, week, report_status, practice_status,
+                     team_spread, implied_total),
   sym_cols(qb_pred$pass_eff,  dp$qb$qs$pass_eff, "pass_eff"),
   sym_cols(qb_pred$db_vol,    dp$qb$qs$db,       "db"),
   sym_cols(qb_pred$rush_dir,  dp$qb$qs$rush,     "rush"),
@@ -353,6 +358,13 @@ simulate_rbwr <- function(scored, fit, pools, tier_fn, rho, thresh) {
   Q_tot <- quantile_matrix(scored, "tot")
   Q_vol <- quantile_matrix(scored, "vol")
 
+  # Vegas translation term (2026-07-26): the saved fits carry it_c with the
+  # training center stored as attr; unposted lines coalesce to neutral zero.
+  it_ctr <- attr(fit, "it_center") %||% NA_real_
+  it_c   <- if (is.finite(it_ctr)) {
+    coalesce(scored$implied_total, it_ctr) - it_ctr
+  } else rep(0, n)
+
   hit_start <- numeric(n)
   hit_boom  <- numeric(n)
 
@@ -369,7 +381,8 @@ simulate_rbwr <- function(scored, fit, pools, tier_fn, rho, thresh) {
       if (length(idx)) res[idx] <- sample(pools[[tr]], length(idx), replace = TRUE)
     }
 
-    fp <- predict(fit, tibble(total_epa = epa_draw, opportunities = opp_draw)) + res
+    fp <- predict(fit, tibble(total_epa = epa_draw, opportunities = opp_draw,
+                              it_c = it_c)) + res
     hit_start <- hit_start + (fp >= thresh["start"])
     hit_boom  <- hit_boom  + (fp >= thresh["boom"])
   }
@@ -384,6 +397,10 @@ cli_alert_success("WR simulation complete")
 
 simulate_qb <- function(scored, fit, pools, chol_m, thresh) {
   n       <- nrow(scored)
+  it_ctr  <- attr(fit, "it_center") %||% NA_real_
+  it_c    <- if (is.finite(it_ctr)) {
+    coalesce(scored$implied_total, it_ctr) - it_ctr
+  } else rep(0, n)
   Q_eff   <- quantile_matrix(scored, "pass_eff")
   Q_db    <- quantile_matrix(scored, "db")
   Q_rush  <- quantile_matrix(scored, "rush")
@@ -409,7 +426,8 @@ simulate_qb <- function(scored, fit, pools, chol_m, thresh) {
     fp <- predict(fit, tibble(pass_epa  = eff_draw * db_draw,
                               dropbacks = db_draw,
                               rush_epa  = rush_draw,
-                              carries   = carry_draw)) + res
+                              carries   = carry_draw,
+                              it_c      = it_c)) + res
     hit_start <- hit_start + (fp >= thresh["start"])
     hit_boom  <- hit_boom  + (fp >= thresh["boom"])
   }
@@ -434,8 +452,13 @@ cli_alert_success("TE simulation complete")
 cli_h1("Recalibration maps")
 
 apply_maps <- function(scored, map_start, map_boom, vol) {
-  p_start_recal <- pmin(pmax(map_start$map(scored$p_start, vol), 0), 1)
-  p_boom_recal  <- pmin(pmax(map_boom$map(scored$p_boom,  vol), 0), 1)
+  # Widened uniform signature (2026-07-26): function(p, vol, spread, implied).
+  # Slate Vegas columns may be NA (unposted lines) -- the Vegas closures
+  # coalesce internally to a neutral adjustment.
+  p_start_recal <- pmin(pmax(map_start$map(scored$p_start, vol,
+                                           scored$team_spread, scored$implied_total), 0), 1)
+  p_boom_recal  <- pmin(pmax(map_boom$map(scored$p_boom,  vol,
+                                          scored$team_spread, scored$implied_total), 0), 1)
   scored |>
     mutate(
       p_start_recal = p_start_recal,

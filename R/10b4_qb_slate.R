@@ -314,7 +314,9 @@ slate <- roster |>
   left_join(team_roll, by = "posteam") |>
   left_join(snap_roll, by = c("player_id" = "gsis_id")) |>
   left_join(def_next,  by = "defteam") |>
-  mutate(season = TARGET_SEASON, week = TARGET_WEEK)
+  mutate(season = TARGET_SEASON, week = TARGET_WEEK) |>
+  left_join(vegas_slate_lines(games_long, TARGET_SEASON, hindcast && !force_future),
+            by = c("game_id", "posteam"))
 
 inj <- tryCatch(
   nflreadr::load_injuries(seasons = TARGET_SEASON) |>

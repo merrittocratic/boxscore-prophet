@@ -1,0 +1,42 @@
+
+── Step 10b (part 2): RB player slate -- 2025 week 13 ──────────────────────────
+
+── Step 1: Load artifacts and target-week games ────────────────────────────────
+ℹ 16 games | mode: HINDCAST (gate available)
+
+── Step 2: Slate roster ────────────────────────────────────────────────────────
+ℹ Point-in-time roster: 2025 week 13 (115 active RBs)
+✔ Slate roster: 58 players (ex-ante: 152; cold adds: 15)
+
+── Step 3: Player rolling features ─────────────────────────────────────────────
+
+── Step 4: Team plays and snap-share rolling ───────────────────────────────────
+
+── Step 5: Defense features (recomputed from data/rb_plays.rds) ────────────────
+
+── Step 6: Assemble slate rows ─────────────────────────────────────────────────
+ℹ Vegas lines (hindcast, opener sidecar): 0/32 team-games
+✔ Slate: 58 rows | injuries matched: 2
+✔ Injury states: return=14 | above_new_out>0: 1 | own Q: 2
+
+── Step 7: VALIDATION GATE -- slate vs frozen table, exact match ───────────────
+                  feature  n na_mismatch max_abs_diff flag_mismatch
+1       prior_epa_per_opp 58           0            0             0
+2    baseline_epa_per_opp 58           0            0            NA
+3     rolling_epa_per_opp 58           0            0            NA
+4           form_residual 58           0            0            NA
+5          wt_carry_share 58           0            0            NA
+6         wt_target_share 58           0            0            NA
+7           wt_snap_share 58           0            0            NA
+8     wt_team_total_plays 58           0            0            NA
+9        def_rush_epa_adj 58           0            0            NA
+10 def_short_pass_epa_adj 58           0            0            NA
+11  def_deep_pass_epa_adj 58           0            0            NA
+12    games_played_so_far 58           0            0            NA
+✔ GATE PASSED: max |diff| = 0e+00 across 58 players x 12 features
+✔ INJURY GATE PASSED: max |diff| = 0e+00 across 58 players x 7 features
+
+── Step 8: Save ────────────────────────────────────────────────────────────────
+✔ output/10b2_rb_slate_2025_w13.csv (58 rows)
+
+── Step 10b2 complete (RB) -- WR/QB clones next ────────────────────────────────

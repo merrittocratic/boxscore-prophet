@@ -72,11 +72,17 @@ TIER_ORDER <- c("udfa" = 1L, "r6_udfa" = 2L, "r4_5" = 3L, "r2_3" = 4L, "r1" = 5L
 # FEATURE SETS -- copied verbatim from the frozen backtest scripts
 # ===========================================================================
 
+# Rung-2 Vegas features (13e opener arms, shipped 2026-07-26): joined from
+# the data/vegas_open_lines.rds sidecar (same pattern as injury states);
+# EFFICIENCY models only (pass_eff for QB) -- volume was flat in 13a.
+VEGAS_FEATURES <- c("team_spread", "implied_total")
+
 RB_EFF_FEATURES <- c(
   "prior_epa_per_opp", "baseline_epa_per_opp", "rolling_epa_per_opp", "form_residual",
   "is_cold_start_int", "draft_tier_int",
   "def_rush_epa_adj", "def_short_pass_epa_adj", "def_deep_pass_epa_adj",
-  "wt_snap_share", "games_played_so_far", "def_used_fallback_int"
+  "wt_snap_share", "games_played_so_far", "def_used_fallback_int",
+  VEGAS_FEATURES
 )
 # Rung-1 injury state features (11b layer; shipped 2026-07-18 after the 11c
 # A/B passed the frozen rubric). RB VOLUME model only.
@@ -96,7 +102,8 @@ WR_EFF_FEATURES <- c(
   "is_cold_start_int", "draft_tier_int",
   "def_short_pass_epa_adj", "def_deep_pass_epa_adj",
   "wt_air_yards_per_target",
-  "wt_snap_share", "games_played_so_far", "def_used_fallback_int"
+  "wt_snap_share", "games_played_so_far", "def_used_fallback_int",
+  VEGAS_FEATURES
 )
 WR_VOL_FEATURES <- c(
   "wt_target_share", "wt_air_yards_share", "wt_snap_share", "wt_team_total_plays",
@@ -111,7 +118,8 @@ TE_EFF_FEATURES <- c(
   "is_cold_start_int", "draft_tier_int",
   "def_short_pass_epa_adj", "def_deep_pass_epa_adj",
   "wt_air_yards_per_target",
-  "wt_snap_share", "games_played_so_far", "def_used_fallback_int"
+  "wt_snap_share", "games_played_so_far", "def_used_fallback_int",
+  VEGAS_FEATURES
 )
 TE_VOL_FEATURES <- c(
   "wt_target_share", "wt_air_yards_share", "wt_snap_share", "wt_tgt_per_snap",
@@ -125,7 +133,8 @@ QB_COMPONENTS <- list(
     "prior_pass_epa_per_db", "baseline_pass_epa_per_db", "rolling_pass_epa_per_db",
     "form_residual", "is_cold_start_int", "draft_tier_int",
     "def_short_pass_epa_adj", "def_deep_pass_epa_adj",
-    "wt_snap_share", "games_played_so_far", "def_used_fallback_int"
+    "wt_snap_share", "games_played_so_far", "def_used_fallback_int",
+    VEGAS_FEATURES
   ), y = "pass_epa_per_db_obs"),
   db_vol    = list(feats = c(
     "wt_dropbacks", "wt_team_total_plays", "wt_team_pass_rate",
@@ -304,6 +313,16 @@ trained_through <- function(ft) {
                   week = max(week[season == max(season)])) |> as.list()
 }
 
+# Vegas sidecar join (rung 2): opener lines keyed (game_id, posteam).
+# 2025 season has no openers in the archive -> NA features there, exactly
+# as the 13e backtest arms trained. LightGBM handles NA natively.
+vegas_lines <- readRDS("data/vegas_open_lines.rds")
+join_vegas <- function(ft) {
+  out <- ft |> left_join(vegas_lines, by = c("game_id", "posteam"))
+  cli_alert_info("Vegas join: {sum(!is.na(out$team_spread))} of {nrow(out)} rows with opener lines")
+  out
+}
+
 tune_rows <- list()
 
 # ===========================================================================
@@ -315,7 +334,8 @@ cli_h1("RB deployment fold (03a-v2 procedure)")
 rb_ft <- readRDS("data/rb_feature_table.rds") |>
   encode_features() |>
   left_join(readRDS("data/injury_states_rb.rds"),
-            by = c("player_id", "season", "week"))
+            by = c("player_id", "season", "week")) |>
+  join_vegas()
 stopifnot(!any(is.na(rb_ft$own_practice_int[!is.na(rb_ft$player_id)])))
 rb_sp <- split_fit_cal(rb_ft)
 cli_alert_info("RB rows: fit={nrow(rb_sp$fit)} cal={nrow(rb_sp$cal)}")
@@ -345,7 +365,7 @@ save_model(rb_vol$model, "rb_vol")
 
 cli_h1("WR deployment fold (04b tuning + 04c asymmetric conformal)")
 
-wr_ft <- readRDS("data/wr_feature_table.rds") |> encode_features()
+wr_ft <- readRDS("data/wr_feature_table.rds") |> encode_features() |> join_vegas()
 wr_sp <- split_fit_cal(wr_ft)
 cli_alert_info("WR rows: fit={nrow(wr_sp$fit)} cal={nrow(wr_sp$cal)}")
 
@@ -374,7 +394,7 @@ save_model(wr_vol$model, "wr_vol")
 
 cli_h1("TE deployment fold (12b tuning + 12c asymmetric conformal)")
 
-te_ft <- readRDS("data/te_feature_table.rds") |> encode_features()
+te_ft <- readRDS("data/te_feature_table.rds") |> encode_features() |> join_vegas()
 te_sp <- split_fit_cal(te_ft)
 cli_alert_info("TE rows: fit={nrow(te_sp$fit)} cal={nrow(te_sp$cal)}")
 
@@ -403,7 +423,7 @@ save_model(te_vol$model, "te_vol")
 
 cli_h1("QB deployment fold (08c procedure, 4 components)")
 
-qb_ft <- readRDS("data/qb_feature_table.rds") |> encode_features()
+qb_ft <- readRDS("data/qb_feature_table.rds") |> encode_features() |> join_vegas()
 qb_sp <- split_fit_cal(qb_ft)
 cli_alert_info("QB rows: fit={nrow(qb_sp$fit)} cal={nrow(qb_sp$cal)}")
 

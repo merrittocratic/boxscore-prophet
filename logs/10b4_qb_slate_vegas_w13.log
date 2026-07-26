@@ -1,0 +1,47 @@
+
+── Step 10b4: QB player slate -- 2025 week 13 ──────────────────────────────────
+
+── Step 1: Load artifacts and target-week games ────────────────────────────────
+ℹ 16 games | mode: HINDCAST (gate available)
+
+── Step 2: Slate roster ────────────────────────────────────────────────────────
+ℹ Point-in-time roster: 2025 week 13 (66 active QBs)
+✔ Slate roster: 32 QBs (ex-ante: 77; cold adds: 10)
+
+── Step 3: Player rolling features + priors ────────────────────────────────────
+
+── Step 4: Team totals and snap-share rolling ──────────────────────────────────
+
+── Step 5: Defense features (from data/qb_def_adj.rds) ─────────────────────────
+
+── Step 6: Assemble slate rows ─────────────────────────────────────────────────
+ℹ Vegas lines (hindcast, opener sidecar): 0/32 team-games
+✔ Slate: 32 rows | injuries matched: 1
+
+── Step 7: VALIDATION GATE -- slate vs frozen table, exact match ───────────────
+                    feature  n na_mismatch max_abs_diff
+1     prior_pass_epa_per_db 32           0            0
+2  baseline_pass_epa_per_db 32           0            0
+3   rolling_pass_epa_per_db 32           0            0
+4             form_residual 32           0            0
+5         prior_rush_epa_pg 32           0            0
+6          prior_carries_pg 32           0            0
+7  prior_rush_epa_per_carry 32           0            0
+8              wt_dropbacks 32           0            0
+9                wt_carries 32           0            0
+10           wt_carry_share 32           0            0
+11           wt_rush_epa_pg 32           0            0
+12    wt_rush_epa_per_carry 32           0            0
+13            wt_snap_share 32           0            0
+14      wt_team_total_plays 32           0            0
+15        wt_team_pass_rate 32           0            0
+16   def_short_pass_epa_adj 32           0            0
+17    def_deep_pass_epa_adj 32           0            0
+18         def_rush_epa_adj 32           0            0
+19      games_played_so_far 32           0            0
+✔ GATE PASSED: max |diff| = 0e+00 across 32 QBs x 19 features
+
+── Step 8: Save ────────────────────────────────────────────────────────────────
+✔ output/10b4_qb_slate_2025_w13.csv (32 rows)
+
+── Step 10b4 complete (QB) ─────────────────────────────────────────────────────

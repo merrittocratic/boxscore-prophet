@@ -82,6 +82,25 @@ wr_fp <- wr_outcomes |> inner_join(fp_weekly, by = c("player_id", "season", "wee
 
 cli_alert_success("RB join: {nrow(rb_fp)} rows | WR join: {nrow(wr_fp)} rows")
 
+# Rung-2 ship (2026-07-26): opener implied team total enters the
+# translation. 13f diagnosis: conditional on the SAME EPA and volume, FP
+# runs +0.05/implied point (TD-per-EPA is environment-dependent) -- a
+# defect no EPA-layer feature can reach. Centered on the archive median
+# so rows without openers (2025 season) get a NEUTRAL zero adjustment in
+# both fit and prediction; the center is stored on each fit (attr
+# "it_center") so deployment applies the identical constant.
+vegas_open <- readRDS("data/vegas_open_lines.rds") |>
+  select(game_id, posteam, implied_total)
+IT_CENTER <- median(vegas_open$implied_total, na.rm = TRUE)
+add_it_c <- function(df) {
+  df |>
+    left_join(vegas_open, by = c("game_id", "posteam")) |>
+    mutate(it_c = coalesce(implied_total, IT_CENTER) - IT_CENTER)
+}
+rb_fp <- add_it_c(rb_fp)
+wr_fp <- add_it_c(wr_fp)
+cli_alert_info("Opener implied total: center {round(IT_CENTER, 2)} | coverage RB {round(100 * mean(!is.na(rb_fp$implied_total)), 1)}% WR {round(100 * mean(!is.na(wr_fp$implied_total)), 1)}%")
+
 # ===========================================================================
 # 3. FIT REGRESSIONS, BUILD TIER-CONDITIONAL RESIDUAL POOLS
 # ===========================================================================
@@ -94,8 +113,25 @@ cli_h1("Step 3: Fit EPA -> PPR regressions, pool residuals by volume tier")
 # simultaneously understates P(20+) for boom games and overstates P(15+)
 # for must-starts. ns() extrapolates linearly beyond the boundary knots,
 # which keeps simulated tail draws conservative.
-fit_rb <- lm(fantasy_points_ppr ~ ns(total_epa, df = 4) + opportunities, data = rb_fp)
-fit_wr <- lm(fantasy_points_ppr ~ ns(total_epa, df = 4) + opportunities, data = wr_fp)
+fit_rb <- lm(fantasy_points_ppr ~ ns(total_epa, df = 4) + opportunities + it_c, data = rb_fp)
+fit_wr <- lm(fantasy_points_ppr ~ ns(total_epa, df = 4) + opportunities + it_c, data = wr_fp)
+attr(fit_rb, "it_center") <- IT_CENTER
+attr(fit_wr, "it_center") <- IT_CENTER
+
+# Environment flatness check: residual mean by implied bucket must be ~0
+# now that the term is in (the 13f defect, measured at the source)
+env_check <- function(fit, df, pos) {
+  tibble(res = df$fantasy_points_ppr - predict(fit, df), it = df$implied_total) |>
+    filter(!is.na(it)) |>
+    mutate(bucket = cut(it, c(-Inf, 20, 26, Inf),
+                        labels = c("low", "mid", "high"))) |>
+    group_by(bucket) |>
+    summarise(mean_res = round(mean(res), 3), n = n(), .groups = "drop") |>
+    mutate(position = pos)
+}
+cli_h2("Translation residual mean by implied-total bucket (want ~0)")
+print(bind_rows(env_check(fit_rb, rb_fp, "RB"), env_check(fit_wr, wr_fp, "WR")) |>
+        pivot_wider(names_from = bucket, values_from = c(mean_res, n)), n = Inf)
 
 # Linear fits retained as the v1 "norm" comparison baseline
 fit_rb_lin <- lm(fantasy_points_ppr ~ total_epa + opportunities, data = rb_fp)
@@ -144,8 +180,8 @@ cli_h1("Step 4: Load fold predictions")
 # Overridable seams for interval-construction experiments (e.g. 04c
 # asymmetric conformal, 06b0 pred-vol rescale): swap the prediction sources
 # and redirect outputs without touching the shipped 06b artifacts.
-RB_PRED_FILE <- Sys.getenv("RB_PRED_FILE", "output/03a_v2_lgbm_fold_predictions.csv")
-WR_PRED_FILE <- Sys.getenv("WR_PRED_FILE", "output/04c_wr_asym_fold_predictions.csv")
+RB_PRED_FILE <- Sys.getenv("RB_PRED_FILE", "output/13e_rb_fold_predictions_predvol.csv")
+WR_PRED_FILE <- Sys.getenv("WR_PRED_FILE", "output/13e_wr_fold_predictions_predvol.csv")
 OUT_PREFIX   <- Sys.getenv("FP_OUT_PREFIX", "06b")
 cli_alert_info("RB predictions: {RB_PRED_FILE}")
 cli_alert_info("WR predictions: {WR_PRED_FILE} | output prefix: {OUT_PREFIX}")
@@ -154,6 +190,20 @@ rb_preds <- readr::read_csv(RB_PRED_FILE,
                             show_col_types = FALSE) |> filter(!is.na(player_id))
 wr_preds <- readr::read_csv(WR_PRED_FILE,
                             show_col_types = FALSE) |> filter(!is.na(player_id))
+
+# it_c for each scored row (fold files lack game keys -> via feature table)
+add_it_c_preds <- function(preds, table_path) {
+  key <- readRDS(table_path) |>
+    filter(!is.na(player_id)) |>
+    distinct(player_id, season, week, game_id, posteam)
+  preds |>
+    left_join(key, by = c("player_id", "season", "week")) |>
+    left_join(vegas_open, by = c("game_id", "posteam")) |>
+    mutate(it_c = coalesce(implied_total, IT_CENTER) - IT_CENTER) |>
+    select(-game_id, -posteam, -implied_total)
+}
+rb_preds <- add_it_c_preds(rb_preds, "data/rb_feature_table.rds")
+wr_preds <- add_it_c_preds(wr_preds, "data/wr_feature_table.rds")
 
 cli_alert_success("RB preds: {nrow(rb_preds)} rows | WR preds: {nrow(wr_preds)} rows")
 
@@ -224,7 +274,8 @@ simulate_position <- function(preds, fit, fit_lin, pools, tier_fn, rho, position
       if (length(idx)) res[idx] <- sample(pools[[tr]], length(idx), replace = TRUE)
     }
 
-    fp <- predict(fit, tibble(total_epa = epa_draw, opportunities = opp_draw)) + res
+    fp <- predict(fit, tibble(total_epa = epa_draw, opportunities = opp_draw,
+                              it_c = preds$it_c)) + res
     hit_start <- hit_start + (fp >= THRESH_START)
     hit_boom  <- hit_boom  + (fp >= THRESH_BOOM)
   }
