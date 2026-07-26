@@ -1,0 +1,130 @@
+
+── 14a step 1: weather table (outdoor, 2021-2025) ──────────────────────────────
+ℹ Outdoor games: 929 | weather coverage 100%
+
+── Bucket counts (games) ──
+
+      wb   n
+    calm 703
+  breezy 174
+ windy15  52
+     tb   n
+ frigid  23
+   cold 123
+   mild 783
+  pb   n
+ dry 896
+ wet  33
+── 14a step 2: shipped fold residuals by weather bucket ────────────────────────
+✔ Joined outdoor player-weeks: QB=1883 | RB=3422 | TE=1969 | WR=4997
+
+── Cell 1: combined-EPA residual by weather bucket ──
+
+ axis position  bucket    n mean_tot_resid   se mean_vol_resid
+   pb       QB     dry 1815          -0.03 0.24          -1.38
+   pb       QB     wet   68          -2.22 1.33          -1.86
+   pb       RB     dry 3294          +0.53 0.07          -0.54
+   pb       RB     wet  128          -0.60 0.30          -0.37
+   pb       TE     dry 1901          +0.16 0.08          -0.11
+   pb       TE     wet   68          -0.45 0.37          -0.51
+   pb       WR     dry 4819          +0.12 0.06          -0.23
+   pb       WR     wet  178          -0.40 0.28          -0.30
+   tb       QB  frigid   46          -2.22 1.24          -2.41
+   tb       QB    cold  245          -0.04 0.66          -1.39
+   tb       QB    mild 1592          -0.06 0.26          -1.37
+   tb       RB  frigid   84          +0.15 0.42          -0.22
+   tb       RB    cold  457          +0.49 0.19          -0.42
+   tb       RB    mild 2881          +0.50 0.07          -0.56
+   tb       TE  frigid   49          -0.46 0.55          -0.14
+   tb       TE    cold  255          -0.37 0.20          -0.24
+   tb       TE    mild 1665          +0.24 0.08          -0.10
+   tb       WR  frigid  104          +0.12 0.36          -0.62
+   tb       WR    cold  669          +0.02 0.16          -0.30
+   tb       WR    mild 4224          +0.11 0.07          -0.21
+   wb       QB    calm 1426          +0.39 0.27          -1.22
+   wb       QB  breezy  350          -1.45 0.54          -1.63
+   wb       QB windy15  107          -2.35 0.99          -3.05
+   wb       RB    calm 2608          +0.59 0.07          -0.60
+   wb       RB  breezy  617          +0.11 0.16          -0.31
+   wb       RB windy15  197          +0.36 0.24          -0.28
+   wb       TE    calm 1502          +0.17 0.09          -0.09
+   wb       TE  breezy  365          +0.12 0.19          -0.16
+   wb       TE windy15  102          -0.24 0.27          -0.44
+   wb       WR    calm 3803          +0.24 0.07          -0.24
+   wb       WR  breezy  929          -0.24 0.14          -0.21
+   wb       WR windy15  265          -0.74 0.27          -0.16
+── 14a step 3: shipped probability honesty by weather bucket ───────────────────
+
+── Cell 2: honesty by weather bucket (delta pp = emp - stated) ──
+
+ axis position  bucket    n stated   emp threshold delta_pp
+   pb       QB     dry 1815  0.141 0.127      boom     -1.5
+   pb       QB     wet   68  0.131 0.103      boom     -2.8
+   pb       QB     dry 1815  0.293 0.274     start     -1.8
+   pb       QB     wet   68  0.284 0.294     start     +1.0
+   pb       RB     dry 3294  0.143 0.132      boom     -1.1
+   pb       RB     wet  128  0.144 0.133      boom     -1.1
+   pb       RB     dry 3294  0.276 0.274     start     -0.2
+   pb       RB     wet  128  0.275 0.234     start     -4.0
+   pb       TE     dry 1901  0.107 0.115      boom     +0.7
+   pb       TE     wet   68  0.108 0.074      boom     -3.4
+   pb       TE     dry 1901  0.275 0.266     start     -0.9
+   pb       TE     wet   68  0.276 0.162     start    -11.4
+   pb       WR     dry 4819  0.127 0.123      boom     -0.4
+   pb       WR     wet  178  0.119 0.107      boom     -1.2
+   pb       WR     dry 4819  0.259 0.254     start     -0.5
+   pb       WR     wet  178  0.246 0.202     start     -4.4
+   tb       QB  frigid   46  0.123 0.043      boom     -7.9
+   tb       QB    cold  245  0.132 0.127      boom     -0.5
+   tb       QB    mild 1592  0.143 0.128      boom     -1.5
+   tb       QB  frigid   46  0.269 0.174     start     -9.5
+   tb       QB    cold  245  0.282 0.294     start     +1.1
+   tb       QB    mild 1592  0.294 0.275     start     -1.9
+   tb       RB  frigid   84  0.148 0.119      boom     -2.9
+   tb       RB    cold  457  0.143 0.147      boom     +0.4
+   tb       RB    mild 2881  0.143 0.130      boom     -1.3
+   tb       RB  frigid   84  0.288 0.321     start     +3.4
+   tb       RB    cold  457  0.274 0.282     start     +0.8
+   tb       RB    mild 2881  0.276 0.270     start     -0.6
+   tb       TE  frigid   49  0.105 0.082      boom     -2.4
+   tb       TE    cold  255  0.114 0.102      boom     -1.2
+   tb       TE    mild 1665  0.107 0.116      boom     +0.9
+   tb       TE  frigid   49  0.270 0.265     start     -0.5
+   tb       TE    cold  255  0.279 0.239     start     -3.9
+   tb       TE    mild 1665  0.274 0.265     start     -0.9
+   tb       WR  frigid  104  0.131 0.125      boom     -0.6
+   tb       WR    cold  669  0.112 0.109      boom     -0.3
+   tb       WR    mild 4224  0.129 0.125      boom     -0.4
+   tb       WR  frigid  104  0.260 0.212     start     -4.8
+   tb       WR    cold  669  0.236 0.212     start     -2.4
+   tb       WR    mild 4224  0.262 0.259     start     -0.3
+   wb       QB    calm 1426  0.140 0.137      boom     -0.3
+   wb       QB  breezy  350  0.143 0.089      boom     -5.5
+   wb       QB windy15  107  0.140 0.093      boom     -4.6
+   wb       QB    calm 1426  0.290 0.297     start     +0.7
+   wb       QB  breezy  350  0.298 0.203     start     -9.5
+   wb       QB windy15  107  0.301 0.215     start     -8.6
+   wb       RB    calm 2608  0.143 0.135      boom     -0.8
+   wb       RB  breezy  617  0.148 0.126      boom     -2.1
+   wb       RB windy15  197  0.138 0.112      boom     -2.7
+   wb       RB    calm 2608  0.275 0.276     start     +0.1
+   wb       RB  breezy  617  0.284 0.256     start     -2.8
+   wb       RB windy15  197  0.267 0.279     start     +1.3
+   wb       TE    calm 1502  0.107 0.118      boom     +1.1
+   wb       TE  breezy  365  0.108 0.104      boom     -0.4
+   wb       TE windy15  102  0.114 0.078      boom     -3.5
+   wb       TE    calm 1502  0.275 0.265     start     -1.0
+   wb       TE  breezy  365  0.277 0.258     start     -1.9
+   wb       TE windy15  102  0.271 0.235     start     -3.6
+   wb       WR    calm 3803  0.128 0.125      boom     -0.2
+   wb       WR  breezy  929  0.126 0.118      boom     -0.7
+   wb       WR windy15  265  0.120 0.102      boom     -1.8
+   wb       WR    calm 3803  0.259 0.259     start     -0.0
+   wb       WR  breezy  929  0.257 0.242     start     -1.4
+   wb       WR windy15  265  0.251 0.185     start     -6.6
+── 14a verdict (pre-committed rule) ────────────────────────────────────────────
+✔ NO TRIGGER: all residual cells < 0.8 EPA (QB < 2) and all calibration cells < 4pp at the pre-committed n floors.
+✔ RUNG 3 VERDICT: NULL -- the market already prices the weather. Publish the receipt; ladder moves on.
+✔ output/14a_weather_{residuals,calibration}.csv
+
+── 14a complete ────────────────────────────────────────────────────────────────

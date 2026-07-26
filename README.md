@@ -624,6 +624,28 @@ the accepted Egbuka flag in rung 1; 1 of 404 comparisons). WR20
 strat_iso cliff behavior stays on the watch list. 2025-season openers
 remain NA (neutral) pending backfill at rollover.
 
+### D20. Rung 3 (weather): PUBLISHED NULL -- the market already prices it (2026-07-26)
+
+The pre-registration expected a thin post-prediction adjustment; rung 2
+changed the null before rung 3 ran (opener totals price weather), and
+the diagnostic confirmed the absorption. 14a0 fetched kickoff-hour
+HISTORICAL FORECASTS (as-of-lock discipline, never observed; Open-Meteo
+archive floor = 2021, so 5 seasons, outdoor games only; 1,359/1,359
+games, 0 failures; data by Open-Meteo, CC-BY 4.0). 14a measured fold
+residuals (13e Vegas-era arms) and shipped-probability honesty by
+wind / temp / precip bucket under a pre-committed rule (residual >= 0.8
+EPA at n >= 300, QB >= 2.0; calibration >= 4pp at n >= 400 -- bars
+wider than rung 2's for the half-length window).
+
+NO TRIGGER. Verdict: NULL, published. No 14b, no weather features
+anywhere in the trained chain; slate weather remains content flags.
+
+WATCH ITEM (bar NOT widened post hoc): WR starts in 15+ mph wind read
+-6.6pp at n=265 -- the exact cell the expectation flagged, but below
+the pre-committed 400-row floor on only 52 windy games in the archive.
+Re-examine as seasons accrue (~10 windy games/yr); becomes testable at
+the pre-committed floor around 2027-2028.
+
 ## Deployment runner (10-series) -- design, in progress 2026-07-17
 
 The backtest chain trains a model per fold; deployment is ONE MORE FOLD:

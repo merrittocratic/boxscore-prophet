@@ -4,6 +4,30 @@ Narrative-grade decision log: the moments worth writing about, with the
 receipts pinned. Technical detail lives in README decision entries; this
 file records why the roadmap bent where it did.
 
+## 2026-07-26: The null we PAID to publish -- weather is already in the price
+
+Rung 3 (weather) closed the same day rung 2 shipped, and the two
+verdicts are a matched pair: rung 2 found the market knows things our
+models did not; rung 3 found that once you let the market in, it has
+already told you about the weather.
+
+We fetched five seasons of kickoff-hour forecasts -- forecasts as of
+lock, never observed weather, the same discipline the golf stack
+taught us -- and measured whether wind, cold, or rain move anything
+our Vegas-aware chain gets wrong. Pre-stated expectation: mostly
+absorbed, because a 15-mph-wind game opens with a lower total and our
+chain now reads totals. Pre-committed bars, wider than rung 2's out of
+respect for a five-season window. Result: nothing fires. The null is
+published, no weather feature enters the models, and the slate's
+weather stays what it was -- context for readers.
+
+One cell gets a bookmark rather than a patch: WR starts in 15+ mph
+wind read 6.6 points cold, on a sample (52 windy games) below the
+floor we committed to before looking. The bar does not move after the
+data arrives. The archive grows ~10 windy games a year; the question
+becomes answerable honestly around 2027. That is the difference
+between a finding and a temptation.
+
 ## 2026-07-26: Shipping the market -- three layers deep, with a gate that kept saying no
 
 The Vegas rung shipped today, and the story of the ship pass is the

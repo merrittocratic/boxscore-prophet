@@ -1,0 +1,39 @@
+
+── 14a0: bulk kickoff-hour weather fetch (2021-2025) ───────────────────────────
+ℹ 1359 games | 430 indoor | 0 without coords
+Warning message:
+There was 1 warning in `filter()`.
+ℹ In argument: `!game_id %in% done$game_id`.
+Caused by warning:
+! Unknown or uninitialised column: `game_id`. 
+ℹ Cached: 0 | to fetch: 1359
+ℹ 50/1359 fetched (checkpoint saved)
+ℹ 100/1359 fetched (checkpoint saved)
+ℹ 150/1359 fetched (checkpoint saved)
+ℹ 200/1359 fetched (checkpoint saved)
+ℹ 250/1359 fetched (checkpoint saved)
+ℹ 300/1359 fetched (checkpoint saved)
+ℹ 350/1359 fetched (checkpoint saved)
+ℹ 400/1359 fetched (checkpoint saved)
+ℹ 450/1359 fetched (checkpoint saved)
+ℹ 500/1359 fetched (checkpoint saved)
+ℹ 550/1359 fetched (checkpoint saved)
+ℹ 600/1359 fetched (checkpoint saved)
+ℹ 650/1359 fetched (checkpoint saved)
+ℹ 700/1359 fetched (checkpoint saved)
+ℹ 750/1359 fetched (checkpoint saved)
+ℹ 800/1359 fetched (checkpoint saved)
+ℹ 850/1359 fetched (checkpoint saved)
+ℹ 900/1359 fetched (checkpoint saved)
+ℹ 950/1359 fetched (checkpoint saved)
+ℹ 1000/1359 fetched (checkpoint saved)
+ℹ 1050/1359 fetched (checkpoint saved)
+ℹ 1100/1359 fetched (checkpoint saved)
+ℹ 1150/1359 fetched (checkpoint saved)
+ℹ 1200/1359 fetched (checkpoint saved)
+ℹ 1250/1359 fetched (checkpoint saved)
+ℹ 1300/1359 fetched (checkpoint saved)
+ℹ 1350/1359 fetched (checkpoint saved)
+✔ data/weather_forecast_hist.rds: 1359 games | 1359 with weather | 0 failed
+
+── 14a0 complete ───────────────────────────────────────────────────────────────
