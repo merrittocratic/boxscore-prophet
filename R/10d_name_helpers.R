@@ -15,7 +15,10 @@
 NAME_ALIASES <- c(
   # "external form" = "nflverse form" -- extend as the join report surfaces
   "hollywood brown" = "marquise brown",
-  "gabe davis"      = "gabriel davis"
+  "gabe davis"      = "gabriel davis",
+  "jose aguilar"    = "joey aguilar",  # draft-model board name vs nflverse (2026 UDFA QB, JAX)
+  "elijah raridon"  = "eli raridon",   # draft-model name variant (2026 TE, Notre Dame)
+  "dezhaun-ryan stribling" = "dezhaun stribling"  # draft-model name variant (2026 WR, SFO)
 )
 
 normalize_player_name <- function(x) {

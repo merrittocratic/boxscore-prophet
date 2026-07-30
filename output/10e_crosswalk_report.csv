@@ -1,0 +1,237 @@
+name,pos,school,side,note
+Fernando Mendoza,QB,Indiana,matched,pfr_id -> MEN516487
+Ty Simpson,QB,Alabama,matched,pfr_id -> SIM639376
+Carson Beck,QB,Miami,matched,pfr_id -> NO GSIS YET
+Drew Allar,QB,Penn State,matched,pfr_id -> ALL015451
+Cade Klubnik,QB,Clemson,matched,pfr_id -> 00-0041056
+Cole Payton,QB,North Dakota State,matched,name_pos -> 00-0040891
+Taylen Green,QB,Arkansas,matched,pfr_id -> 00-0041092
+Athan Kaliakmanis,QB,Rutgers,matched,name_pos -> 00-0041117
+Behren Morton,QB,Texas Tech,matched,pfr_id -> 00-0041123
+Garrett Nussmeier,QB,LSU,matched,pfr_id -> 00-0040906
+Haynes King,QB,Georgia Tech,matched,udfa_name -> 00-0041149
+Jalon Daniels,QB,Kansas,matched,udfa_name -> 00-0041251
+Joe Fagnano,QB,Connecticut,matched,udfa_name -> 00-0040981
+Jose Aguilar,QB,Tennessee,matched,udfa_name -> 00-0041203
+Kyron Drones,QB,Virginia Tech,matched,udfa_name -> 00-0040942
+Luke Altmyer,QB,Illinois,matched,udfa_name -> 00-0041453
+Mark Gronowski,QB,Iowa,matched,udfa_name -> 00-0041156
+Miller Moss,QB,Louisville,matched,udfa_name -> 00-0041172
+Jeremiyah Love,RB,Notre Dame,matched,pfr_id -> 00-0041027
+Jadarian Price,RB,Notre Dame,matched,pfr_id -> 00-0041512
+Kaelon Black,RB,Indiana,matched,name_pos -> 00-0041052
+Jonah Coleman,RB,Washington,matched,pfr_id -> 00-0041496
+Mike Washington Jr.,RB,Arkansas,matched,pfr_id -> 00-0040878
+Max Bredeson,RB,Michigan,matched,name_only -> 00-0041081
+Emmett Johnson,RB,Nebraska,matched,pfr_id -> 00-0041013
+Nicholas Singleton,RB,Penn State,matched,pfr_id -> NO GSIS YET
+Adam Randall,RB,Clemson,matched,pfr_id -> 00-0040888
+Kaytron Allen,RB,Penn State,matched,pfr_id -> 00-0041096
+Demond Claiborne,RB,Wake Forest,matched,pfr_id -> 00-0041104
+Seth McGowan,RB,Kentucky,matched,pfr_id -> 00-0041125
+Jam Miller,RB,Alabama,matched,name_pos -> 00-0041129
+Cash Jones,RB,Georgia,matched,udfa_name -> 00-0041191
+Chip Trayanum,RB,Toledo,matched,udfa_name -> 00-0041239
+CJ Donaldson,RB,Ohio State,matched,udfa_name -> 00-0041326
+Dean Connors,RB,Houston,matched,udfa_name -> 00-0041415
+Dominic Richardson,RB,Tulsa,matched,udfa_name -> 00-0040937
+E.J. Smith,RB,Texas A&M,matched,udfa_name -> 00-0040964
+Eli Heidenreich,RB,Navy,matched,udfa_name -> 00-0041490
+Jamal Haynes,RB,Georgia Tech,matched,udfa_name -> 00-0041244
+Jaydn Ott,RB,Oklahoma,matched,udfa_name -> 00-0040959
+J'Mari Taylor,RB,Virginia,matched,udfa_name -> 00-0041217
+Kadarius Calloway,RB,New Mexico State,matched,udfa_name -> 00-0041433
+Kejon Owens,RB,Florida International,matched,udfa_name -> 00-0041350
+Kentrel Bullock,RB,South Alabama,matched,udfa_name -> 00-0041241
+Noah Whittington,RB,Oregon,matched,udfa_name -> 00-0041312
+Robert Henry Jr.,RB,Texas-San Antonio,matched,udfa_name -> 00-0041178
+Roman Hemby,RB,Indiana,matched,udfa_name -> 00-0040998
+Kenyon Sadiq,TE,Oregon,matched,pfr_id -> 00-0041032
+Eli Stowers,TE,Vanderbilt,matched,pfr_id -> 00-0041483
+Nate Boerkircher,TE,Texas A&M,matched,pfr_id -> 00-0041503
+Marlin Klein,TE,Michigan,matched,pfr_id -> 00-0041472
+Max Klare,TE,Ohio State,matched,pfr_id -> 00-0041510
+Sam Roush,TE,Stanford,matched,pfr_id -> 00-0041558
+Oscar Delp,TE,Georgia,matched,pfr_id -> NO GSIS YET
+Will Kacmarek,TE,Ohio State,matched,name_pos -> 00-0041524
+Elijah Raridon,TE,Notre Dame,matched,pfr_id -> 00-0041395
+Matthew Hibner,TE,SMU,matched,pfr_id -> 00-0040879
+Justin Joly,TE,North Carolina State,matched,pfr_id -> 00-0041077
+Tanner Koziol,TE,Houston,matched,pfr_id -> 00-0041084
+Riley Nowakowski,TE,Indiana,matched,pfr_id -> 00-0041398
+Joe Royer,TE,Cincinnati,matched,pfr_id -> NO GSIS YET
+Josh Cuevas,TE,Alabama,matched,pfr_id -> 00-0040887
+Seydou Traore,TE,Mississippi State,matched,name_pos -> TRA291459
+Bauer Sharp,TE,LSU,matched,pfr_id -> 00-0041094
+Jack Endries,TE,Texas,matched,pfr_id -> 00-0041116
+Jaren Kanak,TE,Oklahoma,matched,pfr_id -> 00-0040901
+Carsen Ryan,TE,BYU,matched,name_pos -> 00-0041131
+Dallen Bentley,TE,Utah,matched,pfr_id -> 00-0041133
+Dae'Quan Wright,TE,Mississippi,matched,udfa_name -> 00-0040927
+Dan Villari,TE,Syracuse,matched,udfa_name -> 00-0041422
+DJ Rogers,TE,TCU,matched,udfa_name -> 00-0040938
+Jack Velling,TE,Michigan State,matched,udfa_name -> 00-0041195
+Jameson Geers,TE,Minnesota,matched,udfa_name -> 00-0041366
+John Michael Gyllenborg,TE,Wyoming,matched,udfa_name -> 00-0040955
+Josh Kattus,TE,Kentucky,matched,udfa_name -> 00-0041246
+Lake McRee,TE,USC,matched,udfa_name -> 00-0041263
+Lance Mason,TE,Wisconsin,matched,udfa_name -> 00-0040974
+Michael Trigg,TE,Baylor,matched,udfa_name -> 00-0040939
+Miles Kitselman,TE,Tennessee,matched,udfa_name -> 00-0041457
+RJ Maryland,TE,SMU,matched,udfa_name -> 00-0040945
+Rohan Jones,TE,Arkansas,matched,udfa_name -> 00-0041403
+Tanner Arkin,TE,Illinois,matched,udfa_name -> 00-0041314
+Carnell Tate,WR,Ohio State,matched,pfr_id -> 00-0041438
+Jordyn Tyson,WR,Arizona State,matched,pfr_id -> 00-0041029
+Makai Lemon,WR,USC,matched,pfr_id -> 00-0040867
+KC Concepcion,WR,Texas A&M,matched,name_pos -> 00-0041547
+Omar Cooper,WR,Indiana,matched,pfr_id -> 00-0041511
+De'Zhaun-Ryan Stribling,WR,Mississippi,matched,pfr_id -> NO GSIS YET
+Denzel Boston,WR,Washington,matched,pfr_id -> 00-0041037
+Germie Bernard,WR,Alabama,matched,pfr_id -> 00-0041489
+Antonio Williams,WR,Clemson,matched,pfr_id -> 00-0041040
+Malachi Fields,WR,Notre Dame,matched,pfr_id -> 00-0041042
+Caleb Douglas,WR,Texas Tech,matched,pfr_id -> 00-0041523
+Zachariah Branch,WR,Georgia,matched,pfr_id -> 00-0041044
+Ja'Kobi Lane,WR,USC,matched,pfr_id -> 00-0040870
+Chris Brazzell II,WR,Tennessee,matched,name_pos -> 00-0041047
+Ted Hurst,WR,Georgia State,matched,name_pos -> 00-0041048
+Zavion Thomas,WR,LSU,matched,pfr_id -> 00-0041051
+Chris Bell,WR,Louisville,matched,pfr_id -> 00-0041525
+Brenen Thompson,WR,Mississippi State,matched,pfr_id -> 00-0041550
+Elijah Sarratt,WR,Indiana,matched,pfr_id -> 00-0040876
+Kaden Wetjen,WR,Iowa,matched,pfr_id -> 00-0041397
+Skyler Bell,WR,Connecticut,matched,pfr_id -> 00-0041443
+Bryce Lance,WR,North Dakota State,matched,name_pos -> 00-0041067
+Colbie Young,WR,Georgia,matched,pfr_id -> NO GSIS YET
+Reggie Virgil,WR,Texas Tech,matched,name_pos -> 00-0041070
+Kendrick Law,WR,Kentucky,matched,name_pos -> LAW090280
+Cyrus Allen,WR,Cincinnati,matched,name_pos -> 00-0040890
+Kevin Coleman,WR,Missouri,matched,pfr_id -> 00-0041529
+Barion Brown,WR,LSU,matched,pfr_id -> 00-0041099
+Josh Cameron,WR,Baylor,matched,pfr_id -> 00-0041100
+Malik Benson,WR,Oregon,matched,name_pos -> 00-0040894
+CJ Daniels,WR,Miami,matched,pfr_id -> 00-0041399
+Emmanuel Henderson,WR,Kansas,matched,name_pos -> 00-0040895
+C.J. Williams,WR,Stanford,matched,name_pos -> 00-0041106
+Lewis Bond,WR,Boston College,matched,name_pos -> 00-0041467
+Deion Burks,WR,Oklahoma,matched,pfr_id -> NO GSIS YET
+Aaron Anderson,WR,LSU,matched,udfa_name -> 00-0041491
+Caullin Lacy,WR,Louisville,matched,udfa_name -> 00-0041199
+Chase Roberts,WR,BYU,matched,udfa_name -> 00-0041004
+Chris Hilton,WR,LSU,matched,udfa_name -> 00-0041179
+Dane Key,WR,Nebraska,matched,udfa_name -> 00-0041293
+Dillon Bell,WR,Georgia,matched,udfa_name -> 00-0041342
+Donaven McCulley,WR,Michigan,matched,udfa_name -> 00-0041158
+E.J. Williams,WR,Indiana,matched,udfa_name -> 00-0041011
+Eric Rivers,WR,Georgia Tech,matched,udfa_name -> 00-0041257
+Hank Beatty,WR,Illinois,matched,udfa_name -> 00-0040912
+Harrison Wallace,WR,Mississippi,matched,udfa_name -> 00-0041368
+J. Michael Sturdivant,WR,Florida,matched,udfa_name -> 00-0040948
+Jacob De Jesus,WR,California,matched,udfa_name -> 00-0040967
+Jalen Walthall,WR,Incarnate Word,matched,udfa_name -> 00-0041311
+Ja'Mori Maclin,WR,Kentucky,matched,udfa_name -> 00-0041272
+Jeff Caldwell,WR,Cincinnati,matched,udfa_name -> 00-0040953
+Jordan Hudson,WR,SMU,matched,udfa_name -> 00-0040934
+Joseph Manjack IV,WR,TCU,matched,udfa_name -> 00-0041294
+Keelan Marion,WR,Miami (FL),matched,udfa_name -> 00-0041266
+Kobe Prentice,WR,Baylor,matched,udfa_name -> 00-0041152
+Malik McClain,WR,Arizona State,matched,udfa_name -> 00-0041267
+Michael Wortham,WR,Montana,matched,udfa_name -> 00-0041220
+Nick Degennaro,WR,James Madison,matched,udfa_name -> 00-0041317
+Noah Thomas,WR,Georgia,matched,udfa_name -> 00-0041248
+Omari Evans,WR,Washington,matched,udfa_name -> 00-0040954
+Trebor Pena,WR,Penn State,matched,udfa_name -> 00-0041216
+Tyren Montgomery,WR,John Carroll,matched,udfa_name -> 00-0040919
+Vinny Anthony II,WR,Wisconsin,matched,udfa_name -> 00-0041185
+Will Pauling,WR,Notre Dame,matched,udfa_name -> 00-0041361
+Alton McCaskill IV,RB,Sam Houston State,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Amari Niblack,TE,Texas A&M,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Andrel Anthony,WR,Duke,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Andrew Paul,RB,Jacksonville State,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Antonio Gates Jr.,WR,Delaware State,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Armoni Goodwin,RB,UT Martin,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Ayden Williams,WR,Mississippi State,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Barika Kpeenu,RB,North Dakota State,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Braylin Presley,WR,Tulsa,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Braylon James,WR,TCU,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Byron Cardwell,RB,San Diego State,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Cade McNamara,QB,East Tennessee State,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Cam Porter,RB,Northwestern,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Chamon Metayer,TE,Arizona State,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Christian Leary,WR,Western Michigan,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Curtis Allen,RB,Virginia Union,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Dacari Collins,WR,Louisville,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Davin Stoffel,TE,Illinois,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Deion Colzie,WR,Miami (OH),model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Dequan Finn,QB,Miami (OH),model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Desmond Reid,RB,Pittsburgh,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Devin Voisin,WR,South Alabama,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Diego Pavia,QB,Vanderbilt,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Donavon Greene,WR,Virginia Tech,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Drew Pyne,QB,Bowling Green,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Eric McAlister,WR,TCU,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Grayson Loftis,QB,Charlotte,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Holden Staes,TE,Indiana,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Jake Retzlaff,QB,Tulane,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Jalen Berger,RB,UCLA,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Jalil Farooq,WR,Maryland,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Jamarion Miller,RB,Alabama,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Jared Brown,WR,South Carolina,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Ja'Varrius Johnson,WR,UCF,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Jayden Ballard,WR,Wisconsin,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Jayden Thomas,WR,Virginia,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Jaylon Glover,RB,UNLV,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Jeff Sims,QB,Arizona State,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Jerand Bradley,WR,Kansas State,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+J.Michael Sturdivant,WR,Florida,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+JoJo Earle,WR,UNLV,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Justus Ross-Simmons,WR,Syracuse,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Kaidon Salter,QB,Colorado,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Kaleb Brown,WR,UAB,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Kevin Concepcion,WR,Texas A&M,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Kevorian Barnes,RB,TCU,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Khalil Dinkins,TE,Penn State,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Kyion Grayes,WR,California,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Kyron Ware-Hudson,WR,Penn State,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Le'Veon Moss,RB,Texas A&M,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+L.J. Johnson Jr.,RB,California,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Logan Diggs,RB,Mississippi,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Maalik Murphy,QB,Oregon State,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Matthew Sluka,QB,James Madison,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Maverick McIvor,QB,Western Kentucky,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Max Tomzcak,WR,Youngstown State,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Nate Johnson,QB,Utah,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Nate Rutchena,TE,UC Davis,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Nathan Leacock,WR,North Carolina,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Nick Singleton,RB,Penn State,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+O'Mega Blake,WR,Arkansas,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Owen McCown,QB,UTSA,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Preston Stone,QB,Northwestern,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Rahsul Faison,RB,South Carolina,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Rara Thomas,WR,Troy,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Raymond Cottrell,WR,West Alabama,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Richard Reese,RB,Stephen F. Austin,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Romello Brinson,WR,SMU,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Roydell Williams,RB,Florida State,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Ryan Niblett,WR,Texas,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Savion Red,RB,Sacramento State,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Sawyer Robertson,QB,Baylor,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Sedrick Alexander,RB,Vanderbilt,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Squirrel White,WR,Florida State,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Terion Stewart,RB,Virginia Tech,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Thomas Castellanos,QB,Florida State,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Tobias Merriweather,WR,Utah,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Trevion Cooley,RB,Troy,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+TreVonte Citizen,RB,McNeese State,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Ty Thompson,TE,Tulane,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Tyler Van Dyke,QB,SMU,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Zach Calzada,QB,Kentucky,model_prospect_unmatched,not drafted and no rookie-roster name match (likely unsigned)
+Anthony Smith,WR,East Carolina,drafted_not_in_model,pick 218 (DAL) -- draft model has no row
+Chris Brazzell,WR,Tennessee,duplicate_dropped,name-variant twin of 'Chris Brazzell II' (pred -0.077 vs kept 0.030) -- fix in draft model
+De'Zhaun Stribling,WR,Mississippi,duplicate_dropped,name-variant twin of 'De'Zhaun-Ryan Stribling' (pred 0.002 vs kept -0.136) -- fix in draft model
+Eli Raridon,TE,Notre Dame,duplicate_dropped,name-variant twin of 'Elijah Raridon' (pred -0.236 vs kept -0.163) -- fix in draft model
+Harrison Wallace III,WR,Mississippi,duplicate_dropped,name-variant twin of 'Harrison Wallace' (pred -0.071 vs kept -0.057) -- fix in draft model
+Joey Aguilar,QB,Tennessee,duplicate_dropped,name-variant twin of 'Jose Aguilar' (pred -0.014 vs kept -0.018) -- fix in draft model
+Kevin Coleman Jr.,WR,Missouri,duplicate_dropped,name-variant twin of 'Kevin Coleman' (pred 0.099 vs kept 0.178) -- fix in draft model
+Omar Cooper Jr.,WR,Indiana,duplicate_dropped,name-variant twin of 'Omar Cooper' (pred -0.128 vs kept 0.100) -- fix in draft model
