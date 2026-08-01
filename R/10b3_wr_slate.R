@@ -19,15 +19,15 @@ suppressPackageStartupMessages({
 source("R/10b_roster_helpers.R")
 
 args <- commandArgs(trailingOnly = TRUE)
-TARGET_SEASON <- if (length(args) >= 1) as.integer(args[1]) else 2025L
+TARGET_SEASON <- if (length(args) >= 1) as.integer(args[1]) else 2026L
 TARGET_WEEK   <- if (length(args) >= 2) as.integer(args[2]) else 15L
 
 ROLLING_WINDOW     <- 5L
 DECAY_RATE         <- 0.85
 DEF_WINDOW         <- 6L
 FALLBACK_MIN_GAMES <- 3L
-ANCHOR_SEASONS     <- 2013L:2024L
-PREDICTION_SEASONS <- 2014L:2025L
+ANCHOR_SEASONS     <- 2013L:2025L
+PREDICTION_SEASONS <- 2014L:2026L
 MIN_PRIOR_OPP      <- 10L
 
 exp_weights <- function(n, decay = DECAY_RATE) {
@@ -197,7 +197,7 @@ id_xwalk <- rosters_all |>
   distinct(pfr_id, .keep_all = TRUE) |>
   select(gsis_id, pfr_id)
 
-snaps_raw <- nflreadr::load_snap_counts(seasons = TARGET_SEASON)
+snaps_raw <- load_season_or_empty(nflreadr::load_snap_counts, TARGET_SEASON)
 snap_pct_divisor <- if (max(snaps_raw$offense_pct, na.rm = TRUE) > 1.5) 100 else 1
 snap_roll <- snaps_raw |>
   filter(game_type == "REG", week < TARGET_WEEK,
@@ -317,7 +317,7 @@ slate <- roster |>
             by = c("game_id", "posteam"))
 
 inj <- tryCatch(
-  nflreadr::load_injuries(seasons = TARGET_SEASON) |>
+  load_season_or_empty(nflreadr::load_injuries, TARGET_SEASON) |>
     filter(week == TARGET_WEEK) |>
     select(player_id = gsis_id, report_status, practice_status) |>
     distinct(player_id, .keep_all = TRUE),

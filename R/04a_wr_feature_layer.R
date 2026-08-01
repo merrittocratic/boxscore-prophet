@@ -18,9 +18,9 @@ suppressPackageStartupMessages({
 # ===========================================================================
 # PARAMETERS
 # ===========================================================================
-ALL_SEASONS        <- 2013L:2025L
-PREDICTION_SEASONS <- 2014L:2025L
-ANCHOR_SEASONS     <- 2013L:2024L
+ALL_SEASONS        <- 2013L:2026L
+PREDICTION_SEASONS <- 2014L:2026L
+ANCHOR_SEASONS     <- 2013L:2025L
 
 ROLLING_WINDOW     <- 5L
 DECAY_RATE         <- 0.85
@@ -67,7 +67,11 @@ cli_h1("WR Feature Layer v1.0 | Seasons {paste(PREDICTION_SEASONS, collapse=', '
 cli_h1("Step 1: Pull raw data")
 
 cli_alert_info("PBP seasons {paste(ALL_SEASONS, collapse='-')}")
-pbp_raw <- nflreadr::load_pbp(ALL_SEASONS)
+# pbp only exists for seasons nflverse serves (load_pbp(2026) hard-errors
+# pre-season); rosters/draft DO have 2026 rows now. Clamp pbp only -- 2026
+# feature rows appear as games are played, which is the intended behavior.
+PBP_SEASONS <- ALL_SEASONS[ALL_SEASONS <= nflreadr::most_recent_season()]
+pbp_raw <- nflreadr::load_pbp(PBP_SEASONS)
 
 cli_alert_info("Rosters seasons {paste(ALL_SEASONS, collapse='-')}")
 rosters_raw <- nflreadr::load_rosters(ALL_SEASONS)
@@ -76,7 +80,7 @@ cli_alert_info("Draft picks (all available seasons)")
 draft_raw <- nflreadr::load_draft_picks()
 
 cli_alert_info("Snap counts seasons {paste(PREDICTION_SEASONS, collapse='-')}")
-snaps_raw <- nflreadr::load_snap_counts(PREDICTION_SEASONS)
+snaps_raw <- nflreadr::load_snap_counts(intersect(PREDICTION_SEASONS, PBP_SEASONS))
 
 # ===========================================================================
 # 2. COLUMN INVENTORY

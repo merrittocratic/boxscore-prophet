@@ -33,7 +33,12 @@ suppressPackageStartupMessages({
 
 source("R/11b_injury_state_fns.R")
 
-SEASONS <- 2014L:2025L
+# 2026 rollover: extend through the current season, clamped to what nflverse
+# serves (load_injuries(2026) hard-errors pre-season). This script is now on
+# the weekly full-run cadence (before 10a) so in-season weeks materialize --
+# 10a's stopifnot requires injury states for every feature row.
+SEASONS <- 2014L:2026L
+SEASONS <- SEASONS[SEASONS <= nflreadr::most_recent_season()]
 
 cli_h1("11b: ex-ante injury state layer (Friday-lock masked)")
 
@@ -41,13 +46,24 @@ inj_raw <- nflreadr::load_injuries(SEASONS)
 locks   <- build_lock_table(SEASONS)
 inj_slim <- clean_injury_reports(inj_raw, locks, mask = TRUE)
 
+# Mask-rate stat only over seasons where date_modified exists (data-driven;
+# 2025 never got the column, even post-season -- checked 2026-07-30. Any
+# later season without it is the same accepted approximation).
+if (!"date_modified" %in% names(inj_raw)) inj_raw$date_modified <- as.POSIXct(NA)
+dm_seasons <- inj_raw |>
+  group_by(season) |>
+  summarise(has_dm = any(!is.na(date_modified)), .groups = "drop")
+maskable   <- dm_seasons |> filter(has_dm) |> pull(season)
+unmaskable <- dm_seasons |> filter(!has_dm) |> pull(season)
 mask_rate <- inj_raw |>
-  filter(game_type == "REG", !is.na(gsis_id), season < 2025) |>
+  filter(game_type == "REG", !is.na(gsis_id), season %in% maskable) |>
   left_join(locks, by = c("season", "week", "team")) |>
   summarise(pct = 100 * mean(!is.na(date_modified) & !is.na(lock_ts) &
                                date_modified > lock_ts)) |> pull(pct)
-cli_alert_info("Friday-lock mask: {round(mask_rate, 1)}% of 2014-2024 report rows post-lock (report_status masked)")
-cli_alert_warning("2025 has no date_modified -- unmaskable, accepted approximation")
+cli_alert_info("Friday-lock mask: {round(mask_rate, 1)}% of {min(maskable)}-{max(maskable)} report rows post-lock (report_status masked)")
+if (length(unmaskable) > 0) {
+  cli_alert_warning("No date_modified for: {paste(unmaskable, collapse = ', ')} -- unmaskable, accepted approximation")
+}
 
 POSITIONS <- list(
   rb = list(table = "data/rb_feature_table.rds", share = "wt_carry_share",  above = TRUE),

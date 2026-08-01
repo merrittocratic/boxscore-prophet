@@ -45,7 +45,7 @@ suppressPackageStartupMessages({
 source("R/10b_roster_helpers.R")
 
 args <- commandArgs(trailingOnly = TRUE)
-TARGET_SEASON <- if (length(args) >= 1) as.integer(args[1]) else 2025L
+TARGET_SEASON <- if (length(args) >= 1) as.integer(args[1]) else 2026L
 TARGET_WEEK   <- if (length(args) >= 2) as.integer(args[2]) else 15L
 
 # Frozen constants -- copied from build_rb_feature_layer.R v1.5
@@ -53,8 +53,8 @@ ROLLING_WINDOW     <- 5L
 DECAY_RATE         <- 0.85
 DEF_WINDOW         <- 6L
 FALLBACK_MIN_GAMES <- 3L
-ANCHOR_SEASONS     <- 2013L:2024L
-PREDICTION_SEASONS <- 2014L:2025L
+ANCHOR_SEASONS     <- 2013L:2025L
+PREDICTION_SEASONS <- 2014L:2026L
 
 # Frozen helpers -- copied VERBATIM from build_rb_feature_layer.R
 exp_weights <- function(n, decay = DECAY_RATE) {
@@ -238,7 +238,7 @@ id_xwalk <- rosters_all |>
   distinct(pfr_id, .keep_all = TRUE) |>
   select(gsis_id, pfr_id)
 
-snaps_raw <- nflreadr::load_snap_counts(seasons = TARGET_SEASON)
+snaps_raw <- load_season_or_empty(nflreadr::load_snap_counts, TARGET_SEASON)
 snap_pct_divisor <- if (max(snaps_raw$offense_pct, na.rm = TRUE) > 1.5) 100 else 1
 snap_roll <- snaps_raw |>
   filter(game_type == "REG", week < TARGET_WEEK,
@@ -363,7 +363,7 @@ slate <- roster |>
 # Injury context (report + practice status; the DNP-progression FEATURE
 # family is ablation ladder rung 1, built separately)
 inj <- tryCatch(
-  nflreadr::load_injuries(seasons = TARGET_SEASON) |>
+  load_season_or_empty(nflreadr::load_injuries, TARGET_SEASON) |>
     filter(week == TARGET_WEEK) |>
     select(player_id = gsis_id, report_status, practice_status) |>
     distinct(player_id, .keep_all = TRUE),
@@ -383,7 +383,7 @@ cli_alert_success("Slate: {nrow(slate)} rows | injuries matched: {sum(!is.na(sla
 source("R/11b_injury_state_fns.R")
 
 inj_slim_states <- clean_injury_reports(
-  nflreadr::load_injuries(TARGET_SEASON),
+  load_season_or_empty(nflreadr::load_injuries, TARGET_SEASON),
   lock_table = if (hindcast) build_lock_table(TARGET_SEASON) else NULL,
   mask = hindcast
 )

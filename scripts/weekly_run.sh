@@ -60,6 +60,7 @@ if [ "$MODE" = "full" ]; then
   run R/04a_wr_feature_layer.R
   run R/12a_te_feature_layer.R
   run R/08a_qb_feature_layer.R          # also refreshes data/qb_def_adj.rds
+  run R/11b_injury_state_layer.R        # injury states for new in-season rows; 10a stopifnot requires them
   run R/10a_deployment_models.R         # weekly retrain; frozen after tonight
 fi
 

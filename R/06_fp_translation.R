@@ -26,7 +26,7 @@ suppressPackageStartupMessages({
   library(cli)
 })
 
-PREDICTION_SEASONS <- 2014L:2025L
+PREDICTION_SEASONS <- 2014L:2025L  # OUTCOME-FITTING range (loads actual FP to fit the EPA->FP translation). Do NOT bump at season rollover -- extend only after the new season has outcomes. Misleading name predates 2026 rollover.
 THRESH_START <- 15   # RB1 start/sit threshold
 THRESH_BOOM  <- 20   # elite week threshold
 

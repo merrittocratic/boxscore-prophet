@@ -137,3 +137,14 @@ vegas_slate_lines <- function(games_long, target_season, hindcast) {
   cli::cli_alert_info("Vegas lines (live, schedules-at-build): {nrow(out) - n_na}/{nrow(out)} team-games{if (n_na > 0) cli::format_inline(' ({n_na} unposted -> NA features)') else ''}")
   out
 }
+
+# Pre-season loader guard (2026 rollover): nflverse per-season loaders
+# (snap_counts, injuries) hard-error via `seasons <= most_recent_season()`
+# until the target season is served, and can still fail before the release
+# asset exists. Return zero rows with the PRIOR season's schema so
+# downstream joins stay shape-stable -- a future-week slate has no
+# target-season rows anyway (cold-start / no-designation semantics).
+load_season_or_empty <- function(loader, season) {
+  tryCatch(loader(seasons = season),
+           error = function(e) loader(seasons = season - 1L) |> dplyr::filter(FALSE))
+}

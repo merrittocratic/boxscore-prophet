@@ -5,17 +5,17 @@
 # and at Friday lock, so unambiguously reconstructable, unlike closers).
 #
 # Source: data/vegas/nfl_odds_aussports.xlsx (fetched via Wayback snapshot
-# 2025-08-27 of aussportsbetting.com/historical_data/nfl.xlsx; the live
+# 2025-08-27, refreshed 2026-07-30 via browser download; the live
 # site is Cloudflare-gated). Third-party data, gitignored like data/ecr.
-# Coverage: 2006-09-07 .. 2025-02-09 => complete 2014-2024 seasons; the
-# 2025 season has NO openers in this file (rows carry NA; LightGBM handles
+# Coverage: 2006-09-07 .. 2026-02-08 => complete 2014-2025 seasons (the
+# pre-refresh snapshot lacked 2025; refreshed file carries it. LightGBM handles
 # NA natively and the A/B comparison reports the coverage split).
 #
 # JOIN + VALIDATION (all gates abort on failure):
 #   - Odds file keys games by (date, era-specific full team names); map
 #     nickname -> franchise abbr with relocation-era logic, join on
 #     (gameday, home_abbr) to nflverse schedules.
-#   - GATE 1: >= 99% of 2014-2024 REG games matched.
+#   - GATE 1: >= 99% of 2014-COVERED_THROUGH REG games matched.
 #   - GATE 2 (join fingerprint): the file's CLOSING spread must reproduce
 #     nflverse spread_line (r >= 0.98) -- a wrong join scrambles this.
 #   - Sign convention verified against game results (slope ~ +1).
@@ -101,16 +101,17 @@ joined <- sched |>
                      total_open, total_close),
             by = c("gameday", "home_team" = "home_abbr"))
 
-# GATE 1: match rate on covered seasons (2014-2024)
-cov <- joined |> filter(season <= 2024L)
+# GATE 1: match rate on covered seasons. COVERED_THROUGH = last season the
+# source file fully spans (2025 backfilled 2026-07-30 from a fresh download,
+# coverage through 2026-02-08; was 2024 under the 2025-08-27 Wayback snapshot).
+COVERED_THROUGH <- 2025L
+cov <- joined |> filter(season <= COVERED_THROUGH)
 match_rate <- mean(!is.na(cov$home_line_open))
-cli_alert_info("Match rate 2014-2024: {round(100 * match_rate, 2)}% ({sum(is.na(cov$home_line_open))} unmatched of {nrow(cov)})")
+cli_alert_info("Match rate 2014-{COVERED_THROUGH}: {round(100 * match_rate, 2)}% ({sum(is.na(cov$home_line_open))} unmatched of {nrow(cov)})")
 if (match_rate < 0.99) {
   print(cov |> filter(is.na(home_line_open)) |> count(season) |> as.data.frame())
   cli_abort("GATE 1 FAILED: match rate below 99%")
 }
-n_2025 <- joined |> filter(season == 2025L) |> summarise(m = mean(!is.na(home_line_open))) |> pull(m)
-cli_alert_info("2025 season opener coverage: {round(100 * n_2025, 1)}% (expected ~0 -- snapshot predates the season)")
 
 # GATE 2: closer fingerprint. aussportsbetting home line is the handicap
 # APPLIED to the home team (favorite negative); nflverse spread_line is

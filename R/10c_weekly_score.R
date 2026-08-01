@@ -45,7 +45,7 @@ suppressPackageStartupMessages({
 set.seed(42)
 
 args <- commandArgs(trailingOnly = TRUE)
-TARGET_SEASON <- if (length(args) >= 1) as.integer(args[1]) else 2025L
+TARGET_SEASON <- if (length(args) >= 1) as.integer(args[1]) else 2026L
 TARGET_WEEK   <- if (length(args) >= 2) as.integer(args[2]) else 15L
 
 WTAG <- sprintf("%d_w%02d", TARGET_SEASON, TARGET_WEEK)

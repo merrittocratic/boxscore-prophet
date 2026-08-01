@@ -36,7 +36,7 @@ suppressPackageStartupMessages({
 
 set.seed(42)
 
-PREDICTION_SEASONS <- 2014L:2025L
+PREDICTION_SEASONS <- 2014L:2025L  # OUTCOME-FITTING range (loads actual FP to fit the EPA->FP translation). Do NOT bump at season rollover -- extend only after the new season has outcomes. Misleading name predates 2026 rollover.
 THRESH_START <- 15
 THRESH_BOOM  <- 20
 N_SIM        <- 2000
