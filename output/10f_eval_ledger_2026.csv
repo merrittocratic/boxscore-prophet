@@ -1,0 +1,8 @@
+cell_id,source_d,n_reg,effect_reg,n_new,effect_new,n_pooled,effect_pooled,n_floor,bar,decision_point,status,section,week
+windy15_wr_start,D20,265,-6.6,0,NA,265,-6.6,400,4,FALSE,no graded weeks,watch,0
+cont_broken_qb,D21,592,-1.37,0,NA,592,-1.37,300,2,FALSE,no graded weeks,watch,0
+own_sack_hi_qb,D21,2040,-0.96,0,NA,2040,-0.96,300,2,FALSE,no graded weeks,watch,0
+opp_sack_hi_qb,D21,1981,-0.84,0,NA,1981,-0.84,300,2,FALSE,no graded weeks,watch,0
+own_stuff_hi_qb,D21,2056,-0.82,0,NA,2056,-0.82,300,2,FALSE,no graded weeks,watch,0
+rookie_day2_qb,D22,95,-1.86,0,NA,95,-1.86,300,2,FALSE,no graded weeks,watch,0
+rookie_day3_qb,D22,130,-2.65,0,NA,130,-2.65,300,2,FALSE,no graded weeks,watch,0

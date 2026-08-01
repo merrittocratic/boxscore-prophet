@@ -1,0 +1,8 @@
+cell_id,source_d,position,axis,bucket,metric,threshold,bar,n_floor,n_reg,effect_reg,registered,note
+windy15_wr_start,D20,WR,wind,windy15,cal,start,4.0,400,265,-6.6,2026-07-26,52 windy games 2021-2025; ~10/yr; floor ~2027-2028
+cont_broken_qb,D21,QB,cont,broken,resid,,2.0,300,592,-1.37,2026-08-01,observed-state sizing; ex-ante rebuild required before any build
+own_sack_hi_qb,D21,QB,own_sack,hi,resid,,2.0,300,2040,-0.96,2026-08-01,shares population with other trench cells -- one lean
+opp_sack_hi_qb,D21,QB,opp_sack,hi,resid,,2.0,300,1981,-0.84,2026-08-01,shares population with other trench cells -- one lean
+own_stuff_hi_qb,D21,QB,own_stuff,hi,resid,,2.0,300,2056,-0.82,2026-08-01,shares population with other trench cells -- one lean
+rookie_day2_qb,D22,QB,tier,day2,resid,,2.0,300,95,-1.86,2026-08-01,~50 rookie-QB pw/yr; floor ~2028-29
+rookie_day3_qb,D22,QB,tier,day3_udfa,resid,,2.0,300,130,-2.65,2026-08-01,~50 rookie-QB pw/yr; floor ~2028-29
