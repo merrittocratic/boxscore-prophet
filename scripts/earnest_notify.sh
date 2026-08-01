@@ -30,7 +30,7 @@ command -v openclaw >/dev/null || { echo "[earnest_notify] openclaw CLI not foun
 SUMMARY_FILE=$(mktemp)
 MEDIA_FILE=$(mktemp)
 python3 - "$MANIFEST" "$SUMMARY_FILE" "$MEDIA_FILE" <<'PY'
-import json, subprocess, sys
+import csv, json, os, subprocess, sys
 
 path = sys.argv[1]
 summary_path = sys.argv[2]
@@ -46,6 +46,7 @@ counts = m.get("counts", {})
 warnings = m.get("warnings", [])
 ecr = counts.get("ecr", {})
 status = "completed with warnings" if warnings else "finished clean"
+artifacts = m.get("artifacts", {})
 summary = [
     f"Boxscore Prophet update, {season} W{week:02d} {mode} {status}.",
     f"{counts.get('games', 0)} games in slate, {counts.get('scored_players', 0)} scored players.",
@@ -58,6 +59,63 @@ summary.append(f"Repo commit pushed to main ({commit}).")
 if warnings:
     summary.append("Warnings: " + "; ".join(warnings[:2]) + ".")
 summary.append("Latest handoff refreshed at output/latest/boards.md")
+
+if mode == "full":
+    rookie_tracker = artifacts.get("rookie_tracker_csv")
+    rookie_leaders = artifacts.get("rookie_leaders_csv")
+    rookie_role = artifacts.get("rookie_role_earners_csv")
+    rookie_watch = artifacts.get("rookie_watch_csv")
+
+    def read_rows(path):
+        if not path or not os.path.exists(path):
+            return []
+        with open(path, newline="") as fh:
+            return list(csv.DictReader(fh))
+
+    tracker_rows = read_rows(rookie_tracker)
+    leaders_rows = read_rows(rookie_leaders)
+    role_rows = read_rows(rookie_role)
+    watch_rows = read_rows(rookie_watch)
+
+    if tracker_rows:
+        status_counts = {}
+        for row in tracker_rows:
+            key = row.get("tracker_status") or "unknown"
+            status_counts[key] = status_counts.get(key, 0) + 1
+        active = status_counts.get("active", 0)
+        limited = status_counts.get("limited_role", 0)
+        waiting = status_counts.get("no_nfl_data_yet", 0)
+        pending = status_counts.get("id_pending", 0)
+        summary.append(
+            "Rookie tracker: "
+            f"{active} active, {limited} limited-role, {waiting} waiting on NFL data"
+            + (f", {pending} id-pending." if pending else ".")
+        )
+
+        if leaders_rows:
+            top = leaders_rows[:3]
+            summary.append(
+                "Top rookie production: " + ", ".join(
+                    f"{row['nfl_name']} ({row['fp_pg']} FP/G)" for row in top
+                ) + "."
+            )
+        elif watch_rows:
+            top = watch_rows[:3]
+            summary.append(
+                "Rookie watchlist: " + ", ".join(
+                    f"{row['nfl_name']} ({row['draft_team']})" for row in top
+                ) + "."
+            )
+
+        if role_rows:
+            top = role_rows[:3]
+            summary.append(
+                "Role earners: " + ", ".join(
+                    f"{row['nfl_name']} ({row['latest_snap_share'] or '--'} snap, {row['latest_opportunities'] or '--'} opps)"
+                    for row in top
+                ) + "."
+            )
+
 with open(summary_path, "w") as fh:
     fh.write("\n".join(summary))
 with open(media_path, "w") as fh:
