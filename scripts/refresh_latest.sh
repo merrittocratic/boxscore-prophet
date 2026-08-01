@@ -45,6 +45,13 @@ copy_optional "output/10d_ecr_gap_${WTAG}.csv"         "$LATEST_DIR/ecr_gap.csv"
 copy_optional "output/10d_receipts_${WTAG}.md"         "$LATEST_DIR/receipts.md"
 copy_optional "output/10d_receipts_${WTAG}.csv"        "$LATEST_DIR/receipts.csv"
 copy_optional "output/10d_receipt_bands_${WTAG}.csv"   "$LATEST_DIR/receipt_bands.csv"
+copy_optional "output/10e_rookie_content_${SEASON}.md"      "$LATEST_DIR/rookies.md"
+copy_optional "output/10e_rookie_tracker_${SEASON}.csv"     "$LATEST_DIR/rookie_tracker.csv"
+copy_optional "output/10e_rookie_weekly_${SEASON}.csv"      "$LATEST_DIR/rookie_weekly.csv"
+copy_optional "output/10e_rookie_leaders_${SEASON}.csv"     "$LATEST_DIR/rookie_leaders.csv"
+copy_optional "output/10e_rookie_role_earners_${SEASON}.csv" "$LATEST_DIR/rookie_role_earners.csv"
+copy_optional "output/10e_rookie_efficiency_${SEASON}.csv"  "$LATEST_DIR/rookie_efficiency.csv"
+copy_optional "output/10e_rookie_watch_${SEASON}.csv"       "$LATEST_DIR/rookie_watch.csv"
 
 copy_required "output/img/10d_start_rb_${WTAG}.png"   "$IMG_DIR/start_rb.png"
 copy_required "output/img/10d_start_wr_${WTAG}.png"   "$IMG_DIR/start_wr.png"
@@ -109,6 +116,11 @@ counts = {
     "boom_board_rows": row_count(os.path.join(latest_dir, "boom_board.csv")),
     "streamer_board_rows": row_count(os.path.join(latest_dir, "streamer_board.csv")),
     "ecr_gap_rows": row_count(os.path.join(latest_dir, "ecr_gap.csv")),
+    "rookie_tracker_rows": row_count(os.path.join(latest_dir, "rookie_tracker.csv")),
+    "rookie_leaders_rows": row_count(os.path.join(latest_dir, "rookie_leaders.csv")),
+    "rookie_role_rows": row_count(os.path.join(latest_dir, "rookie_role_earners.csv")),
+    "rookie_efficiency_rows": row_count(os.path.join(latest_dir, "rookie_efficiency.csv")),
+    "rookie_watch_rows": row_count(os.path.join(latest_dir, "rookie_watch.csv")),
     "ecr": ecr_counts(os.path.join("data", "ecr", f"ecr_{wtag}.csv")),
 }
 
@@ -131,6 +143,13 @@ manifest = {
         "scored_slate_csv": os.path.join(latest_dir, "scored_slate.csv"),
         "ecr_gap_csv": os.path.join(latest_dir, "ecr_gap.csv"),
         "receipts_md": os.path.join(latest_dir, "receipts.md"),
+        "rookies_md": os.path.join(latest_dir, "rookies.md"),
+        "rookie_tracker_csv": os.path.join(latest_dir, "rookie_tracker.csv"),
+        "rookie_weekly_csv": os.path.join(latest_dir, "rookie_weekly.csv"),
+        "rookie_leaders_csv": os.path.join(latest_dir, "rookie_leaders.csv"),
+        "rookie_role_earners_csv": os.path.join(latest_dir, "rookie_role_earners.csv"),
+        "rookie_efficiency_csv": os.path.join(latest_dir, "rookie_efficiency.csv"),
+        "rookie_watch_csv": os.path.join(latest_dir, "rookie_watch.csv"),
         "images": {
             "start_rb": os.path.join(latest_dir, "img", "start_rb.png"),
             "start_wr": os.path.join(latest_dir, "img", "start_wr.png"),
@@ -148,6 +167,13 @@ manifest = {
         "scored_slate_csv": f"output/10c_scored_slate_{wtag}.csv",
         "game_slate_csv": f"output/10b_game_slate_{wtag}.csv",
         "ecr_gap_csv": f"output/10d_ecr_gap_{wtag}.csv",
+        "rookies_md": f"output/10e_rookie_content_{season}.md",
+        "rookie_tracker_csv": f"output/10e_rookie_tracker_{season}.csv",
+        "rookie_weekly_csv": f"output/10e_rookie_weekly_{season}.csv",
+        "rookie_leaders_csv": f"output/10e_rookie_leaders_{season}.csv",
+        "rookie_role_earners_csv": f"output/10e_rookie_role_earners_{season}.csv",
+        "rookie_efficiency_csv": f"output/10e_rookie_efficiency_{season}.csv",
+        "rookie_watch_csv": f"output/10e_rookie_watch_{season}.csv",
     },
 }
 

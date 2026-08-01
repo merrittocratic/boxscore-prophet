@@ -862,7 +862,10 @@ rather than an emergency rebuild.
                           current week into output/latest/ (stable
                           names + run_manifest.json) so downstream
                           content work never has to chase week-tagged
-                          filenames. EDITORIAL CAPS pre-committed:
+                          filenames. Tuesday full runs also refresh a
+                          rookie handoff there when 10e is present:
+                          rookies.md + rookie_tracker/leaders/role/
+                          efficiency/watch CSVs. EDITORIAL CAPS pre-committed:
                           displayed probabilities clamped to [2%, 95%]
                           (never publish a certainty); raw values stay
                           in the CSVs. Hindcast demo: 2025-W15.
