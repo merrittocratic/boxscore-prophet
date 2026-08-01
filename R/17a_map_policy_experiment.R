@@ -65,15 +65,159 @@
 # frozen procedure the backtest never ran.
 # ==========================================================================
 
-APPROVED <- FALSE   # flip to TRUE only on Steve sign-off of the rule above
+APPROVED <- TRUE    # Steve sign-off 2026-08-01; header locked verbatim above
 
 if (!APPROVED) {
   cli::cli_abort("17a pre-registration awaiting sign-off -- body does not run until APPROVED <- TRUE (and the header is locked verbatim at that point).")
 }
 
-# Implementation lands after sign-off:
-#   1. Fit Policy-A maps: per deployed cell, the judged method fit on fold
-#      preds with season <= 2024 (reusing the 6c/12e/9b fitting helpers).
-#   2. Apply to 2025 fold preds; Policy-B columns read straight from
-#      output/06c_recal_probabilities.csv / 12e / 09b.
-#   3. Emit output/17a_policy_comparison.csv + verdict block per the rule.
+# CAVEAT LOGGED AT APPROVAL: the recal files on disk predate the 2025
+# opener backfill, so 2025 rows carry NA vegas covariates and the
+# vegas-aware closures coalesce to neutral center. Both policies see the
+# same rows, so the WINDOW comparison is apples-to-apples; but the
+# experiment runs under 2025-vegas-NA conditions, not 2026's real-opener
+# conditions. Stated here, not silently absorbed.
+
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(cli)
+})
+
+# ---- fitting machinery: EXACT shipped code, extracted by parsing the
+# recal scripts and evaluating only the wanted top-level definitions
+# (no reimplementation, no heavy execution) ------------------------------
+extract_defs <- function(path, wanted) {
+  env <- new.env(parent = globalenv())
+  for (e in parse(path)) {
+    if (is.call(e) && identical(e[[1]], as.name("<-"))) {
+      lhs <- tryCatch(as.character(e[[2]]), error = function(err) NULL)
+      if (length(lhs) == 1 && lhs %in% wanted) eval(e, env)
+    }
+  }
+  missing <- setdiff(wanted, ls(env))
+  if (length(missing) > 0) cli_abort("defs missing from {path}: {missing}")
+  env
+}
+
+env_fp <- extract_defs("R/06c_recalibration.R",
+  c("P_EPS", "MIN_STRAT_N", "STRATA_LABELS",
+    "fit_platt", "fit_isotonic", "fit_strat", "fit_platt_vegas"))
+env_te <- extract_defs("R/12e_te_recalibration.R",
+  c("P_EPS", "fit_platt", "fit_platt_vegas", "fit_platt_vol_vegas"))
+env_qb <- extract_defs("R/09b_qb_recalibration.R",
+  c("P_EPS", "fit_platt", "fit_platt_vegas", "fit_platt_vol_vegas"))
+
+# Policy-A implied-total center: median over ARCHIVE games in seasons
+# <= 2024 (the shipped, pre-backfill condition -- IT_CENTER's definition
+# with the frozen window).
+vegas_open <- readRDS("data/vegas_open_lines.rds") |>
+  mutate(season = as.integer(substr(game_id, 1, 4)))
+IT_CENTER_A <- median(vegas_open$implied_total[vegas_open$season <= 2024], na.rm = TRUE)
+cli_alert_info("Policy-A it center (archive <= 2024): {round(IT_CENTER_A, 2)}")
+
+FIT_MAX_SEASON <- 2024L
+EVAL_SEASON    <- 2025L
+
+POOLS <- tribble(
+  ~pool,      ~file,                                   ~pos,  ~stem,     ~method,           ~env,   ~vol_col,
+  "RB_start", "output/06c_recal_probabilities.csv",    "RB",  "p_start", "platt_vegas",     "fp",   "pred_vol",
+  "RB_boom",  "output/06c_recal_probabilities.csv",    "RB",  "p_boom",  "platt_vegas",     "fp",   "pred_vol",
+  "WR_start", "output/06c_recal_probabilities.csv",    "WR",  "p_start", "strat_platt",     "fp",   "pred_vol",
+  "WR_boom",  "output/06c_recal_probabilities.csv",    "WR",  "p_boom",  "strat_iso",       "fp",   "pred_vol",
+  "TE_start", "output/12e_te_recal_probabilities.csv", "TE",  "p_start", "platt_vol_vegas", "te",   "pred_vol",
+  "TE_boom",  "output/12e_te_recal_probabilities.csv", "TE",  "p_boom",  "platt_vegas",     "te",   "pred_vol",
+  "QB_start", "output/09b_qb_recal_probabilities.csv", NA,    "p_start", "platt_vol_vegas", "qb",   "pred_carry",
+  "QB_boom",  "output/09b_qb_recal_probabilities.csv", NA,    "p_boom",  "platt",           "qb",   "pred_carry"
+)
+
+# Guard the pre-registration against drift: the deployed methods must
+# still be what the pre-reg assumed (terminal-round picks).
+maps_check <- c(
+  readRDS("data/fp_recal_maps.rds")[["RB_15+"]]$method   == "platt_vegas",
+  readRDS("data/fp_recal_maps.rds")[["RB_20+"]]$method   == "platt_vegas",
+  readRDS("data/fp_recal_maps.rds")[["WR_15+"]]$method   == "strat_platt",
+  readRDS("data/fp_recal_maps.rds")[["WR_20+"]]$method   == "strat_iso",
+  readRDS("data/te_fp_recal_maps.rds")[["TE_12+"]]$method == "platt_vol_vegas",
+  readRDS("data/te_fp_recal_maps.rds")[["TE_17+"]]$method == "platt_vegas",
+  readRDS("data/qb_fp_recal_maps.rds")[["QB_20+"]]$method == "platt_vol_vegas",
+  readRDS("data/qb_fp_recal_maps.rds")[["QB_25+"]]$method == "platt"
+)
+if (!all(maps_check)) cli_abort("Deployed method drifted from pre-registered POOLS table -- re-review before running.")
+
+run_pool <- function(cfg) {
+  env <- switch(cfg$env, fp = env_fp, te = env_te, qb = env_qb)
+  df <- read_csv(cfg$file, show_col_types = FALSE)
+  if (!is.na(cfg$pos)) df <- df |> filter(position == cfg$pos)
+  hit_col <- paste0("hit_", sub("p_", "", cfg$stem))
+  b_col   <- paste0(cfg$stem, "_", cfg$method)
+  fit  <- df |> filter(season <= FIT_MAX_SEASON)
+  eval <- df |> filter(season == EVAL_SEASON)
+  stopifnot(nrow(fit) > 500, nrow(eval) > 50)
+
+  p_f <- fit[[cfg$stem]];  h_f <- as.numeric(fit[[hit_col]])
+  pA <- switch(cfg$method,
+    platt = {
+      f <- env$fit_platt(p_f, h_f); f(eval[[cfg$stem]])
+    },
+    strat_platt = {
+      f <- env$fit_strat(p_f, h_f, fit$stratum, env$fit_platt)
+      f(eval[[cfg$stem]], eval$stratum)
+    },
+    strat_iso = {
+      f <- env$fit_strat(p_f, h_f, fit$stratum, env$fit_isotonic)
+      f(eval[[cfg$stem]], eval$stratum)
+    },
+    platt_vegas = {
+      f <- env$fit_platt_vegas(p_f, h_f, fit$team_spread, fit$implied_total, IT_CENTER_A)
+      f(eval[[cfg$stem]], eval$team_spread, eval$implied_total)
+    },
+    platt_vol_vegas = {
+      f <- env$fit_platt_vol_vegas(p_f, h_f, fit[[cfg$vol_col]],
+                                   fit$team_spread, fit$implied_total, IT_CENTER_A)
+      f(eval[[cfg$stem]], eval[[cfg$vol_col]], eval$team_spread, eval$implied_total)
+    }
+  )
+  if (is.null(pA)) cli_abort("Policy-A fit failed for {cfg$pool}")
+
+  h_e <- as.numeric(eval[[hit_col]])
+  pB  <- eval[[b_col]]
+  late <- eval$week >= 10
+  tibble(
+    pool = cfg$pool, n = nrow(eval),
+    m1_A = 100 * abs(mean(pA) - mean(h_e)),
+    m1_B = 100 * abs(mean(pB) - mean(h_e)),
+    brier_A = mean((pA - h_e)^2),
+    brier_B = mean((pB - h_e)^2),
+    n_late = sum(late),
+    m1_A_late = 100 * abs(mean(pA[late]) - mean(h_e[late])),
+    m1_B_late = 100 * abs(mean(pB[late]) - mean(h_e[late]))
+  )
+}
+
+cli_h1("17a: fitting + scoring 8 pools")
+res <- POOLS |> rowwise() |> group_split() |> map(run_pool) |> list_rbind()
+print(res |> mutate(across(where(is.numeric), ~round(.x, 3))) |> as.data.frame(), row.names = FALSE)
+
+# ---- pre-committed decision rule ----------------------------------------
+cli_h1("17a verdict (pre-committed rule)")
+mean_A <- mean(res$m1_A); mean_B <- mean(res$m1_B)
+improve_ok <- (mean_A - mean_B) >= 0.5
+worsen     <- res |> filter(m1_B - m1_A >= 1.0)
+brier_ok   <- mean(res$brier_B) <= mean(res$brier_A)
+
+cli_alert_info("Mean |delta|: A(frozen) {round(mean_A, 2)}pp vs B(refit) {round(mean_B, 2)}pp | improvement {round(mean_A - mean_B, 2)}pp (need >= 0.5)")
+cli_alert_info("Pools worsening >= 1pp under B: {nrow(worsen)} (need 0) | Brier: B {round(mean(res$brier_B), 4)} vs A {round(mean(res$brier_A), 4)} (B must not be worse)")
+cli_alert_info("W10+ secondary: A {round(mean(res$m1_A_late), 2)}pp vs B {round(mean(res$m1_B_late), 2)}pp")
+
+if (improve_ok && nrow(worsen) == 0 && brier_ok) {
+  cli_alert_warning("VERDICT: POLICY B (weekly refit) SHIPS for 2026 -- production refit = fold rows + accumulating 2026 ledger, slotted between 10a and slates. Pre-register the implementation before building.")
+} else {
+  cli_alert_success("VERDICT: POLICY A (frozen) SHIPS for 2026 -- pre-stated tiebreak. Maps stay sealed; 10f drift alarms are the in-season check.")
+}
+
+readr::write_csv(res |> mutate(mean_A = mean_A, mean_B = mean_B,
+                               improve_ok = improve_ok, brier_ok = brier_ok,
+                               it_center_A = IT_CENTER_A),
+                 "output/17a_policy_comparison.csv")
+cli_alert_success("output/17a_policy_comparison.csv")
+cli_h1("17a complete")

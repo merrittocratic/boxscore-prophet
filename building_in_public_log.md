@@ -353,3 +353,17 @@ squeezing: every cell still leaning is a QB-context cell -- bad
 trenches, non-premium rookie starters -- and every one is below the
 bars, parked on the watch list with the year it becomes testable.
 The model knows what it knows. Full detail: README D22.
+
+## 2026-08-01: The refit experiment loses to its own tiebreak
+
+17a asked whether the recalibration maps should learn during the season
+the way they learned during the backtest. The answer from a 2025
+pretend-deploy: weekly refitting was better in seven of eight pools,
+better on the late-season cut, and still lost -- 0.34pp of improvement
+against a bar we set at 0.5pp before running anything. So the frozen
+maps ship, because the rule that would have to be broken to ship the
+refit is the same rule that makes any of these numbers worth trusting.
+The refit idea is parked, not dead: the eval layer watches the frozen
+maps all season, and the experiment re-runs before 2027 with live
+ledger data, where the half of the seam this test could not measure
+finally becomes measurable. Full detail: README D23.

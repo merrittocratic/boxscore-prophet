@@ -710,6 +710,32 @@ rung 2 Vegas SHIPPED (3 layers), rung 3 weather NULL, rung 4 OL/front
 NULL, rung 5 rookie priors NULL (rest/travel was batched with rung 2).
 Two signals entered the chain; three nulls published with receipts.
 
+### D23. Recal-map in-season policy: FROZEN ships for 2026 (17a, 2026-08-01)
+
+The frozen-vs-refit question the backtest never tested: deployed maps are
+sealed at the ship fit while the validating backtest refit walk-forward
+weekly. 17a pretend-deployed the 2025 season both ways (Policy A = maps
+fit once through 2024; Policy B = the shipped walk-forward, whose numbers
+already existed in the 6c/12e/9b files), same method per cell (window
+varied, method selection NOT reopened), pre-committed rule locked before
+the run: B ships iff mean |stated-empirical| across the 8 pools improves
+>= 0.5pp AND no pool worsens >= 1pp AND Brier not worse; tiebreak frozen.
+
+RESULT: B directionally better nearly everywhere (mean 1.72 -> 1.38pp;
+RB start 2.24 -> 1.45; QB start 4.47 -> 3.37; W10+ cut 1.49 -> 1.17)
+but improvement = 0.34pp < 0.5pp bar. TIEBREAK FIRES: FROZEN SHIPS.
+The rule exists precisely because "better in 7 of 8 pools" reads like a
+mandate post hoc; one season of evidence under the pre-stated bar is not
+enough to change a live-season procedure.
+
+Caveats logged at approval: the 2025 sim ran under vegas-NA conditions
+(recal files predate the opener backfill), and leg 2 of the seam
+(fold-model vs weekly-retrained-deployed-model drift) is unmeasurable
+until a live ledger exists. STANDING PLAN: 10f drift alarms are the
+pre-committed in-season check on the frozen maps; re-run 17a before 2027
+with the 2026 ledger rows, where leg 2 becomes measurable and B clears
+the bar if its edge is real.
+
 ## Deployment runner (10-series) -- design, in progress 2026-07-17
 
 The backtest chain trains a model per fold; deployment is ONE MORE FOLD:
