@@ -646,6 +646,39 @@ the pre-committed 400-row floor on only 52 windy games in the archive.
 Re-examine as seasons accrue (~10 windy games/yr); becomes testable at
 the pre-committed floor around 2027-2028.
 
+### D21. Rung 4 (OL/opponent front): PUBLISHED NULL -- trenches priced too (2026-08-01)
+
+Same market-conditioned posture as rung 3: the chain already carries
+opponent EPA-adjustments (def_prior, def_*_epa_adj) and opener lines,
+and Vegas moves on OL news, so the question was whether TRENCH-SPECIFIC
+states add anything beyond both. 15a0 built team-week axes -- ex-ante
+own-OL sack/hit/stuff rates allowed and defense front rates generated
+(pbp, 2014-2025; prior-season fallback under 100 plays), OBSERVED
+starting-5 continuity from snap counts (11a sizing precedent; 2020 and
+2025 required OL/OT/OG label variants -- generic-label drift), and FTN
+box/blitz tendencies (2022+ floor; short-era axis, weather precedent).
+Coverage gates 97-99%; FTN join 96.6% on the REG denominator.
+
+15a measured 13e fold residuals + shipped-probability honesty across 7
+axes x tercile/state cells under the rung-3 rule (residual >= 0.8 EPA at
+n >= 300, QB >= 2.0; calibration >= 4pp at n >= 400; locked 2026-08-01
+pre-run). NO TRIGGER. Verdict: NULL, published. No 15b; no trench
+features anywhere in the chain.
+
+The pre-stated live candidates split: heavy-box vs RB is DEAD (flat to
+slightly positive, +0.2..+0.6 across terciles). The QB TRENCH FAMILY is
+the watch item (bar NOT moved post hoc): four correlated cells all
+negative -- continuity-broken -1.37 EPA (n=592, se 0.45), own sack-rate
+hi -0.96 (n=2040), opp sack-rate hi -0.84, own stuff hi -0.82 -- same
+story (QBs behind compromised lines slightly overpredicted even after
+market conditioning), every cell under the 2.0 QB bar, and the cells
+share population so they are one lean, not four confirmations. Worst
+calibration cell: RB starts vs blitz-hi -3.1pp (n=1262), under the 4pp
+bar. If a future QB-specific rung picks this up, the continuity axis
+must first be rebuilt EX-ANTE (Friday-lock reconstruction from injury
+designations + prior-week line) -- 15a's version is observed-state
+sizing only.
+
 ## Deployment runner (10-series) -- design, in progress 2026-07-17
 
 The backtest chain trains a model per fold; deployment is ONE MORE FOLD:

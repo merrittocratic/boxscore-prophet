@@ -319,3 +319,22 @@ is for). The two-product concept survives as a roster split over single
 engines. The veto's real payload was finding the shipped chain's
 streamer stratum was mis-cut (8 -> 10); fixing the cut closed a +3.25pp
 bias to -0.3pp. Full detail: README D13-D16.
+
+## 2026-08-01: Rung 4 comes back null, and the trenches tell one story
+
+The OL/opponent-front rung published its null under the same locked
+rule as weather: nothing at the pre-committed bars. The interesting
+part is the shape of the nothing. Every axis that measured trench
+LEVELS -- how good the line is, how fierce the front is -- came back
+flat, which is the market and the defensive adjustments doing their
+job. The only lean in the table is a family of QB cells that are
+really one cell wearing four hats: quarterbacks behind compromised
+lines (a broken starting five, a high sack-rate-allowed line, a
+sack-generating opponent) run about -0.8 to -1.4 EPA of overprediction,
+all below the 2.0 QB bar, all drawing from the same player-weeks. The
+pre-registered favorite (heavy boxes suffocating RBs beyond what the
+adjustments know) is dead -- flat to positive. Watch item recorded;
+any future QB-specific look must rebuild continuity ex-ante from
+Friday-lock injury designations first, because this diagnostic sized
+the observed state, same as the injury rung did before its build.
+Full detail: README D21.
