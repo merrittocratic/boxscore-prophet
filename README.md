@@ -803,6 +803,21 @@ Laptop = stage, MacMini (Earnest) = production; same scripts, cron on the
 MacMini via scripts/weekly_run.sh (modes: full | rescore; season/week
 auto-detect = week of the earliest future REG kickoff).
 
+ANNUAL OFFSEASON CHORES (Manfred, before Week 1):
+  1. Season-constant rollover: bump the layer/slate season constants and
+     CLI defaults (see the 2026 rollover commit for the full file list;
+     the 06/06b/09a/12d ranges are outcome-fitting -- extend those only
+     AFTER the completed season, never at rollover).
+  2. Opener backfill (Feb/Mar, after the Super Bowl): download a fresh
+     https://www.aussportsbetting.com/historical_data/nfl.xlsx in a real
+     browser (Cloudflare blocks every scripted route) to
+     data/vegas/nfl_odds_aussports.xlsx, bump COVERED_THROUGH in
+     R/13d0_opener_lines.R, run it -- gates verify the join. Live weeks
+     never depend on this; slates pull lines from nflverse schedules.
+  3. Early-September pass: re-run R/10e0_rookie_crosswalk.R (rookie
+     gsis ids firm up late August), check the ECR name-alias report on
+     the first real W1 slate, then arm the crontab.
+
 IN-SEASON CADENCE (decided 2026-07-18, kickoff-aware). 10c only scores
 games whose kickoff is still in the future (AS_OF env overrides the clock
 for tests/replays; a fully-past week auto-runs as hindcast) and appends
