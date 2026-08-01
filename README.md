@@ -679,6 +679,37 @@ must first be rebuilt EX-ANTE (Friday-lock reconstruction from injury
 designations + prior-week line) -- 15a's version is observed-state
 sizing only.
 
+### D22. Rung 5 (rookie priors): PUBLISHED NULL -- ladder complete (2026-08-01)
+
+The chain's existing rookie machinery -- draft-tier median cold-start
+baselines + the volume-conditional walk-forward recal -- was the null
+hypothesis, and it held. 16a measured 13e fold residuals and shipped-
+probability honesty across cohort (veteran / rookie), draft-capital
+tier (R1 / day2 / day3+UDFA), and season phase (w1-4 / w5+) cells under
+the ladder rule (residual >= 0.8 EPA at n >= 300, QB >= 2.0;
+calibration >= 4pp at n >= 400; locked pre-run). NO TRIGGER. No 16b;
+no rookie features change.
+
+Pre-stated candidates resolved: rookie w1-4 flat (RB +0.31, WR -0.06);
+the day-3/UDFA volume hypothesis was wrong in DIRECTION (vol residual
+mildly negative -- tier medians slightly over-credit the breakout
+class); R1 rookie QBs unremarkable. WATCH (bars not moved): rookie-QB
+family -- rookie_all QB -1.03 EPA (n=642 vs 2.0 bar) with loud-but-tiny
+below-floor cells (day2 -1.86 n=95, day3+UDFA -2.65 n=130); at ~50
+rookie-QB player-weeks/yr these reach the floor ~2028-29. Worst
+calibration cell: RB day3+UDFA boom -3.0pp (n=945), under the bar.
+
+Cross-rung note: rungs 4 and 5 lean the same way -- the chain's softest
+cells are QB-context cells (compromised trenches, non-premium rookies),
+every one below the pre-committed bars. If a QB-specific rung is ever
+pre-registered, it starts from those two watch items and an EX-ANTE
+continuity rebuild (D21).
+
+THE PRE-REGISTERED LADDER IS COMPLETE: rung 1 injury states SHIPPED,
+rung 2 Vegas SHIPPED (3 layers), rung 3 weather NULL, rung 4 OL/front
+NULL, rung 5 rookie priors NULL (rest/travel was batched with rung 2).
+Two signals entered the chain; three nulls published with receipts.
+
 ## Deployment runner (10-series) -- design, in progress 2026-07-17
 
 The backtest chain trains a model per fold; deployment is ONE MORE FOLD:

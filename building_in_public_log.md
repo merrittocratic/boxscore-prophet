@@ -338,3 +338,18 @@ any future QB-specific look must rebuild continuity ex-ante from
 Friday-lock injury designations first, because this diagnostic sized
 the observed state, same as the injury rung did before its build.
 Full detail: README D21.
+
+## 2026-08-01: The ladder is done, and the nulls were worth the climb
+
+Rung 5 (rookie priors) published its null in an afternoon: the boring
+draft-tier median plus the volume-conditional recalibration already
+handle rookies at every cell the rule can see. The satisfying part was
+watching the pre-stated candidates die honestly -- the "day-3 breakout
+class arrives early" story is not just absent, it points the other way.
+That closes the pre-registered ladder: five rungs, two signals shipped
+(injury states, Vegas three ways), three nulls published with receipts
+(weather, trenches, rookies). The residual map after two years of
+squeezing: every cell still leaning is a QB-context cell -- bad
+trenches, non-premium rookie starters -- and every one is below the
+bars, parked on the watch list with the year it becomes testable.
+The model knows what it knows. Full detail: README D22.
