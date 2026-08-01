@@ -857,7 +857,12 @@ rather than an emergency rebuild.
                           markdown boards + 4 rendered X board PNGs
                           (output/img/, 1280x1080, validated palette,
                           image order = raw-probability order matching
-                          the CSVs). EDITORIAL CAPS pre-committed:
+                          the CSVs). For operations/content handoff,
+                          scripts/refresh_latest.sh also copies the
+                          current week into output/latest/ (stable
+                          names + run_manifest.json) so downstream
+                          content work never has to chase week-tagged
+                          filenames. EDITORIAL CAPS pre-committed:
                           displayed probabilities clamped to [2%, 95%]
                           (never publish a certainty); raw values stay
                           in the CSVs. Hindcast demo: 2025-W15.
@@ -891,8 +896,11 @@ re-scored: receipts grade the LATEST pre-kickoff ledger row per player.
     # Earnest crontab (times ET; MacMini local tz). Installed/managed by
     # scripts/earnest_setup.sh --arm; entrypoint is earnest_cron.sh, which
     # wraps weekly_run.sh with the git cadence (clean-tree guard -> ff-only
-    # pull -> run -> commit outputs -> push). Preflight first: earnest_setup.sh
-    # with no args checks git/R/deps/keychain/artifacts and refuses to arm dirty.
+    # pull -> run -> commit outputs -> push), then refreshes output/latest/
+    # and sends a Telegram summary + 5-image media group via OpenClaw when
+    # scripts/earnest_delivery.env is configured. Preflight first:
+    # earnest_setup.sh with no args checks git/R/deps/keychain/artifacts and
+    # refuses to arm dirty.
     30 23 * * 2  earnest_cron.sh full      # Tue: retrain + W+1 slate; models freeze
     0  15 * * 4  earnest_cron.sh rescore   # Thu: TNF lock (Wed injury desigs + weather)
     0  15 * * 6  earnest_cron.sh rescore   # Sat: late-season Sat slates (no-op refresh otherwise)

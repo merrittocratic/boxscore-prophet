@@ -5,3 +5,5 @@
 data/ecr/
 data/vegas/
 logs/cron.log
+output/latest/
+scripts/earnest_delivery.env

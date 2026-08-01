@@ -57,6 +57,24 @@ N_MODELS=$(ls data/deploy_models/*.txt 2>/dev/null | wc -l | tr -d ' ')
 [ -f data/deployment_params.rds ] && ok "deployment_params.rds present" || bad "deployment_params.rds missing"
 [ -f data/vegas_open_lines.rds ] && ok "vegas opener sidecar present" || bad "vegas_open_lines.rds missing"
 
+# --- OpenClaw delivery --------------------------------------------------
+if command -v openclaw >/dev/null; then
+  ok "openclaw CLI present"
+else
+  warn "openclaw CLI missing -- Telegram summary/media delivery disabled"
+fi
+if [ -f scripts/earnest_delivery.env ]; then
+  # shellcheck disable=SC1091
+  source scripts/earnest_delivery.env
+  if [ -n "${OPENCLAW_DELIVERY_TARGET:-}" ]; then
+    ok "delivery target configured for ${OPENCLAW_DELIVERY_CHANNEL:-telegram}:${OPENCLAW_DELIVERY_TARGET}"
+  else
+    warn "scripts/earnest_delivery.env present but OPENCLAW_DELIVERY_TARGET is empty"
+  fi
+else
+  warn "scripts/earnest_delivery.env missing -- summary + media group delivery disabled"
+fi
+
 # --- environment --------------------------------------------------------
 TZN=$(date +%Z)
 case "$TZN" in EST|EDT) ok "system timezone: $TZN (crontab times are ET)";;

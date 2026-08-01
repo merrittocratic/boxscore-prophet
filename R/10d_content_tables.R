@@ -51,6 +51,16 @@ START_LABEL <- c(RB = "P(15+ PPR)", WR = "P(15+ PPR)", TE = "P(12+ PPR)",
                  QB = "P(20+ std)")
 BOOM_LABEL  <- c(RB = "P(20+ PPR)", WR = "P(20+ PPR)", TE = "P(17+ PPR)",
                  QB = "P(25+ std)")
+CONTENT_CHALK_ECR_CUT   <- c(RB = 6L, WR = 6L, TE = 4L)
+CONTENT_DECISION_ECR_MAX <- c(RB = 24L, WR = 30L, TE = 18L)
+CONTENT_DECISION_MODEL_MAX <- c(RB = 18L, WR = 24L, TE = 12L)
+CONTENT_SWING_ECR_FLOOR <- c(RB = 12L, WR = 12L, TE = 8L)
+CONTENT_MIN_START <- c(RB = 28L, WR = 28L, TE = 25L)
+CONTENT_MAX_START <- c(RB = 60L, WR = 60L, TE = 60L)
+CONTENT_MIN_BOOM  <- c(RB = 14L, WR = 14L, TE = 12L)
+CONTENT_EDGE_GAP  <- c(RB = 4L, WR = 4L, TE = 3L)
+CONTENT_FADE_GAP  <- c(RB = 4L, WR = 4L, TE = 3L)
+CONTENT_FADE_MAX_START <- c(RB = 52L, WR = 52L, TE = 50L)
 
 # Validated board accents (dataviz palette check, light surface #fcfcfb)
 ACCENT_START <- "#2F6DB3"
@@ -149,7 +159,6 @@ readr::write_csv(bind_rows(boom_flex |> mutate(board = "flex"),
                              select(any_of(names(boom_flex)), board)),
                  sprintf("output/10d_boom_board_%s.csv", WTAG))
 readr::write_csv(streamer_board, sprintf("output/10d_streamer_board_%s.csv", WTAG))
-cli_alert_success("Board CSVs written (start / boom / streamer)")
 
 # ===========================================================================
 # 3. ECR GAP (file-drop feed; skips gracefully)
@@ -157,6 +166,7 @@ cli_alert_success("Board CSVs written (start / boom / streamer)")
 
 ecr_path <- sprintf("data/ecr/ecr_%s.csv", WTAG)
 ecr_gap <- NULL
+ecr_slim <- tibble(player_name_norm = character(), position = character(), ecr_rank = integer())
 if (file.exists(ecr_path)) {
   ecr <- readr::read_csv(ecr_path, show_col_types = FALSE)
   if (!"player_name_norm" %in% names(ecr)) {   # manual drops lack the column
@@ -193,6 +203,55 @@ if (file.exists(ecr_path)) {
 } else {
   cli_alert_info("No ECR feed at {ecr_path} -- gap table skipped (drop a CSV or run 10d0 once the API key is active)")
 }
+
+content_board <- start_board |>
+  filter(position %in% c("RB", "WR", "TE")) |>
+  mutate(player_name_norm = normalize_player_name(player_name)) |>
+  left_join(ecr_slim, by = c("player_name_norm", "position")) |>
+  mutate(
+    rank_gap = ecr_rank - rank,
+    consensus_chalk = !is.na(ecr_rank) & ecr_rank <= CONTENT_CHALK_ECR_CUT[position],
+    decision_band = rank <= CONTENT_DECISION_MODEL_MAX[position] |
+      (!is.na(ecr_rank) & ecr_rank <= CONTENT_DECISION_ECR_MAX[position]),
+    real_volume = pred_vol >= STREAMER_CUT[position],
+    leverage_call = !consensus_chalk & !is.na(ecr_rank) &
+      ecr_rank <= CONTENT_DECISION_ECR_MAX[position] &
+      start_pct >= CONTENT_MIN_START[position] &
+      rank_gap >= CONTENT_EDGE_GAP[position],
+    caution_call = !is.na(ecr_rank) & decision_band & real_volume &
+      start_pct >= CONTENT_MIN_START[position] &
+      start_pct <= CONTENT_FADE_MAX_START[position] &
+      rank_gap <= -CONTENT_FADE_GAP[position],
+    upside_swing = !consensus_chalk & real_volume & decision_band &
+      (is.na(ecr_rank) | ecr_rank > CONTENT_SWING_ECR_FLOOR[position]) &
+      start_pct >= CONTENT_MIN_START[position] &
+      start_pct <= CONTENT_MAX_START[position] &
+      boom_pct >= CONTENT_MIN_BOOM[position],
+    content_tier = case_when(
+      leverage_call ~ "leverage",
+      caution_call  ~ "caution",
+      upside_swing  ~ "swing",
+      TRUE          ~ NA_character_
+    ),
+    content_score = p_boom_recal +
+      0.01 * pmax(replace_na(rank_gap, 0L), 0L) +
+      0.002 * pmax(0, 12 - abs(start_pct - 42))
+  ) |>
+  filter(!is.na(content_tier)) |>
+  arrange(factor(content_tier, levels = c("leverage", "caution", "swing")),
+          dplyr::if_else(content_tier == "caution", rank_gap, -replace_na(rank_gap, 0L)),
+          desc(content_score), desc(replace_na(rank_gap, 0L)),
+          desc(boom_pct), desc(start_pct)) |>
+  group_by(content_tier) |>
+  mutate(content_rank = row_number()) |>
+  ungroup() |>
+  select(content_tier, content_rank, position, player_id, player_name, player_disp,
+         posteam, defteam, model_rank = rank, ecr_rank, rank_gap,
+         start_pct, boom_pct, disp_vol, report_status,
+         p_start_recal, p_boom_recal, pred_vol, content_score)
+
+readr::write_csv(content_board, sprintf("output/10d_content_board_%s.csv", WTAG))
+cli_alert_success("Board CSVs written (start / boom / content / streamer)")
 
 # ===========================================================================
 # 4. RECEIPTS (played weeks only)
@@ -303,6 +362,64 @@ for (pos in c("RB", "WR", "TE", "QB")) {
                             boom = paste0(boom_pct, "%"), disp_vol),
              c("#", "Player", "Team", "Opp", "Start", "Boom", VOL_LABEL[pos])),
     "")
+}
+
+if (nrow(content_board) > 0) {
+  leverage_md <- content_board |>
+    filter(content_tier == "leverage") |>
+    slice_head(n = 12)
+  caution_md <- content_board |>
+    filter(content_tier == "caution") |>
+    slice_head(n = 12)
+  swing_md <- content_board |>
+    filter(content_tier == "swing") |>
+    slice_head(n = 12)
+
+  md <- c(md,
+    "## Content board -- the hard middle", "",
+    "These are the non-obvious starts worth writing about: players with real ceiling, real volume, or a stronger model view than consensus.", "")
+
+  if (nrow(leverage_md) > 0) {
+    md <- c(md,
+      "### Leverage calls -- model materially higher than consensus", "",
+      md_table(leverage_md |>
+                 mutate(rank_gap = sprintf("%+d", rank_gap)) |>
+                 transmute(position, content_rank, player_disp, posteam, defteam,
+                           start = paste0(start_pct, "%"),
+                           boom = paste0(boom_pct, "%"),
+                           model = model_rank, ecr = ecr_rank,
+                           gap = rank_gap, disp_vol),
+               c("Pos", "#", "Player", "Team", "Opp", "Start", "Boom", "Model", "ECR", "Gap", "proj vol")),
+      "")
+  }
+
+  if (nrow(caution_md) > 0) {
+    md <- c(md,
+      "### Caution calls -- consensus is richer than the model", "",
+      md_table(caution_md |>
+                 mutate(rank_gap = sprintf("%+d", rank_gap)) |>
+                 transmute(position, content_rank, player_disp, posteam, defteam,
+                           start = paste0(start_pct, "%"),
+                           boom = paste0(boom_pct, "%"),
+                           model = model_rank, ecr = ecr_rank,
+                           gap = rank_gap, disp_vol),
+               c("Pos", "#", "Player", "Team", "Opp", "Start", "Boom", "Model", "ECR", "Gap", "proj vol")),
+      "")
+  }
+
+  if (nrow(swing_md) > 0) {
+    md <- c(md,
+      "### Swing starts -- viable volume, real ceiling, not just the obvious chalk", "",
+      md_table(swing_md |>
+                 mutate(rank_gap = if_else(is.na(rank_gap), "--", sprintf("%+d", rank_gap)),
+                        ecr_rank = if_else(is.na(ecr_rank), "--", as.character(ecr_rank))) |>
+                 transmute(position, content_rank, player_disp, posteam, defteam,
+                           start = paste0(start_pct, "%"),
+                           boom = paste0(boom_pct, "%"),
+                           ecr = ecr_rank, gap = rank_gap, disp_vol),
+               c("Pos", "#", "Player", "Team", "Opp", "Start", "Boom", "ECR", "Gap", "proj vol")),
+      "")
+  }
 }
 
 md <- c(md, "## Flex boom board -- P(elite week), position-calibrated bars", "",
