@@ -114,14 +114,60 @@ baseline. Split of responsibilities:
   NOT yet exercised on a live multi-week ledger.
 - Earnest's cron is BUILT but NOT ARMED. September pass before
   Week 1: re-run rookie crosswalk (~12 pending GSIS IDs), confirm
-  ECR aliases, run `earnest_setup.sh --arm`, babysit the first
-  Tuesday (confirm the movers digest renders on a real manifest).
+  ECR aliases, remove any legacy direct `weekly_run.sh` cron lines,
+  run `earnest_setup.sh --arm`, babysit the first Tuesday (confirm
+  the movers digest renders on a real manifest).
 - Season teaser committed at `content/2026_season_teaser.md` with
   board chart (`content/teaser_charts.R`); X thread drafted at
   `content/2026_season_teaser_x_thread.md`. Both awaiting Steve's
   final review + the live Substack URL.
 - Paid data: ECR subscription live (renews 2027-07-18); odds data
   deliberately free (opening lines); no injury feeds, ever.
+
+## September production arming checklist
+
+Run these steps ON THE MAC MINI itself, or from an SSH shell into the
+Mac Mini. Do not run them on Manfred/laptop; they validate and modify
+production-local cron, keychain, repo state, and OpenClaw delivery.
+
+Recommended sequence:
+
+1. SSH to the Mac Mini, then `cd ~/.openclaw/workspace/boxscore-prophet`
+2. `git status` should be clean; `git pull --ff-only` before touching cron
+3. Remove any old cron entries that call `scripts/weekly_run.sh`
+   directly, they bypass the production wrapper
+4. Run `bash scripts/earnest_setup.sh` and confirm preflight passes
+5. Re-check rookie crosswalk / pending GSIS IDs and ECR alias sanity
+6. When ready to arm for the live season, run
+   `bash scripts/earnest_setup.sh --arm`
+7. Babysit the first Tuesday full run: confirm `earnest_cron.sh`
+   commits/pushes outputs, refreshes `output/latest/`, and sends the
+   Telegram summary/media cleanly
+
+Managed cron block that `earnest_setup.sh --arm` installs:
+
+```cron
+# BEGIN boxscore-prophet cadence (managed by earnest_setup.sh)
+30 23 * * 2  bash /Users/merrittocracyclaw/.openclaw/workspace/boxscore-prophet/scripts/earnest_cron.sh full    >> /Users/merrittocracyclaw/.openclaw/workspace/boxscore-prophet/logs/cron.log 2>&1
+0  15 * * 4  bash /Users/merrittocracyclaw/.openclaw/workspace/boxscore-prophet/scripts/earnest_cron.sh rescore >> /Users/merrittocracyclaw/.openclaw/workspace/boxscore-prophet/logs/cron.log 2>&1
+0  15 * * 6  bash /Users/merrittocracyclaw/.openclaw/workspace/boxscore-prophet/scripts/earnest_cron.sh rescore >> /Users/merrittocracyclaw/.openclaw/workspace/boxscore-prophet/logs/cron.log 2>&1
+0  8  * * 0  bash /Users/merrittocracyclaw/.openclaw/workspace/boxscore-prophet/scripts/earnest_cron.sh rescore >> /Users/merrittocracyclaw/.openclaw/workspace/boxscore-prophet/logs/cron.log 2>&1
+0  15 * * 1  bash /Users/merrittocracyclaw/.openclaw/workspace/boxscore-prophet/scripts/earnest_cron.sh rescore >> /Users/merrittocracyclaw/.openclaw/workspace/boxscore-prophet/logs/cron.log 2>&1
+# END boxscore-prophet cadence
+```
+
+10g movers automation status:
+
+- `weekly_run.sh` runs `R/10g_movers_table.R` on both `full` and
+  `rescore`
+- `refresh_latest.sh` promotes the latest movers CSV to
+  `output/latest/movers.csv`
+- `earnest_notify.sh` includes top movers up/down in the Telegram
+  summary
+- The written MOVERS column draft is still a separate content step via
+  the `/movers-column` skill to
+  `~/content/draft/w<NN>_movers_column.md`; cron does not auto-draft
+  the Substack post
 
 ## Where to read deeper
 
