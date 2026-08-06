@@ -45,6 +45,7 @@ copy_optional "output/10d_ecr_gap_${WTAG}.csv"         "$LATEST_DIR/ecr_gap.csv"
 copy_optional "output/10d_receipts_${WTAG}.md"         "$LATEST_DIR/receipts.md"
 copy_optional "output/10d_receipts_${WTAG}.csv"        "$LATEST_DIR/receipts.csv"
 copy_optional "output/10d_receipt_bands_${WTAG}.csv"   "$LATEST_DIR/receipt_bands.csv"
+copy_optional "output/10g_movers_${WTAG}.csv"          "$LATEST_DIR/movers.csv"
 copy_optional "output/10e_rookie_content_${SEASON}.md"      "$LATEST_DIR/rookies.md"
 copy_optional "output/10e_rookie_tracker_${SEASON}.csv"     "$LATEST_DIR/rookie_tracker.csv"
 copy_optional "output/10e_rookie_weekly_${SEASON}.csv"      "$LATEST_DIR/rookie_weekly.csv"
@@ -121,6 +122,7 @@ counts = {
     "rookie_role_rows": row_count(os.path.join(latest_dir, "rookie_role_earners.csv")),
     "rookie_efficiency_rows": row_count(os.path.join(latest_dir, "rookie_efficiency.csv")),
     "rookie_watch_rows": row_count(os.path.join(latest_dir, "rookie_watch.csv")),
+    "movers_rows": row_count(os.path.join(latest_dir, "movers.csv")),
     "ecr": ecr_counts(os.path.join("data", "ecr", f"ecr_{wtag}.csv")),
 }
 
@@ -150,6 +152,7 @@ manifest = {
         "rookie_role_earners_csv": os.path.join(latest_dir, "rookie_role_earners.csv"),
         "rookie_efficiency_csv": os.path.join(latest_dir, "rookie_efficiency.csv"),
         "rookie_watch_csv": os.path.join(latest_dir, "rookie_watch.csv"),
+        "movers_csv": os.path.join(latest_dir, "movers.csv"),
         "images": {
             "start_rb": os.path.join(latest_dir, "img", "start_rb.png"),
             "start_wr": os.path.join(latest_dir, "img", "start_wr.png"),
@@ -174,6 +177,7 @@ manifest = {
         "rookie_role_earners_csv": f"output/10e_rookie_role_earners_{season}.csv",
         "rookie_efficiency_csv": f"output/10e_rookie_efficiency_{season}.csv",
         "rookie_watch_csv": f"output/10e_rookie_watch_{season}.csv",
+        "movers_csv": f"output/10g_movers_{wtag}.csv",
     },
 }
 

@@ -116,6 +116,34 @@ if mode == "full":
                 ) + "."
             )
 
+# Movers -- both modes (10g refreshes on rescores, where injury movers appear).
+def read_rows(path):
+    if not path or not os.path.exists(path):
+        return []
+    with open(path, newline="") as fh:
+        return list(csv.DictReader(fh))
+
+mover_rows = read_rows(artifacts.get("movers_csv"))
+if mover_rows:
+    def cap_pct(p):
+        return round(100 * min(max(float(p), 0.02), 0.95))
+
+    def fmt_mover(row):
+        tag = " (inj)" if row.get("injury_flag") == "TRUE" else ""
+        delta = round(float(row["delta_start_pp"]))
+        return (
+            f"{row['player_name']} {row['position']} {delta:+d} "
+            f"({cap_pct(row['p_start'])}% vs {cap_pct(row['p_start_base'])}%){tag}"
+        )
+
+    ranked = sorted(mover_rows, key=lambda r: float(r["delta_start_pp"]))
+    ups = [r for r in reversed(ranked) if float(r["delta_start_pp"]) > 0][:3]
+    downs = [r for r in ranked if float(r["delta_start_pp"]) < 0][:3]
+    if ups:
+        summary.append("Movers up: " + ", ".join(fmt_mover(r) for r in ups) + ".")
+    if downs:
+        summary.append("Movers down: " + ", ".join(fmt_mover(r) for r in downs) + ".")
+
 with open(summary_path, "w") as fh:
     fh.write("\n".join(summary))
 with open(media_path, "w") as fh:
