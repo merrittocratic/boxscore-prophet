@@ -61,6 +61,9 @@ polish away room for his voice, and never commit.
 
 ## Output
 
-Write to `content/<season>_w<week>_movers_column.md`. Report word count.
+Write to `~/content/draft/w<NN>_movers_column.md` (zero-padded week, no
+season prefix, e.g. `~/content/draft/w01_movers_column.md`). This is
+Steve's content folder, OUTSIDE this repo -- the column is not a repo
+artifact and must not be written into `content/` here. Report word count.
 Surface proposed revisions in chat for approval before editing the file
 on any subsequent pass. Never commit or push; Steve handles git.
