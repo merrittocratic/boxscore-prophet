@@ -85,19 +85,41 @@ the first live season (launch = Week 1, September).
   `data/deploy_models/` are committed only by Earnest in-season.
 - Git: no auto-commit/auto-push, ever. Pull before starting work.
 
-## Current state (2026-08-04)
+## Content workflow (movers column)
+
+The primary weekly Substack vehicle is the start/sit MOVERS column:
+players whose P(start) moved most vs their own trailing published
+baseline. Split of responsibilities:
+
+- Data is a repo artifact. `R/10g_movers_table.R` (wired into
+  `weekly_run.sh`, both modes) writes `output/10g_movers_<wtag>.csv`;
+  Earnest surfaces the top movers to Telegram via the digest
+  (`refresh_latest.sh` manifest + `earnest_notify.sh`).
+- The written column is NOT a repo artifact. The `/movers-column`
+  skill drafts it to `~/content/draft/w<NN>_movers_column.md`
+  (zero-padded week, no season prefix) -- Steve's content folder,
+  outside this repo. A `.gitignore` rule blocks stray
+  `content/*_movers_column.md` from being committed here; the one
+  exception is `content/2025_w15_movers_column.md`, kept tracked as
+  the historical demo.
+
+## Current state (2026-08-06)
 
 - 2026 rollover committed; 2025 opener backfill done (Vegas join 96%).
 - All four positions content-ready; boards validated on 2025
   hindcast weeks (W13-15).
 - 10f weekly eval + watch registry live in the Tuesday cadence.
+- Movers pipeline (10g) built, wired into the runner, and pushed;
+  smoke-tested on 2025 W13-15 (deltas center ~0, median |move| 3pp).
+  NOT yet exercised on a live multi-week ledger.
 - Earnest's cron is BUILT but NOT ARMED. September pass before
   Week 1: re-run rookie crosswalk (~12 pending GSIS IDs), confirm
   ECR aliases, run `earnest_setup.sh --arm`, babysit the first
-  Tuesday.
-- Season teaser article drafted at `content/2026_season_teaser.md`
-  with board chart (`content/teaser_charts.R`); awaiting Steve's
-  review, uncommitted.
+  Tuesday (confirm the movers digest renders on a real manifest).
+- Season teaser committed at `content/2026_season_teaser.md` with
+  board chart (`content/teaser_charts.R`); X thread drafted at
+  `content/2026_season_teaser_x_thread.md`. Both awaiting Steve's
+  final review + the live Substack URL.
 - Paid data: ECR subscription live (renews 2027-07-18); odds data
   deliberately free (opening lines); no injury feeds, ever.
 
