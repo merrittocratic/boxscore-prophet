@@ -103,6 +103,44 @@ baseline. Split of responsibilities:
   exception is `content/2025_w15_movers_column.md`, kept tracked as
   the historical demo.
 
+## FOR EARNEST: team-code fix landed 2026-08-09 (read before arming)
+
+Upstream regression, caught on a 2026 W1 slate build. The 2026
+nflverse WEEKLY ROSTER release codes Arizona `AZ`; schedules code it
+`ARI`. 2024 and 2025 rosters both used `ARI`, so this is new drift.
+
+Impact if unpatched: `build_exante_roster` sets `posteam` from the
+roster, then `inner_join`s to schedule-derived `games_long` -- so
+every Cardinal was SILENTLY dropped from every slate. 28 skill
+players, including Trey McBride, Marvin Harrison Jr., and James
+Conner. No warning, no row-count anomaly. It would also persist once
+games are played, because `posteam` is
+`coalesce(posteam_now, posteam_hist)` and the roster's `AZ` keeps
+winning over PBP's `ARI`.
+
+Note `nflreadr::clean_team_abbrs()` does NOT fix this -- it returns
+`AZ` unchanged.
+
+Fix in `R/10b_roster_helpers.R`:
+- `TEAM_CODE_ALIASES` + `normalize_team_codes()`, applied to `posteam`
+  before the schedule join. An alias only fires when its TARGET is a
+  valid schedule code and the original is not, so it can never rewrite
+  a code the schedule already uses.
+- A new warning fires when any roster row carries a team code absent
+  from the SEASON's schedule vocabulary (season, not week -- bye-week
+  teams must not trip it). The silence was the real bug; the alias map
+  is just today's instance.
+
+Verified: all four hindcast gates still pass at max |diff| = 0e+00
+(2025 W15, RB/WR/TE/QB). 2026 W1 slate rows 881 -> 908, and all four
+positions now carry 32 distinct `defteam` values instead of 31.
+
+ACTION WHEN ARMING: after `git pull`, run a 2026 W1 slate build and
+confirm 32 distinct `defteam` per position and no team-code warning.
+If a DIFFERENT team goes missing later in the season, the warning now
+names it -- add it to `TEAM_CODE_ALIASES` rather than working around
+it downstream.
+
 ## Current state (2026-08-06)
 
 - 2026 rollover committed; 2025 opener backfill done (Vegas join 96%).
@@ -138,6 +176,9 @@ Recommended sequence:
    directly, they bypass the production wrapper
 4. Run `bash scripts/earnest_setup.sh` and confirm preflight passes
 5. Re-check rookie crosswalk / pending GSIS IDs and ECR alias sanity
+5b. Team-code check (see the Earnest section at the top of this file):
+   build a 2026 W1 slate and confirm 32 distinct `defteam` per
+   position and no team-code warning in the log
 6. When ready to arm for the live season, run
    `bash scripts/earnest_setup.sh --arm`
 7. Babysit the first Tuesday full run: confirm `earnest_cron.sh`

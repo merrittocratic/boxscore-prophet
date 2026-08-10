@@ -35,8 +35,15 @@ source("R/10d_name_helpers.R")
 DRAFT_MODEL_DIR <- Sys.getenv("DRAFT_MODEL_DIR", unset = "~/nfl-draft-model")
 SCORED_PATH     <- file.path(path.expand(DRAFT_MODEL_DIR), "data", "05_scored_2026.rds")
 OVERRIDES_PATH  <- "data/rookie_crosswalk_overrides.csv"
-OUT_CROSSWALK   <- "data/10e_rookie_crosswalk.csv"
-OUT_REPORT      <- "output/10e_crosswalk_report.csv"
+
+# Output paths are env-overridable so a run can be pointed somewhere other
+# than the tracked artifacts (dry runs, one-off preseason prep). Defaults are
+# unchanged, so the September setup pass and any existing caller behave
+# exactly as before.
+OUT_CROSSWALK   <- Sys.getenv("CROSSWALK_OUT",
+                              unset = "data/10e_rookie_crosswalk.csv")
+OUT_REPORT      <- Sys.getenv("CROSSWALK_REPORT_OUT",
+                              unset = "output/10e_crosswalk_report.csv")
 
 FANTASY_POS <- c("QB", "RB", "WR", "TE")
 DRAFT_SEASON <- 2026L
@@ -266,6 +273,10 @@ report <- bind_rows(
   unscored_picks,
   dupe_rows
 )
+
+for (d in unique(dirname(c(OUT_CROSSWALK, OUT_REPORT)))) {
+  if (!dir.exists(d)) dir.create(d, recursive = TRUE)
+}
 
 write_csv(crosswalk, OUT_CROSSWALK)
 write_csv(report, OUT_REPORT)

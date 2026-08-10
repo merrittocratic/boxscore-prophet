@@ -17,6 +17,42 @@
 # future week beyond the archive, the latest available week is the
 # current roster -- which is exactly the as-of-lock state.
 
+# ---------------------------------------------------------------------------
+# Team-code normalization (added 2026-08-09).
+#
+# WHY: the 2026 weekly-roster release codes Arizona "AZ" while schedules
+# code it "ARI" (2024 and 2025 rosters both used "ARI", so this is new
+# upstream drift, not a longstanding quirk). The roster team feeds
+# `posteam`, which inner_joins to schedule-derived games_long -- so a code
+# mismatch SILENTLY drops every player on that team from the slate. Found
+# when all 28 Arizona skill players vanished from a 2026 week 1 build.
+# nflreadr::clean_team_abbrs() does not fix this (it returns "AZ").
+#
+# The alias map handles known variants; the real protection is the caller's
+# unmatched-code warning below, which makes any FUTURE drift loud instead
+# of silent. A dropped team is a data bug, never a legitimate empty.
+TEAM_CODE_ALIASES <- c(
+  AZ = "ARI", ARZ = "ARI",
+  LAR = "LA",  STL = "LA",
+  JAC = "JAX",
+  WSH = "WAS", WFT = "WAS",
+  SD  = "LAC", OAK = "LV",  LVR = "LV",
+  KAN = "KC",  SFO = "SF",  TAM = "TB",
+  NWE = "NE",  NOR = "NO",  GNB = "GB"
+)
+
+# Map roster team codes onto the schedule's vocabulary. Aliases are applied
+# only when the alias TARGET is actually a valid schedule code and the
+# original is not -- so this can never rewrite a code the schedule already
+# uses (e.g. seasons where "LAR" is itself the schedule code).
+normalize_team_codes <- function(x, valid_codes) {
+  hit <- !is.na(x) & !(x %in% valid_codes) & (x %in% names(TEAM_CODE_ALIASES))
+  mapped <- TEAM_CODE_ALIASES[x[hit]]
+  ok <- !is.na(mapped) & mapped %in% valid_codes
+  x[which(hit)[ok]] <- mapped[ok]
+  x
+}
+
 # known_ids: player_ids that belong to this position under the FROZEN
 # layer's definition ("ever rostered at pos, any season") -- catches
 # position converts (e.g. a WR-table player currently listed TE) whose
@@ -59,16 +95,41 @@ build_exante_roster <- function(pos, target_season, target_week,
     cli::cli_alert_warning("Weekly rosters unavailable; season-level roster fallback ({nrow(roster_now)} {pos}s)")
   }
 
+  # Validate against the SEASON's team vocabulary, not this week's games:
+  # a team on bye is legitimately absent from games_long and must not trip
+  # the drift warning. Falls back to the week's codes if schedules are
+  # unavailable (offline hindcast).
+  valid_codes <- tryCatch({
+    s <- nflreadr::load_schedules(target_season) |>
+      dplyr::filter(game_type == "REG")
+    unique(c(s$home_team, s$away_team))
+  }, error = function(e) unique(games_long$posteam))
+
   combined <- played |>
     full_join(roster_now, by = "player_id") |>
     mutate(
       posteam = coalesce(posteam_now, posteam_hist),
+      posteam = normalize_team_codes(posteam, valid_codes),
       source  = case_when(
         !is.na(posteam_hist) ~ "played",
         TRUE                 ~ "roster_cold"
       )
     ) |>
-    select(player_id, posteam, source) |>
+    select(player_id, posteam, source)
+
+  # Loud on unmatched codes. The inner_join below drops these rows; without
+  # this warning that drop is invisible (the 2026 "AZ" regression cost a
+  # full team's slate rows and produced no diagnostic at all).
+  unmatched <- combined |>
+    filter(!is.na(posteam), !posteam %in% valid_codes) |>
+    count(posteam, sort = TRUE)
+  if (nrow(unmatched)) {
+    cli::cli_alert_warning(
+      "{sum(unmatched$n)} {pos} row(s) on team code(s) not in this week's schedule: {paste0(unmatched$posteam, ' (', unmatched$n, ')', collapse = ', ')} -- these are being DROPPED. Add to TEAM_CODE_ALIASES if this is upstream drift."
+    )
+  }
+
+  combined <- combined |>
     inner_join(games_long, by = "posteam")
 
   overrides <- if (file.exists(overrides_file)) {
