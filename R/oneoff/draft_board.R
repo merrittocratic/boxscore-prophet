@@ -341,6 +341,11 @@ if (file.exists(ecr_path)) {
 }
 
 cw_path <- file.path(OUT_DIR, "rookie_crosswalk.csv")
+CANONICAL_CW <- "data/10e_rookie_crosswalk.csv"
+if (!file.exists(cw_path) && file.exists(CANONICAL_CW)) {
+  file.copy(CANONICAL_CW, cw_path)
+  cli_alert_info("Copied rookie crosswalk from {CANONICAL_CW} into run dir")
+}
 if (file.exists(cw_path)) {
   cw <- read_csv(cw_path, show_col_types = FALSE) |>
     filter(!is.na(gsis_id)) |>
