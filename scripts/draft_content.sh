@@ -68,6 +68,36 @@ notify() {
 
 log() { echo "[draft_content] $1" | tee -a "$LOG_PATH" >&2; }
 
+# macOS ships no `timeout` (that's GNU coreutils; Homebrew installs it as
+# `gtimeout` to avoid clashing with anything, and it may not be installed
+# at all) -- found the hard way when the real `timeout` call failed with
+# "command not found" on the Mac Mini. Implemented in bash instead so this
+# never depends on what happens to be installed: a watchdog subshell kills
+# the job if it outlives the deadline; mimics `timeout`'s own convention of
+# returning 124 on a timeout so the rest of this script doesn't need to care
+# which one ran.
+run_with_timeout() {
+  local secs="$1"; shift
+  "$@" &
+  local pid=$!
+  ( sleep "$secs"
+    if kill -0 "$pid" 2>/dev/null; then
+      kill -TERM "$pid" 2>/dev/null
+      sleep 2
+      kill -KILL "$pid" 2>/dev/null
+    fi
+  ) &
+  local watchdog=$!
+  local status=0
+  wait "$pid" || status=$?
+  kill "$watchdog" 2>/dev/null
+  wait "$watchdog" 2>/dev/null || true
+  if [ "$status" -ge 128 ]; then
+    return 124
+  fi
+  return "$status"
+}
+
 # ---------------------------------------------------------------------------
 # 0. Preflight: the permission grant this depends on has to already exist.
 #    Missing it doesn't fail loudly inside Claude -- it fails as a silent
@@ -122,7 +152,7 @@ PRE_SHA=$(git rev-parse HEAD)
 REF_FILE=$(mktemp)
 
 log "firing /${SKILL} (timeout ${TIMEOUT_SECS}s)"
-timeout "$TIMEOUT_SECS" claude -p "/${SKILL}" >> "$LOG_PATH" 2>&1
+run_with_timeout "$TIMEOUT_SECS" claude -p "/${SKILL}" >> "$LOG_PATH" 2>&1
 CLAUDE_EXIT=$?
 
 NEW_DRAFTS=$(find "$CONTENT_DRAFT_DIR" -type f -newer "$REF_FILE" 2>/dev/null || true)
