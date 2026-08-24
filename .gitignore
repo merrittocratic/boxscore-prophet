@@ -19,32 +19,3 @@ scripts/earnest_delivery.env
 # Movers columns are drafted to ~/content/draft, not this repo. Guard against
 # a stray landing in content/ (the committed 2025_w15 demo stays tracked).
 content/*_movers_column.md
-
-# Local weekly run artifacts for 2026 stay off git unless we explicitly decide
-# to preserve a fixture/example.
-logs/cron_weekly_run.log
-logs/run_*.log
-output/10b2_rb_slate_2026_w*.csv
-output/10b3_wr_slate_2026_w*.csv
-output/10b4_qb_slate_2026_w*.csv
-output/10b5_te_slate_2026_w*.csv
-output/10b_game_slate_2026_w*.csv
-output/10c_ledger_2026_w*.csv
-output/10c_scored_detail_2026_w*.csv
-output/10c_scored_slate_2026_w*.csv
-output/10d_boards_2026_w*.md
-output/10d_boom_board_2026_w*.csv
-output/10d_content_board_2026_w*.csv
-output/10d_ecr_gap_2026_w*.csv
-output/10d_start_board_2026_w*.csv
-output/10d_streamer_board_2026_w*.csv
-output/10e_rookie_content_2026.md
-output/10e_rookie_efficiency_2026.csv
-output/10e_rookie_leaders_2026.csv
-output/10e_rookie_role_earners_2026.csv
-output/10e_rookie_watch_2026.csv
-output/img/10d_boom_flex_2026_w*.png
-output/img/10d_start_qb_2026_w*.png
-output/img/10d_start_rb_2026_w*.png
-output/img/10d_start_te_2026_w*.png
-output/img/10d_start_wr_2026_w*.png
