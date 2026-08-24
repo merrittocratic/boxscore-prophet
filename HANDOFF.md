@@ -85,23 +85,68 @@ the first live season (launch = Week 1, September).
   `data/deploy_models/` are committed only by Earnest in-season.
 - Git: no auto-commit/auto-push, ever. Pull before starting work.
 
-## Content workflow (movers column)
+## Content workflow (On the Record + movers column)
 
-The primary weekly Substack vehicle is the start/sit MOVERS column:
-players whose P(start) moved most vs their own trailing published
-baseline. Split of responsibilities:
+Two named weekly formats now (see `CONTENT_GUIDE.md`): **On the Record**
+(Tuesday grading, via the `/on-the-record` skill) and **Start 'Em, Sit
+'Em: The Movers** (Saturday start/sit, via the `/movers-column` skill).
+Split of responsibilities:
 
-- Data is a repo artifact. `R/10g_movers_table.R` (wired into
-  `weekly_run.sh`, both modes) writes `output/10g_movers_<wtag>.csv`;
-  Earnest surfaces the top movers to Telegram via the digest
-  (`refresh_latest.sh` manifest + `earnest_notify.sh`).
-- The written column is NOT a repo artifact. The `/movers-column`
-  skill drafts it to `~/content/draft/w<NN>_movers_column.md`
-  (zero-padded week, no season prefix) -- Steve's content folder,
-  outside this repo. A `.gitignore` rule blocks stray
-  `content/*_movers_column.md` from being committed here; the one
-  exception is `content/2025_w15_movers_column.md`, kept tracked as
-  the historical demo.
+- Data is a repo artifact. `R/10g_movers_table.R` and `R/10d_content_tables.R`
+  (wired into `weekly_run.sh`) write `output/10g_movers_<wtag>.csv` and
+  `output/10d_receipts_<wtag>.md`; Earnest surfaces the top movers to
+  Telegram via the digest (`refresh_latest.sh` manifest +
+  `earnest_notify.sh`).
+- WRITTEN PROSE IS NEVER A REPO ARTIFACT. This is a general rule, not
+  just a movers-column rule (2026-08-23, after a repo cleanup found five
+  loose lede-in drafts and a content brief sitting in `content/`). Any
+  Substack/X draft -- movers columns, On the Record columns, lede-in
+  posts, briefs prepared for Cousin Claude, fact sheets -- goes to
+  `~/content/draft/` (Steve's personal content workspace, outside this
+  repo), never into this repo's `content/` folder. The `/movers-column`
+  and `/on-the-record` skills both write to `~/content/draft/w<NN>_*.md`
+  (zero-padded week, no season prefix) by contract.
+- What DOES stay in this repo's `content/`: chart-generating CODE
+  (`teaser_charts.R`) and already-published/committed brand assets
+  (`2026_season_teaser.md`, `content/img/*.png`, the tracked
+  `2025_w15_movers_column.md` historical demo). Those are finished
+  artifacts or code, not drafts-in-progress. A `.gitignore` rule blocks
+  stray `content/*_movers_column.md` from landing here by accident.
+
+## Content-drafting automation (Option C) -- in progress, NOT armed
+
+2026-08-24: proved the mechanism for auto-firing `/movers-column` and
+`/on-the-record` off Earnest's own cadence, without touching Earnest's
+cron and without changing anything live. Full detail in the
+`earnest-content-automation` memory; short version:
+
+- Claude Code is now installed on the Mac Mini (npm, logged into the Max
+  subscription -- SSH-safe login flow, falls back to a URL). It did not
+  exist there before this session; OpenClaw/Earnest never needed it.
+- Headless `claude -p "..."` runs unattended and can discover/run
+  project skills, but writing outside the `boxscore-prophet` workspace
+  (e.g. `~/content/draft/`) needs an explicit, HAND-edited
+  `.claude/settings.local.json` on the Mac Mini granting
+  `"Edit(//Users/merrittocracyclaw/content/**)"` -- Claude correctly
+  refuses to widen its own permissions, so this is a one-time manual
+  step, not something a future automated run can silently redo.
+- Fired `/movers-column` for real: it correctly declined rather than
+  drafting off incomplete data, because `R/10g_movers_table.R`'s
+  `MIN_BASE_WEEKS=2` gate had nothing to write yet. The safety gate we
+  thought we'd need to build already exists in the data layer.
+- Gating dates, don't conflate: `/movers-column` first draftable
+  Saturday of Week 3 (~2026-09-26, needs 2 prior graded weeks);
+  `/on-the-record` first draftable Week 2's Tuesday (needs only 1).
+
+**Before this touches Earnest's real cron**, it must (Steve's own
+non-negotiables, not suggestions): live in a SEPARATE script, never
+inline in `earnest_cron.sh`; carry a hard timeout on every headless call;
+make zero writes inside `boxscore-prophet/` (a stray file there would
+trip Earnest's clean-tree guard and silently block the next real run);
+fire off evidence the data is fresh, not a guessed time offset; and
+route failure/skip notifications through the existing
+`earnest_notify.sh` Telegram channel. Content-repo push-after-draft
+discipline is still undecided.
 
 ## FOR EARNEST: team-code fix landed 2026-08-09 (read before arming)
 
