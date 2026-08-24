@@ -52,6 +52,8 @@ cli_h1("One-off: FantasyPros DRAFT ECR fetch -- {TARGET_SEASON}")
 # Parallel credential pathways, cloned from 10d0: keychain (MacMini) then
 # 1Password (laptop). Key is never printed, only its source.
 get_key <- function() {
+  k <- Sys.getenv("FANTASYPROS_API_KEY", unset = "")
+  if (nzchar(k)) return(list(key = k, src = "env"))
   k <- tryCatch(
     system2("security", c("find-generic-password", "-s", "fantasypros-api-key", "-w"),
             stdout = TRUE, stderr = FALSE),
