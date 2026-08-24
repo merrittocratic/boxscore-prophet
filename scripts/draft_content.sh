@@ -27,6 +27,14 @@ set -uo pipefail
 # Deliberately NOT `set -e`: a failed or declined draft is a reportable
 # outcome we want to notify on, not a reason to crash before reaching the
 # notify step.
+
+# Homebrew's bin dir (Apple Silicon default) isn't on a non-interactive
+# bash subshell's PATH even though it's on the interactive zsh login
+# shell's -- found the hard way when `claude` resolved fine by hand but
+# exited 127 (command not found) under this script. Prepending here means
+# it doesn't matter what shell or context invokes this (manual test, or
+# eventually cron, which has an even sparser PATH than this).
+export PATH="/opt/homebrew/bin:$PATH"
 cd "$(dirname "$0")/.."
 
 SKILL="${1:?usage: draft_content.sh on-the-record|movers-column}"
