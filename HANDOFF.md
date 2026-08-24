@@ -113,12 +113,19 @@ Split of responsibilities:
   artifacts or code, not drafts-in-progress. A `.gitignore` rule blocks
   stray `content/*_movers_column.md` from landing here by accident.
 
-## Content-drafting automation (Option C) -- in progress, NOT armed
+## Content-drafting automation (Option C) -- built + verified, NOT armed
 
-2026-08-24: proved the mechanism for auto-firing `/movers-column` and
-`/on-the-record` off Earnest's own cadence, without touching Earnest's
-cron and without changing anything live. Full detail in the
-`earnest-content-automation` memory; short version:
+2026-08-24: `scripts/draft_content.sh` fires `/movers-column` or
+`/on-the-record` off Earnest's own cadence via headless Claude Code,
+entirely separate from `earnest_cron.sh`. Verified end-to-end for real on
+the Mac Mini (`DRAFT_CONTENT_MAX_COMMIT_AGE_SECS=999999 bash
+scripts/draft_content.sh movers-column`): preflight, evidence gate,
+clean-tree guard, the headless fire itself, the post-run tripwire, and a
+real Telegram notification all worked, producing a correct clean decline
+(no draft written -- the 10g gate isn't met yet, same reason as below).
+The only path NOT yet testable is an actual successful draft, since
+there's nothing real to draft from until games are played. Full detail
+in the `earnest-content-automation` memory; original design notes below:
 
 - Claude Code is now installed on the Mac Mini (npm, logged into the Max
   subscription -- SSH-safe login flow, falls back to a URL). It did not
@@ -146,7 +153,23 @@ trip Earnest's clean-tree guard and silently block the next real run);
 fire off evidence the data is fresh, not a guessed time offset; and
 route failure/skip notifications through the existing
 `earnest_notify.sh` Telegram channel. Content-repo push-after-draft
-discipline is still undecided.
+discipline is still undecided. All of these are now implemented in
+`scripts/draft_content.sh` except content-repo push (deliberately --
+it only writes the local draft file, Steve pushes after his edit pass).
+
+Two real bugs found only by running it, not by review, both now fixed:
+`claude` needs `/opt/homebrew/bin` explicitly on PATH (not on a
+non-interactive bash subshell's default PATH even though it's on the
+interactive zsh login shell's); and macOS has no `timeout` command at
+all, so the script implements its own bash-only watchdog instead of
+depending on coreutils. Also caught in passing: Earnest's own attempt to
+gitignore 2026 output clutter (`21d6171`) would have silently stopped
+the real Week 1 board from being committed too -- reverted (`4b295ae`)
+before it shipped; a separate scratch path is the agreed fix for
+test-run cleanup instead.
+
+Not wired to cron yet -- that's the next real step, once you're
+comfortable arming something whose success path is still unverified.
 
 ## FOR EARNEST: team-code fix landed 2026-08-09 (read before arming)
 
