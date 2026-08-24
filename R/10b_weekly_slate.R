@@ -81,9 +81,21 @@ cli_h1("Step 2: Kickoff-hour weather at stadium coordinates")
 # gametime is US/Eastern. Request the hourly series in America/New_York and
 # index by the ET kickoff hour -- venue-local conversion is unnecessary
 # when the request timezone matches the index timezone.
+# Open-Meteo's free live-forecast endpoint only serves ~16 days ahead; a
+# request beyond that returns a non-200 response that jsonlite::fromJSON
+# surfaces as R's generic "cannot open the connection" error -- identical
+# text to a real outage. Short-circuiting on days-out keeps that ambiguity
+# out of weather_src instead of mislabeling an expected gap as FETCH_FAILED.
+OPEN_METEO_FORECAST_HORIZON_DAYS <- 16L
+
 fetch_weather <- function(lat, lon, gameday, gametime) {
   kick_hour <- as.integer(substr(gametime, 1, 2))
   is_past   <- as.Date(gameday) < Sys.Date()
+  days_out  <- as.integer(as.Date(gameday) - Sys.Date())
+  if (!is_past && days_out > OPEN_METEO_FORECAST_HORIZON_DAYS) {
+    return(tibble(temp_c = NA_real_, wind_kmh = NA_real_, gust_kmh = NA_real_,
+                  precip_mm = NA_real_, weather_src = "TOO_FAR_OUT"))
+  }
   base <- if (is_past) {
     "https://historical-forecast-api.open-meteo.com/v1/forecast"
   } else {
@@ -132,8 +144,10 @@ weather <- slate |>
     gust_mph  = round(gust_kmh / 1.609)
   )
 
-n_fail <- sum(startsWith(weather$weather_src, "FETCH_FAILED"))
+n_fail    <- sum(startsWith(weather$weather_src, "FETCH_FAILED"))
+n_too_far <- sum(weather$weather_src == "TOO_FAR_OUT")
 if (n_fail) cli_alert_warning("{n_fail} weather fetches failed (see weather_src)")
+if (n_too_far) cli_alert_info("{n_too_far} game(s) beyond the {OPEN_METEO_FORECAST_HORIZON_DAYS}-day forecast horizon, not yet fetchable -- expected, not a failure")
 
 cli_h2("Slate with weather (outdoor flags: wind >= {WIND_FLAG_KMH}km/h, temp <= {COLD_FLAG_C}C)")
 print(weather |>
