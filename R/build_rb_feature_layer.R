@@ -1,7 +1,24 @@
-# R/build_rb_feature_layer.R  (v1.5)
+# R/build_rb_feature_layer.R  (v1.6)
 # Feature layer for in-season RB EPA model -- step 1 of 5.
 # PREDICTION_SEASONS produce output rows. ANCHOR_SEASONS supply prior-season
 # baselines only. All rolling windows reset at season boundaries (group by season).
+#
+# v1.6: Step 7 volume features (wt_carry_share/wt_target_share/wt_snap_share/
+# wt_team_total_plays) are backward-looking WITHIN a season and therefore NA
+# at every player's Week 1, established veteran or rookie alike -- the
+# efficiency side (Step 6) already has a prior-season carryforward fallback
+# (prior_epa_per_opp/tier_prior/pos_prior) for exactly this; the volume side
+# had none. v1.6 adds the analogous baseline_carry_share/baseline_target_share/
+# baseline_snap_share/baseline_team_total_plays, same fallback ladder (real
+# prior-season value -> draft-tier median -> league median) and the same
+# prior_opp >= MIN_PRIOR_OPP gate efficiency already uses, so the cold-start
+# definition stays identical across efficiency and volume. Mirrors the WR fix
+# (R/04a_wr_feature_layer.R v1.1) exactly. Root-caused 2026-08-30; see project
+# memory project_rb_rookie_role_gap / project_wr_coldstart_volume_gap. NOT yet
+# wired into the deployed model's feature list (R/10a_deployment_models.R) or
+# revalidated through vegas promotion/recalibration -- this commit only fixes
+# the feature table. Do not deploy without the full downstream re-validation
+# pass (see tracked task list).
 
 suppressPackageStartupMessages({
   library(tidyverse)
@@ -73,8 +90,11 @@ rosters_raw <- nflreadr::load_rosters(ALL_SEASONS)
 cli_alert_info("Draft picks (all available seasons)")
 draft_raw <- nflreadr::load_draft_picks()
 
-cli_alert_info("Snap counts seasons {paste(PREDICTION_SEASONS, collapse='-')}")
-snaps_raw <- nflreadr::load_snap_counts(intersect(PREDICTION_SEASONS, PBP_SEASONS))
+cli_alert_info("Snap counts seasons {paste(PBP_SEASONS, collapse='-')}")
+# Widened to PBP_SEASONS (was intersect(PREDICTION_SEASONS, PBP_SEASONS)) so the
+# earliest ANCHOR_SEASONS year (2013) has real snap data to carry forward into
+# prediction_season 2014's baseline_snap_share -- see v1.6 note above.
+snaps_raw <- nflreadr::load_snap_counts(PBP_SEASONS)
 
 # ===========================================================================
 # 2. COLUMN INVENTORY
@@ -327,6 +347,114 @@ rb_volume <- rb_volume |>
 cli_alert_success("Volume features built")
 
 # ===========================================================================
+# 7b. VOLUME BASELINE FEATURES (v1.6 fix -- prior-season carryforward)
+#     Exact structural mirror of Step 6's efficiency baseline
+#     (prior_stats/tier_prior/position_prior -> baseline_epa_per_opp), filling
+#     the analogous gap on the volume side. wt_carry_share/wt_target_share
+#     above are NA at every player's Week 1 by construction (roll_wt_mean_prior
+#     resets each season); this baseline gives Week 1 rows a real signal
+#     instead of falling through to draft_tier alone.
+# ===========================================================================
+cli_h1("Step 7b: Volume baseline features (prior-season carryforward)")
+
+# rb_plays (Step 4) and team_plays_obs/team_rb_opp (Step 5) are all built from
+# pbp_reg over ALL_SEASONS (2013-2026), NOT filtered to PREDICTION_SEASONS --
+# so ANCHOR_SEASONS (2013-2025) already has real carry/target/team-total data
+# here, no extra PBP pull needed.
+rb_game_anchor <- rb_plays |>
+  filter(season %in% ANCHOR_SEASONS) |>
+  group_by(game_id, season, week, posteam, player_id) |>
+  summarise(
+    carries = sum(play_cat == "rush"),
+    targets = sum(play_cat != "rush"),
+    .groups = "drop"
+  ) |>
+  left_join(team_rb_opp, by = c("game_id", "season", "week", "posteam"))
+
+# Gated on the SAME prior_opp (carries+targets) >= MIN_PRIOR_OPP threshold
+# efficiency's prior_stats uses, so cold-start stays identically defined
+# across efficiency and volume for a given player-season.
+prior_vol_stats <- rb_game_anchor |>
+  group_by(player_id, season) |>
+  summarise(
+    prior_carries          = sum(carries, na.rm = TRUE),
+    prior_targets          = sum(targets, na.rm = TRUE),
+    prior_team_rb_carries  = sum(team_rb_carries, na.rm = TRUE),
+    prior_team_rb_targets  = sum(team_rb_targets, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  mutate(
+    prior_opp = prior_carries + prior_targets,
+    prior_carry_share  = if_else(prior_opp >= MIN_PRIOR_OPP & prior_team_rb_carries > 0,
+                                 prior_carries / prior_team_rb_carries, NA_real_),
+    prior_target_share = if_else(prior_opp >= MIN_PRIOR_OPP & prior_team_rb_targets > 0,
+                                 prior_targets / prior_team_rb_targets, NA_real_),
+    prediction_season = season + 1L
+  ) |>
+  select(player_id, prediction_season, prior_carry_share, prior_target_share)
+
+tier_vol_prior <- prior_vol_stats |>
+  left_join(rb_draft |> select(player_id = gsis_id, draft_tier), by = "player_id") |>
+  filter(!is.na(draft_tier)) |>
+  group_by(draft_tier, prediction_season) |>
+  summarise(
+    tier_carry_share  = median(prior_carry_share,  na.rm = TRUE),
+    tier_target_share = median(prior_target_share, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+position_vol_prior <- prior_vol_stats |>
+  group_by(prediction_season) |>
+  summarise(
+    pos_carry_share  = median(prior_carry_share,  na.rm = TRUE),
+    pos_target_share = median(prior_target_share, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+rb_volume <- rb_volume |>
+  left_join(prior_vol_stats,    by = c("player_id", "season" = "prediction_season")) |>
+  left_join(tier_vol_prior,     by = c("draft_tier", "season" = "prediction_season")) |>
+  left_join(position_vol_prior, by = c("season" = "prediction_season")) |>
+  mutate(
+    baseline_carry_share  = coalesce(prior_carry_share,  tier_carry_share,  pos_carry_share),
+    baseline_target_share = coalesce(prior_target_share, tier_target_share, pos_target_share)
+  ) |>
+  select(-prior_carry_share, -prior_target_share,
+         -tier_carry_share, -tier_target_share,
+         -pos_carry_share, -pos_target_share)
+
+n_na_bcs <- sum(is.na(rb_volume$baseline_carry_share))
+cli_alert_success(
+  "baseline_carry_share/baseline_target_share built | NA baseline_carry_share: {n_na_bcs} of {nrow(rb_volume)}"
+)
+
+# Team-level baseline_team_total_plays -- exact structural mirror of Step 9's
+# def_prior/lg_scalar pattern. team_plays_obs (Step 5) already covers
+# ANCHOR_SEASONS (unfiltered pbp_reg), no extra pull needed.
+prior_team_plays_vol <- team_plays_obs |>
+  filter(season %in% ANCHOR_SEASONS) |>
+  group_by(posteam, season) |>
+  summarise(prior_team_total_plays = mean(team_total_plays_obs, na.rm = TRUE), .groups = "drop") |>
+  mutate(prediction_season = season + 1L) |>
+  select(posteam, prediction_season, prior_team_total_plays)
+
+lg_team_plays_scalar <- mean(
+  team_plays_obs$team_total_plays_obs[team_plays_obs$season %in% ANCHOR_SEASONS],
+  na.rm = TRUE
+)
+
+rb_volume <- rb_volume |>
+  left_join(prior_team_plays_vol, by = c("posteam", "season" = "prediction_season")) |>
+  mutate(
+    baseline_team_total_plays = coalesce(prior_team_total_plays, lg_team_plays_scalar)
+  ) |>
+  select(-prior_team_total_plays)
+
+cli_alert_success(
+  "baseline_team_total_plays built | league scalar fallback: {round(lg_team_plays_scalar,1)}"
+)
+
+# ===========================================================================
 # 8. SNAP SHARE FEATURES
 # ===========================================================================
 cli_h1("Step 8: Snap share features")
@@ -360,6 +488,41 @@ rb_volume <- rb_volume |>
 n_snap_matched <- sum(!is.na(rb_volume$wt_snap_share))
 cli_alert_info(
   "wt_snap_share: {n_snap_matched} non-NA of {nrow(rb_volume)} rows ({round(100*n_snap_matched/nrow(rb_volume),1)}%)"
+)
+
+# Prior-season snap-share carryforward (v1.6 fix) -- same fallback ladder as
+# baseline_carry_share above (real prior-season value -> tier median ->
+# league median).
+prior_snap_stats <- snaps_clean |>
+  filter(season %in% ANCHOR_SEASONS) |>
+  group_by(gsis_id, season) |>
+  summarise(prior_snap_share = mean(snap_pct, na.rm = TRUE), .groups = "drop") |>
+  mutate(prediction_season = season + 1L) |>
+  select(player_id = gsis_id, prediction_season, prior_snap_share)
+
+tier_snap_prior <- prior_snap_stats |>
+  left_join(rb_draft |> select(player_id = gsis_id, draft_tier), by = "player_id") |>
+  filter(!is.na(draft_tier), !is.na(prior_snap_share)) |>
+  group_by(draft_tier, prediction_season) |>
+  summarise(tier_snap_share = median(prior_snap_share, na.rm = TRUE), .groups = "drop")
+
+position_snap_prior <- prior_snap_stats |>
+  filter(!is.na(prior_snap_share)) |>
+  group_by(prediction_season) |>
+  summarise(pos_snap_share = median(prior_snap_share, na.rm = TRUE), .groups = "drop")
+
+rb_volume <- rb_volume |>
+  left_join(prior_snap_stats,    by = c("player_id", "season" = "prediction_season")) |>
+  left_join(tier_snap_prior,     by = c("draft_tier", "season" = "prediction_season")) |>
+  left_join(position_snap_prior, by = c("season" = "prediction_season")) |>
+  mutate(
+    baseline_snap_share = coalesce(prior_snap_share, tier_snap_share, pos_snap_share)
+  ) |>
+  select(-prior_snap_share, -tier_snap_share, -pos_snap_share)
+
+n_na_bss <- sum(is.na(rb_volume$baseline_snap_share))
+cli_alert_success(
+  "baseline_snap_share built | NA: {n_na_bss} of {nrow(rb_volume)}"
 )
 
 # ===========================================================================
@@ -501,6 +664,11 @@ feature_table_raw <- rb_volume |>
     is_cold_start, draft_tier,
     # VOLUME FEATURES (recency-weighted, backward-looking)
     wt_carry_share, wt_target_share, wt_snap_share, wt_team_total_plays,
+    # VOLUME BASELINE FEATURES (v1.6 -- prior-season carryforward, fills the
+    # Week 1 gap in the wt_* columns above; same fallback ladder as
+    # baseline_epa_per_opp)
+    baseline_carry_share, baseline_target_share,
+    baseline_snap_share, baseline_team_total_plays,
     # DEFENSIVE COMPONENT VECTOR (schedule-adjusted, player/defense/week nesting intact)
     def_rush_epa_adj, def_short_pass_epa_adj, def_deep_pass_epa_adj,
     games_played_so_far, def_used_fallback
@@ -589,4 +757,4 @@ if (nrow(na_audit) == 0) {
   }
 }
 
-cli_h1("Done -- feature layer v2.0 frozen")
+cli_h1("Done -- RB feature layer v1.6 (volume carryforward fix, unvalidated downstream)")
