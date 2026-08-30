@@ -396,8 +396,13 @@ sim_params <- tibble(
 )
 readr::write_csv(sim_params, paste0("output/", OUT_PREFIX, "_sim_params.csv"))
 
-# Fitted translation models (spline mu) for weekly deployment
-saveRDS(list(rb = fit_rb, wr = fit_wr), "data/fp_translation_fits.rds")
+# Fitted translation models (spline mu) for weekly deployment.
+# Overridable seam (2026-08-30, volfix recal refit): the fit depends only on
+# rb_outcomes.rds/wr_outcomes.rds (not on RB_PRED_FILE/WR_PRED_FILE), so an
+# experimental run still refits on whatever outcomes tables are checked out.
+# Default path unchanged so normal 06b runs behave exactly as before.
+TRANS_FIT_OUT <- Sys.getenv("TRANS_FIT_OUT", "data/fp_translation_fits.rds")
+saveRDS(list(rb = fit_rb, wr = fit_wr), TRANS_FIT_OUT)
 
 cli_alert_success("output/{OUT_PREFIX}_fp_sim_probabilities.csv ({nrow(all_probs)} rows)")
 cli_alert_success("output/{OUT_PREFIX}_fp_sim_calibration.csv")

@@ -232,7 +232,17 @@ fit_platt_vol_vegas <- function(p, hit, vol, sp, it, it_center) {
 
 cli_h1("Step 6c: Walk-forward recalibration (volume-conditional bake-off)")
 
-probs <- readr::read_csv("output/06b_fp_sim_probabilities.csv", show_col_types = FALSE) |>
+# Overridable seams (2026-08-30, volfix recal refit): same pattern as the
+# 06b RB_PRED_FILE/WR_PRED_FILE/FP_OUT_PREFIX seam -- swap the input
+# probabilities file, output-file prefix, and deployment-map path without
+# touching the canonical 06c artifacts. Defaults reproduce prior behavior
+# exactly.
+PROBS_FILE     <- Sys.getenv("RECAL_PROBS_FILE", "output/06b_fp_sim_probabilities.csv")
+OUT_PREFIX     <- Sys.getenv("RECAL_OUT_PREFIX", "06c")
+DEPLOY_MAPS_OUT <- Sys.getenv("RECAL_DEPLOY_MAPS_OUT", "data/fp_recal_maps.rds")
+cli_alert_info("Probabilities input: {PROBS_FILE} | output prefix: {OUT_PREFIX} | deploy maps: {DEPLOY_MAPS_OUT}")
+
+probs <- readr::read_csv(PROBS_FILE, show_col_types = FALSE) |>
   filter(!is.na(fantasy_points_ppr)) |>
   select(player_id, season, week, position, pred_vol,
          p_start = p_start_sim, p_boom = p_boom_sim, hit_start, hit_boom) |>
@@ -517,7 +527,7 @@ deploy_maps <- pmap(picks, function(position, threshold, pick, reason) {
 })
 names(deploy_maps) <- paste(picks$position, picks$threshold, sep = "_")
 
-saveRDS(deploy_maps, "data/fp_recal_maps.rds")
+saveRDS(deploy_maps, DEPLOY_MAPS_OUT)
 
 # Inspection grid: for conditional maps, evaluate at each stratum's median
 # ex-ante volume so the CSV shows the map the product will actually apply
@@ -546,25 +556,25 @@ map_grid <- map(deploy_maps, function(m) {
 
 cli_h1("Save outputs")
 
-readr::write_csv(recal,     "output/06c_recal_probabilities.csv")
-readr::write_csv(cal_all,   "output/06c_recal_calibration.csv")
-readr::write_csv(cal_strat, "output/06c_recal_calibration_strat.csv")
+readr::write_csv(recal,     paste0("output/", OUT_PREFIX, "_recal_probabilities.csv"))
+readr::write_csv(cal_all,   paste0("output/", OUT_PREFIX, "_recal_calibration.csv"))
+readr::write_csv(cal_strat, paste0("output/", OUT_PREFIX, "_recal_calibration_strat.csv"))
 readr::write_csv(summary_tbl |>
                    mutate(across(c(w_mean_abs_delta, ext_w_mean_abs_delta),
                                  ~ sprintf("%.4f", 100 * .x), .names = "{.col}_pp"),
                           brier = sprintf("%.5f", brier)) |>
                    select(position, threshold, method,
                           ext_w_mean_abs_delta_pp, w_mean_abs_delta_pp, brier),
-                 "output/06c_recal_summary.csv")
-readr::write_csv(strata_tbl, "output/06c_recal_strata.csv")
-readr::write_csv(map_grid,   "output/06c_recal_map_grid.csv")
+                 paste0("output/", OUT_PREFIX, "_recal_summary.csv"))
+readr::write_csv(strata_tbl, paste0("output/", OUT_PREFIX, "_recal_strata.csv"))
+readr::write_csv(map_grid,   paste0("output/", OUT_PREFIX, "_recal_map_grid.csv"))
 
-cli_alert_success("output/06c_recal_probabilities.csv ({nrow(recal)} rows)")
-cli_alert_success("output/06c_recal_calibration.csv")
-cli_alert_success("output/06c_recal_calibration_strat.csv")
-cli_alert_success("output/06c_recal_summary.csv")
-cli_alert_success("output/06c_recal_strata.csv")
-cli_alert_success("output/06c_recal_map_grid.csv")
-cli_alert_success("data/fp_recal_maps.rds (deployment maps)")
+cli_alert_success("output/{OUT_PREFIX}_recal_probabilities.csv ({nrow(recal)} rows)")
+cli_alert_success("output/{OUT_PREFIX}_recal_calibration.csv")
+cli_alert_success("output/{OUT_PREFIX}_recal_calibration_strat.csv")
+cli_alert_success("output/{OUT_PREFIX}_recal_summary.csv")
+cli_alert_success("output/{OUT_PREFIX}_recal_strata.csv")
+cli_alert_success("output/{OUT_PREFIX}_recal_map_grid.csv")
+cli_alert_success("{DEPLOY_MAPS_OUT} (deployment maps)")
 
 cli_h1("Step 6c complete")

@@ -84,9 +84,16 @@ cli_h1("06b0: rescale fold-prediction tot intervals to pred-vol scaling")
 # RB/WR source = the rung-2 Vegas opener arms (13e canonical) since
 # 2026-07-26: injury states (RB vol) + opener Vegas features (eff) are both
 # in the shipped chain. Pre-Vegas receipts remain in git history.
-rescale_file("output/13e_rb_fold_predictions.csv",
-             "output/13e_rb_fold_predictions_predvol.csv", "RB (13e Vegas arm)")
-rescale_file("output/13e_wr_fold_predictions.csv",
-             "output/13e_wr_fold_predictions_predvol.csv", "WR (13e Vegas arm)")
+#
+# Overridable seam (2026-08-30, volfix recal refit): swap the input/output
+# paths without touching the canonical 06b0 artifacts, same pattern as the
+# RB_PRED_FILE / WR_PRED_FILE seam in 06b.
+RB0_IN  <- Sys.getenv("RB0_IN",  "output/13e_rb_fold_predictions.csv")
+WR0_IN  <- Sys.getenv("WR0_IN",  "output/13e_wr_fold_predictions.csv")
+RB0_OUT <- Sys.getenv("RB0_OUT", "output/13e_rb_fold_predictions_predvol.csv")
+WR0_OUT <- Sys.getenv("WR0_OUT", "output/13e_wr_fold_predictions_predvol.csv")
+
+rescale_file(RB0_IN, RB0_OUT, "RB (13e Vegas arm)")
+rescale_file(WR0_IN, WR0_OUT, "WR (13e Vegas arm)")
 
 cli_h1("06b0 complete -- feed via RB_PRED_FILE / WR_PRED_FILE into 06b")

@@ -55,7 +55,13 @@ rescale_file <- function(in_path, out_path, label) {
 cli_h1("12d0: rescale TE fold-prediction tot intervals to pred-vol scaling")
 
 # TE source = the rung-2 Vegas opener arm (13e canonical) since 2026-07-26.
-rescale_file("output/13e_te_fold_predictions.csv",
-             "output/13e_te_fold_predictions_predvol.csv", "TE (13e Vegas arm)")
+#
+# Overridable seam (2026-08-30, volfix recal refit): swap the input/output
+# paths without touching the canonical 12d0 artifact, same pattern as the
+# TE_PRED_FILE seam in 12d.
+TE0_IN  <- Sys.getenv("TE0_IN",  "output/13e_te_fold_predictions.csv")
+TE0_OUT <- Sys.getenv("TE0_OUT", "output/13e_te_fold_predictions_predvol.csv")
+
+rescale_file(TE0_IN, TE0_OUT, "TE (13e Vegas arm)")
 
 cli_h1("12d0 complete -- 12d reads the _predvol file by default")

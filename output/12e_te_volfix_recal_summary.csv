@@ -1,0 +1,17 @@
+position,threshold,method,ext_w_mean_abs_delta_pp,w_mean_abs_delta_pp,brier
+TE,12+,iso,2.5185,1.1505,0.18655
+TE,12+,platt,1.8555,0.9150,0.18572
+TE,12+,platt_vegas,1.9890,0.7355,0.18568
+TE,12+,platt_vol,2.0050,0.9611,0.18565
+TE,12+,platt_vol_vegas,1.8286,0.9047,0.18485
+TE,12+,raw,2.5592,1.6749,0.18579
+TE,12+,strat_iso,2.5275,1.1267,0.18702
+TE,12+,strat_platt,2.2058,1.2439,0.18582
+TE,17+,iso,1.1239,0.3897,0.09682
+TE,17+,platt,1.0098,0.4603,0.09659
+TE,17+,platt_vegas,1.0432,0.5498,0.09651
+TE,17+,platt_vol,1.2874,0.5816,0.09683
+TE,17+,platt_vol_vegas,1.3500,0.8949,0.09641
+TE,17+,raw,1.2672,0.8697,0.09658
+TE,17+,strat_iso,1.0605,0.2982,0.09687
+TE,17+,strat_platt,1.1176,0.7084,0.09665

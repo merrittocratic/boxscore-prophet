@@ -301,9 +301,12 @@ sim_params <- tibble(position = "TE", rho = rho_te, n_sim = N_SIM, seed = 42,
                      thresh_start = THRESH_START, thresh_boom = THRESH_BOOM)
 readr::write_csv(sim_params, paste0("output/", OUT_PREFIX, "_te_sim_params.csv"))
 
-saveRDS(fit_te, "data/te_fp_translation_fit.rds")
+# Overridable seam (2026-08-30, volfix recal refit): see 06b's TRANS_FIT_OUT
+# note -- default path unchanged for normal 12d runs.
+TE_TRANS_FIT_OUT <- Sys.getenv("TE_TRANS_FIT_OUT", "data/te_fp_translation_fit.rds")
+saveRDS(fit_te, TE_TRANS_FIT_OUT)
 
 cli_alert_success("output/{OUT_PREFIX}_te_fp_sim_probabilities.csv ({nrow(all_probs)} rows)")
-cli_alert_success("data/te_fp_translation_fit.rds")
+cli_alert_success("{TE_TRANS_FIT_OUT}")
 
 cli_h1("Step 12d complete -- TE simulation translation layer")
