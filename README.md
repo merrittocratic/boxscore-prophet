@@ -736,6 +736,62 @@ pre-committed in-season check on the frozen maps; re-run 17a before 2027
 with the 2026 ledger rows, where leg 2 becomes measurable and B clears
 the bar if its edge is real.
 
+### D24. RB/WR/TE volume-carryforward fix: ship pass (2026-08-31)
+
+Root cause of the WR cold-start ECR gap ([[project_wr_coldstart_volume_gap]]
+in memory) and the RB rookie role-split ([[project_rb_rookie_role_gap]]):
+volume features (wt_target_share etc.) are strictly backward-looking within
+a season, so every player -- 10-year veteran or rookie -- is NA at Week 1 by
+construction; only the efficiency side had a prior-season fallback. Added
+baseline_{target,carry,air_yards,snap,tgt_per_snap}_share/team_total_plays
+(real prior-season value -> draft-tier median -> league median), mirroring
+the efficiency pattern, to the frozen feature layers (04a/build_rb/12a),
+the deployment training script (10a), and the live slate builders (10b2/
+10b3/10b5, which have independent feature logic from the frozen layers and
+were the one gap the walk-forward validation alone would not have caught).
+
+VALIDATION: retrained under full walk-forward, promoted through the Vegas
+chain (13b/13e), recal maps refit honestly (WR20's fragile strat_iso did
+not survive -- replaced by plain iso, a safer non-stratified map). Draft-
+tier counterfactual: NOT a dominant feature on the volume side (<1.5% swing
+from tier alone, ~0.1-0.2% gain importance) -- the original ECR gap was the
+missing-data bug, not tier override. A parallel investigation into
+draft_tier_int instability on the EFFICIENCY side (15-30% of folds show
+real swings) was tested and the feature-deletion fix REJECTED (redistributes
+instability onto correlated features rather than removing it) -- logged as
+a 2027 roadmap item, not blocking this pass.
+
+HONEST LIMITATION, found by an objective role-change cohort check (real
+season-over-season share deltas, not hand-picked players): the fix's real,
+significant Week-1 error improvement is concentrated in STABLE-role players.
+Role-changers -- the population this was originally motivated by (Barkley-
+vs-Edwards-Helaire, Jeremiyah Love-style situations) -- show no reliable
+gain; RB role-changers trend toward a regression at the stricter cohort
+threshold. baseline_target_share/baseline_carry_share is literally last
+season's share, which is actively wrong for the biggest changers. Not
+solved by this pass -- would need a forward-looking role/committee-risk
+feature, a different and harder problem.
+
+HINDCAST (2025 W13-15, the actual promoted combination -- real deployment
+models + big-backtest-refit recal maps + native slate builders): real Brier
+improvement on live outcomes, pooled start 0.1754->0.1721, boom 0.1044->
+0.1035; RB and WR both improve, TE a small noisy wash (n=100).
+
+SHIPPED (single-writer exception, retrained/committed from the laptop):
+data/deploy_models/{rb,wr,te}_{eff,vol}.txt + data/deployment_params.rds
+(qb entry deliberately held on production -- out of scope, avoids pairing
+a retrained model with stale QB recal maps) + data/fp_recal_maps.rds +
+data/te_fp_recal_maps.rds, promoted together as one atomic step (a
+mismatched promotion -- new maps against old models or vice versa -- would
+ship silently; 10c's reconciliation gate cannot catch this on a live/future
+week, only on hindcast replays).
+
+ACCEPTED, NOT FIXED: the published null-results article's RB rookie cell
+drifts 10.6pp -> 11.9pp under the new chain (n=182 unchanged, verdict
+unchanged -- still a published null). Steve accepted the drift rather than
+republishing -- the RB model is expected to underperform on role-changers
+this year regardless; a real fix is planned for 2027, not a number patch now.
+
 ## Deployment runner (10-series) -- design, in progress 2026-07-17
 
 The backtest chain trains a model per fold; deployment is ONE MORE FOLD:
