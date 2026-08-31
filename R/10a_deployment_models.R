@@ -94,6 +94,8 @@ RB_INJURY_FEATURES <- c(
 RB_VOL_FEATURES <- c(
   "wt_carry_share", "wt_target_share", "wt_snap_share", "wt_team_total_plays",
   "def_rush_epa_adj", "draft_tier_int", "is_cold_start_int", "games_played_so_far",
+  "baseline_carry_share", "baseline_target_share", "baseline_snap_share",
+  "baseline_team_total_plays",
   RB_INJURY_FEATURES
 )
 
@@ -108,7 +110,9 @@ WR_EFF_FEATURES <- c(
 WR_VOL_FEATURES <- c(
   "wt_target_share", "wt_air_yards_share", "wt_snap_share", "wt_team_total_plays",
   "def_short_pass_epa_adj", "def_deep_pass_epa_adj",
-  "draft_tier_int", "is_cold_start_int", "games_played_so_far"
+  "draft_tier_int", "is_cold_start_int", "games_played_so_far",
+  "baseline_target_share", "baseline_air_yards_share", "baseline_snap_share",
+  "baseline_team_total_plays"
 )
 
 # TE feature sets (12b/12c): WR sets + wt_tgt_per_snap in the volume model
@@ -125,7 +129,9 @@ TE_VOL_FEATURES <- c(
   "wt_target_share", "wt_air_yards_share", "wt_snap_share", "wt_tgt_per_snap",
   "wt_team_total_plays",
   "def_short_pass_epa_adj", "def_deep_pass_epa_adj",
-  "draft_tier_int", "is_cold_start_int", "games_played_so_far"
+  "draft_tier_int", "is_cold_start_int", "games_played_so_far",
+  "baseline_target_share", "baseline_air_yards_share", "baseline_snap_share",
+  "baseline_tgt_per_snap", "baseline_team_total_plays"
 )
 
 QB_COMPONENTS <- list(

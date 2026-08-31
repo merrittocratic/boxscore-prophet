@@ -87,8 +87,12 @@ fmt_pp <- function(x) sprintf("%+.2f", 100 * x)
 
 cli_h1("Step 10c: score slate {TARGET_SEASON} week {TARGET_WEEK}")
 
+# Overridable seam (2026-08-31, volfix candidate hindcast): pick up a
+# candidate-augmented slate variant (e.g. "_volfixaug") without touching the
+# real 10b builder outputs. Default "" reproduces prior behavior exactly.
+SLATE_SUFFIX <- Sys.getenv("SLATE_SUFFIX", "")
 slate_file <- function(stem) {
-  path <- sprintf("output/%s_%s.csv", stem, WTAG)
+  path <- sprintf("output/%s_%s%s.csv", stem, WTAG, SLATE_SUFFIX)
   if (!file.exists(path)) {
     cli_abort("Missing slate {path} -- run the 10b builders for this week first.")
   }
@@ -146,7 +150,31 @@ te_slate <- te_slate |> semi_join(live_games, by = "game_id")
 qb_slate <- qb_slate |> semi_join(live_games, by = "game_id")
 cli_alert_success("Scoring: RB={nrow(rb_slate)} WR={nrow(wr_slate)} TE={nrow(te_slate)} QB={nrow(qb_slate)} players")
 
-dp <- readRDS("data/deployment_params.rds")
+# Overridable seams (2026-08-31, volfix candidate hindcast): same
+# Sys.getenv pattern as the 06b0/06b/06c/12d0/12d/12e_te seams added
+# 2026-08-30. Defaults reproduce prior behavior exactly -- a bare
+# `Rscript R/10c_weekly_score.R` still reads/writes the real shipped
+# artifacts. Set these to point at data/deployment_params_volfix.rds etc.
+# to score a slate against the candidate deployed models without touching
+# the real deployment_params.rds / fp_recal_maps.rds / production 10c
+# ledger and scored-slate outputs.
+DP_FILE             <- Sys.getenv("DP_FILE",             "data/deployment_params.rds")
+FP_TRANS_FITS_FILE  <- Sys.getenv("FP_TRANS_FITS_FILE",  "data/fp_translation_fits.rds")
+TE_TRANS_FIT_FILE   <- Sys.getenv("TE_TRANS_FIT_FILE",   "data/te_fp_translation_fit.rds")
+QB_TRANS_FIT_FILE   <- Sys.getenv("QB_TRANS_FIT_FILE",   "data/qb_fp_translation_fit.rds")
+FP_RECAL_MAPS_FILE  <- Sys.getenv("FP_RECAL_MAPS_FILE",  "data/fp_recal_maps.rds")
+TE_RECAL_MAPS_FILE  <- Sys.getenv("TE_RECAL_MAPS_FILE",  "data/te_fp_recal_maps.rds")
+QB_RECAL_MAPS_FILE  <- Sys.getenv("QB_RECAL_MAPS_FILE",  "data/qb_fp_recal_maps.rds")
+RESID_POOLS_FILE    <- Sys.getenv("RESID_POOLS_FILE",    "output/06b_resid_pools.csv")
+TE_RESID_POOLS_FILE <- Sys.getenv("TE_RESID_POOLS_FILE", "output/12d_te_resid_pools.csv")
+QB_RESID_POOLS_FILE <- Sys.getenv("QB_RESID_POOLS_FILE", "output/09a_qb_resid_pools.csv")
+SIM_PARAMS_FILE     <- Sys.getenv("SIM_PARAMS_FILE",     "output/06b_sim_params.csv")
+TE_SIM_PARAMS_FILE  <- Sys.getenv("TE_SIM_PARAMS_FILE",  "output/12d_te_sim_params.csv")
+QB_SIM_PARAMS_FILE  <- Sys.getenv("QB_SIM_PARAMS_FILE",  "output/09a_qb_sim_params.csv")
+OUT_SUFFIX           <- Sys.getenv("OUT_SUFFIX", "")
+cli_alert_info("Deployment params: {DP_FILE} | recal maps: {FP_RECAL_MAPS_FILE} / {TE_RECAL_MAPS_FILE} | out suffix: '{OUT_SUFFIX}'")
+
+dp <- readRDS(DP_FILE)
 cli_alert_info("Deployment models trained through {dp$rb$trained_through$season}-W{dp$rb$trained_through$week}")
 
 encode_features <- function(df) {
@@ -170,19 +198,19 @@ predict_component <- function(df, spec) {
 }
 
 # Translation + recal + sim artifacts
-fp_fits    <- readRDS("data/fp_translation_fits.rds")        # $rb, $wr
-te_fit     <- readRDS("data/te_fp_translation_fit.rds")
-qb_fit     <- readRDS("data/qb_fp_translation_fit.rds")
-fp_maps    <- readRDS("data/fp_recal_maps.rds")              # RB_15+ etc.
-te_maps    <- readRDS("data/te_fp_recal_maps.rds")           # TE_12+ etc.
-qb_maps    <- readRDS("data/qb_fp_recal_maps.rds")           # QB_20+ etc.
+fp_fits    <- readRDS(FP_TRANS_FITS_FILE)        # $rb, $wr
+te_fit     <- readRDS(TE_TRANS_FIT_FILE)
+qb_fit     <- readRDS(QB_TRANS_FIT_FILE)
+fp_maps    <- readRDS(FP_RECAL_MAPS_FILE)        # RB_15+ etc.
+te_maps    <- readRDS(TE_RECAL_MAPS_FILE)        # TE_12+ etc.
+qb_maps    <- readRDS(QB_RECAL_MAPS_FILE)        # QB_20+ etc.
 
-pools_csv  <- readr::read_csv("output/06b_resid_pools.csv",    show_col_types = FALSE)
-te_pools_csv <- readr::read_csv("output/12d_te_resid_pools.csv", show_col_types = FALSE)
-qb_pools_csv <- readr::read_csv("output/09a_qb_resid_pools.csv", show_col_types = FALSE)
-sim_params <- readr::read_csv("output/06b_sim_params.csv",     show_col_types = FALSE)
-te_sim_csv <- readr::read_csv("output/12d_te_sim_params.csv",  show_col_types = FALSE)
-qb_sim_csv <- readr::read_csv("output/09a_qb_sim_params.csv",  show_col_types = FALSE)
+pools_csv  <- readr::read_csv(RESID_POOLS_FILE,    show_col_types = FALSE)
+te_pools_csv <- readr::read_csv(TE_RESID_POOLS_FILE, show_col_types = FALSE)
+qb_pools_csv <- readr::read_csv(QB_RESID_POOLS_FILE, show_col_types = FALSE)
+sim_params <- readr::read_csv(SIM_PARAMS_FILE,     show_col_types = FALSE)
+te_sim_csv <- readr::read_csv(TE_SIM_PARAMS_FILE,  show_col_types = FALSE)
+qb_sim_csv <- readr::read_csv(QB_SIM_PARAMS_FILE,  show_col_types = FALSE)
 
 pool_list <- function(df, pos, tiers) {
   map(set_names(tiers), function(tr) df$resid[df$position == pos & df$tier == tr])
@@ -510,14 +538,14 @@ scored_all <- bind_rows(
 ) |>
   arrange(position, desc(p_start_recal))
 
-out_scored <- sprintf("output/10c_scored_slate_%s.csv", WTAG)
+out_scored <- sprintf("output/10c_scored_slate_%s%s.csv", WTAG, OUT_SUFFIX)
 readr::write_csv(scored_all, out_scored)
 cli_alert_success("{out_scored} ({nrow(scored_all)} rows)")
 
 # Locked-probabilities ledger: every run appends the rows it scored (all
 # pre-kickoff by construction). Receipts (10d) grade the LATEST run per
 # player -- the final statement made before that player's game kicked off.
-ledger_path <- sprintf("output/10c_ledger_%s.csv", WTAG)
+ledger_path <- sprintf("output/10c_ledger_%s%s.csv", WTAG, OUT_SUFFIX)
 ledger_rows <- scored_all |>
   left_join(kickoffs, by = "game_id") |>
   mutate(run_ts = format(Sys.time(), "%Y-%m-%d %H:%M:%S", tz = "America/New_York"),
@@ -527,7 +555,7 @@ readr::write_csv(ledger_rows, ledger_path, append = file.exists(ledger_path))
 cli_alert_success("{ledger_path} (+{nrow(ledger_rows)} rows, mode={RUN_MODE})")
 
 # Full per-position detail (all interval columns) for downstream 10d use
-out_detail <- sprintf("output/10c_scored_detail_%s.csv", WTAG)
+out_detail <- sprintf("output/10c_scored_detail_%s%s.csv", WTAG, OUT_SUFFIX)
 readr::write_csv(bind_rows(rb_scored |> mutate(across(everything(), as.character)),
                            wr_scored |> mutate(across(everything(), as.character)),
                            te_scored |> mutate(across(everything(), as.character)),
@@ -632,8 +660,8 @@ if (nrow(bt_rbwr) + nrow(bt_te) + nrow(bt_qb) == 0) {
           n = Inf)
   }
 
-  out_recon <- sprintf("output/10c_reconciliation_%s.csv", WTAG)
-  out_recon_sum <- sprintf("output/10c_reconciliation_summary_%s.csv", WTAG)
+  out_recon <- sprintf("output/10c_reconciliation_%s%s.csv", WTAG, OUT_SUFFIX)
+  out_recon_sum <- sprintf("output/10c_reconciliation_summary_%s%s.csv", WTAG, OUT_SUFFIX)
   readr::write_csv(recon_long, out_recon)
   readr::write_csv(recon_summary, out_recon_sum)
   cli_alert_success("{out_recon} ({nrow(recon_long)} rows)")
