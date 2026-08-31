@@ -67,6 +67,17 @@ wr_outcomes <- readRDS("data/wr_outcomes.rds") |> filter(!is.na(player_id))
 wr_plays    <- readRDS("data/wr_plays.rds")
 ft          <- readRDS("data/wr_feature_table.rds")
 
+# Unfiltered outcomes for the Step 3b volume-baseline block only: training's
+# prior_vol_stats is built straight off wr_plays (never filtered to
+# !is.na(player_id) the way wr_outcomes is above), so its NA-player
+# pseudo-row (uncredited targets per team-game) is a real, if incidental,
+# member of the udfa tier median -- wr_draft below carries a matching
+# NA-gsis_id "udfa" row from an incomplete historical roster entry, and
+# dplyr's left_join treats NA keys as equal, so that row's aggregate share
+# joins straight into the tier population. Reproducing that here (rather
+# than the tidied wr_outcomes above) is required for an exact gate match.
+wr_outcomes_raw <- readRDS("data/wr_outcomes.rds")
+
 games <- nflreadr::load_schedules(seasons = TARGET_SEASON) |>
   filter(game_type == "REG", week == TARGET_WEEK) |>
   select(game_id, season, week, home_team, away_team)
@@ -173,6 +184,91 @@ season_const <- wr_draft |>
   select(player_id, prior_epa_per_opp, baseline_epa_per_opp,
          is_cold_start, draft_tier)
 
+# ===========================================================================
+# 3b. VOLUME BASELINE FEATURES (prior-season carryforward -- mirrors
+#     04a_wr_feature_layer.R v1.1 Step 7b: real prior-season share ->
+#     draft-tier median -> league median, same MIN_PRIOR_OPP gate as the
+#     efficiency prior above. Team-total denominators (ALL receivers, not
+#     just WR) come straight from wr_outcomes.rds's team_total_targets/
+#     team_total_air_yards/team_total_plays_obs columns (already loaded --
+#     these were themselves built off unfiltered pbp_reg in training, so
+#     re-deriving from raw pbp here would just reproduce the same numbers;
+#     no extra pull needed).
+# ===========================================================================
+
+cli_h1("Step 3b: Volume baseline features (prior-season carryforward)")
+
+prior_vol_stats <- wr_outcomes_raw |>
+  filter(season == TARGET_SEASON - 1L) |>
+  group_by(player_id) |>
+  summarise(
+    prior_targets        = sum(targets, na.rm = TRUE),
+    prior_team_targets   = sum(team_total_targets, na.rm = TRUE),
+    prior_air_yards      = sum(air_yards_obs, na.rm = TRUE),
+    prior_team_air_yards = sum(team_total_air_yards, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  mutate(
+    prior_target_share    = if_else(prior_targets >= MIN_PRIOR_OPP,
+                                    prior_targets / prior_team_targets, NA_real_),
+    prior_air_yards_share = if_else(prior_targets >= MIN_PRIOR_OPP & prior_team_air_yards > 0,
+                                    prior_air_yards / prior_team_air_yards, NA_real_)
+  ) |>
+  select(player_id, prior_target_share, prior_air_yards_share)
+
+tier_vol_prior <- prior_vol_stats |>
+  left_join(wr_draft, by = "player_id") |>
+  filter(!is.na(draft_tier)) |>
+  group_by(draft_tier) |>
+  summarise(
+    tier_target_share    = median(prior_target_share,    na.rm = TRUE),
+    tier_air_yards_share = median(prior_air_yards_share, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+pos_target_share    <- median(prior_vol_stats$prior_target_share,    na.rm = TRUE)
+pos_air_yards_share <- median(prior_vol_stats$prior_air_yards_share, na.rm = TRUE)
+
+vol_const <- wr_draft |>
+  left_join(prior_vol_stats, by = "player_id") |>
+  left_join(tier_vol_prior,  by = "draft_tier") |>
+  mutate(
+    baseline_target_share    = coalesce(prior_target_share,    tier_target_share,    pos_target_share),
+    baseline_air_yards_share = coalesce(prior_air_yards_share, tier_air_yards_share, pos_air_yards_share)
+  ) |>
+  select(player_id, baseline_target_share, baseline_air_yards_share)
+
+# Team-level baseline_team_total_plays -- exact structural mirror of
+# 04a_wr_feature_layer.R's Step 5 team_plays_obs (ALL scrimmage plays from
+# raw pbp, position-agnostic) + Step 7b's prior_team_plays_vol. wr_outcomes
+# is WR-presence-filtered (one row per WR target); a team-game where WRs
+# went scoreless on targets would be silently missing from it -- rare for
+# WR but the same structural gap that's real and documented for TE (see
+# 10b5). A single-season pbp pull avoids that gap entirely; TARGET_SEASON-1
+# is always a completed season.
+pbp_prior_wr <- nflreadr::load_pbp(TARGET_SEASON - 1L) |>
+  filter(season_type == "REG", !is.na(epa), play == 1, !is.na(posteam))
+team_plays_obs_prior <- pbp_prior_wr |>
+  group_by(game_id, posteam) |>
+  summarise(team_total_plays_obs = n(), .groups = "drop")
+
+prior_team_plays_vol <- team_plays_obs_prior |>
+  group_by(posteam) |>
+  summarise(prior_team_total_plays = mean(team_total_plays_obs, na.rm = TRUE), .groups = "drop")
+
+lg_team_plays_scalar <- mean(team_plays_obs_prior$team_total_plays_obs, na.rm = TRUE)
+
+team_vol_const <- games_long |>
+  distinct(posteam) |>
+  left_join(prior_team_plays_vol, by = "posteam") |>
+  mutate(baseline_team_total_plays = coalesce(prior_team_total_plays, lg_team_plays_scalar)) |>
+  select(posteam, baseline_team_total_plays)
+
+n_na_bts <- sum(is.na(vol_const$baseline_target_share))
+cli_alert_success(
+  "baseline_target_share/baseline_air_yards_share/baseline_team_total_plays built | NA baseline_target_share: {n_na_bts} of {nrow(vol_const)}"
+)
+
 player_names <- rosters_all |>
   filter(season == TARGET_SEASON, !is.na(gsis_id)) |>
   distinct(gsis_id, .keep_all = TRUE) |>
@@ -209,6 +305,43 @@ snap_roll <- snaps_raw |>
   group_by(gsis_id) |>
   summarise(wt_snap_share = next_roll(snap_pct, ROLLING_WINDOW, DECAY_RATE),
             .groups = "drop")
+
+# Prior-season snap-share carryforward -- same fallback ladder as
+# baseline_target_share above (real prior-season value -> tier median ->
+# league median). Needs TARGET_SEASON-1 snap data, which the TARGET_SEASON
+# -only snaps_raw pull above doesn't have; TARGET_SEASON-1 is always a
+# completed season so this pull can't hit the pre-season loader guard for
+# real, but load_season_or_empty is used anyway for defensive consistency.
+snaps_prior_raw   <- load_season_or_empty(nflreadr::load_snap_counts, TARGET_SEASON - 1L)
+snap_pct_divisor_prior <- if (max(snaps_prior_raw$offense_pct, na.rm = TRUE) > 1.5) 100 else 1
+snaps_prior_clean <- snaps_prior_raw |>
+  filter(game_type == "REG", !is.na(pfr_player_id), !is.na(offense_pct)) |>
+  mutate(snap_pct = offense_pct / snap_pct_divisor_prior) |>
+  left_join(id_xwalk, by = c("pfr_player_id" = "pfr_id")) |>
+  filter(!is.na(gsis_id)) |>
+  select(gsis_id, snap_pct)
+
+prior_snap_stats <- snaps_prior_clean |>
+  group_by(gsis_id) |>
+  summarise(prior_snap_share = mean(snap_pct, na.rm = TRUE), .groups = "drop") |>
+  select(player_id = gsis_id, prior_snap_share)
+
+tier_snap_prior <- prior_snap_stats |>
+  left_join(wr_draft, by = "player_id") |>
+  filter(!is.na(draft_tier), !is.na(prior_snap_share)) |>
+  group_by(draft_tier) |>
+  summarise(tier_snap_share = median(prior_snap_share, na.rm = TRUE), .groups = "drop")
+
+pos_snap_share <- median(prior_snap_stats$prior_snap_share, na.rm = TRUE)
+
+snap_vol_const <- wr_draft |>
+  left_join(prior_snap_stats, by = "player_id") |>
+  left_join(tier_snap_prior,  by = "draft_tier") |>
+  mutate(baseline_snap_share = coalesce(prior_snap_share, tier_snap_share, pos_snap_share)) |>
+  select(player_id, baseline_snap_share)
+
+n_na_bss <- sum(is.na(snap_vol_const$baseline_snap_share))
+cli_alert_success("baseline_snap_share built | NA: {n_na_bss} of {nrow(snap_vol_const)}")
 
 # ===========================================================================
 # 5. DEFENSE CHAIN (frozen 04a step-9 logic from saved raw plays)
@@ -307,10 +440,13 @@ cli_h1("Step 6: Assemble slate rows")
 slate <- roster |>
   left_join(player_roll,  by = "player_id") |>
   left_join(season_const, by = "player_id") |>
+  left_join(vol_const,    by = "player_id") |>
   left_join(player_names, by = "player_id") |>
   mutate(form_residual = rolling_epa_per_opp - baseline_epa_per_opp) |>
   left_join(team_roll, by = "posteam") |>
+  left_join(team_vol_const, by = "posteam") |>
   left_join(snap_roll, by = c("player_id" = "gsis_id")) |>
+  left_join(snap_vol_const, by = "player_id") |>
   left_join(def_next,  by = "defteam") |>
   mutate(season = TARGET_SEASON, week = TARGET_WEEK) |>
   left_join(vegas_slate_lines(games_long, TARGET_SEASON, hindcast && !force_future),
@@ -340,7 +476,9 @@ if (hindcast) {
   feat_cols <- c("prior_epa_per_opp", "baseline_epa_per_opp", "rolling_epa_per_opp",
                  "form_residual", "wt_target_share", "wt_air_yards_share",
                  "wt_air_yards_per_target", "wt_snap_share", "wt_team_total_plays",
-                 "def_short_pass_epa_adj", "def_deep_pass_epa_adj", "games_played_so_far")
+                 "def_short_pass_epa_adj", "def_deep_pass_epa_adj", "games_played_so_far",
+                 "baseline_target_share", "baseline_air_yards_share",
+                 "baseline_snap_share", "baseline_team_total_plays")
 
   cmp <- truth |>
     select(player_id, all_of(feat_cols), def_used_fallback, is_cold_start) |>
