@@ -44,6 +44,10 @@ suppressPackageStartupMessages({
 
 set.seed(42)
 
+# D27 star_platt ship: shared core for the RB trailing-FP star buckets
+# (one implementation, two call sites -- fit side is 18e).
+source("R/18e_star_bucket_fns.R")
+
 args <- commandArgs(trailingOnly = TRUE)
 TARGET_SEASON <- if (length(args) >= 1) as.integer(args[1]) else 2026L
 TARGET_WEEK   <- if (length(args) >= 2) as.integer(args[2]) else 15L
@@ -479,14 +483,22 @@ cli_alert_success("TE simulation complete")
 
 cli_h1("Recalibration maps")
 
-apply_maps <- function(scored, map_start, map_boom, vol) {
+apply_maps <- function(scored, map_start, map_boom, vol, star_bucket = NULL) {
   # Widened uniform signature (2026-07-26): function(p, vol, spread, implied).
   # Slate Vegas columns may be NA (unposted lines) -- the Vegas closures
   # coalesce internally to a neutral adjustment.
-  p_start_recal <- pmin(pmax(map_start$map(scored$p_start, vol,
-                                           scored$team_spread, scored$implied_total), 0), 1)
-  p_boom_recal  <- pmin(pmax(map_boom$map(scored$p_boom,  vol,
-                                          scored$team_spread, scored$implied_total), 0), 1)
+  # D27 (2026-09-05): maps flagged needs_bucket take a fifth argument,
+  # the RB trailing-FP star bucket; all other closures keep 4 args.
+  call_map <- function(m, p) {
+    if (isTRUE(m$needs_bucket)) {
+      stopifnot(!is.null(star_bucket), !any(is.na(star_bucket)))
+      m$map(p, vol, scored$team_spread, scored$implied_total, star_bucket)
+    } else {
+      m$map(p, vol, scored$team_spread, scored$implied_total)
+    }
+  }
+  p_start_recal <- pmin(pmax(call_map(map_start, scored$p_start), 0), 1)
+  p_boom_recal  <- pmin(pmax(call_map(map_boom, scored$p_boom), 0), 1)
   scored |>
     mutate(
       p_start_recal = p_start_recal,
@@ -496,7 +508,13 @@ apply_maps <- function(scored, map_start, map_boom, vol) {
     )
 }
 
-rb_scored <- apply_maps(rb_scored, fp_maps[["RB_15+"]], fp_maps[["RB_20+"]], rb_scored$pred_vol)
+# D27: RB star buckets, ex-ante within the slate universe. trailing FP
+# uses strictly-prior completed games only (lag construction), so the
+# target week never leaks even on hindcast replays.
+rb_scored <- star_assign_buckets(rb_scored, star_trailing_fp(2016:TARGET_SEASON))
+
+rb_scored <- apply_maps(rb_scored, fp_maps[["RB_15+"]], fp_maps[["RB_20+"]], rb_scored$pred_vol,
+                        star_bucket = rb_scored$star_bucket)
 wr_scored <- apply_maps(wr_scored, fp_maps[["WR_15+"]], fp_maps[["WR_20+"]], wr_scored$pred_vol)
 te_scored <- apply_maps(te_scored, te_maps[["TE_12+"]], te_maps[["TE_17+"]], te_scored$pred_vol)
 qb_scored <- apply_maps(qb_scored, qb_maps[["QB_20+"]], qb_maps[["QB_25+"]], qb_scored$pred_carry)
@@ -575,8 +593,13 @@ if (n_skipped > 0) {
   quit(save = "no", status = 0)
 }
 
-bt_rbwr_path <- "output/06c_recal_probabilities.csv"
-bt_te_path   <- "output/12e_te_recal_probabilities.csv"
+# FIXED 2026-09-05 (found by the D27 ship gates): these pointed at the
+# unsuffixed rung-2-era files, so every post-D24 hindcast reconciled the
+# volfix deployment against the PRE-volfix backtest -- guaranteed WR/TE
+# breach. The volfix backtest lives in the _volfix-prefixed files (D24
+# refit); the unsuffixed ones are the frozen rung-2 receipts.
+bt_rbwr_path <- "output/06c_volfix_recal_probabilities.csv"
+bt_te_path   <- "output/12e_te_volfix_recal_probabilities.csv"
 bt_qb_path   <- "output/09b_qb_recal_probabilities.csv"
 
 bt_col <- function(stem, method) {
@@ -596,6 +619,17 @@ if (nrow(bt_rbwr) + nrow(bt_te) + nrow(bt_qb) == 0) {
 } else {
 
   pick_bt <- function(bt, pos, start_map, boom_map) {
+    # D27: star_platt has no column in the production backtest file --
+    # its honest walk-forward columns live in the 18d validation output
+    # (the 10acand chain, i.e. the deployed models' own cal folds).
+    # Cross-chain caveat noted there; a bounds breach is a STOP as ever.
+    if (pos == "RB" && start_map$method == "star_platt") {
+      return(readr::read_csv("output/18d_rb_star_recal_probabilities.csv",
+                             show_col_types = FALSE) |>
+               filter(season == TARGET_SEASON, week == TARGET_WEEK) |>
+               transmute(player_id, position = "RB",
+                         bt_p_start = p_start_new, bt_p_boom = p_boom_new))
+    }
     bt |>
       filter(position == pos) |>
       transmute(player_id, position,

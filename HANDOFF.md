@@ -206,6 +206,22 @@ If a DIFFERENT team goes missing later in the season, the warning now
 names it -- add it to `TEAM_CODE_ALIASES` rather than working around
 it downstream.
 
+## FOR EARNEST: D27 RB star_platt maps live (2026-09-05, read before arming)
+
+- data/fp_recal_maps.rds RB 15+/20+ entries are now star_platt: the map
+  conditions on an RB trailing-FP "star bucket" (top-12 / 13-24 / rest,
+  last-17-games PPR FP per game, shared core R/18e_star_bucket_fns.R).
+  WR/TE/QB maps and all models are untouched.
+- 10c computes the buckets at score time from nflreadr player stats --
+  a hard runtime data dependency: no stats access at score time = loud
+  failure (correct behavior; do not soften it to a silent default).
+- Expected live effect: elite RBs' p(start)/p(boom) up (~+9/+4pp at the
+  top-12), mid/deep RBs trimmed slightly. First live grading through
+  10f is the real confirmation -- watch the RB cells in the Tue eval.
+- 10c reconciliation backtest paths were stale (pre-volfix) since the
+  D24 promote -- now fixed to the _volfix files. If a hindcast recon
+  breaches, that is REAL again, not the stale-path artifact.
+
 ## Current state (2026-08-06)
 
 - 2026 rollover committed; 2025 opener backfill done (Vegas join 96%).

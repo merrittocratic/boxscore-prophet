@@ -851,11 +851,44 @@ guard (data-hungry, as expected).
 REPORTED market recheck: RB-start skill vs ECR -0.0084 -> -0.0049 with the
 CI now spanning zero (the D25 would-be FAIL becomes NEUTRAL); ~42% of the
 RB deficit closed. Pooled cells still FAIL -- WR untouched (see the 19-series
-WR context rung, pre-registered separately). NOT SHIPPED: promotion is a
-full ship pass (10a training + maps rds + live trailing-FP computation in
-10b2 + Earnest single-writer coordination) awaiting Steve's call; honest
-confirmation is live 2026 grading through 10f, since the defect was found
-and fixed within the same window.
+WR context rung, pre-registered separately).
+
+SHIPPED (2026-09-05, Steve cleared promote; single-writer note: maps rds
+is not an Earnest-only artifact and his cron is not yet armed). This
+amends D23's frozen-maps-for-2026 policy for the RB entries only, by
+explicit authorization with the D26/D27 receipts. Mechanism: RB 15+/20+
+entries of data/fp_recal_maps.rds replaced with star_platt closures
+(deployment fit on the full 10acand cal-fold history, R/18e_rb_star_
+deploy_maps.R), widened signature map(p, vol, spread, implied, bucket)
+gated by a needs_bucket flag so WR/TE/QB closures are untouched. Bucket
+computation shares one core (R/18e_star_bucket_fns.R) between fit side
+and 10c score side; 10c now loads player stats at score time (new hard
+runtime data dependency -- fails loudly rather than bucketing wrong).
+Models, deployment_params.rds, and deploy_models/ untouched.
+
+GATES (all passed before promote): shared-core bucket equality vs the
+18d validation file 0 mismatches / 2,126 rows; 10c reconciliation on
+2025 W13-15 all eight position x threshold cells inside the
+pre-committed bounds, zero flagged rows (RB r 0.9957-0.9988); WR/TE/QB
+byte-stable vs a production control run; RB direction matches the D26
+diagnosis (top-12 +9.3pp start / +4.4pp boom, b2/b3 trimmed);
+post-promote defaults run byte-identical to the gated candidate run.
+
+FOUND AND FIXED BY THE GATES: since the D24 promote, 10c's
+reconciliation had compared volfix deployment output against the
+PRE-volfix backtest files (stale hardcoded bt_rbwr_path/bt_te_path,
+last written at rung 2) -- any post-D24 full-slate hindcast breached and
+none had been run. Repointed to the _volfix backtest files. star_platt
+reconciles against the 18d walk-forward columns (10acand chain).
+
+ERRATUM: production RB maps before this ship were platt_vegas (the D24
+promote used the big-backtest refit), not the raw picks recorded from
+the candidate rds in D25's "shipped variants" enumeration. D25/D27
+verdicts hold a fortiori -- raw out-scored platt_vegas in the graded
+window, so the market comparison gave the model its best variant.
+
+Honest confirmation remains live 2026 grading through 10f -- the defect
+was found and fixed within the same historical window.
 
 ### D28. WR context rung: PUBLISHED NULL (2026-09-05)
 
