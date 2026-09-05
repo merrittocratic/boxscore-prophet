@@ -91,19 +91,70 @@ fi
 echo "== preflight clean =="
 
 # --- arm ----------------------------------------------------------------
+# launchd, not cron (2026-09-06): the MacMini is launchd-only -- Earnest
+# confirmed com.vix.cron is not registered, and every other periodic job
+# on the machine (including the news-capture agent) is a launchd plist.
+# Same times as the old crontab block: full Tue 23:30, rescore Thu/Sat/
+# Mon 15:00 + Sun 08:00 (all local ET, checked in preflight). RunAtLoad
+# is deliberately absent -- arming must never fire a production run.
+# Idempotent: plists are regenerated and reloaded wholesale on re-run.
+# Any stale crontab block from the pre-launchd version is removed.
+LA_DIR="${EARNEST_LAUNCH_AGENT_DIR:-$HOME/Library/LaunchAgents}"
+
+write_cadence_plist() {  # $1 label-suffix  $2 mode  $3 calendar-xml
+  cat > "$LA_DIR/com.boxscoreprophet.cadence.$1.plist" <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.boxscoreprophet.cadence.$1</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>$REPO/scripts/earnest_cron.sh</string>
+    <string>$2</string>
+  </array>
+  <key>StartCalendarInterval</key>
+  $3
+  <key>StandardOutPath</key>
+  <string>$REPO/logs/cron.log</string>
+  <key>StandardErrorPath</key>
+  <string>$REPO/logs/cron.log</string>
+</dict>
+</plist>
+PLIST
+}
+
 if [ "${1:-}" = "--arm" ]; then
-  MARK_BEGIN="# BEGIN boxscore-prophet cadence (managed by earnest_setup.sh)"
-  MARK_END="# END boxscore-prophet cadence"
-  CRON_BODY="$MARK_BEGIN
-30 23 * * 2  bash $REPO/scripts/earnest_cron.sh full    >> $REPO/logs/cron.log 2>&1
-0  15 * * 4  bash $REPO/scripts/earnest_cron.sh rescore >> $REPO/logs/cron.log 2>&1
-0  15 * * 6  bash $REPO/scripts/earnest_cron.sh rescore >> $REPO/logs/cron.log 2>&1
-0  8  * * 0  bash $REPO/scripts/earnest_cron.sh rescore >> $REPO/logs/cron.log 2>&1
-0  15 * * 1  bash $REPO/scripts/earnest_cron.sh rescore >> $REPO/logs/cron.log 2>&1
-$MARK_END"
-  ( crontab -l 2>/dev/null | sed "/^$MARK_BEGIN\$/,/^$MARK_END\$/d"; echo "$CRON_BODY" ) | crontab -
-  echo "== ARMED: crontab installed =="
-  crontab -l | sed -n "/boxscore-prophet/,/END boxscore/p"
+  mkdir -p "$LA_DIR"
+
+  write_cadence_plist full full \
+'<dict><key>Weekday</key><integer>2</integer><key>Hour</key><integer>23</integer><key>Minute</key><integer>30</integer></dict>'
+
+  write_cadence_plist rescore rescore \
+'<array>
+    <dict><key>Weekday</key><integer>4</integer><key>Hour</key><integer>15</integer><key>Minute</key><integer>0</integer></dict>
+    <dict><key>Weekday</key><integer>6</integer><key>Hour</key><integer>15</integer><key>Minute</key><integer>0</integer></dict>
+    <dict><key>Weekday</key><integer>0</integer><key>Hour</key><integer>8</integer><key>Minute</key><integer>0</integer></dict>
+    <dict><key>Weekday</key><integer>1</integer><key>Hour</key><integer>15</integer><key>Minute</key><integer>0</integer></dict>
+  </array>'
+
+  for j in full rescore; do
+    plutil -lint "$LA_DIR/com.boxscoreprophet.cadence.$j.plist" >/dev/null ||
+      { echo "== ARM FAILED: generated plist $j does not lint =="; exit 1; }
+    launchctl unload "$LA_DIR/com.boxscoreprophet.cadence.$j.plist" 2>/dev/null || true
+    launchctl load "$LA_DIR/com.boxscoreprophet.cadence.$j.plist"
+  done
+
+  # retire any crontab block left by the pre-launchd arming path
+  if crontab -l >/dev/null 2>&1; then
+    crontab -l | sed "/^# BEGIN boxscore-prophet cadence/,/^# END boxscore-prophet cadence/d" | crontab -
+  fi
+
+  echo "== ARMED: launchd agents installed =="
+  launchctl list | grep boxscoreprophet || true
 else
   echo "(not armed -- run with --arm during the September pass)"
 fi
