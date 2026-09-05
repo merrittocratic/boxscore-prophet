@@ -22,3 +22,4 @@ content/*_movers_column.md
 
 # Agent worktrees (session scratch, never project content)
 .claude/worktrees/
+logs/*.log
