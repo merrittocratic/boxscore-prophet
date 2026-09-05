@@ -1,0 +1,28 @@
+rank,nfl_name,pos,draft_round,draft_pick,draft_team,tracker_status,games,last_week_active,latest_opportunities,latest_snap_share,model_verdict
+1,Jeremiyah Love,RB,1,3,ARI,no_nfl_data_yet,0,NA,NA,NA,Baseline
+2,Carnell Tate,WR,1,4,TEN,no_nfl_data_yet,0,NA,NA,NA,Upside
+3,Jordyn Tyson,WR,1,8,NOR,no_nfl_data_yet,0,NA,NA,NA,Baseline
+4,Kenyon Sadiq,TE,1,16,NYJ,no_nfl_data_yet,0,NA,NA,NA,Baseline
+5,Makai Lemon,WR,1,20,PHI,no_nfl_data_yet,0,NA,NA,NA,Baseline
+6,KC Concepcion,WR,1,24,CLE,no_nfl_data_yet,0,NA,NA,NA,Baseline
+7,Omar Cooper Jr.,WR,1,30,NYJ,no_nfl_data_yet,0,NA,NA,NA,Baseline
+8,Jadarian Price,RB,1,32,SEA,no_nfl_data_yet,0,NA,NA,NA,Baseline
+9,Denzel Boston,WR,2,39,CLE,no_nfl_data_yet,0,NA,NA,NA,Baseline
+10,Germie Bernard,WR,2,47,PIT,no_nfl_data_yet,0,NA,NA,NA,Baseline
+11,Eli Stowers,TE,2,54,PHI,no_nfl_data_yet,0,NA,NA,NA,Baseline
+12,Nate Boerkircher,TE,2,56,JAX,no_nfl_data_yet,0,NA,NA,NA,Baseline
+13,Marlin Klein,TE,2,59,HOU,no_nfl_data_yet,0,NA,NA,NA,Baseline
+14,Max Klare,TE,2,61,LAR,no_nfl_data_yet,0,NA,NA,NA,Baseline
+15,Sam Roush,TE,3,69,CHI,no_nfl_data_yet,0,NA,NA,NA,Baseline
+16,Antonio Williams,WR,3,71,WAS,no_nfl_data_yet,0,NA,NA,NA,Baseline
+17,Malachi Fields,WR,3,74,NYG,no_nfl_data_yet,0,NA,NA,NA,Baseline
+18,Caleb Douglas,WR,3,75,MIA,no_nfl_data_yet,0,NA,NA,NA,Baseline
+19,Zachariah Branch,WR,3,79,ATL,no_nfl_data_yet,0,NA,NA,NA,Baseline
+20,Ja'Kobi Lane,WR,3,80,BAL,no_nfl_data_yet,0,NA,NA,NA,Baseline
+21,Chris Brazzell II,WR,3,83,CAR,no_nfl_data_yet,0,NA,NA,NA,Baseline
+22,Ted Hurst III,WR,3,84,TAM,no_nfl_data_yet,0,NA,NA,NA,Baseline
+23,Will Kacmarek,TE,3,87,MIA,no_nfl_data_yet,0,NA,NA,NA,Baseline
+24,Zavion Thomas,WR,3,89,CHI,no_nfl_data_yet,0,NA,NA,NA,Baseline
+25,Kaelon Black,RB,3,90,SFO,no_nfl_data_yet,0,NA,NA,NA,Baseline
+26,Chris Bell,WR,3,94,MIA,no_nfl_data_yet,0,NA,NA,NA,Baseline
+27,Eli Raridon,TE,3,95,NWE,no_nfl_data_yet,0,NA,NA,NA,Baseline
