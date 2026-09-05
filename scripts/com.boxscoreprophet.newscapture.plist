@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  News-capture launchd job (every 4 hours). Install on the MacMini:
+
+    1. Edit REPO_PATH below to the repo location on that machine
+       (laptop test: /Users/stephenmerritt/boxscore-prophet).
+    2. cp scripts/com.boxscoreprophet.newscapture.plist \
+         ~/Library/LaunchAgents/
+    3. launchctl load ~/Library/LaunchAgents/com.boxscoreprophet.newscapture.plist
+    4. Verify: launchctl list | grep newscapture, then check
+       ~/boxscore-news/logs/capture.log after the first interval
+       (RunAtLoad fires one capture immediately).
+
+  Health check for the Tuesday cadence: the existence of
+  ~/boxscore-news/ALERT_news_capture means 3+ consecutive failures.
+  Uninstall: launchctl unload ~/Library/LaunchAgents/com.boxscoreprophet.newscapture.plist
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.boxscoreprophet.newscapture</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/zsh</string>
+    <string>-lc</string>
+    <string>cd REPO_PATH &amp;&amp; Rscript R/10h_news_capture.R</string>
+  </array>
+  <key>StartInterval</key>
+  <integer>14400</integer>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>/tmp/newscapture.launchd.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/newscapture.launchd.log</string>
+</dict>
+</plist>
