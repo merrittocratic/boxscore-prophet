@@ -69,6 +69,31 @@ formality.
 
 ---
 
+## Decision-Relevant Tiers
+
+A start/sit example is only content if a real reader would actually be
+choosing between two names. Confirmed 2026-09-05: examples and movers
+should be drawn from the tier where the roster decision is genuinely
+live, not from the auto-start tier -- a big probability move on a
+player everyone starts regardless is not a dilemma, no matter how large
+the delta is.
+
+- **RB/WR:** roughly ranks 20-39 (flex/streaming range -- two flex-caliber
+  names competing for one spot). Avoid the top ~15-19 at either position;
+  those are auto-starts in standard lineups regardless of weekly movement.
+- **QB/TE:** roughly ranks 10-19 ("teens" -- single-starter streaming
+  range). Most standard leagues roster one QB and one TE with no flex
+  depth at either, so the real decision zone starts much earlier than
+  RB/WR's -- avoid the top ~9 at either position for the same reason.
+
+This applies to the movers column's pick selection (see its skill
+contract) and to any one-off illustrative example drawn from a board in
+other content. When checking a candidate example/mover against this,
+confirm against the actual board's rank column -- don't estimate from
+name recognition, since perceived star power and model rank can diverge.
+
+---
+
 ## Content Autonomy Levels
 
 - **CSVs, boards, receipts artifacts (10d/10f/10g outputs):** autonomous.

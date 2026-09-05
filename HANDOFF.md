@@ -1,8 +1,12 @@
 # Boxscore Prophet -- Orientation Brief
 
-Written 2026-08-04 as a handoff/orientation document. Read this
-first, then `building_in_public_log.md` for the story, then the
-README decision log (D1-D23) for full technical rationale.
+Written 2026-08-04 as a handoff/orientation document, revised
+2026-09-05 to split standing rules out into `CLAUDE.md` (auto-loaded
+every session -- read it first for anything that must never depend on
+an agent happening to open this file). This document is architecture,
+history, and current-state context, read on demand. Read `CLAUDE.md`
+first, then this, then `building_in_public_log.md` for the story, then
+the README decision log (D1-D23) for full technical rationale.
 
 ## What this is
 
@@ -81,9 +85,7 @@ the first live season (launch = Week 1, September).
   the Tuesday cadence, re-scores as injury reports land, posts
   drafts to Steve via Telegram for approval. Also a public-facing
   character in the content.
-- Single-writer rule: `data/deployment_params.rds` and
-  `data/deploy_models/` are committed only by Earnest in-season.
-- Git: no auto-commit/auto-push, ever. Pull before starting work.
+- Single-writer rule, git discipline: see `CLAUDE.md`.
 
 ## Content workflow (On the Record + movers column)
 
@@ -97,15 +99,10 @@ Split of responsibilities:
   `output/10d_receipts_<wtag>.md`; Earnest surfaces the top movers to
   Telegram via the digest (`refresh_latest.sh` manifest +
   `earnest_notify.sh`).
-- WRITTEN PROSE IS NEVER A REPO ARTIFACT. This is a general rule, not
-  just a movers-column rule (2026-08-23, after a repo cleanup found five
-  loose lede-in drafts and a content brief sitting in `content/`). Any
-  Substack/X draft -- movers columns, On the Record columns, lede-in
-  posts, briefs prepared for Cousin Claude, fact sheets -- goes to
-  `~/content/draft/` (Steve's personal content workspace, outside this
-  repo), never into this repo's `content/` folder. The `/movers-column`
-  and `/on-the-record` skills both write to `~/content/draft/w<NN>_*.md`
-  (zero-padded week, no season prefix) by contract.
+- Written-prose and Cousin-Claude-material rules: see `CLAUDE.md`. The
+  `/movers-column` and `/on-the-record` skills write to
+  `~/content/draft/w<NN>_*.md` (zero-padded week, no season prefix) by
+  contract.
 - What DOES stay in this repo's `content/`: chart-generating CODE
   (`teaser_charts.R`) and already-published/committed brand assets
   (`2026_season_teaser.md`, `content/img/*.png`, the tracked

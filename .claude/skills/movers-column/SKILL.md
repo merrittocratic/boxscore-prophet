@@ -52,7 +52,12 @@ draft off stale numbers.
   forced).
 - Every start/sit is a MOVER: picked from the top risers/fallers in the
   CSV, not from the top of the board. Obvious names moving in obvious
-  directions are not content.
+  directions are not content. Concretely, per `CONTENT_GUIDE.md`'s
+  Decision-Relevant Tiers: RB/WR picks from roughly rank 20-39, QB/TE
+  picks from roughly rank 10-19. A big delta on a player ranked above
+  that band is not a real start/sit dilemma no matter how large the
+  move -- skip it for a mover further down the board even if its delta
+  is smaller.
 - Each pick states: this week's probability, the player's own baseline,
   and the WHY in NFL terms from the context columns (front quality,
   projected volume shift, game environment, injury status). Never invent
