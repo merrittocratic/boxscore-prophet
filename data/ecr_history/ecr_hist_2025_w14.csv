@@ -1,0 +1,145 @@
+season,week,player_name,player_name_norm,position,ecr_rank,pos_rank,ecr_best,ecr_worst,team,fp_player_id,scoring,era,source_page,wayback_ts,before_kick
+2025,14,Jaxon Smith-Njigba,jaxon smith-njigba,WR,1,1,1,2,SEA,23070,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Ja'Marr Chase,jamarr chase,WR,2,2,1,3,CIN,19788,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Puka Nacua,puka nacua,WR,3,3,1,7,LAR,23180,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,CeeDee Lamb,ceedee lamb,WR,4,4,2,6,DAL,19202,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Rashee Rice,rashee rice,WR,5,5,3,5,KC,23113,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,George Pickens,george pickens,WR,6,6,5,6,DAL,22963,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Davante Adams,davante adams,WR,7,7,6,9,LAR,12123,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Nico Collins,nico collins,WR,8,8,8,14,HOU,20130,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Jaylen Waddle,jaylen waddle,WR,9,9,9,12,MIA,19790,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Chris Olave,chris olave,WR,10,10,9,13,NO,20111,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Amon-Ra St. Brown,amon-ra st brown,WR,11,11,7,20,DET,19799,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Jameson Williams,jameson williams,WR,12,12,8,17,DET,23677,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,A.J. Brown,aj brown,WR,13,13,10,16,PHI,18218,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Michael Wilson,michael wilson,WR,14,14,8,21,ARI,25333,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Emeka Egbuka,emeka egbuka,WR,15,15,12,17,TB,23062,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Justin Jefferson,justin jefferson,WR,16,16,12,23,MIN,19236,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,DeVonta Smith,devonta smith,WR,17,17,15,21,PHI,19222,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Ladd McConkey,ladd mcconkey,WR,18,18,13,23,LAC,26122,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Michael Pittman Jr.,michael pittman,WR,19,19,17,24,IND,19278,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Zay Flowers,zay flowers,WR,20,20,16,24,BAL,22916,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Christian Watson,christian watson,WR,21,21,16,29,GB,23886,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Jakobi Meyers,jakobi meyers,WR,22,22,18,25,JAC,18598,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Terry McLaurin,terry mclaurin,WR,23,23,16,25,WAS,18466,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Tee Higgins,tee higgins,WR,24,24,14,57,CIN,19211,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Khalil Shakir,khalil shakir,WR,25,25,22,29,BUF,23748,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Courtland Sutton,courtland sutton,WR,26,26,22,32,DEN,17253,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,DK Metcalf,dk metcalf,WR,27,27,22,33,PIT,18219,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Adonai Mitchell,adonai mitchell,WR,28,28,26,33,NYJ,24357,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Deebo Samuel Sr.,deebo samuel,WR,29,29,25,33,WAS,18244,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Alec Pierce,alec pierce,WR,30,30,27,31,IND,23791,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Chris Godwin Jr.,chris godwin,WR,31,31,24,35,TB,16406,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Brian Thomas Jr.,brian thomas,WR,32,32,28,38,JAC,23000,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Troy Franklin,troy franklin,WR,33,33,27,39,DEN,23092,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,DJ Moore,dj moore,WR,34,34,28,41,CHI,17265,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Romeo Doubs,romeo doubs,WR,35,35,32,39,GB,23794,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Luther Burden III,luther burden,WR,36,36,30,47,CHI,27016,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Keenan Allen,keenan allen,WR,37,37,34,45,LAC,11616,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Jayden Higgins,jayden higgins,WR,38,38,34,48,HOU,27077,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Xavier Worthy,xavier worthy,WR,39,39,37,43,KC,23019,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Quentin Johnston,quentin johnston,WR,40,40,33,49,LAC,23123,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Jordan Addison,jordan addison,WR,41,41,33,49,MIN,23107,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,John Metchie III,john metchie,WR,42,42,34,44,NYJ,22895,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Darnell Mooney,darnell mooney,WR,43,43,36,48,ATL,19810,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Devaughn Vele,devaughn vele,WR,44,44,34,46,NO,26409,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Tre Tucker,tre tucker,WR,45,45,36,49,LV,25337,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Josh Downs,josh downs,WR,46,46,42,50,IND,24706,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Jerry Jeudy,jerry jeudy,WR,47,47,45,49,CLE,19201,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Pat Bryant,pat bryant,WR,48,48,42,52,DEN,27211,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Dontayvion Wicks,dontayvion wicks,WR,49,49,46,61,GB,24354,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Cooper Kupp,cooper kupp,WR,50,50,47,56,SEA,16433,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Isaac TeSlaa,isaac teslaa,WR,51,51,41,67,DET,27446,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Malik Washington,malik washington,WR,52,52,45,59,MIA,26314,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Chimere Dike,chimere dike,WR,53,53,48,61,TEN,27315,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Elic Ayomanor,elic ayomanor,WR,54,54,51,59,TEN,27059,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Rashid Shaheed,rashid shaheed,WR,55,55,52,61,SEA,24687,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Tez Johnson,tez johnson,WR,56,56,53,60,TB,27147,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Keon Coleman,keon coleman,WR,57,57,54,60,BUF,26019,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Andrei Iosivas,andrei iosivas,WR,58,58,54,73,CIN,25335,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Gabe Davis,gabriel davis,WR,59,59,54,68,BUF,19398,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Rashod Bateman,rashod bateman,WR,60,60,61,68,BAL,19794,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Calvin Austin III,calvin austin,WR,61,61,59,68,PIT,23739,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Marquise Brown,marquise brown,WR,62,62,55,90,KC,18226,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,David Sills V,david sills,WR,63,63,55,98,ATL,18566,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Tyler Lockett,tyler lockett,WR,64,64,61,76,LV,13971,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Christian Kirk,christian kirk,WR,65,65,61,81,HOU,17268,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Cedric Tillman,cedric tillman,WR,66,66,60,71,CLE,25287,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Marvin Mims Jr.,marvin mims,WR,67,67,67,80,DEN,23080,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,DeAndre Hopkins,deandre hopkins,WR,68,68,65,80,BAL,11606,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Jack Bech,jack bech,WR,69,69,62,96,LV,27224,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Van Jefferson,van jefferson,WR,70,70,68,84,TEN,19483,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Xavier Hutchinson,xavier hutchinson,WR,71,71,68,86,HOU,25332,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,KaVontae Turpin,kavontae turpin,WR,72,72,71,85,DAL,18520,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Parker Washington,parker washington,WR,73,73,50,91,JAC,23106,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Olamide Zaccheaus,olamide zaccheaus,WR,74,74,54,96,CHI,18864,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Matthew Golden,matthew golden,WR,75,75,60,92,GB,26024,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Ryan Flournoy,ryan flournoy,WR,76,76,67,84,DAL,26398,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Jaylin Noel,jaylin noel,WR,77,77,73,88,HOU,27122,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Mason Tipton,mason tipton,WR,78,78,68,91,NO,26546,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Jalen Nailor,jalen nailor,WR,79,79,71,92,MIN,24177,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Sterling Shepard,sterling shepard,WR,80,80,70,86,TB,15569,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Tyrell Shavers,tyrell shavers,WR,81,81,77,87,BUF,25813,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Jayden Reed,jayden reed,WR,82,82,51,109,GB,23020,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Roman Wilson,roman wilson,WR,83,83,78,101,PIT,26160,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Tom Kennedy,tom kennedy,WR,84,84,67,97,DET,19052,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Tre Harris,tre harris,WR,85,85,82,94,LAC,26215,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Mitch Tinsley,mitch tinsley,WR,86,86,69,104,CIN,24370,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Isaiah Bond,isaiah bond,WR,87,87,81,100,CLE,24371,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Tyquan Thornton,tyquan thornton,WR,88,88,79,99,KC,22913,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Treylon Burks,treylon burks,WR,89,89,74,101,WAS,22905,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Jahan Dotson,jahan dotson,WR,90,90,87,97,PHI,23101,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,JuJu Smith-Schuster,juju smith-schuster,WR,91,91,87,95,KC,16427,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Brandin Cooks,brandin cooks,WR,92,92,81,113,BUF,12122,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Xavier Weaver,xavier weaver,WR,93,93,60,106,ARI,23957,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Xavier Smith,xavier smith,WR,94,94,76,102,LAR,25627,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Tim Patrick,tim patrick,WR,95,95,90,106,JAC,16556,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Jaylin Lane,jaylin lane,WR,96,96,93,103,WAS,27454,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Greg Dortch,greg dortch,WR,97,97,35,56,ARI,18585,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Konata Mumpfield,konata mumpfield,WR,98,98,94,108,LAR,27449,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Noah Brown,noah brown,WR,99,99,76,112,WAS,16443,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Jordan Whittington,jordan whittington,WR,100,100,95,114,LAR,23135,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Devontez Walker,devontez walker,WR,101,101,100,113,BAL,26011,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Nick Westbrook-Ikhine,nick westbrook-ikhine,WR,102,102,98,110,MIA,19747,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Allen Lazard,allen lazard,WR,103,103,100,110,NYJ,17301,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Dyami Brown,dyami brown,WR,104,104,96,117,JAC,20113,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Tutu Atwell,tutu atwell,WR,105,105,97,106,LAR,20126,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Dylan Drummond,dylan drummond,WR,106,106,78,105,ATL,25912,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Andre Baccellia,andre baccellia,WR,107,107,77,119,ARI,20050,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Chris Moore,chris moore,WR,108,108,98,115,FA,15654,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Austin Trammell,austin trammell,WR,109,109,77,115,JAC,23260,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Joshua Palmer,joshua palmer,WR,110,110,78,110,BUF,22845,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Kameron Johnson,kameron johnson,WR,111,111,104,137,TB,26626,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Isaiah Williams,isaiah williams,WR,112,112,96,108,NYJ,26379,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Malachi Corley,malachi corley,WR,113,113,100,104,CLE,26023,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Jalen Brooks,jalen brooks,WR,114,114,89,100,ARI,25468,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Cedrick Wilson Jr.,cedrick wilson,WR,115,115,98,109,MIA,17262,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Gage Larvadain,gage larvadain,WR,116,116,96,113,CLE,27829,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Trent Sherfield Sr.,trent sherfield,WR,117,117,101,110,ARI,17888,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Adam Thielen,adam thielen,WR,118,118,105,139,PIT,13429,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,James Proche II,james proche,WR,119,119,107,119,TEN,19359,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Cody White,cody white,WR,120,120,106,122,SEA,19739,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Devin Duvernay,devin duvernay,WR,121,121,107,117,CHI,19270,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Deven Thompkins,deven thompkins,WR,122,122,108,117,ATL,24134,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Tyler Johnson,tyler johnson,WR,123,123,99,120,NYJ,18633,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Laquon Treadwell,laquon treadwell,WR,124,124,114,121,IND,15495,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Casey Washington,casey washington,WR,125,125,103,123,ATL,26413,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Marquez Valdes-Scantling,marquez valdes-scantling,WR,126,126,111,130,PIT,17528,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Darius Cooper,darius cooper,WR,127,127,118,121,PHI,27866,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Dominic Lovett,dominic lovett,WR,128,128,112,129,DET,26013,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Bo Melton,bo melton,WR,129,129,104,131,GB,24049,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Dante Pettis,dante pettis,WR,130,130,118,135,NO,17264,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Charlie Jones,charlie jones,WR,131,131,112,130,CIN,25336,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Mason Kinsey,mason kinsey,WR,132,132,121,133,TEN,19704,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Lil'Jordan Humphrey,liljordan humphrey,WR,133,133,116,132,DEN,18590,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Derius Davis,derius davis,WR,134,134,121,129,LAC,25334,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Ben Skowronek,ben skowronek,WR,135,135,122,128,PIT,22843,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Jamal Agnew,jamal agnew,WR,136,136,108,134,ATL,16666,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Tylan Wallace,tylan wallace,WR,137,137,110,120,BAL,19801,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Malik Heath,malik heath,WR,138,138,115,117,FA,25668,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Arian Smith,arian smith,WR,139,139,116,117,NYJ,22965,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Kevin Austin Jr.,kevin austin,WR,140,140,122,132,NO,23049,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Jahdae Walker,jahdae walker,WR,141,141,116,126,CHI,27810,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,LaJohntay Wester,lajohntay wester,WR,142,142,111,138,BAL,27447,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Jonathan Mingo,jonathan mingo,WR,143,143,125,131,DAL,23030,PPR,json,ppr-wr,20251207024708,FALSE
+2025,14,Shedrick Jackson,shedrick jackson,WR,144,144,132,134,LV,25709,PPR,json,ppr-wr,20251207024708,FALSE

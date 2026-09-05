@@ -1,0 +1,104 @@
+season,week,player_name,player_name_norm,position,ecr_rank,pos_rank,ecr_best,ecr_worst,team,fp_player_id,scoring,era,source_page,wayback_ts,before_kick
+2024,16,Saquon Barkley,saquon barkley,RB,1,1,1,3,PHI,17240,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Jahmyr Gibbs,jahmyr gibbs,RB,2,2,1,4,DET,22968,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Josh Jacobs,josh jacobs,RB,3,3,2,7,GB,18269,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Bijan Robinson,bijan robinson,RB,4,4,2,6,ATL,23133,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,James Conner,james conner,RB,5,5,3,6,ARI,16447,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Chase Brown,chase brown,RB,6,6,5,8,CIN,25324,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,De'Von Achane,devon achane,RB,7,7,6,8,MIA,23136,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Derrick Henry,derrick henry,RB,8,8,6,14,BAL,15514,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Kyren Williams,kyren williams,RB,9,9,9,11,LAR,23059,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Chuba Hubbard,chuba hubbard,RB,10,10,8,12,CAR,19792,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,James Cook,james cook,RB,11,11,9,14,BUF,22958,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Joe Mixon,joe mixon,RB,12,12,10,17,HOU,16420,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Rico Dowdle,rico dowdle,RB,13,13,12,17,DAL,19647,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Bucky Irving,bucky irving,RB,14,14,13,19,TB,25981,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Jonathan Taylor,jonathan taylor,RB,15,15,10,18,IND,19217,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Isaac Guerendo,isaac guerendo,RB,16,16,13,17,SF,26392,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Aaron Jones Sr.,aaron jones,RB,17,17,13,19,MIN,16673,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Zach Charbonnet,zach charbonnet,RB,18,18,11,27,SEA,23152,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Brian Robinson Jr.,brian robinson,RB,19,19,18,22,WAS,20094,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Breece Hall,breece hall,RB,20,20,17,23,NYJ,22982,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Jerome Ford,jerome ford,RB,21,21,18,23,CLE,22921,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Tony Pollard,tony pollard,RB,22,22,20,23,TEN,18705,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Rachaad White,rachaad white,RB,23,23,19,25,TB,23891,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,D'Andre Swift,dandre swift,RB,24,24,20,29,CHI,19210,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Rhamondre Stevenson,rhamondre stevenson,RB,25,25,22,28,NE,22726,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Isiah Pacheco,isiah pacheco,RB,26,26,25,30,KC,24333,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Tyrone Tracy Jr.,tyrone tracy,RB,27,27,22,31,NYG,22980,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Kendre Miller,kendre miller,RB,28,28,24,31,NO,24360,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Tank Bigsby,tank bigsby,RB,29,29,27,30,JAC,22908,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Najee Harris,najee harris,RB,30,30,26,31,PIT,19302,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Travis Etienne Jr.,travis etienne,RB,31,31,28,33,JAC,19231,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Jaylen Warren,jaylen warren,RB,32,32,30,33,PIT,24209,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Tyjae Spears,tyjae spears,RB,33,33,32,37,TEN,25323,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Gus Edwards,gus edwards,RB,34,34,34,39,LAC,17687,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Javonte Williams,javonte williams,RB,35,35,35,42,DEN,22739,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Tyler Allgeier,tyler allgeier,RB,36,36,34,41,ATL,24172,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Justice Hill,justice hill,RB,37,37,35,42,BAL,18256,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Kimani Vidal,kimani vidal,RB,38,38,37,43,LAC,26355,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Kareem Hunt,kareem hunt,RB,39,39,35,51,KC,16425,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Kenneth Gainwell,kenneth gainwell,RB,40,40,39,53,PHI,23310,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Raheem Mostert,raheem mostert,RB,41,41,41,47,MIA,14338,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Isaiah Davis,isaiah davis,RB,42,42,40,50,NYJ,25977,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Devin Singletary,devin singletary,RB,43,43,42,52,NYG,18280,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Blake Corum,blake corum,RB,44,44,42,56,LAR,23013,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Ameer Abdullah,ameer abdullah,RB,45,45,35,55,LV,13924,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Antonio Gibson,antonio gibson,RB,46,46,44,50,NE,19624,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Cam Akers,cam akers,RB,47,47,45,51,MIN,19268,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Ty Johnson,ty johnson,RB,48,48,44,52,BUF,18406,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Braelon Allen,braelon allen,RB,49,49,43,56,NYJ,24346,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Alexander Mattison,alexander mattison,RB,50,50,34,63,LV,18621,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Jaleel McLaughlin,jaleel mclaughlin,RB,51,51,39,52,DEN,25876,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Ray Davis,ray davis,RB,52,52,47,54,BUF,26191,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Patrick Taylor Jr.,patrick taylor,RB,53,53,50,68,SF,19544,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Audric Estime,audric estime,RB,54,54,54,58,DEN,23054,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Jeremy McNichols,jeremy mcnichols,RB,55,55,55,59,WAS,16445,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Craig Reynolds,craig reynolds,RB,56,56,40,74,DET,19074,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Jaylen Wright,jaylen wright,RB,57,57,58,67,MIA,25987,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Sincere McCormick,sincere mccormick,RB,58,58,27,101,LV,23172,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Roschon Johnson,roschon johnson,RB,59,59,56,88,CHI,25322,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Sean Tucker,sean tucker,RB,60,60,59,69,TB,23679,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Emanuel Wilson,emanuel wilson,RB,61,61,61,70,GB,25885,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Samaje Perine,samaje perine,RB,62,62,60,72,KC,16423,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Chris Brooks,chris brooks,RB,63,63,61,69,GB,25823,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Khalil Herbert,khalil herbert,RB,64,64,64,76,CIN,22763,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Trey Benson,trey benson,RB,65,65,54,100,ARI,25388,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Jamaal Williams,jamaal williams,RB,66,66,54,74,NO,16424,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Cordarrelle Patterson,cordarrelle patterson,RB,67,67,63,72,PIT,11613,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Ezekiel Elliott,ezekiel elliott,RB,68,68,67,70,DAL,15498,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Dare Ogunbowale,dare ogunbowale,RB,69,69,61,80,HOU,16879,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Will Shipley,will shipley,RB,70,70,58,87,PHI,22930,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Alvin Kamara,alvin kamara,RB,71,71,38,103,NO,16421,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Mike Boone,mike boone,RB,72,72,64,75,CAR,17813,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Pierre Strong Jr.,pierre strong,RB,73,73,61,79,CLE,24173,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Kenny McIntosh,kenny mcintosh,RB,74,74,65,73,SEA,25329,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Chris Rodriguez Jr.,chris rodriguez,RB,75,75,69,91,WAS,22986,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Kenneth Walker III,kenneth walker,RB,76,76,35,120,SEA,23021,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Travis Homer,travis homer,RB,77,77,66,79,CHI,18616,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Kyle Juszczyk,kyle juszczyk,RB,78,78,72,82,SF,11798,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Dameon Pierce,dameon pierce,RB,79,79,76,83,HOU,22947,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,DeeJay Dallas,deejay dallas,RB,80,80,73,90,ARI,19521,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Trey Sermon,trey sermon,RB,81,81,78,81,IND,19425,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,D'Onta Foreman,donta foreman,RB,82,82,60,99,CLE,16407,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Sione Vaki,sione vaki,RB,83,83,57,74,DET,26309,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Hunter Luepke,hunter luepke,RB,84,84,76,87,DAL,25941,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Tyler Goodson,tyler goodson,RB,85,85,81,86,IND,22976,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,JaMycal Hasty,jamycal hasty,RB,86,86,82,85,NE,19627,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Darrynton Evans,darrynton evans,RB,87,87,74,91,CHI,19418,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Alec Ingold,alec ingold,RB,88,88,81,90,MIA,18571,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Ke'Shawn Vaughn,keshawn vaughn,RB,89,89,77,106,SF,19351,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Eric Gray,eric gray,RB,90,90,85,90,NYG,23075,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Ty Chandler,ty chandler,RB,91,91,86,93,MIN,19471,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Michael Burton,michael burton,RB,92,92,80,94,DEN,14191,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Hassan Haskins,hassan haskins,RB,93,93,87,95,LAC,23798,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Nick Chubb,nick chubb,RB,94,94,78,105,CLE,17246,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Rasheen Ali,rasheen ali,RB,95,95,86,96,BAL,25983,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Dylan Laube,dylan laube,RB,96,96,88,116,LV,26194,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,C.J. Ham,cj ham,RB,97,97,86,97,MIN,16209,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Carson Steele,carson steele,RB,98,98,89,100,KC,26372,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,George Holani,george holani,RB,99,99,93,98,SEA,22915,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Patrick Ricard,patrick ricard,RB,100,100,92,100,BAL,17145,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Keilan Robinson,keilan robinson,RB,101,101,91,102,JAC,22896,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Adam Prentice,adam prentice,RB,102,102,94,95,NO,23451,HALF,json,half-point-ppr-rb,20241218115256,TRUE
+2024,16,Julius Chestnut,julius chestnut,RB,103,103,97,99,TEN,24689,HALF,json,half-point-ppr-rb,20241218115256,TRUE

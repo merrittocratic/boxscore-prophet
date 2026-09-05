@@ -1,0 +1,101 @@
+season,week,player_name,player_name_norm,position,ecr_rank,pos_rank,ecr_best,ecr_worst,team,fp_player_id,scoring,era,source_page,wayback_ts,before_kick
+2020,5,Ezekiel Elliott,ezekiel elliott,RB,1,1,NA,NA,DAL,15498,NA,table,rb,20201007071312,TRUE
+2020,5,Alvin Kamara,alvin kamara,RB,2,2,NA,NA,NO,16421,NA,table,rb,20201007071312,TRUE
+2020,5,Dalvin Cook,dalvin cook,RB,3,3,NA,NA,MIN,16374,NA,table,rb,20201007071312,TRUE
+2020,5,Josh Jacobs,josh jacobs,RB,4,4,NA,NA,LV,18269,NA,table,rb,20201007071312,TRUE
+2020,5,Jonathan Taylor,jonathan taylor,RB,5,5,NA,NA,IND,19217,NA,table,rb,20201007071312,TRUE
+2020,5,Clyde Edwards-Helaire,clyde edwards-helaire,RB,6,6,NA,NA,KC,19325,NA,table,rb,20201007071312,TRUE
+2020,5,James Robinson,james robinson,RB,7,7,NA,NA,JAC,19631,NA,table,rb,20201007071312,TRUE
+2020,5,Chris Carson,chris carson,RB,8,8,NA,NA,SEA,16754,NA,table,rb,20201007071312,TRUE
+2020,5,Joe Mixon,joe mixon,RB,9,9,NA,NA,CIN,16420,NA,table,rb,20201007071312,TRUE
+2020,5,Kareem Hunt,kareem hunt,RB,10,10,NA,NA,CLE,16425,NA,table,rb,20201007071312,TRUE
+2020,5,David Johnson,david johnson,RB,11,11,NA,NA,HOU,13948,NA,table,rb,20201007071312,TRUE
+2020,5,Kenyan Drake,kenyan drake,RB,12,12,NA,NA,ARI,15637,NA,table,rb,20201007071312,TRUE
+2020,5,Miles Sanders,miles sanders,RB,13,13,NA,NA,PHI,18283,NA,table,rb,20201007071312,TRUE
+2020,5,Todd Gurley II,todd gurley,RB,14,14,NA,NA,ATL,13912,NA,table,rb,20201007071312,TRUE
+2020,5,Mike Davis,mike davis,RB,15,15,NA,NA,CAR,13943,NA,table,rb,20201007071312,TRUE
+2020,5,Derrick Henry,derrick henry,RB,16,16,NA,NA,TEN,15514,NA,table,rb,20201007071312,TRUE
+2020,5,Melvin Gordon III,melvin gordon,RB,17,17,NA,NA,DEN,13903,NA,table,rb,20201007071312,TRUE
+2020,5,Devin Singletary,devin singletary,RB,18,18,NA,NA,BUF,18280,NA,table,rb,20201007071312,TRUE
+2020,5,James Conner,james conner,RB,19,19,NA,NA,PIT,16447,NA,table,rb,20201007071312,TRUE
+2020,5,Jerick McKinnon,jerick mckinnon,RB,20,20,NA,NA,SF,12209,NA,table,rb,20201007071312,TRUE
+2020,5,Ronald Jones II,ronald jones,RB,21,21,NA,NA,TB,17243,NA,table,rb,20201007071312,TRUE
+2020,5,David Montgomery,david montgomery,RB,22,22,NA,NA,CHI,18239,NA,table,rb,20201007071312,TRUE
+2020,5,Mark Ingram II,mark ingram,RB,23,23,NA,NA,BAL,9872,NA,table,rb,20201007071312,TRUE
+2020,5,Antonio Gibson,antonio gibson,RB,24,24,NA,NA,WAS,19624,NA,table,rb,20201007071312,TRUE
+2020,5,Joshua Kelley,joshua kelley,RB,25,25,NA,NA,LAC,19445,NA,table,rb,20201007071312,TRUE
+2020,5,Darrell Henderson,darrell henderson,RB,26,26,NA,NA,LAR,18588,NA,table,rb,20201007071312,TRUE
+2020,5,Malcolm Brown,malcolm brown,RB,27,27,NA,NA,LAR,13953,NA,table,rb,20201007071312,TRUE
+2020,5,Myles Gaskin,myles gaskin,RB,28,28,NA,NA,MIA,17251,NA,table,rb,20201007071312,TRUE
+2020,5,Latavius Murray,latavius murray,RB,29,29,NA,NA,NO,11821,NA,table,rb,20201007071312,TRUE
+2020,5,J.K. Dobbins,jk dobbins,RB,30,30,NA,NA,BAL,19245,NA,table,rb,20201007071312,TRUE
+2020,5,Chase Edmonds,chase edmonds,RB,31,31,NA,NA,ARI,17496,NA,table,rb,20201007071312,TRUE
+2020,5,Devonta Freeman,devonta freeman,RB,32,32,NA,NA,NYG,12108,NA,table,rb,20201007071312,TRUE
+2020,5,Alexander Mattison,alexander mattison,RB,33,33,NA,NA,MIN,18621,NA,table,rb,20201007071312,TRUE
+2020,5,Damien Harris,damien harris,RB,34,34,NA,NA,NE,18230,NA,table,rb,20201007071312,TRUE
+2020,5,Rex Burkhead,rex burkhead,RB,35,35,NA,NA,NE,11655,NA,table,rb,20201007071312,TRUE
+2020,5,Frank Gore,frank gore,RB,36,36,NA,NA,NYJ,9218,NA,table,rb,20201007071312,TRUE
+2020,5,Jeff Wilson Jr.,jeff wilson,RB,37,37,NA,NA,SF,18026,NA,table,rb,20201007071312,TRUE
+2020,5,James White,james white,RB,38,38,NA,NA,NE,12195,NA,table,rb,20201007071312,TRUE
+2020,5,Jordan Howard,jordan howard,RB,39,39,NA,NA,MIA,15585,NA,table,rb,20201007071312,TRUE
+2020,5,Gus Edwards,gus edwards,RB,40,40,NA,NA,BAL,17687,NA,table,rb,20201007071312,TRUE
+2020,5,Nyheim Hines,nyheim hines,RB,41,41,NA,NA,IND,17297,NA,table,rb,20201007071312,TRUE
+2020,5,Brian Hill,brian hill,RB,42,42,NA,NA,ATL,16448,NA,table,rb,20201007071312,TRUE
+2020,5,Zack Moss,zack moss,RB,43,43,NA,NA,BUF,19263,NA,table,rb,20201007071312,TRUE
+2020,5,Duke Johnson Jr.,duke johnson,RB,44,44,NA,NA,HOU,13939,NA,table,rb,20201007071312,TRUE
+2020,5,Boston Scott,boston scott,RB,45,45,NA,NA,PHI,17612,NA,table,rb,20201007071312,TRUE
+2020,5,J.D. McKissic,jd mckissic,RB,46,46,NA,NA,WAS,16230,NA,table,rb,20201007071312,TRUE
+2020,5,Giovani Bernard,giovani bernard,RB,47,47,NA,NA,CIN,11644,NA,table,rb,20201007071312,TRUE
+2020,5,Tony Pollard,tony pollard,RB,48,48,NA,NA,DAL,18705,NA,table,rb,20201007071312,TRUE
+2020,5,Chris Thompson,chris thompson,RB,49,49,NA,NA,JAC,11651,NA,table,rb,20201007071312,TRUE
+2020,5,D'Ernest Johnson,dernest johnson,RB,50,50,NA,NA,CLE,19111,NA,table,rb,20201007071312,TRUE
+2020,5,Dion Lewis,dion lewis,RB,51,51,NA,NA,NYG,9983,NA,table,rb,20201007071312,TRUE
+2020,5,Justin Jackson,justin jackson,RB,52,52,NA,NA,LAC,17300,NA,table,rb,20201007071312,TRUE
+2020,5,Wayne Gallman,wayne gallman,RB,53,53,NA,NA,NYG,16422,NA,table,rb,20201007071312,TRUE
+2020,5,Matt Breida,matt breida,RB,54,54,NA,NA,MIA,17058,NA,table,rb,20201007071312,TRUE
+2020,5,Travis Homer,travis homer,RB,55,55,NA,NA,SEA,18616,NA,table,rb,20201007071312,TRUE
+2020,5,Darrel Williams,darrel williams,RB,56,56,NA,NA,KC,17514,NA,table,rb,20201007071312,TRUE
+2020,5,Jordan Wilkins,jordan wilkins,RB,57,57,NA,NA,IND,17497,NA,table,rb,20201007071312,TRUE
+2020,5,Ke'Shawn Vaughn,keshawn vaughn,RB,58,58,NA,NA,TB,19351,NA,table,rb,20201007071312,TRUE
+2020,5,Le'Veon Bell,leveon bell,RB,59,59,NA,NA,NYJ,11645,NA,table,rb,20201007071312,TRUE
+2020,5,Cam Akers,cam akers,RB,60,60,NA,NA,LAR,19268,NA,table,rb,20201007071312,TRUE
+2020,5,Peyton Barber,peyton barber,RB,61,61,NA,NA,WAS,15920,NA,table,rb,20201007071312,TRUE
+2020,5,Jalen Richard,jalen richard,RB,62,62,NA,NA,LV,16120,NA,table,rb,20201007071312,TRUE
+2020,5,LeSean McCoy,lesean mccoy,RB,63,63,NA,NA,TB,9398,NA,table,rb,20201007071312,TRUE
+2020,5,Lamical Perine,lamical perine,RB,64,64,NA,NA,NYJ,19333,NA,table,rb,20201007071312,TRUE
+2020,5,Darwin Thompson,darwin thompson,RB,65,65,NA,NA,KC,18620,NA,table,rb,20201007071312,TRUE
+2020,5,Corey Clement,corey clement,RB,66,66,NA,NA,PHI,16446,NA,table,rb,20201007071312,TRUE
+2020,5,Phillip Lindsay,phillip lindsay,RB,67,67,NA,NA,DEN,17498,NA,table,rb,20201007071312,TRUE
+2020,5,Devontae Booker,devontae booker,RB,68,68,NA,NA,LV,15555,NA,table,rb,20201007071312,TRUE
+2020,5,Ito Smith,ito smith,RB,69,69,NA,NA,ATL,17249,NA,table,rb,20201007071312,TRUE
+2020,5,Raheem Mostert,raheem mostert,RB,70,70,NA,NA,SF,14338,NA,table,rb,20201007071312,TRUE
+2020,5,Benny Snell Jr.,benny snell,RB,71,71,NA,NA,PIT,18609,NA,table,rb,20201007071312,TRUE
+2020,5,J.J. Taylor,jj taylor,RB,72,72,NA,NA,NE,19438,NA,table,rb,20201007071312,TRUE
+2020,5,DeeJay Dallas,deejay dallas,RB,73,73,NA,NA,SEA,19521,NA,table,rb,20201007071312,TRUE
+2020,5,T.J. Yeldon,tj yeldon,RB,74,74,NA,NA,BUF,13941,NA,table,rb,20201007071312,TRUE
+2020,5,Ryan Nall,ryan nall,RB,75,75,NA,NA,CHI,17777,NA,table,rb,20201007071312,TRUE
+2020,5,Royce Freeman,royce freeman,RB,76,76,NA,NA,DEN,17245,NA,table,rb,20201007071312,TRUE
+2020,5,Darrynton Evans,darrynton evans,RB,77,77,NA,NA,TEN,19418,NA,table,rb,20201007071312,TRUE
+2020,5,C.J. Prosise,cj prosise,RB,78,78,NA,NA,HOU,15614,NA,table,rb,20201007071312,TRUE
+2020,5,JaMycal Hasty,jamycal hasty,RB,79,79,NA,NA,SF,19627,NA,table,rb,20201007071312,TRUE
+2020,5,Jaylen Samuels,jaylen samuels,RB,80,80,NA,NA,PIT,17271,NA,table,rb,20201007071312,TRUE
+2020,5,Josh Adams,josh adams,RB,81,81,NA,NA,NYJ,17248,NA,table,rb,20201007071312,TRUE
+2020,5,Kyle Juszczyk,kyle juszczyk,RB,82,82,NA,NA,SF,11798,NA,table,rb,20201007071312,TRUE
+2020,5,Dare Ogunbowale,dare ogunbowale,RB,83,83,NA,NA,JAC,16879,NA,table,rb,20201007071312,TRUE
+2020,5,Anthony McFarland Jr.,anthony mcfarland,RB,84,84,NA,NA,PIT,19366,NA,table,rb,20201007071312,TRUE
+2020,5,Patrick Laird,patrick laird,RB,85,85,NA,NA,MIA,18332,NA,table,rb,20201007071312,TRUE
+2020,5,Dontrell Hilliard,dontrell hilliard,RB,86,86,NA,NA,CLE,18037,NA,table,rb,20201007071312,TRUE
+2020,5,Artavis Pierce,artavis pierce,RB,87,87,NA,NA,CHI,19547,NA,table,rb,20201007071312,TRUE
+2020,5,Ryquell Armstead,ryquell armstead,RB,88,88,NA,NA,JAC,18521,NA,table,rb,20201007071312,TRUE
+2020,5,C.J. Ham,cj ham,RB,89,89,NA,NA,MIN,16209,NA,table,rb,20201007071312,TRUE
+2020,5,Mike Boone,mike boone,RB,90,90,NA,NA,MIN,17813,NA,table,rb,20201007071312,TRUE
+2020,5,Alex Armah,alex armah,RB,91,91,NA,NA,CAR,16707,NA,table,rb,20201007071312,TRUE
+2020,5,Qadree Ollison,qadree ollison,RB,92,92,NA,NA,ATL,18480,NA,table,rb,20201007071312,TRUE
+2020,5,Carlos Hyde,carlos hyde,RB,93,93,NA,NA,SEA,12105,NA,table,rb,20201007071312,TRUE
+2020,5,Eno Benjamin,eno benjamin,RB,94,94,NA,NA,ARI,19361,NA,table,rb,20201007071312,TRUE
+2020,5,Kalen Ballage,kalen ballage,RB,95,95,NA,NA,FA,17250,NA,table,rb,20201007071312,TRUE
+2020,5,Justice Hill,justice hill,RB,96,96,NA,NA,BAL,18256,NA,table,rb,20201007071312,TRUE
+2020,5,Samaje Perine,samaje perine,RB,97,97,NA,NA,CIN,16423,NA,table,rb,20201007071312,TRUE
+2020,5,Ameer Abdullah,ameer abdullah,RB,98,98,NA,NA,MIN,13924,NA,table,rb,20201007071312,TRUE
+2020,5,Alec Ingold,alec ingold,RB,99,99,NA,NA,LV,18571,NA,table,rb,20201007071312,TRUE
+2020,5,Jakob Johnson,jakob johnson,RB,100,100,NA,NA,NE,18673,NA,table,rb,20201007071312,TRUE
