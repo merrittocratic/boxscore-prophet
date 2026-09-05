@@ -792,6 +792,105 @@ unchanged -- still a published null). Steve accepted the drift rather than
 republishing -- the RB model is expected to underperform on role-changers
 this year regardless; a real fix is planned for 2027, not a number patch now.
 
+### D25. Market-edge backtest vs archived ECR: NO DEMONSTRATED EDGE (2026-09-05)
+
+The CLAUDE.md bar ("real information beyond a market/consensus baseline")
+was unmeasurable -- FantasyPros' API serves live weeks only, no history.
+Broken open via the Wayback Machine: R/oneoff/ecr_wayback_harvest.R pulls
+~1,000 in-season snapshots of the public rankings pages (12 URL variants,
+three page eras, all parsed; the page's own week label is authoritative)
+into data/ecr_history/ -- 141 season-weeks of point-in-time weekly ECR,
+2016-2025, with capture provenance. Name-match rate to model rows 95.9-98.2%
+by position.
+
+PRE-REGISTERED (bars signed before the eval ran; R/18a_market_edge_backtest.R):
+model Brier vs a walk-forward isotonic pos_rank->P(hit) ECR baseline (fit
+only on seasons strictly before each eval season), shipped recal variants
+only, before-kickoff captures only, week-clustered bootstrap CIs. VERDICTS:
+QB start/boom NEUTRAL (start +2.25% relative, CI [-0.0005,+0.0100] -- just
+misses); RB/WR/TE pooled start AND boom FAIL -- the market BEATS the model
+(-2.7%/-2.8% relative, CIs exclude 0). Post-hoc symmetric-info diagnostic
+(pre-Friday captures only, labeled, non-regrading): skill-position deficit
+unchanged -- NOT a capture-timing artifact. Per the standing rule, no public
+differentiation claim ships; this is the null, published with receipts.
+
+Diagnostics (R/18b, labeled post-hoc): the model adds no blend information
+on top of ECR at skill positions; losses concentrate in model-bearish
+disagreements (market-favored players hitting 56%) and ECR ranks 1-12;
+NOT early-season; injury-listed weeks carry ~40% of the RB deficit.
+Drill-down: the missed rows are Achane/CMC/Bijan-class stars at model
+p 0.32-0.44 vs market-implied 0.62-0.77.
+
+### D26. Star-bucket calibration check: DISCONFIRMED at top-24; real effect is RB top-12 (2026-09-05)
+
+PRE-REGISTERED (R/18c_star_bucket_check.R; star = trailing-FP top-24 per
+Steve's amendment, bar = 7pp gap): ALL graded cells DISCONFIRMED (RB star
+gaps +2.9/+2.5pp -- real but under the bar; WR CIs span 0). Bars locked,
+verdict stands. The pre-registered REPORTED gradient then localized the
+true effect: RB trailing rank 1-12 = +10.2pp start / +8.4pp boom
+underconfident, while ranks 13-24 = -4.5pp and non-stars = -3.9pp
+OVERconfident -- RB is compressed at both ends, and widening the bucket to
+24 mixed two opposite miscalibrations that cancelled. WR shows NO level
+miscalibration anywhere (its D25 deficit is ordering/resolution, not
+calibration). pred_vol-defined stars show no gap: the misses are elite
+trailing-FP players whose predicted volume lags -- usage recency.
+
+### D27. RB star-dispersion recal fix: star_platt PASSES (2026-09-05)
+
+PRE-REGISTERED (bars approved before R/18d_rb_star_recal.R was written;
+D26 replication skipped by Steve's call, straight to fix). Candidates
+star_platt / star_platt_int / star_iso through the 06c walk-forward
+weekly-refit machinery on the shipped volfix RB rows; buckets = trailing-FP
+rank 1-12 / 13-24 / rest; selection = simplest passing. BARS per cell
+(RB 15+/20+): all three buckets within +/-4pp AND pooled Brier <= raw +
+0.0005. RESULT: star_platt passes both cells -- top-12 gaps +9.7/+8.7pp ->
+-2.9/-1.4pp, other buckets inside +/-4pp, pooled Brier IMPROVES
+(0.1750->0.1717 start, 0.1087->0.1081 boom). star_iso failed the Brier
+guard (data-hungry, as expected).
+
+REPORTED market recheck: RB-start skill vs ECR -0.0084 -> -0.0049 with the
+CI now spanning zero (the D25 would-be FAIL becomes NEUTRAL); ~42% of the
+RB deficit closed. Pooled cells still FAIL -- WR untouched (see the 19-series
+WR context rung, pre-registered separately). NOT SHIPPED: promotion is a
+full ship pass (10a training + maps rds + live trailing-FP computation in
+10b2 + Earnest single-writer coordination) awaiting Steve's call; honest
+confirmation is live 2026 grading through 10f, since the defect was found
+and fixed within the same window.
+
+### D28. WR context rung: PUBLISHED NULL (2026-09-05)
+
+PRE-REGISTERED (spec + bars approved before 19a/19b/19c ran; committed
+as code before grading). Motivation: D25's WR deficit vs ECR is
+ordering/resolution at the TOP of the board (per-position 18b split:
+model-bearish disagreements hit 48%, ranks 1-12 worst, deep board
+fine), and calibration is clean (D26) -- so only new inputs could help.
+Treatment (R/19a): 8 context features, all Friday-lock reconstructable,
+novelty-guarded against the rung-1 WR null (own-injury and
+same-position vacancy excluded) -- QB out/questionable + trailing team
+pass EPA, cross-position (TE/RB) vacated + returning target share,
+target-share slope/delta trajectory, opponent WR-FP-allowed. Arm B
+(R/19b) = volfix 04c clone, VOL_FEATURES extended, fixed
+hyperparameters (11d precedent); both arms through identical
+06b0/06b/06c chains; graded at the probability level (R/19c).
+
+BARS: top-12 trailing-FP bucket improvement >= 0.002 (start and boom)
+with week-clustered CI excluding 0; pooled WR guard +0.0005. RESULT:
+FAIL both cells -- top-12 start +0.0011 (CI [-0.0013,+0.0036]), boom
+-0.0010. Guard ok (features harmless); interval rubric unchanged;
+full-window improvements ~zero everywhere. The structured residue of
+week-of context (injury reports, QB status, vacancy math, usage
+trends, points-allowed) adds nothing to WR p(start)/p(boom) this
+architecture doesn't already extract.
+
+IMPLICATION (pre-stated in the spec): the WR-vs-market gap is now
+bounded away from cheap structured fixes on both sides -- calibration
+clean (D26), context features null (D28). What remains is the
+information class no feed carries (coverage assignments, coach intent,
+target-competition chatter) -- the live text-capture layer (10h,
+running from Week 1 2026) is the designated path, graded in-season
+through the override ledger before any training seat in 2027. No WR
+edge claim ships; WR presents on calibration honesty.
+
 ## Deployment runner (10-series) -- design, in progress 2026-07-17
 
 The backtest chain trains a model per fold; deployment is ONE MORE FOLD:
