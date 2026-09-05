@@ -21,7 +21,32 @@
 # construction -- only completed games enter trail_fp.
 
 star_trailing_fp <- function(seasons) {
-  nflreadr::load_player_stats(seasons) |>
+  # A season with no released stats yet (scoring Week 1 of a new season)
+  # loads as an error from nflreadr -- skip it with a warning; trailing
+  # FP then comes from prior seasons, which is correct pre-W1 behavior.
+  # Stay LOUD on real data loss: the season before the newest requested
+  # one must load, else abort (found by the 2026 W1 stage run 2026-09-05;
+  # hindcast weeks cannot catch this).
+  loaded <- lapply(seasons, function(s) {
+    tryCatch(nflreadr::load_player_stats(s),
+             error = function(e) { warning(sprintf(
+               "star_trailing_fp: season %d stats unavailable (%s) -- skipped",
+               s, conditionMessage(e)), call. = FALSE); NULL })
+  })
+  loaded <- Filter(Negate(is.null), loaded)
+  got <- vapply(loaded, function(d) d$season[1], numeric(1))
+  if (length(loaded) == 0 || !(max(seasons) - 1) %in% got)
+    stop(sprintf("star_trailing_fp: required history missing (loaded: %s)",
+                 paste(got, collapse = ",")))
+  # State AFTER each played game (last-17 mean including that game).
+  # star_assign_buckets rolls the most recent pre-week state forward, so
+  # a query week needs no log row of its own -- required for live weeks
+  # (no stats row exists before kickoff; found by the 2026 W1 stage run:
+  # the old exact-week join sent the entire live slate to b3). For a row
+  # whose player DID play that week, the most recent prior state equals
+  # the old strictly-before-this-week definition exactly, so fit-side
+  # buckets are unchanged (re-proven by the 18e equality gate).
+  dplyr::bind_rows(loaded) |>
     dplyr::filter(season_type == "REG", !is.na(player_id),
                   !is.na(fantasy_points_ppr)) |>
     dplyr::select(player_id, season, week, fantasy_points_ppr) |>
@@ -30,23 +55,33 @@ star_trailing_fp <- function(seasons) {
     dplyr::mutate(
       g = dplyr::row_number(),
       cum = cumsum(fantasy_points_ppr),
-      prior_games = g - 1L,
-      trail_n = pmin(prior_games, 17L),
-      trail_fp = dplyr::if_else(
-        prior_games > 0,
-        (dplyr::lag(cum, 1, default = 0) -
-           dplyr::lag(cum, 18, default = 0)) / trail_n,
-        NA_real_)
+      games_after = g,
+      trail_n_after = pmin(g, 17L),
+      trail_fp_after = (cum - dplyr::lag(cum, 17, default = 0)) /
+        trail_n_after,
+      sw = season * 100L + week
     ) |>
     dplyr::ungroup() |>
-    dplyr::select(player_id, season, week, trail_fp, trail_n)
+    dplyr::select(player_id, sw, trail_fp_after, games_after)
 }
 
 # rows: any frame with player_id, season, week (one row per player-week
 # within the universe). Returns rows + bucket (character: b1/b2/b3).
 star_assign_buckets <- function(rows, trailing) {
+  rows$..rid <- seq_len(nrow(rows))
+  state <- rows |>
+    dplyr::select(..rid, player_id, season, week) |>
+    dplyr::mutate(q_sw = season * 100L + week) |>
+    dplyr::inner_join(trailing, by = "player_id",
+                      relationship = "many-to-many") |>
+    dplyr::filter(sw < q_sw) |>
+    dplyr::group_by(..rid) |>
+    dplyr::slice_max(sw, n = 1, with_ties = FALSE) |>
+    dplyr::ungroup() |>
+    dplyr::select(..rid, trail_fp = trail_fp_after, trail_n = games_after)
   rows |>
-    dplyr::left_join(trailing, by = c("player_id", "season", "week")) |>
+    dplyr::left_join(state, by = "..rid") |>
+    dplyr::mutate(trail_n = pmin(trail_n, 17L)) |>
     dplyr::group_by(season, week) |>
     dplyr::mutate(
       trail_rank = ifelse(
@@ -61,7 +96,7 @@ star_assign_buckets <- function(rows, trailing) {
       )
     ) |>
     dplyr::ungroup() |>
-    dplyr::select(-trail_fp, -trail_n, -trail_rank)
+    dplyr::select(-trail_fp, -trail_n, -trail_rank, -..rid)
 }
 
 # Self-contained star_platt closure: coefficients captured by value, no

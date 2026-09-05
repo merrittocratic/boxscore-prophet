@@ -890,6 +890,19 @@ window, so the market comparison gave the model its best variant.
 Honest confirmation remains live 2026 grading through 10f -- the defect
 was found and fixed within the same historical window.
 
+POST-SHIP STAGE FINDS (2026-09-05, same day, September arming pass):
+scoring the REAL 2026 W1 slate on the laptop caught two live-week bugs
+hindcasts structurally cannot see: (1) star_trailing_fp hard-errored on
+the not-yet-released 2026 stats season (now skips it loudly, aborts
+only if the prior season is missing); (2) the bucket join required a
+same-week stats row, which no live week has pre-kickoff -- the entire
+W1 slate silently landed in b3 and stars got no boost. Rewritten to
+carry each player's post-game trailing state forward. Fit-side buckets
+provably unchanged (18e equality gate 0/2126, deployment coefficients
+byte-identical, hindcast W13 rescore byte-identical to the gated ship
+run) -- only the previously-broken live path changed. W1 stage after
+fix: Gibbs/Henry-class RBs at p(start) 0.53-0.57, as calibrated.
+
 ### D28. WR context rung: PUBLISHED NULL (2026-09-05)
 
 PRE-REGISTERED (spec + bars approved before 19a/19b/19c ran; committed

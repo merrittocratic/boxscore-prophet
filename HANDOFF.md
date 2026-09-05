@@ -221,6 +221,12 @@ it downstream.
 - 10c reconciliation backtest paths were stale (pre-volfix) since the
   D24 promote -- now fixed to the _volfix files. If a hindcast recon
   breaches, that is REAL again, not the stale-path artifact.
+- 2026-09-05 late: R/18e_star_bucket_fns.R amended after a 2026 W1
+  stage run caught two live-week bugs (unreleased-season stats load;
+  bucket join needed a same-week stats row so live slates all fell to
+  b3). Maps rds unchanged (coefficients identical); pull picks up the
+  fns fix automatically. A W1 board whose top RBs sit near p_start
+  0.35 instead of ~0.55 means the OLD fns file is somehow loaded.
 
 ## Current state (2026-08-06)
 

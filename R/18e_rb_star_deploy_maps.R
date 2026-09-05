@@ -90,8 +90,8 @@ stopifnot(all(abs(verify$gap_start_new) < 0.02),
 # the graded window, so the market comparison gave the model its best
 # variant. star_platt replaces platt_vegas here.
 prod <- readRDS("data/fp_recal_maps.rds")
-stopifnot(prod[["RB_15+"]]$method == "platt_vegas",
-          prod[["RB_20+"]]$method == "platt_vegas")
+stopifnot(prod[["RB_15+"]]$method %in% c("platt_vegas", "star_platt"),
+          prod[["RB_20+"]]$method %in% c("platt_vegas", "star_platt"))
 
 BUCKET_DEF <- paste(
   "trailing PPR FP/game, last 17 REG games played, >=6 games, ranked",
