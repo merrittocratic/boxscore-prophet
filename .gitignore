@@ -19,3 +19,6 @@ scripts/earnest_delivery.env
 # Movers columns are drafted to ~/content/draft, not this repo. Guard against
 # a stray landing in content/ (the committed 2025_w15 demo stays tracked).
 content/*_movers_column.md
+
+# Agent worktrees (session scratch, never project content)
+.claude/worktrees/
