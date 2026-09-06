@@ -1,4 +1,3 @@
 position,rank,player_id,player_name,player_disp,posteam,defteam,start_pct,boom_pct,disp_vol,p_start_recal,pred_vol
-RB,1,00-0034959,Andrew Beck,Andrew Beck,NYJ,TEN,10,4,10,0.09772192867470109,9.741143732211707
-RB,2,00-0040556,Corey Kiner,Corey Kiner,NE,SEA,10,3,10,0.09553328660471172,9.948512355890378
-WR,1,00-0039920,Malachi Corley,Malachi Corley,CLE,JAX,7,2,5,0.07402358703235226,4.940678340760388
+RB,1,00-0035125,Alec Ingold,Alec Ingold,LAC,ARI,12,5,10,0.12368972792363882,9.95417685224866
+WR,1,00-0039920,Malachi Corley,Malachi Corley,CLE,JAX,8,2,5,0.08498063747386896,4.865181180877663
