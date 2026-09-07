@@ -42,8 +42,6 @@ suppressPackageStartupMessages({
   library(cli)
 })
 
-set.seed(42)
-
 # D27 star_platt ship: shared core for the RB trailing-FP star buckets
 # (one implementation, two call sites -- fit side is 18e).
 source("R/18e_star_bucket_fns.R")
@@ -56,6 +54,21 @@ WTAG <- sprintf("%d_w%02d", TARGET_SEASON, TARGET_WEEK)
 
 N_SIM     <- 2000
 CDF_PROBS <- c(0.05, 0.10, 0.25, 0.50, 0.75, 0.90, 0.95)
+
+# Per-position RNG seeds (2026-09-06 rebuild prep), replacing a single
+# set.seed(42) shared by all four simulate_*() calls in sequence. Under the
+# old scheme, each position's draws depended on its position in the call
+# order, not on the position itself -- documented at the old TE-must-be-last
+# comment below (only RB, drawing first, actually started from seed 42; WR,
+# QB, and TE each drew from wherever the shared stream landed after every
+# prior position's N_SIM=2000 iterations). Seeding each position
+# independently, keyed by position identity rather than call order, makes
+# every position's draws invariant to the order the calls happen to appear
+# in. This is a ONE-TIME BREAK: all four positions' probabilities move vs
+# every previously shipped run, since none of them draw from the same stream
+# position as before. Re-baseline the frozen reconciliation reference after
+# this change, not before -- do not diff against old numbers expecting a match.
+SIM_SEED <- c(RB = 42L, WR = 43L, QB = 44L, TE = 45L)
 
 # Thresholds (content spec): RB/WR PPR 15/20, TE PPR 12/17 (12_te
 # feasibility rate-matched cuts), QB standard 20/25
@@ -422,8 +435,11 @@ simulate_rbwr <- function(scored, fit, pools, tier_fn, rho, thresh) {
   scored |> mutate(p_start = hit_start / N_SIM, p_boom = hit_boom / N_SIM)
 }
 
+set.seed(SIM_SEED[["RB"]])
 rb_scored <- simulate_rbwr(rb_scored, fp_fits$rb, pools_rb, tier_rb, rho_rb, THRESH$RB)
 cli_alert_success("RB simulation complete")
+
+set.seed(SIM_SEED[["WR"]])
 wr_scored <- simulate_rbwr(wr_scored, fp_fits$wr, pools_wr, tier_wr, rho_wr, THRESH$WR)
 cli_alert_success("WR simulation complete")
 
@@ -467,13 +483,16 @@ simulate_qb <- function(scored, fit, pools, chol_m, thresh) {
   scored |> mutate(p_start = hit_start / N_SIM, p_boom = hit_boom / N_SIM)
 }
 
+set.seed(SIM_SEED[["QB"]])
 qb_scored <- simulate_qb(qb_scored, qb_fit, pools_qb, chol_qb, THRESH$QB)
 cli_alert_success("QB simulation complete")
 
-# TE simulates LAST by design: inserting it earlier shifts the shared RNG
-# stream and jitters already-published RB/WR/QB probabilities (found on the
-# first TE recon run -- a QB row moved 2.6pp and tripped the 10pp row flag;
-# RB/WR/QB draw order is now byte-stable vs the pre-TE shipped chain).
+# TE no longer needs to simulate last for RNG reasons -- each position now
+# seeds its own stream (SIM_SEED above), so call order cannot jitter another
+# position's draws. Kept last anyway simply to avoid reordering anything else
+# in this commit; the old jitter risk this comment used to warn about
+# (a QB row moving 2.6pp from a shared stream) can no longer happen.
+set.seed(SIM_SEED[["TE"]])
 te_scored <- simulate_rbwr(te_scored, te_fit, pools_te, tier_te, rho_te, THRESH$TE)
 cli_alert_success("TE simulation complete")
 
