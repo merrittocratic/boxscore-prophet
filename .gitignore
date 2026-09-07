@@ -12,6 +12,10 @@ MODEL_BRIDGE.md
 # FantasyPros ECR feed drops: licensed data, never redistribute via the repo
 data/ecr/
 data/vegas/
+
+# Raw vendor exports (PFF, Reception Perception, etc): keep out of git
+# regardless of ToS status on any given vendor -- never redistribute.
+data/vendor_raw/
 logs/cron.log
 output/latest/
 scripts/earnest_delivery.env
