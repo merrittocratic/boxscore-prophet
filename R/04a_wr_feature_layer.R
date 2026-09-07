@@ -43,7 +43,16 @@ DEF_WINDOW         <- 6L
 FALLBACK_MIN_GAMES <- 3L
 SHORT_PASS_THRESH  <- 10L    # air_yards; < this = short pass, >= this = deep pass
 MIN_PRIOR_OPP      <- 10L    # prior-season targets needed for a non-NA baseline
-MIN_OPPORTUNITIES  <- 3L     # per-game target floor; rows below this are dropped
+
+# Overridable seam (2026-09-06, D29 single-stage rebuild): the floor exists
+# only because epa_per_opp is undefined at zero opportunities -- fantasy
+# points are defined at zero, so a floor-free variant of this table is a
+# real ablation arm (R/21c_fp_train_tables.R), not just a diagnostic.
+# Default reproduces prior behavior exactly (a bare Rscript run still
+# writes the real data/wr_feature_table.rds unchanged).
+MIN_OPPORTUNITIES <- as.integer(Sys.getenv("MIN_OPP", "3"))
+FT_RDS_OUT        <- Sys.getenv("FT_RDS_OUT", "data/wr_feature_table.rds")
+FT_CSV_OUT        <- Sys.getenv("FT_CSV_OUT", "output/wr_feature_table_v1.0.csv")
 
 # ===========================================================================
 # HELPERS  (identical to RB layer)
@@ -680,11 +689,11 @@ dir.create("output", showWarnings = FALSE, recursive = TRUE)
 saveRDS(wr_plays,      "data/wr_plays.rds")
 saveRDS(wr_outcomes,   "data/wr_outcomes.rds")
 saveRDS(def_final,     "data/wr_def_rolling_final.rds")
-saveRDS(feature_table, "data/wr_feature_table.rds")
-readr::write_csv(feature_table, "output/wr_feature_table_v1.0.csv")
+saveRDS(feature_table, FT_RDS_OUT)
+readr::write_csv(feature_table, FT_CSV_OUT)
 
-cli_alert_success("data/wr_feature_table.rds")
-cli_alert_success("output/wr_feature_table_v1.0.csv")
+cli_alert_success(FT_RDS_OUT)
+cli_alert_success(FT_CSV_OUT)
 
 # ===========================================================================
 # 12. VALIDATION SUMMARY

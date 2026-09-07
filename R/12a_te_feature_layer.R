@@ -44,7 +44,16 @@ DEF_WINDOW         <- 6L
 FALLBACK_MIN_GAMES <- 3L
 SHORT_PASS_THRESH  <- 7L     # TE-specific: median TE aDOT 6.9 (12_te receipts)
 MIN_PRIOR_OPP      <- 10L    # prior-season targets needed for a non-NA baseline
-MIN_OPPORTUNITIES  <- 3L     # per-game target floor; rows below this are dropped
+
+# Overridable seam (2026-09-06, D29 single-stage rebuild): the floor exists
+# only because epa_per_opp is undefined at zero opportunities -- fantasy
+# points are defined at zero, so a floor-free variant of this table is a
+# real ablation arm (R/21c_fp_train_tables.R), not just a diagnostic.
+# Default reproduces prior behavior exactly (a bare Rscript run still
+# writes the real data/te_feature_table.rds unchanged).
+MIN_OPPORTUNITIES <- as.integer(Sys.getenv("MIN_OPP", "3"))
+FT_RDS_OUT        <- Sys.getenv("FT_RDS_OUT", "data/te_feature_table.rds")
+FT_CSV_OUT        <- Sys.getenv("FT_CSV_OUT", "output/te_feature_table_v1.0.csv")
 
 # ===========================================================================
 # HELPERS  (identical to RB/WR layers)
@@ -729,11 +738,11 @@ dir.create("output", showWarnings = FALSE, recursive = TRUE)
 saveRDS(te_plays,      "data/te_plays.rds")
 saveRDS(te_outcomes,   "data/te_outcomes.rds")
 saveRDS(def_final,     "data/te_def_rolling_final.rds")
-saveRDS(feature_table, "data/te_feature_table.rds")
-readr::write_csv(feature_table, "output/te_feature_table_v1.0.csv")
+saveRDS(feature_table, FT_RDS_OUT)
+readr::write_csv(feature_table, FT_CSV_OUT)
 
-cli_alert_success("data/te_feature_table.rds")
-cli_alert_success("output/te_feature_table_v1.0.csv")
+cli_alert_success(FT_RDS_OUT)
+cli_alert_success(FT_CSV_OUT)
 
 # ===========================================================================
 # 12. VALIDATION SUMMARY
