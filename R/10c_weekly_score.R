@@ -189,10 +189,33 @@ SIM_PARAMS_FILE     <- Sys.getenv("SIM_PARAMS_FILE",     "output/06b_sim_params.
 TE_SIM_PARAMS_FILE  <- Sys.getenv("TE_SIM_PARAMS_FILE",  "output/12d_te_sim_params.csv")
 QB_SIM_PARAMS_FILE  <- Sys.getenv("QB_SIM_PARAMS_FILE",  "output/09a_qb_sim_params.csv")
 OUT_SUFFIX           <- Sys.getenv("OUT_SUFFIX", "")
-cli_alert_info("Deployment params: {DP_FILE} | recal maps: {FP_RECAL_MAPS_FILE} / {TE_RECAL_MAPS_FILE} | out suffix: '{OUT_SUFFIX}'")
+
+# S1 shadow mode (2026-09-08): MODEL_ARCH selects RB/WR's architecture only
+# -- TE has no single-stage arm (never built/graded during the D29 rebuild)
+# and QB was confirmed fine as two-stage, so both always run the twostage
+# path below regardless of this flag. "fp1" never touches production: it
+# requires a non-empty OUT_SUFFIX so shadow output can never land on a
+# production filename, and it reads its own deployment_params_fp.rds /
+# fp_recal_maps_fp1.rds artifacts (R/21n, R/21e), never data/deployment_
+# params.rds or data/fp_recal_maps.rds.
+MODEL_ARCH <- Sys.getenv("MODEL_ARCH", "twostage")
+stopifnot(MODEL_ARCH %in% c("twostage", "fp1"))
+if (MODEL_ARCH == "fp1") {
+  stopifnot(nzchar(OUT_SUFFIX))
+}
+DP_FP_FILE             <- Sys.getenv("DP_FP_FILE",             "data/deployment_params_fp.rds")
+FP_RECAL_MAPS_FP1_FILE <- Sys.getenv("FP_RECAL_MAPS_FP1_FILE", "data/fp_recal_maps_fp1.rds")
+
+cli_alert_info("Deployment params: {DP_FILE} | recal maps: {FP_RECAL_MAPS_FILE} / {TE_RECAL_MAPS_FILE} | out suffix: '{OUT_SUFFIX}' | model arch: {MODEL_ARCH}")
 
 dp <- readRDS(DP_FILE)
 cli_alert_info("Deployment models trained through {dp$rb$trained_through$season}-W{dp$rb$trained_through$week}")
+
+if (MODEL_ARCH == "fp1") {
+  dp_fp    <- readRDS(DP_FP_FILE)
+  fp1_maps <- readRDS(FP_RECAL_MAPS_FP1_FILE)
+  cli_alert_info("fp1 params: {DP_FP_FILE} (RB thru {dp_fp$rb$trained_through$season}-W{dp_fp$rb$trained_through$week}, arm={dp_fp$rb$arm} | WR thru {dp_fp$wr$trained_through$season}-W{dp_fp$wr$trained_through$week}, arm={dp_fp$wr$arm}) | fp1 recal maps: {FP_RECAL_MAPS_FP1_FILE}")
+}
 
 encode_features <- function(df) {
   df |>
@@ -212,6 +235,61 @@ predict_component <- function(df, spec) {
   p   <- predict(mod, make_matrix(df, spec$features))
   stopifnot(all(is.finite(p)))
   p
+}
+
+# fp1 (single-stage) direct conformal CDF inversion -- identical to
+# R/21d_fp_single_stage_backtest.R:266-284 / R/21n's training-time
+# machinery. Row-wise P(Y >= t) from a monotone per-row quantile grid.
+p_at_least <- function(Qmat, probs, t) {
+  n <- nrow(Qmat)
+  out <- numeric(n)
+  k <- length(probs)
+  for (i in seq_len(n)) {
+    q <- Qmat[i, ]
+    if (t <= q[1]) {
+      slope <- (probs[2] - probs[1]) / (q[2] - q[1])
+      cdf <- probs[1] + slope * (t - q[1])
+    } else if (t >= q[k]) {
+      slope <- (probs[k] - probs[k - 1]) / (q[k] - q[k - 1])
+      cdf <- probs[k] + slope * (t - q[k])
+    } else {
+      cdf <- approx(q, probs, xout = t)$y
+    }
+    out[i] <- 1 - cdf
+  }
+  pmin(pmax(out, 0), 1)
+}
+
+# fp1 point + interval + raw-probability chain for one position -- mirrors
+# R/21d's per-fold serve logic (lines 423-429) using the deployed fp1
+# artifacts instead of a fold-local fit. No Monte Carlo needed: the K=11
+# signed conformal grid inverts directly (R/21d header: "zero sampling
+# noise, deterministic reruns"). lo/hi_80 read off q10/q90, lo/hi_90 off
+# q05/q95 -- the grid has no exact 50% pair (QLEVELS has .20/.30/.70/.80,
+# not .25/.75), so lo/hi_50_fp is deliberately not produced; nothing
+# downstream needs it yet.
+score_fp1 <- function(enc, dpos) {
+  X_pt <- make_matrix(enc, dpos$point$features)
+  X_vl <- make_matrix(enc, dpos$vol$features)
+  m_pt <- lightgbm::lgb.load(dpos$point$model_file)
+  m_vl <- lightgbm::lgb.load(dpos$vol$model_file)
+  pred_pt <- predict(m_pt, X_pt)
+  pred_vl <- predict(m_vl, X_vl)
+  stopifnot(all(is.finite(pred_pt)), all(is.finite(pred_vl)))
+
+  qgrid <- dpos$conformal$qgrid
+  qlevs <- dpos$conformal$qlevels
+  alpha <- dpos$conformal$alpha
+  scale <- pmax(pred_vl, 1)^alpha
+  Q     <- outer(scale, qgrid)
+  Q     <- sweep(Q, 1, pred_pt, "+")
+  colnames(Q) <- names(qgrid)
+
+  list(pred_fp = pred_pt, pred_vol = pred_vl,
+       lo_80_fp = Q[, "q10"], hi_80_fp = Q[, "q90"],
+       lo_90_fp = Q[, "q05"], hi_90_fp = Q[, "q95"],
+       p_start = p_at_least(Q, qlevs, dpos$thresh["start"]),
+       p_boom  = p_at_least(Q, qlevs, dpos$thresh["boom"]))
 }
 
 # Translation + recal + sim artifacts
@@ -302,45 +380,71 @@ vol_scale <- function(pred_vol, alpha, label) {
   pmax(pred_vol, 1)^alpha
 }
 
-# --- RB: symmetric + power-law (03a-v2 mechanism) ---
+# --- RB: symmetric + power-law (03a-v2 mechanism), OR fp1 direct conformal ---
 rb_enc <- encode_features(rb_slate)
-rb_pred_eff <- predict_component(rb_enc, dp$rb$eff)
-rb_pred_vol <- predict_component(rb_enc, dp$rb$vol)
-rb_pred_tot <- rb_pred_eff * rb_pred_vol
-rb_sc       <- vol_scale(rb_pred_vol, dp$rb$tot$alpha, "RB")
+if (MODEL_ARCH == "fp1") {
+  rb_fp1 <- score_fp1(rb_enc, dp_fp$rb)
+  rb_scored <- bind_cols(
+    rb_slate |> select(player_id, player_name, posteam, defteam, game_id,
+                       season, week, report_status, practice_status,
+                       team_spread, implied_total),
+    tibble(pred_fp = rb_fp1$pred_fp, pred_vol = rb_fp1$pred_vol,
+           lo_80_fp = rb_fp1$lo_80_fp, hi_80_fp = rb_fp1$hi_80_fp,
+           lo_90_fp = rb_fp1$lo_90_fp, hi_90_fp = rb_fp1$hi_90_fp,
+           p_start = rb_fp1$p_start, p_boom = rb_fp1$p_boom)
+  ) |> mutate(position = "RB", .before = 1)
+} else {
+  rb_pred_eff <- predict_component(rb_enc, dp$rb$eff)
+  rb_pred_vol <- predict_component(rb_enc, dp$rb$vol)
+  rb_pred_tot <- rb_pred_eff * rb_pred_vol
+  rb_sc       <- vol_scale(rb_pred_vol, dp$rb$tot$alpha, "RB")
 
-rb_scored <- bind_cols(
-  rb_slate |> select(player_id, player_name, posteam, defteam, game_id,
-                     season, week, report_status, practice_status,
-                     team_spread, implied_total),
-  tibble(pred_eff = rb_pred_eff),
-  sym_cols(rb_pred_vol, dp$rb$vol$qs, "vol"),
-  tibble(pred_tot = rb_pred_tot)
-)
-# tot bounds row-wise: half-widths vary per row through the volume scale
-for (i in seq_along(dp$rb$tot$q_norm)) {
-  cv <- c("50", "80", "90")[i]
-  hw <- dp$rb$tot$q_norm[i] * rb_sc
-  rb_scored[[paste0("lo_", cv, "_tot")]] <- rb_pred_tot - hw
-  rb_scored[[paste0("hi_", cv, "_tot")]] <- rb_pred_tot + hw
+  rb_scored <- bind_cols(
+    rb_slate |> select(player_id, player_name, posteam, defteam, game_id,
+                       season, week, report_status, practice_status,
+                       team_spread, implied_total),
+    tibble(pred_eff = rb_pred_eff),
+    sym_cols(rb_pred_vol, dp$rb$vol$qs, "vol"),
+    tibble(pred_tot = rb_pred_tot)
+  )
+  # tot bounds row-wise: half-widths vary per row through the volume scale
+  for (i in seq_along(dp$rb$tot$q_norm)) {
+    cv <- c("50", "80", "90")[i]
+    hw <- dp$rb$tot$q_norm[i] * rb_sc
+    rb_scored[[paste0("lo_", cv, "_tot")]] <- rb_pred_tot - hw
+    rb_scored[[paste0("hi_", cv, "_tot")]] <- rb_pred_tot + hw
+  }
+  rb_scored <- rb_scored |> mutate(position = "RB", .before = 1)
 }
-rb_scored <- rb_scored |> mutate(position = "RB", .before = 1)
 
-# --- WR: asymmetric signed qsets + power-law (04c mechanism) ---
+# --- WR: asymmetric signed qsets + power-law (04c mechanism), OR fp1 ---
 wr_enc <- encode_features(wr_slate)
-wr_pred_eff <- predict_component(wr_enc, dp$wr$eff)
-wr_pred_vol <- predict_component(wr_enc, dp$wr$vol)
-wr_pred_tot <- wr_pred_eff * wr_pred_vol
-wr_sc       <- vol_scale(wr_pred_vol, dp$wr$tot$alpha, "WR")
+if (MODEL_ARCH == "fp1") {
+  wr_fp1 <- score_fp1(wr_enc, dp_fp$wr)
+  wr_scored <- bind_cols(
+    wr_slate |> select(player_id, player_name, posteam, defteam, game_id,
+                       season, week, report_status, practice_status,
+                       team_spread, implied_total),
+    tibble(pred_fp = wr_fp1$pred_fp, pred_vol = wr_fp1$pred_vol,
+           lo_80_fp = wr_fp1$lo_80_fp, hi_80_fp = wr_fp1$hi_80_fp,
+           lo_90_fp = wr_fp1$lo_90_fp, hi_90_fp = wr_fp1$hi_90_fp,
+           p_start = wr_fp1$p_start, p_boom = wr_fp1$p_boom)
+  ) |> mutate(position = "WR", .before = 1)
+} else {
+  wr_pred_eff <- predict_component(wr_enc, dp$wr$eff)
+  wr_pred_vol <- predict_component(wr_enc, dp$wr$vol)
+  wr_pred_tot <- wr_pred_eff * wr_pred_vol
+  wr_sc       <- vol_scale(wr_pred_vol, dp$wr$tot$alpha, "WR")
 
-wr_scored <- bind_cols(
-  wr_slate |> select(player_id, player_name, posteam, defteam, game_id,
-                     season, week, report_status, practice_status,
-                     team_spread, implied_total),
-  tibble(pred_eff = wr_pred_eff),
-  asym_cols(wr_pred_vol, dp$wr$vol$qset, "vol"),
-  asym_cols(wr_pred_tot, dp$wr$tot$qset, "tot", scale = wr_sc)
-) |> mutate(position = "WR", .before = 1)
+  wr_scored <- bind_cols(
+    wr_slate |> select(player_id, player_name, posteam, defteam, game_id,
+                       season, week, report_status, practice_status,
+                       team_spread, implied_total),
+    tibble(pred_eff = wr_pred_eff),
+    asym_cols(wr_pred_vol, dp$wr$vol$qset, "vol"),
+    asym_cols(wr_pred_tot, dp$wr$tot$qset, "tot", scale = wr_sc)
+  ) |> mutate(position = "WR", .before = 1)
+}
 
 # --- TE: asymmetric signed qsets + power-law (12c mechanism, WR clone) ---
 te_enc <- encode_features(te_slate)
@@ -374,7 +478,11 @@ qb_scored <- bind_cols(
   sym_cols(qb_pred_tot,       dp$qb$qs$tot,      "tot")
 ) |> mutate(position = "QB", .before = 1)
 
-cli_alert_success("Predictions: RB tot mean={round(mean(rb_pred_tot), 2)} | WR {round(mean(wr_pred_tot), 2)} | TE {round(mean(te_pred_tot), 2)} | QB {round(mean(qb_pred_tot), 2)} EPA")
+rbwr_pred_col   <- if (MODEL_ARCH == "fp1") "pred_fp" else "pred_tot"
+rbwr_pred_label <- if (MODEL_ARCH == "fp1") "FP" else "EPA"
+rb_pred_mean    <- round(mean(rb_scored[[rbwr_pred_col]]), 2)
+wr_pred_mean    <- round(mean(wr_scored[[rbwr_pred_col]]), 2)
+cli_alert_success("Predictions: RB {rbwr_pred_label} mean={rb_pred_mean} | WR {rbwr_pred_label} mean={wr_pred_mean} | TE {round(mean(te_pred_tot), 2)} EPA | QB {round(mean(qb_pred_tot), 2)} EPA")
 
 # ===========================================================================
 # 3. SIMULATION TRANSLATION (cloned 06b / 09a draw logic)
@@ -435,13 +543,17 @@ simulate_rbwr <- function(scored, fit, pools, tier_fn, rho, thresh) {
   scored |> mutate(p_start = hit_start / N_SIM, p_boom = hit_boom / N_SIM)
 }
 
-set.seed(SIM_SEED[["RB"]])
-rb_scored <- simulate_rbwr(rb_scored, fp_fits$rb, pools_rb, tier_rb, rho_rb, THRESH$RB)
-cli_alert_success("RB simulation complete")
+if (MODEL_ARCH == "fp1") {
+  cli_alert_info("RB/WR: fp1 direct conformal CDF inversion already produced p_start/p_boom -- no Monte Carlo simulation needed (R/21d header: zero sampling noise, deterministic reruns)")
+} else {
+  set.seed(SIM_SEED[["RB"]])
+  rb_scored <- simulate_rbwr(rb_scored, fp_fits$rb, pools_rb, tier_rb, rho_rb, THRESH$RB)
+  cli_alert_success("RB simulation complete")
 
-set.seed(SIM_SEED[["WR"]])
-wr_scored <- simulate_rbwr(wr_scored, fp_fits$wr, pools_wr, tier_wr, rho_wr, THRESH$WR)
-cli_alert_success("WR simulation complete")
+  set.seed(SIM_SEED[["WR"]])
+  wr_scored <- simulate_rbwr(wr_scored, fp_fits$wr, pools_wr, tier_wr, rho_wr, THRESH$WR)
+  cli_alert_success("WR simulation complete")
+}
 
 simulate_qb <- function(scored, fit, pools, chol_m, thresh) {
   n       <- nrow(scored)
@@ -532,9 +644,10 @@ apply_maps <- function(scored, map_start, map_boom, vol, star_bucket = NULL) {
 # target week never leaks even on hindcast replays.
 rb_scored <- star_assign_buckets(rb_scored, star_trailing_fp(2016:TARGET_SEASON))
 
-rb_scored <- apply_maps(rb_scored, fp_maps[["RB_15+"]], fp_maps[["RB_20+"]], rb_scored$pred_vol,
+rbwr_maps <- if (MODEL_ARCH == "fp1") fp1_maps else fp_maps
+rb_scored <- apply_maps(rb_scored, rbwr_maps[["RB_15+"]], rbwr_maps[["RB_20+"]], rb_scored$pred_vol,
                         star_bucket = rb_scored$star_bucket)
-wr_scored <- apply_maps(wr_scored, fp_maps[["WR_15+"]], fp_maps[["WR_20+"]], wr_scored$pred_vol)
+wr_scored <- apply_maps(wr_scored, rbwr_maps[["WR_15+"]], rbwr_maps[["WR_20+"]], wr_scored$pred_vol)
 te_scored <- apply_maps(te_scored, te_maps[["TE_12+"]], te_maps[["TE_17+"]], te_scored$pred_vol)
 qb_scored <- apply_maps(qb_scored, qb_maps[["QB_20+"]], qb_maps[["QB_25+"]], qb_scored$pred_carry)
 
@@ -543,7 +656,7 @@ for (d in list(rb_scored, wr_scored, te_scored, qb_scored)) {
             all(d$p_boom_recal <= d$p_start_recal + 1e-12))
 }
 
-cli_alert_success("Maps applied: RB={fp_maps[['RB_15+']]$method}/{fp_maps[['RB_20+']]$method} WR={fp_maps[['WR_15+']]$method}/{fp_maps[['WR_20+']]$method} TE={te_maps[['TE_12+']]$method}/{te_maps[['TE_17+']]$method} QB={qb_maps[['QB_20+']]$method}/{qb_maps[['QB_25+']]$method}")
+cli_alert_success("Maps applied: RB={rbwr_maps[['RB_15+']]$method}/{rbwr_maps[['RB_20+']]$method} WR={rbwr_maps[['WR_15+']]$method}/{rbwr_maps[['WR_20+']]$method} TE={te_maps[['TE_12+']]$method}/{te_maps[['TE_17+']]$method} QB={qb_maps[['QB_20+']]$method}/{qb_maps[['QB_25+']]$method}")
 
 # ===========================================================================
 # 5. SAVE SCORED SLATE
@@ -556,15 +669,40 @@ id_cols <- c("position", "player_id", "player_name", "posteam", "defteam",
 prob_cols <- c("p_start", "p_boom", "p_start_recal", "p_boom_recal",
                "recal_method_start", "recal_method_boom")
 
-slim <- function(d, vol_col) {
-  d |>
-    mutate(thresh_start = THRESH[[position[1]]]["start"],
-           thresh_boom  = THRESH[[position[1]]]["boom"],
-           pred_vol_out = .data[[vol_col]]) |>
-    select(all_of(id_cols), thresh_start, thresh_boom,
-           pred_vol = pred_vol_out, pred_tot,
-           lo_80_tot, hi_80_tot, lo_90_tot, hi_90_tot,
-           all_of(prob_cols))
+if (MODEL_ARCH == "fp1") {
+  # fp1 RB/WR carry pred_fp/lo_XX_fp (FP-space), TE/QB carry pred_tot/lo_XX_tot
+  # (EPA-space) in the SAME run/file -- both column families always exist
+  # (NA where not applicable) so a fp1 row's FP-space numbers can never
+  # silently occupy the EPA-space pred_tot column ("a silent unit change
+  # cannot propagate", per the S1 plan note). Never runs in the default
+  # (twostage) path, so production's scored-slate schema is untouched.
+  slim <- function(d, vol_col) {
+    d <- d |>
+      mutate(thresh_start = THRESH[[position[1]]]["start"],
+             thresh_boom  = THRESH[[position[1]]]["boom"],
+             pred_vol_out = .data[[vol_col]])
+    for (col in c("pred_tot", "lo_80_tot", "hi_80_tot", "lo_90_tot", "hi_90_tot",
+                  "pred_fp",  "lo_80_fp",  "hi_80_fp",  "lo_90_fp",  "hi_90_fp")) {
+      if (!col %in% names(d)) d[[col]] <- NA_real_
+    }
+    d |>
+      select(all_of(id_cols), thresh_start, thresh_boom,
+             pred_vol = pred_vol_out,
+             pred_tot, lo_80_tot, hi_80_tot, lo_90_tot, hi_90_tot,
+             pred_fp,  lo_80_fp,  hi_80_fp,  lo_90_fp,  hi_90_fp,
+             all_of(prob_cols))
+  }
+} else {
+  slim <- function(d, vol_col) {
+    d |>
+      mutate(thresh_start = THRESH[[position[1]]]["start"],
+             thresh_boom  = THRESH[[position[1]]]["boom"],
+             pred_vol_out = .data[[vol_col]]) |>
+      select(all_of(id_cols), thresh_start, thresh_boom,
+             pred_vol = pred_vol_out, pred_tot,
+             lo_80_tot, hi_80_tot, lo_90_tot, hi_90_tot,
+             all_of(prob_cols))
+  }
 }
 
 scored_all <- bind_rows(
@@ -605,6 +743,12 @@ cli_alert_success("{out_detail}")
 # ===========================================================================
 
 cli_h1("Reconciliation vs backtest chain")
+
+if (MODEL_ARCH == "fp1") {
+  cli_alert_info("fp1 shadow run: skipping two-stage reconciliation -- comparing single-stage probabilities against the two-stage backtest baseline is not a valid check for a different architecture. S2 (R/21p_shadow_grade.R) covers fp1 vs production vs ECR instead.")
+  cli_h1("Step 10c complete -- {TARGET_SEASON} week {TARGET_WEEK} ({RUN_MODE}, fp1 shadow)")
+  quit(save = "no", status = 0)
+}
 
 if (n_skipped > 0) {
   cli_alert_info("Partial slate ({RUN_MODE} mode, {n_skipped} games skipped) -- reconciliation only runs on full-slate hindcasts.")
