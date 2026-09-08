@@ -53,11 +53,21 @@ necessary but not sufficient -- it's the entry price for a probability
 to mean anything, not the product. The real bar: does the model's
 prediction carry real information beyond what a market/consensus
 baseline (FantasyPros ECR, Vegas-implied lines) already gives a reader
-for free, today. As of 2026-09-05 this has not been measured -- no
-historical ECR archive exists to backtest against (FantasyPros' API
-serves live-week rankings only, no history), and the live weekly-drop
-accumulator (`R/10f_weekly_eval.R`'s `ecr_baseline` column) needs 4+
-in-season weeks before it's estimable. Proving genuine edge over a
-market/consensus baseline -- not just calibration -- is the top
-modeling priority right now, ahead of further content work. No public
-differentiation claim ships until it's real and reproducible.
+for free, today. This HAS been measured once: D25 (2026-09-05)
+backtested the model against a real historical ECR archive
+(`data/ecr_history/`, 141 season-weeks 2016-2025, Wayback-harvested by
+`R/archive/oneoff/ecr_wayback_harvest.R`, still read live by
+`R/18a`/`18b`/`18d`/`21a`) and found the market beats the model on
+RB/WR/TE start/boom (-2.7%/-2.8% relative, CIs exclude 0; QB NEUTRAL)
+-- a real, documented null, not an unmeasured gap, and part of what
+motivated the D29 single-stage rebuild. The open question now is
+whether the single-stage architecture closes that gap; re-running D25
+against it is unfinished, not un-startable -- do not re-describe this
+as "no archive exists." Separately, the LIVE in-season accumulator
+(`R/10f_weekly_eval.R`'s `ecr_baseline` column) still needs 4+
+in-season weeks before it's estimable -- that's a different,
+going-forward measurement, not blocked on archive availability.
+Proving genuine edge over a market/consensus baseline -- not just
+calibration -- is the top modeling priority, ahead of further content
+work. No public differentiation claim ships until it's real and
+reproducible.
