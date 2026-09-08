@@ -60,23 +60,44 @@ source("R/metrics.R")
 args     <- commandArgs(trailingOnly = TRUE)
 POSITION <- if (length(args) >= 1) toupper(args[1]) else cli_abort("Usage: Rscript R/21d_fp_single_stage_backtest.R <RB|WR|TE> [base|floorfree]")
 ARM      <- if (length(args) >= 2) args[2] else "base"
-stopifnot(POSITION %in% c("RB", "WR", "TE"), ARM %in% c("base", "floorfree"))
+stopifnot(POSITION %in% c("RB", "WR", "TE"), ARM %in% c("base", "floorfree", "lagusage", "lagusage_pff", "ae", "weather"))
 FOLD_LIMIT <- as.integer(Sys.getenv("FOLD_LIMIT", NA))
 
 # ===========================================================================
-# PARAMETERS -- identical to 03a_v2 (grid, split, fixed params frozen)
+# PARAMETERS -- identical to 03a_v2 (grid, split, fixed params frozen), with
+# an opt-in WIDE_GRID variant (2026-09-07) for testing whether the original
+# 32-combo grid under-served the larger PFF-enriched feature sets (up to 84
+# columns) -- WIDE_GRID unset/0 reproduces every already-graded arm's
+# result exactly; WIDE_GRID=1 is a distinct, larger search, never the
+# silent default, so no prior arm's grading is retroactively changed by
+# this addition.
+#
+# max rounds/patience scale together deliberately: adding lr=0.01 to the
+# grid without raising INNER_MAX_ROUNDS would cut that candidate off
+# before it converges (lower lr needs proportionally more rounds), making
+# it look artificially worse than its true performance -- a silent bias
+# against the exact value being added to test finer granularity.
 # ===========================================================================
 
 CAL_FRAC <- 0.20
+WIDE_GRID <- Sys.getenv("WIDE_GRID", unset = "0") == "1"
 
-TUNE_GRID <- expand.grid(
-  num_leaves       = c(7L, 15L, 31L, 63L),
-  min_data_in_leaf = c(10L, 20L, 50L, 100L),
-  lr               = c(0.02, 0.05)
-)
+TUNE_GRID <- if (WIDE_GRID) {
+  expand.grid(
+    num_leaves       = c(7L, 15L, 31L, 63L, 127L),
+    min_data_in_leaf = c(5L, 10L, 20L, 50L, 100L),
+    lr               = c(0.01, 0.02, 0.05, 0.10)
+  )
+} else {
+  expand.grid(
+    num_leaves       = c(7L, 15L, 31L, 63L),
+    min_data_in_leaf = c(10L, 20L, 50L, 100L),
+    lr               = c(0.02, 0.05)
+  )
+}
 
-INNER_MAX_ROUNDS <- 500L
-INNER_EARLY_STOP <- 20L
+INNER_MAX_ROUNDS <- if (WIDE_GRID) 2000L else 500L
+INNER_EARLY_STOP <- if (WIDE_GRID) 50L else 20L
 REFIT_ROUNDS_MIN <- 10L
 
 LGBM_FIXED <- list(
@@ -164,6 +185,49 @@ EFF_FEATURES_MAP <- list(RB = RB_EFF_FEATURES, WR = WR_EFF_FEATURES, TE = TE_EFF
 POINT_FEATURES   <- lapply(names(VOL_FEATURES_MAP), function(p) {
   union(EFF_FEATURES_MAP[[p]], VOL_FEATURES_MAP[[p]])
 }) |> setNames(names(VOL_FEATURES_MAP))
+
+# ARM == "lagusage" (A2, the AE's control arm): union these 42 raw lagged
+# usage columns onto point_feats -- names must match R/21c1's output exactly.
+LAGUSAGE_CHANNELS <- list(
+  RB = c("snap_share", "carry_share_obs", "target_share_obs",
+         "rz_carry_share", "rz_target_share", "routes_proxy"),
+  WR = c("snap_share", "target_share_obs", "air_yards_share_obs",
+         "air_yards_per_target_obs", "rz_target_share", "routes_proxy"),
+  TE = c("snap_share", "target_share_obs", "air_yards_share_obs",
+         "air_yards_per_target_obs", "rz_target_share", "routes_proxy")
+)
+lagusage_cols <- function(position) {
+  unlist(lapply(1:7, function(k) paste0("lag", k, "_", LAGUSAGE_CHANNELS[[position]])))
+}
+
+# ARM == "lagusage_pff" (enriched A2 -- the PFF-enrichment build's control
+# arm, see ~/.claude/plans/dapper-sleeping-lollipop.md): same 42 usage lag
+# columns PLUS lagged PFF charting channels, RB/WR only (no PFF pull for
+# TE this round). Must mirror R/21g's enriched tensor channel list exactly
+# -- that mirroring is the whole point of A2 existing.
+PFF_LAGUSAGE_CHANNELS <- list(
+  RB = c("yco_attempt", "avoided_tackle_rate", "breakaway_percent",
+         "zone_attempt_share", "gap_attempt_share"),
+  WR = c("contested_catch_rate", "avoided_tackle_rate", "drop_rate",
+         "route_rate", "avg_depth_of_target", "yac_per_reception")
+)
+lagusage_pff_cols <- function(position) {
+  c(lagusage_cols(position),
+    unlist(lapply(1:7, function(k) paste0("lag", k, "_", PFF_LAGUSAGE_CHANNELS[[position]]))))
+}
+
+# ARM == "ae" (enriched A3 -- the AE's latents): fixed 8-dim bottleneck,
+# carried forward from the usage-only Increment 2/3 decision (not re-swept
+# for the enriched build). Column names must match R/21i gate (a)'s latent
+# production exactly (z1..z8).
+ae_latent_cols <- function() paste0("z", 1:8)
+
+# ARM == "weather" (A5): game-level weather, 2021-2025 only (R/21c2). Pre-
+# 2021 rows are genuinely NA on every column here -- LightGBM's native
+# missing-value handling, never a 0-fill. Grading (R/21f2) MUST restrict
+# both A1 and A5 to the matched 2021-2025 window -- comparing full-window
+# A1 to A5 would dilute or fake a signal either direction.
+WEATHER_COLS <- c("temp_c", "wind_kmh", "gust_kmh", "precip_mm", "is_indoor")
 
 # ===========================================================================
 # HELPERS -- conformal machinery, generalized to a K=11 signed grid
@@ -256,7 +320,8 @@ fit_lgbm_tuned <- function(X, y, params_list, n_rounds) {
 # ===========================================================================
 
 train_path <- sprintf("data/fp_train_%s%s.rds", tolower(POSITION),
-                      if (ARM == "floorfree") "_floorfree" else "")
+                      switch(ARM, floorfree = "_floorfree", lagusage = "_lagusage",
+                             lagusage_pff = "_lagusage_pff", ae = "_ae", weather = "_weather", ""))
 cli_h1("21d: single-stage FP backtest -- {POSITION} [{ARM}] ({train_path})")
 
 ft       <- readRDS(train_path)
@@ -267,6 +332,10 @@ if (!is.na(FOLD_LIMIT)) {
 }
 
 point_feats <- POINT_FEATURES[[POSITION]]
+if (ARM == "lagusage")     point_feats <- union(point_feats, lagusage_cols(POSITION))
+if (ARM == "lagusage_pff") point_feats <- union(point_feats, lagusage_pff_cols(POSITION))
+if (ARM == "ae")           point_feats <- union(point_feats, ae_latent_cols())
+if (ARM == "weather")      point_feats <- union(point_feats, WEATHER_COLS)
 vol_feats   <- VOL_FEATURES_MAP[[POSITION]]
 thresh      <- THRESH[[POSITION]]
 
@@ -389,7 +458,7 @@ cli_alert_info("Pearson r: {round(cor(results$pred_fp, results$fantasy_points_pp
 # ===========================================================================
 
 dir.create("output", showWarnings = FALSE, recursive = TRUE)
-out_prefix <- sprintf("output/21d_%s_%s", tolower(POSITION), ARM)
+out_prefix <- sprintf("output/21d_%s_%s%s", tolower(POSITION), ARM, if (WIDE_GRID) "_wide" else "")
 write_csv(results,  paste0(out_prefix, "_fold_predictions.csv"))
 write_csv(tune_all, paste0(out_prefix, "_tune_log.csv"))
 

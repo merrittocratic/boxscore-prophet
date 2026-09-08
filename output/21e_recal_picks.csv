@@ -1,0 +1,7 @@
+position,threshold,pick,reason
+RB,15+,platt_vol_vegas,"lowest extended weighted |delta|, Brier ok"
+RB,20+,platt_vol_vegas,"lowest extended weighted |delta|, Brier ok"
+RB,bust,strat_iso,"lowest extended weighted |delta|, Brier ok"
+WR,15+,platt,"lowest extended weighted |delta|, Brier ok"
+WR,20+,platt,"lowest extended weighted |delta|, Brier ok"
+WR,bust,strat_iso,"lowest extended weighted |delta|, Brier ok"

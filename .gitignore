@@ -27,3 +27,8 @@ content/*_movers_column.md
 # Agent worktrees (session scratch, never project content)
 .claude/worktrees/
 logs/*.log
+
+# PFF-named scripts/data/output: name-transparency rule -- never commit a
+# file whose path itself reveals PFF as a source, even though PFF-derived
+# feature/column names inside other committed files are fine.
+pff_experimentation/

@@ -116,12 +116,29 @@ ctx_base <- ctx |> filter(week != TARGET_WEEK) |>
             team_spread_base   = mean(team_spread, na.rm = TRUE),
             .groups = "drop")
 
+# ---- 2b. WR PFF matchup context (descriptive only -- see 20b's header) ----
+# Not a per-factor attribution, same status as opp_def_adj/implied_total
+# above. Absent file (no PFF key, pre-2023 season, fetch failure) degrades
+# to NA columns -- fmt_row() below omits the bit entirely when NA.
+
+pff_ctx_path <- sprintf("output/20b_pff_wr_matchup_%s.csv", WTAG)
+pff_ctx <- if (file.exists(pff_ctx_path)) {
+  read_csv(pff_ctx_path, show_col_types = FALSE) |>
+    select(player_id = gsis_id, pff_man_catch_pct, pff_zone_catch_pct,
+           opp_man_rate, opp_zone_rate)
+} else {
+  tibble(player_id = character(), pff_man_catch_pct = double(),
+         pff_zone_catch_pct = double(), opp_man_rate = double(),
+         opp_zone_rate = double())
+}
+
 # ---- 3. Assemble, filter, rank --------------------------------------------
 
 movers <- now |>
   inner_join(base,     by = c("position", "player_id")) |>
   left_join(ctx_now,   by = c("position", "player_id")) |>
   left_join(ctx_base,  by = c("position", "player_id")) |>
+  left_join(pff_ctx,   by = "player_id") |>
   filter(n_base_weeks >= MIN_BASE_WEEKS, p_start_base >= REL_FLOOR) |>
   mutate(delta_start_pp = 100 * (p_start - p_start_base),
          delta_boom_pp  = 100 * (p_boom  - p_boom_base),
@@ -134,6 +151,24 @@ cli_alert_success("{nrow(movers)} eligible players -> 10g_movers_{WTAG}.csv")
 
 # ---- 4. Markdown: top movers per position ---------------------------------
 
+pff_bit <- function(r) {
+  # Descriptive only (see 20b's header) -- report against whichever
+  # coverage shell this week's opponent actually plays more, since that's
+  # the reader-relevant fact; NA on either side (thin sample, no key, pre-
+  # 2023 season) just omits the bit rather than guessing.
+  has_man  <- !is.na(r$pff_man_catch_pct)  && !is.na(r$opp_man_rate)
+  has_zone <- !is.na(r$pff_zone_catch_pct) && !is.na(r$opp_zone_rate)
+  if (!has_man && !has_zone) return(NULL)
+  use_man <- has_man && (!has_zone || r$opp_man_rate >= r$opp_zone_rate)
+  if (use_man) {
+    sprintf("catches %.0f%% of targets vs man (opp plays man %.0f%%)",
+            r$pff_man_catch_pct, 100 * r$opp_man_rate)
+  } else {
+    sprintf("catches %.0f%% of targets vs zone (opp plays zone %.0f%%)",
+            r$pff_zone_catch_pct, 100 * r$opp_zone_rate)
+  }
+}
+
 fmt_row <- function(r) {
   ctx_bits <- c(
     sprintf("proj %s %.0f (base %.0f)", VOL_LABEL[[r$position]],
@@ -144,6 +179,7 @@ fmt_row <- function(r) {
     if (!is.na(r$opp_def_adj_now))
       sprintf("opp def adj %+.2f (base %+.2f)",
               r$opp_def_adj_now, r$opp_def_adj_base),
+    pff_bit(r),
     if (r$injury_flag) paste0("status: ", r$report_status)
   )
   sprintf("| %s | %s | %s | %d%% | %d%% | %+.0f | %s |",
