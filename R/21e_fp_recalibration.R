@@ -11,9 +11,10 @@
 # architecture-agnostic machinery). What's different from 06c:
 #   - INPUT: R/21d's single-stage fold predictions (pred_fp/pred_vol/
 #     p_start_raw/p_boom_raw/q02..q98), not 06b's two-stage sim output.
-#     Which arm's predictions to recalibrate is an env seam (RECAL_ARM,
-#     default "base") -- this script is meant to be built once and
-#     pointed at whichever arm eventually ships, not re-derived per arm.
+#     Which arm's predictions to recalibrate is an env seam, per position
+#     (RECAL_ARM_RB / RECAL_ARM_WR, each falling back to RECAL_ARM, default
+#     "base") -- this script is meant to be built once and pointed at
+#     whichever arm eventually ships per position, not re-derived per arm.
 #   - THIRD THRESHOLD, p_bust: derived from the K=11 signed-conformal
 #     quantile grid R/21d already saves per row (q02..q98) via the exact
 #     same CDF-inversion logic as p_at_least() -- no rerun of R/21d
@@ -34,8 +35,12 @@
 #     slate universe -- a disclosed, not silently "fixed", carry-over.
 #
 # Usage: Rscript R/21e_fp_recalibration.R
-#   Env RECAL_ARM: which R/21d arm's fold_predictions.csv to recalibrate
-#     (default "base")
+#   Env RECAL_ARM_RB / RECAL_ARM_WR: which R/21d arm's fold_predictions.csv
+#     to recalibrate, per position (each falls back to RECAL_ARM, then "base")
+#   Env RECAL_DEPLOY_MAPS_OUT: where to write the deployment maps rds
+#     (default "data/fp_recal_maps_fp1.rds" -- NOT the production
+#     data/fp_recal_maps.rds path; only a coordinated ship pass should
+#     point this there, see note at the saveRDS call below)
 
 suppressPackageStartupMessages({
   library(tidyverse)
@@ -192,8 +197,12 @@ NEEDS_BUCKET <- c(star_platt = TRUE)
 
 cli_h1("Step 21e: FP recalibration (single-stage input, p_bust folded in)")
 
-RECAL_ARM <- Sys.getenv("RECAL_ARM", "base")
-cli_alert_info("Recalibrating arm: {RECAL_ARM}")
+RECAL_ARM_FALLBACK <- Sys.getenv("RECAL_ARM", "base")
+RECAL_ARM <- c(
+  RB = Sys.getenv("RECAL_ARM_RB", RECAL_ARM_FALLBACK),
+  WR = Sys.getenv("RECAL_ARM_WR", RECAL_ARM_FALLBACK)
+)
+cli_alert_info("Recalibrating arms: RB={RECAL_ARM[['RB']]} | WR={RECAL_ARM[['WR']]}")
 
 THRESH_START <- c(RB = 15, WR = 15)
 THRESH_BOOM  <- c(RB = 20, WR = 20)
@@ -223,9 +232,10 @@ p_at_least <- function(Qmat, probs, t) {
 }
 
 load_position <- function(position) {
-  path <- sprintf("output/21d_%s_%s_fold_predictions.csv", tolower(position), RECAL_ARM)
+  arm  <- RECAL_ARM[[position]]
+  path <- sprintf("output/21d_%s_%s_fold_predictions.csv", tolower(position), arm)
   ft   <- read_csv(path, show_col_types = FALSE)
-  cli_alert_info("{position}: {nrow(ft)} rows from {path}")
+  cli_alert_info("{position}: {nrow(ft)} rows from {path} (arm={arm})")
 
   Qmat <- as.matrix(ft[, QCOLS])
   p_bust <- 1 - p_at_least(Qmat, QLEVELS, BUST_THRESH[[position]])
@@ -467,7 +477,18 @@ deploy_maps <- pmap(picks, function(position, threshold, pick, reason) {
 })
 names(deploy_maps) <- paste(picks$position, picks$threshold, sep = "_")
 
-saveRDS(deploy_maps, "data/fp_recal_maps.rds")
+# Output path is an env seam, same idiom as R/06c_recalibration.R:242
+# (RECAL_DEPLOY_MAPS_OUT) -- but the DEFAULT here is deliberately NOT
+# data/fp_recal_maps.rds. That path is the live production artifact
+# R/10c_weekly_score.R and R/10f_weekly_eval.R read by default, fit on
+# TWO-STAGE probabilities; this script's maps are fit on single-stage
+# (fp1) fold predictions and are not interchangeable with it. A 2026-09-08
+# incident (commit a0b9f56, reverted 2ab4ed6) shipped a bare `Rscript
+# R/21e...` run's output straight onto production -- this seam exists so
+# that can't happen again by default. Only the coordinated S1-S3 ship
+# pass should ever point this at data/fp_recal_maps.rds.
+DEPLOY_MAPS_OUT <- Sys.getenv("RECAL_DEPLOY_MAPS_OUT", "data/fp_recal_maps_fp1.rds")
+saveRDS(deploy_maps, DEPLOY_MAPS_OUT)
 
 # ===========================================================================
 # SAVE
@@ -491,6 +512,6 @@ cli_alert_success("output/21e_recal_calibration.csv")
 cli_alert_success("output/21e_recal_calibration_strat.csv")
 cli_alert_success("output/21e_recal_summary.csv")
 cli_alert_success("output/21e_recal_picks.csv")
-cli_alert_success("data/fp_recal_maps.rds (deployment maps -- SINGLE-WRITER: do not commit outside a coordinated ship pass, per feedback_single_writer_artifacts)")
+cli_alert_success("{DEPLOY_MAPS_OUT} (deployment maps -- SINGLE-WRITER: do not commit outside a coordinated ship pass, per feedback_single_writer_artifacts)")
 
 cli_h1("Step 21e complete")
