@@ -94,7 +94,30 @@ cli_alert_info("Draft picks (all available seasons)")
 draft_raw <- nflreadr::load_draft_picks()
 
 cli_alert_info("Snap counts seasons {paste(range(PREDICTION_SEASONS), collapse='-')}")
-snaps_raw <- nflreadr::load_snap_counts(intersect(PREDICTION_SEASONS, PBP_SEASONS))
+# FETCHED PER-SEASON, not batched (2026-09-09 fix, GitHub #1): same bug as
+# R/build_rb_feature_layer.R -- before Week 1 of a new season nflverse
+# hasn't published that season's snap file yet, a 404 is expected, and a
+# single missing season inside a batched multi-season nflreadr call
+# poisoned the WHOLE result rather than just that season. See
+# build_rb_feature_layer.R's fuller comment on this exact block for the
+# production trace.
+SNAP_SEASONS <- intersect(PREDICTION_SEASONS, PBP_SEASONS)
+REQ_SNAP_COLS <- c("pfr_player_id", "season", "week", "game_type", "offense_pct")
+snaps_raw <- map(SNAP_SEASONS, function(s) {
+  d <- tryCatch(nflreadr::load_snap_counts(s), error = function(e) {
+    cli_alert_warning("Snap counts unavailable for {s} ({conditionMessage(e)}) -- skipping (expected before that season's games are played)")
+    NULL
+  })
+  if (!is.null(d) && !all(REQ_SNAP_COLS %in% names(d))) {
+    cli_alert_warning("Snap counts for {s} came back missing required columns ({paste(setdiff(REQ_SNAP_COLS, names(d)), collapse=', ')}) -- skipping (expected before that season's games are played)")
+    d <- NULL
+  }
+  d
+}) |> compact() |> list_rbind()
+if (nrow(snaps_raw) == 0) {
+  cli_abort("No snap count data fetched for ANY season in {paste(range(SNAP_SEASONS), collapse='-')} -- this is a real failure (network/nflreadr issue), not the expected single-new-season gap")
+}
+cli_alert_success("Snap counts: {n_distinct(snaps_raw$season)} of {length(SNAP_SEASONS)} requested seasons returned data")
 
 # ===========================================================================
 # 2. COLUMN CHECK

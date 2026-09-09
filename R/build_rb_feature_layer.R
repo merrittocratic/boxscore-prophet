@@ -103,7 +103,39 @@ cli_alert_info("Snap counts seasons {paste(PBP_SEASONS, collapse='-')}")
 # Widened to PBP_SEASONS (was intersect(PREDICTION_SEASONS, PBP_SEASONS)) so the
 # earliest ANCHOR_SEASONS year (2013) has real snap data to carry forward into
 # prediction_season 2014's baseline_snap_share -- see v1.6 note above.
-snaps_raw <- nflreadr::load_snap_counts(PBP_SEASONS)
+#
+# FETCHED PER-SEASON, not as one batched nflreadr::load_snap_counts(vector)
+# call (2026-09-09 fix, GitHub #1, run_20260909_0519_full_2026_w1.log):
+# before Week 1 of a new season, nflverse has not published that season's
+# snap-count file yet -- a 404 is the EXPECTED response, not an error
+# condition. A single missing season inside a batched multi-season request
+# poisoned the WHOLE result (observed on production: "cannot open URL...404",
+# then the returned frame was missing offense_pct/game_type entirely,
+# crashing every downstream filter() -- not just dropping the one bad
+# season). Fetching + validating per season and combining only the
+# seasons that actually returned usable data avoids that: one legitimately
+# absent season (the brand-new one) no longer takes out 2013-2025's real
+# history with it. No new fallback scheme needed downstream -- the
+# existing baseline_snap_share ladder (coalesce prior_snap_share ->
+# tier_snap_share -> pos_snap_share, below) already handles "no
+# current-season snap data yet" correctly by design, as long as it
+# actually gets the prior seasons' real data to fall back on.
+REQ_SNAP_COLS <- c("pfr_player_id", "season", "week", "game_type", "offense_pct")
+snaps_raw <- map(PBP_SEASONS, function(s) {
+  d <- tryCatch(nflreadr::load_snap_counts(s), error = function(e) {
+    cli_alert_warning("Snap counts unavailable for {s} ({conditionMessage(e)}) -- skipping (expected before that season's games are played)")
+    NULL
+  })
+  if (!is.null(d) && !all(REQ_SNAP_COLS %in% names(d))) {
+    cli_alert_warning("Snap counts for {s} came back missing required columns ({paste(setdiff(REQ_SNAP_COLS, names(d)), collapse=', ')}) -- skipping (expected before that season's games are played)")
+    d <- NULL
+  }
+  d
+}) |> compact() |> list_rbind()
+if (nrow(snaps_raw) == 0) {
+  cli_abort("No snap count data fetched for ANY season in {paste(range(PBP_SEASONS), collapse='-')} -- this is a real failure (network/nflreadr issue), not the expected single-new-season gap")
+}
+cli_alert_success("Snap counts: {n_distinct(snaps_raw$season)} of {length(PBP_SEASONS)} requested seasons returned data")
 
 # ===========================================================================
 # 2. COLUMN INVENTORY
