@@ -243,7 +243,7 @@ get_anthropic_key <- function() {
   k <- Sys.getenv("ANTHROPIC_API_KEY", unset = "")
   if (nzchar(k)) return(list(key = k, src = "env"))
   k <- tryCatch(
-    system2("security", c("find-generic-password", "-s", "ANTHROPIC_API_KEY", "-w"),
+    system2("security", c("find-generic-password", "-s", "autopilot", "-a", "ANTHROPIC_API_KEY", "-w"),
             stdout = TRUE, stderr = FALSE),
     warning = function(w) character(0), error = function(e) character(0)
   )
