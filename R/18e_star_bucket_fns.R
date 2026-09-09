@@ -27,11 +27,31 @@ star_trailing_fp <- function(seasons) {
   # Stay LOUD on real data loss: the season before the newest requested
   # one must load, else abort (found by the 2026 W1 stage run 2026-09-05;
   # hindcast weeks cannot catch this).
+  #
+  # FIXED 2026-09-09 (GitHub #1 pattern, 7th instance found in production):
+  # the tryCatch above only catches a HARD R error. On Earnest's actual
+  # machine, load_player_stats(2026) returned something malformed (missing/
+  # empty `season` column) WITHOUT throwing -- stats_player_week_2026.rds
+  # 404'd, but the failure surfaced as a warning, not a catchable error, so
+  # the malformed result flowed straight into vapply's fixed-length
+  # template and crashed on d$season[1] returning length 0. Now validates
+  # the actual returned object -- a frame with no usable `season` values is
+  # treated the same as a load error, not trusted, BEFORE it ever reaches
+  # vapply. The "season before newest must load" loud-fail check below is
+  # unchanged -- this only fixes how a bad load is detected, not what
+  # counts as acceptable.
   loaded <- lapply(seasons, function(s) {
-    tryCatch(nflreadr::load_player_stats(s),
+    d <- tryCatch(nflreadr::load_player_stats(s),
              error = function(e) { warning(sprintf(
                "star_trailing_fp: season %d stats unavailable (%s) -- skipped",
                s, conditionMessage(e)), call. = FALSE); NULL })
+    if (!is.null(d) && (!"season" %in% names(d) || nrow(d) == 0)) {
+      warning(sprintf(
+        "star_trailing_fp: season %d stats came back empty/malformed -- skipped",
+        s), call. = FALSE)
+      d <- NULL
+    }
+    d
   })
   loaded <- Filter(Negate(is.null), loaded)
   got <- vapply(loaded, function(d) d$season[1], numeric(1))
