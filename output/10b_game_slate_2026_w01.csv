@@ -1,5 +1,5 @@
 game_id,season,week,gameday,weekday,gametime,away_team,home_team,location,roof,stadium.x,stadium.y,lat,lon,roof_eff,is_indoor,is_neutral,temp_c,wind_kmh,gust_kmh,precip_mm,weather_src,flag_wind,flag_cold,temp_f,wind_mph,gust_mph
-2026_01_NE_SEA,2026,1,2026-09-09,Wednesday,20:20,NE,SEA,Home,outdoors,Lumen Field,Lumen Field,47.595,-122.332,outdoors,FALSE,FALSE,24.2,8.4,12.6,0,forecast,FALSE,FALSE,76,5,8
+2026_01_NE_SEA,2026,1,2026-09-09,Wednesday,20:20,NE,SEA,Home,outdoors,Lumen Field,Lumen Field,47.595,-122.332,outdoors,FALSE,FALSE,23.7,8.4,12.6,0,forecast,FALSE,FALSE,75,5,8
 2026_01_SF_LA,2026,1,2026-09-10,Thursday,20:35,SF,LA,Neutral,dome,Melbourne Cricket Ground,SoFi Stadium,33.953,-118.339,dome,TRUE,TRUE,30.5,10.5,11.9,0,forecast,FALSE,FALSE,87,7,7
 2026_01_CHI_CAR,2026,1,2026-09-13,Sunday,13:00,CHI,CAR,Home,outdoors,Bank of America Stadium,Bank of America Stadium,35.226,-80.853,outdoors,FALSE,FALSE,32.7,7.2,8.6,0,forecast,FALSE,FALSE,91,4,5
 2026_01_TB_CIN,2026,1,2026-09-13,Sunday,13:00,TB,CIN,Home,outdoors,Paycor Stadium,Paycor Stadium,39.095,-84.516,outdoors,FALSE,FALSE,31.6,6.5,9.7,0,forecast,FALSE,FALSE,89,4,6
