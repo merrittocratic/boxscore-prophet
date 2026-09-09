@@ -27,6 +27,8 @@ suppressPackageStartupMessages({
   library(cli)
 })
 
+source("R/10b_roster_helpers.R")  # load_pbp_retry() -- see its own header note
+
 # ===========================================================================
 # PARAMETERS
 # ===========================================================================
@@ -85,7 +87,7 @@ cli_alert_info("PBP seasons {paste(range(ALL_SEASONS), collapse='-')}")
 # pre-season); rosters/draft DO have 2026 rows now. Clamp pbp only -- 2026
 # feature rows appear as games are played, which is the intended behavior.
 PBP_SEASONS <- ALL_SEASONS[ALL_SEASONS <= nflreadr::most_recent_season()]
-pbp_raw <- nflreadr::load_pbp(PBP_SEASONS)
+pbp_raw <- load_pbp_retry(PBP_SEASONS)
 
 cli_alert_info("Rosters seasons {paste(range(ALL_SEASONS), collapse='-')}")
 rosters_raw <- nflreadr::load_rosters(ALL_SEASONS)

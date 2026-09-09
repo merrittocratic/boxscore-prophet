@@ -242,21 +242,44 @@ load_season_or_empty <- function(loader, season) {
 # unavailability) and MUST fail loudly if every attempt fails --
 # already-played PBP is required data, silently dropping it would be
 # worse than crashing.
-load_pbp_retry <- function(season, max_tries = 3, timeout_s = 300) {
+#
+# Accepts a single season or a vector (2026-09-09 follow-on -- same
+# timeout exposure applies to the multi-year batched load_pbp(PBP_SEASONS)
+# calls in build_rb_feature_layer.R/04a/08a/12a, a BIGGER download, not
+# yet actually hit but hardened proactively before it is). Fetches and
+# retries PER SEASON, not as one batched multi-year call -- mirrors the
+# per-season pattern already proven today for load_snap_counts/
+# load_injuries: one flaky year no longer forces re-fetching the whole
+# range. A season that fails all its own retries is dropped with a
+# warning, not immediately fatal -- the function only aborts if EVERY
+# requested season failed, so a single required season (the 10b2/10b3/
+# 10b5 case) still fails loudly exactly as before, while a wide
+# historical range tolerates one bad year the way the other fixes do.
+load_pbp_retry <- function(seasons, max_tries = 3, timeout_s = 300) {
   old_timeout <- getOption("timeout")
   on.exit(options(timeout = old_timeout), add = TRUE)
   options(timeout = timeout_s)
   req_cols <- c("season_type", "epa", "play", "posteam", "game_id")
-  last_err <- "unknown"
-  for (attempt in seq_len(max_tries)) {
-    out <- tryCatch(nflreadr::load_pbp(season), error = function(e) e)
-    ok <- !inherits(out, "error") && all(req_cols %in% names(out)) && nrow(out) > 0
-    if (ok) return(out)
-    last_err <- if (inherits(out, "error")) conditionMessage(out) else "returned empty/malformed frame (missing required columns)"
-    if (attempt < max_tries) {
-      cli::cli_alert_warning("load_pbp({season}) attempt {attempt}/{max_tries} failed ({last_err}) -- retrying")
-      Sys.sleep(2 * attempt)
+
+  fetch_one <- function(season) {
+    last_err <- "unknown"
+    for (attempt in seq_len(max_tries)) {
+      out <- tryCatch(nflreadr::load_pbp(season), error = function(e) e)
+      ok <- !inherits(out, "error") && all(req_cols %in% names(out)) && nrow(out) > 0
+      if (ok) return(out)
+      last_err <- if (inherits(out, "error")) conditionMessage(out) else "returned empty/malformed frame (missing required columns)"
+      if (attempt < max_tries) {
+        cli::cli_alert_warning("load_pbp({season}) attempt {attempt}/{max_tries} failed ({last_err}) -- retrying")
+        Sys.sleep(2 * attempt)
+      }
     }
+    cli::cli_alert_warning("load_pbp({season}) failed after {max_tries} attempts ({last_err}) -- skipping this season (acceptable only if it's genuinely unavailable, e.g. not yet released; the caller aborts below if EVERY season failed)")
+    NULL
   }
-  cli::cli_abort("load_pbp({season}) failed after {max_tries} attempts ({last_err}) -- this is a real failure (network/nflreadr issue) for an already-played season, not an expected pre-Week-1 gap")
+
+  out <- lapply(seasons, fetch_one) |> purrr::compact() |> dplyr::bind_rows()
+  if (nrow(out) == 0) {
+    cli::cli_abort("load_pbp() failed for every season in {paste(range(seasons), collapse='-')} after {max_tries} attempts each -- this is a real failure (network/nflreadr issue), not an expected pre-Week-1 gap")
+  }
+  out
 }
