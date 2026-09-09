@@ -42,7 +42,32 @@ SEASONS <- SEASONS[SEASONS <= nflreadr::most_recent_season()]
 
 cli_h1("11b: ex-ante injury state layer (Friday-lock masked)")
 
-inj_raw <- nflreadr::load_injuries(SEASONS)
+# FETCHED PER-SEASON, not batched (2026-09-09, hardened proactively --
+# same root cause as GitHub #1, not yet actually triggered here because
+# injury/practice reports exist for a season before any games are played,
+# unlike snap counts. Still the same latent risk: a batched multi-season
+# nflreadr fetch does not gracefully skip one bad/not-yet-available
+# season, and this call had no guard at all. See R/build_rb_feature_
+# layer.R's fuller comment on this exact pattern for the production
+# trace that motivated it elsewhere.
+REQ_INJ_COLS <- c("season", "week", "team", "gsis_id", "game_type",
+                  "practice_status", "report_status")
+inj_raw <- map(SEASONS, function(s) {
+  d <- tryCatch(nflreadr::load_injuries(s), error = function(e) {
+    cli_alert_warning("Injury reports unavailable for {s} ({conditionMessage(e)}) -- skipping (expected before that season's reports are published)")
+    NULL
+  })
+  if (!is.null(d) && !all(REQ_INJ_COLS %in% names(d))) {
+    cli_alert_warning("Injury reports for {s} came back missing required columns ({paste(setdiff(REQ_INJ_COLS, names(d)), collapse=', ')}) -- skipping (expected before that season's reports are published)")
+    d <- NULL
+  }
+  d
+}) |> compact() |> list_rbind()
+if (nrow(inj_raw) == 0) {
+  cli_abort("No injury report data fetched for ANY season in {paste(range(SEASONS), collapse='-')} -- this is a real failure (network/nflreadr issue), not the expected single-new-season gap")
+}
+cli_alert_success("Injury reports: {n_distinct(inj_raw$season)} of {length(SEASONS)} requested seasons returned data")
+
 locks   <- build_lock_table(SEASONS)
 inj_slim <- clean_injury_reports(inj_raw, locks, mask = TRUE)
 
