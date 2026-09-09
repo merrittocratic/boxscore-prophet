@@ -69,6 +69,19 @@ run R/10b2_player_slate.R  "$SEASON" "$WEEK"
 run R/10b3_wr_slate.R      "$SEASON" "$WEEK"
 run R/10b5_te_slate.R      "$SEASON" "$WEEK"
 run R/10b4_qb_slate.R      "$SEASON" "$WEEK"
+# News override candidates (2026-09-09): before 10c, same cadence as
+# everything else in this block (every full/rescore run, not just
+# Tuesday) -- classification should catch Sat/Sun-morning news same as
+# injury reports do. 10h2 (parse) had NO schedule anywhere until this
+# line -- capture (10h) runs continuously on its own launchd job, but
+# without parsing, 10i would see an empty/stale archive even though
+# capture itself is working fine. `|| true` on both: network/parse/
+# LLM-API problems must never block the real score. 10i writes
+# data/news_overrides_<season>_w<week>.csv, the exact default path 10c
+# already reads -- no env var needed. If either step fails or produces
+# nothing, 10c's own default is a silent no-op, not an error.
+run R/10h2_news_parse.R          || true
+run R/10i_news_override.R "$SEASON" "$WEEK" || true
 run R/10c_weekly_score.R   "$SEASON" "$WEEK"
 run R/10d0_ecr_fetch.R     "$SEASON" "$WEEK"   # skips itself if no API key yet
 run R/10d_content_tables.R "$SEASON" "$WEEK"
