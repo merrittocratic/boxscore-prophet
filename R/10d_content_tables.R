@@ -282,7 +282,13 @@ fp_obs <- tryCatch({
 receipts <- NULL
 pending  <- NULL
 if (file.exists(ledger_path)) {
-  locked <- readr::read_csv(ledger_path, show_col_types = FALSE) |>
+  locked <- readr::read_csv(
+      ledger_path, show_col_types = FALSE,
+      # A header-only ledger (0 data rows) makes read_csv's type-inference
+      # guess kickoff_et as character instead of datetime -- pin it so the
+      # game_over arithmetic below never sees a non-POSIXct column.
+      col_types = readr::cols(kickoff_et = readr::col_datetime())
+    ) |>
     group_by(player_id) |>
     slice_max(run_ts, n = 1, with_ties = FALSE) |>
     ungroup() |>
