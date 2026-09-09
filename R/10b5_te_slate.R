@@ -247,7 +247,7 @@ vol_const <- te_draft |>
 # receipt) is silently MISSING from it -- using it here would understate
 # some teams' prior-season play volume. A single-season pbp pull avoids
 # that gap entirely; TARGET_SEASON-1 is always a completed season.
-pbp_prior_te <- nflreadr::load_pbp(TARGET_SEASON - 1L) |>
+pbp_prior_te <- load_pbp_retry(TARGET_SEASON - 1L) |>
   filter(season_type == "REG", !is.na(epa), play == 1, !is.na(posteam))
 team_plays_obs_prior <- pbp_prior_te |>
   group_by(game_id, posteam) |>

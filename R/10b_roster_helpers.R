@@ -226,3 +226,37 @@ load_season_or_empty <- function(loader, season) {
   }
   primary
 }
+
+# Robust PBP fetch with a longer timeout + retry (2026-09-09). DIFFERENT
+# root cause from load_season_or_empty above: play_by_play files are
+# large, and the base R default download timeout (options("timeout"),
+# 60s) can time out on a real, ALREADY-PLAYED season's file -- not a
+# "not yet released" gap. Confirmed on production: R/10b5_te_slate.R
+# (and identically R/10b2/10b3) fetch TARGET_SEASON - 1L (a real, needed
+# season) via nflreadr::load_pbp(), a play_by_play_2025.rds download hit
+# the 60s timeout, and the resulting malformed/empty frame silently
+# poisoned the downstream filter(season_type == "REG", ...) the same way
+# every other empty-frame bug did today -- "object 'season_type' not
+# found". Unlike the current-season gaps elsewhere in this file, this
+# case SHOULD retry (a transient network blip, not a genuine
+# unavailability) and MUST fail loudly if every attempt fails --
+# already-played PBP is required data, silently dropping it would be
+# worse than crashing.
+load_pbp_retry <- function(season, max_tries = 3, timeout_s = 300) {
+  old_timeout <- getOption("timeout")
+  on.exit(options(timeout = old_timeout), add = TRUE)
+  options(timeout = timeout_s)
+  req_cols <- c("season_type", "epa", "play", "posteam", "game_id")
+  last_err <- "unknown"
+  for (attempt in seq_len(max_tries)) {
+    out <- tryCatch(nflreadr::load_pbp(season), error = function(e) e)
+    ok <- !inherits(out, "error") && all(req_cols %in% names(out)) && nrow(out) > 0
+    if (ok) return(out)
+    last_err <- if (inherits(out, "error")) conditionMessage(out) else "returned empty/malformed frame (missing required columns)"
+    if (attempt < max_tries) {
+      cli::cli_alert_warning("load_pbp({season}) attempt {attempt}/{max_tries} failed ({last_err}) -- retrying")
+      Sys.sleep(2 * attempt)
+    }
+  }
+  cli::cli_abort("load_pbp({season}) failed after {max_tries} attempts ({last_err}) -- this is a real failure (network/nflreadr issue) for an already-played season, not an expected pre-Week-1 gap")
+}

@@ -289,7 +289,7 @@ vol_const <- rb_draft |>
 # from it -- rare for RB but the same structural gap that's real and
 # documented for TE (see 10b5). A single-season pbp pull avoids that gap
 # entirely; TARGET_SEASON-1 is always a completed season.
-pbp_prior_rb <- nflreadr::load_pbp(TARGET_SEASON - 1L) |>
+pbp_prior_rb <- load_pbp_retry(TARGET_SEASON - 1L) |>
   filter(season_type == "REG", !is.na(epa), play == 1, !is.na(posteam))
 team_plays_obs_prior <- pbp_prior_rb |>
   group_by(game_id, posteam) |>
