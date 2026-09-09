@@ -205,7 +205,24 @@ vegas_slate_lines <- function(games_long, target_season, hindcast) {
 # asset exists. Return zero rows with the PRIOR season's schema so
 # downstream joins stay shape-stable -- a future-week slate has no
 # target-season rows anyway (cold-start / no-designation semantics).
+#
+# FIXED 2026-09-09 (GitHub #1 follow-on -- the same root cause broke a
+# second script, R/10b2_player_slate.R, on production: "object 'game_type'
+# not found"). The original tryCatch(error=...) only catches a HARD R
+# error (e.g. nflreadr's own "seasons <= most_recent_season()" assertion,
+# which is what this laptop hits). On Earnest's actual machine, a 404 for
+# a not-yet-released season doesn't always throw a catchable error -- it
+# can warn and return a malformed/schema-less frame instead, which then
+# silently poisoned every downstream filter() built on the assumption the
+# real columns existed. Now fetches the prior season's schema as a
+# reference FIRST and validates the target season's columns against it --
+# a missing column is treated the same as a hard error, regardless of
+# which way the underlying fetch actually failed.
 load_season_or_empty <- function(loader, season) {
-  tryCatch(loader(seasons = season),
-           error = function(e) loader(seasons = season - 1L) |> dplyr::filter(FALSE))
+  ref <- loader(seasons = season - 1L)
+  primary <- tryCatch(loader(seasons = season), error = function(e) NULL)
+  if (is.null(primary) || !all(names(ref) %in% names(primary))) {
+    return(ref |> dplyr::filter(FALSE))
+  }
+  primary
 }
