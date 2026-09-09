@@ -651,6 +651,69 @@ wr_scored <- apply_maps(wr_scored, rbwr_maps[["WR_15+"]], rbwr_maps[["WR_20+"]],
 te_scored <- apply_maps(te_scored, te_maps[["TE_12+"]], te_maps[["TE_17+"]], te_scored$pred_vol)
 qb_scored <- apply_maps(qb_scored, qb_maps[["QB_20+"]], qb_maps[["QB_25+"]], qb_scored$pred_carry)
 
+# ===========================================================================
+# 4b. NEWS OVERRIDE LAYER (2026-09-09) -- live per CLAUDE.md's carve-out
+# for text/beat-reporter signal: "lives in a live override layer instead,
+# graded in-season, not trained on." R/10i_news_override.R produces the
+# candidate file this reads; NEVER trained on, applied here at scoring
+# time only. Bounded nudge (max MAX_OVERRIDE_SHIFT_PP, scaled by the
+# classifier's own confidence) -- never a wholesale replacement of the
+# recalibrated probability. Optional and silent when absent: no override
+# file for this week (R/10i hasn't run, or nothing qualified) is a
+# no-op, not a failure -- matches the "must apply live, never gate
+# behind a season of proof" design Steve set 2026-09-09, with the
+# pre/post values always kept side by side so nothing is silently
+# overwritten (same "nulls with receipts" discipline as everywhere else
+# in this pipeline).
+NEWS_OVERRIDES_FILE  <- Sys.getenv("NEWS_OVERRIDES_FILE",
+  sprintf("data/news_overrides_%d_w%02d.csv", TARGET_SEASON, TARGET_WEEK))
+MAX_OVERRIDE_SHIFT_PP <- 0.10
+
+apply_news_override <- function(scored, overrides) {
+  if (is.null(overrides) || nrow(overrides) == 0) {
+    return(scored |> mutate(
+      p_start_recal_preoverride = p_start_recal,
+      p_boom_recal_preoverride  = p_boom_recal,
+      override_flag_type  = NA_character_,
+      override_confidence = NA_real_,
+      override_reason     = NA_character_
+    ))
+  }
+  ov <- overrides |> distinct(gsis_id, .keep_all = TRUE)
+  scored |>
+    left_join(ov |> select(gsis_id, override_flag_type = flag_type,
+                           override_confidence = confidence, override_reason = reason),
+              by = c("player_id" = "gsis_id")) |>
+    mutate(
+      p_start_recal_preoverride = p_start_recal,
+      p_boom_recal_preoverride  = p_boom_recal,
+      .shift = case_when(
+        override_flag_type == "role_change_up"   ~  MAX_OVERRIDE_SHIFT_PP * coalesce(override_confidence, 0),
+        override_flag_type == "role_change_down" ~ -MAX_OVERRIDE_SHIFT_PP * coalesce(override_confidence, 0),
+        TRUE ~ 0
+      ),
+      p_start_recal = pmin(pmax(p_start_recal + .shift, 0), 1),
+      p_boom_recal  = pmin(pmax(p_boom_recal  + .shift, 0), 1),
+      p_boom_recal  = pmin(p_boom_recal, p_start_recal)   # re-enforce coherence after the nudge
+    ) |>
+    select(-.shift)
+}
+
+news_overrides <- if (file.exists(NEWS_OVERRIDES_FILE)) {
+  ov <- readr::read_csv(NEWS_OVERRIDES_FILE, show_col_types = FALSE) |>
+    mutate(gsis_id = as.character(gsis_id))
+  cli_alert_info("News overrides: {NEWS_OVERRIDES_FILE} ({nrow(ov)} candidates)")
+  ov
+} else {
+  cli_alert_info("No news override file for this week ({NEWS_OVERRIDES_FILE}) -- skipping (expected if R/10i hasn't run, or nothing qualified)")
+  NULL
+}
+
+rb_scored <- apply_news_override(rb_scored, news_overrides)
+wr_scored <- apply_news_override(wr_scored, news_overrides)
+te_scored <- apply_news_override(te_scored, news_overrides)
+qb_scored <- apply_news_override(qb_scored, news_overrides)
+
 for (d in list(rb_scored, wr_scored, te_scored, qb_scored)) {
   stopifnot(!any(is.na(d$p_start_recal)), !any(is.na(d$p_boom_recal)),
             all(d$p_boom_recal <= d$p_start_recal + 1e-12))
@@ -667,7 +730,9 @@ cli_h1("Save scored slate")
 id_cols <- c("position", "player_id", "player_name", "posteam", "defteam",
              "game_id", "season", "week", "report_status", "practice_status")
 prob_cols <- c("p_start", "p_boom", "p_start_recal", "p_boom_recal",
-               "recal_method_start", "recal_method_boom")
+               "recal_method_start", "recal_method_boom",
+               "p_start_recal_preoverride", "p_boom_recal_preoverride",
+               "override_flag_type", "override_confidence", "override_reason")
 
 if (MODEL_ARCH == "fp1") {
   # fp1 RB/WR carry pred_fp/lo_XX_fp (FP-space), TE/QB carry pred_tot/lo_XX_tot
