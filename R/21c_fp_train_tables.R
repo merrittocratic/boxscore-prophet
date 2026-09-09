@@ -60,9 +60,33 @@ injury_rb <- readRDS("data/injury_states_rb.rds")
 # played. Feature-table rows past that season (e.g. 2026 W1, already in the
 # tables) simply won't find a match below and drop out of the inner join,
 # which is correct: there is no FP target for them yet.
-fp_weekly <- load_player_stats(2014:nflreadr::most_recent_season()) |>
+#
+# FETCHED PER-SEASON, not batched (2026-09-09, hardened proactively --
+# same GitHub #1 pattern: most_recent_season() including the current
+# season doesn't guarantee load_player_stats() actually has that season's
+# data yet, and a batched multi-season fetch does not gracefully skip one
+# bad season). Reachable via the S1 shadow retrain in weekly_run.sh
+# (`|| true` guarded at the shell level, so it wouldn't crash the real
+# run, but it WOULD silently break the shadow retrain every week without
+# this).
+FP_SEASONS <- 2014:nflreadr::most_recent_season()
+REQ_STATS_COLS <- c("player_id", "season", "week", "season_type", "fantasy_points_ppr")
+fp_weekly <- map(FP_SEASONS, function(s) {
+  d <- tryCatch(load_player_stats(s), error = function(e) {
+    cli_alert_warning("Player stats unavailable for {s} ({conditionMessage(e)}) -- skipping (expected before that season's games are played)")
+    NULL
+  })
+  if (!is.null(d) && !all(REQ_STATS_COLS %in% names(d))) {
+    cli_alert_warning("Player stats for {s} came back missing required columns ({paste(setdiff(REQ_STATS_COLS, names(d)), collapse=', ')}) -- skipping (expected before that season's games are played)")
+    d <- NULL
+  }
+  d
+}) |> compact() |> list_rbind() |>
   filter(season_type == "REG", !is.na(player_id), !is.na(fantasy_points_ppr)) |>
   select(player_id, season, week, fantasy_points_ppr)
+if (nrow(fp_weekly) == 0) {
+  cli_abort("No player stats fetched for ANY season in {paste(range(FP_SEASONS), collapse='-')} -- this is a real failure (network/nflreadr issue), not the expected single-new-season gap")
+}
 
 cli_alert_info("Weekly PPR fantasy points: {nrow(fp_weekly)} player-game rows")
 
