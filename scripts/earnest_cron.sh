@@ -13,6 +13,7 @@
 # Usage: earnest_cron.sh full|rescore   (season/week auto-detect downstream)
 
 set -euo pipefail
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"  # launchd strips PATH; Rscript lives in /opt/homebrew/bin
 cd "$(dirname "$0")/.."
 
 MODE="${1:?usage: earnest_cron.sh full|rescore}"
