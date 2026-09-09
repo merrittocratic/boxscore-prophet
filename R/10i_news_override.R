@@ -22,20 +22,28 @@
 #
 # PIPELINE:
 #   1. Position filter: RB/WR/TE/QB only (~half the archive, free).
-#   2. Timing validity: blurb published before the affected player's own
-#      kickoff (fallback: week's first kickoff) -- same pattern as
-#      R/21a_discrimination_fns.R::ecr_join()'s timing logic, reused
-#      verbatim rather than reinvented.
-#   3. Dedup: latest blurb per player within the valid window.
-#   4. Crosswalk: FantasyPros slug -> name -> gsis_id, via the SAME
+#   2. Unnest players (a blurb can name several) + crosswalk EACH row:
+#      FantasyPros slug -> name -> gsis_id + TEAM, via the SAME
 #      normalize_player_name() + unique-within-season roster join R/18a
 #      and R/21a already use for ECR's own crosswalk (R/10d_name_
-#      helpers.R). Slugs aren't free text, so a slug->name step
-#      (title-case, de-hyphenate) runs first.
+#      helpers.R). Team has to be known before timing validity (next
+#      step) can be per-player rather than week-wide.
+#   3. Timing validity: blurb published before THAT PLAYER'S OWN team's
+#      kickoff (fallback: week's first kickoff if team unknown) -- same
+#      pattern R/21a_discrimination_fns.R::ecr_join() and R/11b's
+#      build_lock_table() already use. FIXED 2026-09-09 (Steve's own
+#      sanity check): the original version filtered on the week's FIRST
+#      kickoff for every player, which for any week with an early
+#      Thursday game cut off ALL Friday/Saturday news about Sunday-game
+#      players -- stricter than even the official Friday injury-report
+#      lock (R/11b), let alone useful.
+#   4. Dedup: latest VALID blurb per gsis_id (not per slug -- multiple
+#      slug spellings can crosswalk to the same real player; dedup
+#      happens after validity filtering so an invalid later blurb can
+#      never displace a valid earlier one for the same player).
 #   5. Depth-chart rule (cheap, no LLM, no API dependency): regex on
-#      headline/body for "depth chart" / "listed as ... starter" etc.
-#      Flags directly, source="rule". Handles the whole depth-chart
-#      sub-case for free.
+#      the headline for "listed as ... starter" etc. Flags directly,
+#      source="rule". Handles the whole depth-chart sub-case for free.
 #   6. LLM classification for everything else -- one Haiku call per
 #      remaining blurb, see "STEP 6 CREDENTIAL" below.
 #   7. Output: data/news_overrides_<season>_w<week>.csv.
@@ -89,51 +97,11 @@ blurbs <- blurbs_raw |>
 cli_alert_info("{nrow(blurbs_raw)} total blurbs -> {nrow(blurbs)} RB/WR/TE/QB after position filter")
 
 # ===========================================================================
-# 2. TIMING VALIDITY -- reused pattern from R/21a_discrimination_fns.R's
-# ecr_join(): a blurb is valid for THAT player's game if captured before
-# their own kickoff, falling back to the week's first kickoff when the
-# team can't be matched. Blurbs mention multiple positions/teams
-# (`players` is a list column of slugs) -- team isn't reliably attached
-# per-blurb here, so this uses the SIMPLER, stricter rule: valid only if
-# published before the WEEK'S FIRST kickoff. Cheaper than 10c's own
-# per-team join and correct to use here since this runs BEFORE slate
-# scoring, same discipline as everything else in this repo ("point-in-
-# time reconstructable as of lock").
-# ===========================================================================
-
-sched <- nflreadr::load_schedules(SEASON) |>
-  filter(game_type == "REG", week == WEEK) |>
-  mutate(kick = as.POSIXct(paste(gameday, coalesce(gametime, "13:00")),
-                           format = "%Y-%m-%d %H:%M", tz = "America/New_York"))
-first_kick <- min(sched$kick, na.rm = TRUE)
-
-blurbs <- blurbs |> filter(!is.na(published_utc), published_utc < first_kick)
-cli_alert_info("{nrow(blurbs)} blurbs valid (published before week's first kickoff {format(first_kick, tz='America/New_York')})")
-
-# ===========================================================================
-# 3. UNNEST players (list column of FP slugs) -- one row per (blurb, slug)
-# ===========================================================================
-
-by_player <- blurbs |>
-  select(news_id, headline, body, impact, published_utc, pos, players) |>
-  unnest_longer(players, values_to = "slug") |>
-  filter(!is.na(slug), nzchar(slug))
-
-# ===========================================================================
-# 4. DEDUP -- latest blurb per (slug) in this valid window. Same player
-# often has several blurbs across the week (practice status updates);
-# only the most recent matters for classification.
-# ===========================================================================
-
-latest <- by_player |>
-  arrange(slug, desc(published_utc)) |>
-  distinct(slug, .keep_all = TRUE)
-
-cli_alert_info("{nrow(latest)} distinct players after dedup (from {nrow(by_player)} blurb-player rows)")
-
-# ===========================================================================
-# 5. CROSSWALK -- slug -> name -> gsis_id, reusing normalize_player_name()
-# + the unique-within-season roster join pattern from R/18a/R/21a.
+# 2. UNNEST players (list column of FP slugs, one blurb can name several)
+# + CROSSWALK each row to gsis_id + TEAM -- slug -> name -> gsis_id, reusing
+# normalize_player_name() + the unique-within-season roster join pattern
+# from R/18a/R/21a. Team is needed for per-player timing validity (step 3)
+# -- has to happen before that, not after.
 # ===========================================================================
 
 slug_to_name <- function(slug) {
@@ -145,23 +113,68 @@ slug_to_name <- function(slug) {
 rosters <- nflreadr::load_rosters(SEASON) |>
   filter(position %in% FANTASY_POSITIONS, !is.na(gsis_id)) |>
   mutate(nm = normalize_player_name(full_name)) |>
-  distinct(position, nm, gsis_id) |>
+  distinct(position, nm, gsis_id, team) |>
   add_count(nm) |>
   filter(n == 1) |>
-  select(nm, gsis_id)
+  select(nm, gsis_id, team)
 
-latest <- latest |>
+by_player <- blurbs |>
+  select(news_id, headline, body, impact, published_utc, pos, players) |>
+  unnest_longer(players, values_to = "slug") |>
+  filter(!is.na(slug), nzchar(slug)) |>
   mutate(name_guess = slug_to_name(slug),
          nm = normalize_player_name(name_guess)) |>
   left_join(rosters, by = "nm")
 
-n_matched <- sum(!is.na(latest$gsis_id))
-cli_alert_info("Crosswalk: {n_matched}/{nrow(latest)} matched to a gsis_id ({round(100*n_matched/nrow(latest),1)}%)")
-if (n_matched / nrow(latest) < 0.85) {
-  cli_alert_warning("Match rate below 85% -- inspect latest$nm[is.na(latest$gsis_id)] before trusting output")
+n_matched <- sum(!is.na(by_player$gsis_id))
+cli_alert_info("Crosswalk: {n_matched}/{nrow(by_player)} matched to a gsis_id ({round(100*n_matched/nrow(by_player),1)}%)")
+if (n_matched / nrow(by_player) < 0.85) {
+  cli_alert_warning("Match rate below 85% -- inspect by_player$nm[is.na(by_player$gsis_id)] before trusting output")
 }
 
-matched <- latest |> filter(!is.na(gsis_id))
+matched <- by_player |> filter(!is.na(gsis_id))
+
+# ===========================================================================
+# 3. TIMING VALIDITY -- PER-PLAYER kickoff (fixed 2026-09-09, Steve's own
+# sanity check): valid if published before THAT PLAYER'S OWN team's
+# kickoff, falling back to the week's first kickoff if team is unknown --
+# same pattern R/21a_discrimination_fns.R::ecr_join() and R/11b's
+# build_lock_table() already use. The original version filtered on the
+# week's FIRST kickoff for every player regardless of team, which for any
+# week with an early Thursday game cut off ALL Friday/Saturday news about
+# Sunday-game players -- stricter than even the official Friday
+# injury-report lock (R/11b), let alone useful.
+# ===========================================================================
+
+sched <- nflreadr::load_schedules(SEASON) |>
+  filter(game_type == "REG", week == WEEK) |>
+  mutate(kick = as.POSIXct(paste(gameday, coalesce(gametime, "13:00")),
+                           format = "%Y-%m-%d %H:%M", tz = "America/New_York"))
+kicks <- bind_rows(
+  sched |> select(team = home_team, kick),
+  sched |> select(team = away_team, kick)
+)
+first_kick <- min(sched$kick, na.rm = TRUE)
+
+matched <- matched |>
+  left_join(kicks, by = "team") |>
+  mutate(kick_eff = coalesce(kick, first_kick)) |>
+  filter(!is.na(published_utc), published_utc < kick_eff)
+
+cli_alert_info("{nrow(matched)} player-blurb rows valid (published before that player's own kickoff; fallback week's first kickoff {format(first_kick, tz='America/New_York')})")
+
+# ===========================================================================
+# 4. DEDUP -- latest VALID blurb per gsis_id (not per slug -- multiple
+# slug spellings can crosswalk to the same real player; happens after
+# validity filtering so an invalid later blurb can never displace a valid
+# earlier one for the same player).
+# ===========================================================================
+
+matched <- matched |>
+  arrange(gsis_id, desc(published_utc)) |>
+  distinct(gsis_id, .keep_all = TRUE)
+
+cli_alert_info("{nrow(matched)} distinct players after dedup")
 
 # ===========================================================================
 # 6. DEPTH-CHART RULE (cheap, no LLM) -- catches the clean sub-case for
