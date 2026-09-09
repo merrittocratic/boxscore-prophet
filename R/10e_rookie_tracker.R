@@ -60,6 +60,17 @@ if (!file.exists(CROSSWALK)) {
   quit(status = 1)
 }
 cw <- read_csv(CROSSWALK, show_col_types = FALSE)
+
+# draft_team comes straight from the PFR draft-order source, which uses its
+# own team codes (e.g. "LVR" for the Raiders) rather than nflverse's -- run
+# it through the same alias map 10b's roster join uses so downstream watch/
+# content files never surface a code that doesn't match the rest of the site.
+cw_valid_codes <- tryCatch({
+  s <- nflreadr::load_schedules(TARGET_SEASON) |> dplyr::filter(game_type == "REG")
+  unique(c(s$home_team, s$away_team))
+}, error = function(e) unique(cw$draft_team))
+cw <- cw |> mutate(draft_team = normalize_team_codes(draft_team, cw_valid_codes))
+
 cli_alert_info("Crosswalk rookies: {nrow(cw)} ({sum(!is.na(cw$draft_pick))} drafted, {sum(cw$gsis_provisional)} gsis still provisional)")
 
 # ---- 1. Actuals -----------------------------------------------------------
