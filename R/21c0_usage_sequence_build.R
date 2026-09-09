@@ -86,8 +86,28 @@ id_xwalk <- rosters_all |>
   distinct(pfr_id, .keep_all = TRUE) |>
   select(gsis_id, pfr_id)
 
-snaps_raw <- load_snap_counts(SEASONS) |>
+# FETCHED PER-SEASON, not batched (2026-09-09, hardened proactively --
+# same GitHub #1 pattern as R/build_rb_feature_layer.R: a batched multi-
+# season nflreadr fetch does not gracefully skip one bad/not-yet-
+# available season, and this call had no guard at all). Not wired into
+# weekly_run.sh, so lower urgency than the production fixes, but the
+# same landmine the moment someone reruns this script pre-Week-1.
+REQ_SNAP_COLS <- c("pfr_player_id", "season", "week", "game_type", "offense_pct")
+snaps_raw <- map(SEASONS, function(s) {
+  d <- tryCatch(load_snap_counts(s), error = function(e) {
+    cli_alert_warning("Snap counts unavailable for {s} ({conditionMessage(e)}) -- skipping (expected before that season's games are played)")
+    NULL
+  })
+  if (!is.null(d) && !all(REQ_SNAP_COLS %in% names(d))) {
+    cli_alert_warning("Snap counts for {s} came back missing required columns ({paste(setdiff(REQ_SNAP_COLS, names(d)), collapse=', ')}) -- skipping (expected before that season's games are played)")
+    d <- NULL
+  }
+  d
+}) |> compact() |> list_rbind() |>
   filter(game_type == "REG", !is.na(pfr_player_id), !is.na(offense_pct))
+if (nrow(snaps_raw) == 0) {
+  cli_abort("No snap count data fetched for ANY season in {paste(range(SEASONS), collapse='-')} -- this is a real failure (network/nflreadr issue), not the expected single-new-season gap")
+}
 snap_pct_divisor <- if (max(snaps_raw$offense_pct, na.rm = TRUE) > 1.5) 100 else 1
 
 snap_share <- snaps_raw |>
