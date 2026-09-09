@@ -168,15 +168,29 @@ matched <- latest |> filter(!is.na(gsis_id))
 # free: "listed as RB2 on ... depth chart", "named ... starter", etc.
 # ===========================================================================
 
-DEPTH_CHART_RX <- regex(
-  "depth chart|named .*(starter|starting)|listed as .*(starter|QB1|QB2|RB1|RB2|WR1|WR2|WR3|TE1)",
-  ignore_case = TRUE
-)
+# Directional, not a single undifferentiated "depth_chart" flag (fixed
+# 2026-09-09 -- caught before wiring to 10c: the original version treated
+# "Jeremiyah Love listed as RB2" and "Tyler Allgeier listed as starter"
+# identically, which would have pushed an "up" nudge onto a CONFIRMED
+# BACKUP. Starter/QB1/RB1/WR1/TE1 postings are the beneficiary's own
+# subject (no retargeting needed, unlike the LLM path); backup/QB2/RB2/
+# etc. postings are a mild down signal for that same player.
+STARTER_RX <- regex("named .*(starter|starting)|listed as .*(starter|QB1|RB1|WR1|TE1)\\b", ignore_case = TRUE)
+BACKUP_RX  <- regex("listed as .*(QB2|RB2|WR2|WR3|TE2|backup)\\b", ignore_case = TRUE)
 
-rule_flagged <- matched |>
-  filter(str_detect(paste(headline, body, impact), DEPTH_CHART_RX)) |>
-  mutate(flag_source = "rule", flag_type = "depth_chart", confidence = 1.0,
-         reason = headline)
+# Headline ONLY, not body/impact -- caught 2026-09-09: "Michael Penix Jr.
+# to be inactive in Week 1" matched STARTER_RX because his OWN blurb's
+# impact text mentions "Tua Tagovailoa was named the starter" (a related
+# but DIFFERENT player). The headline for this style of blurb is always
+# self-contained and correctly attributed to its own subject; body/impact
+# often discusses other players. A cheap rule that can't verify WHOSE
+# name a match belongs to should only match where attribution is certain.
+rule_flagged <- bind_rows(
+  matched |> filter(str_detect(headline, STARTER_RX)) |>
+    mutate(flag_source = "rule", flag_type = "role_change_up", confidence = 1.0, reason = headline),
+  matched |> filter(str_detect(headline, BACKUP_RX), !str_detect(headline, STARTER_RX)) |>
+    mutate(flag_source = "rule", flag_type = "role_change_down", confidence = 0.6, reason = headline)
+)
 
 cli_alert_success("{nrow(rule_flagged)} flagged by the depth-chart rule (no LLM call)")
 
