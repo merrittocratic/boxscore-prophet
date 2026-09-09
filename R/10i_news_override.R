@@ -315,13 +315,31 @@ if (is.null(key_hit)) {
   cli_alert_info("Anthropic key found via {key_hit$src} -- classifying {nrow(to_classify)} remaining blurbs with {ANTHROPIC_MODEL}")
 }
 
-llm_results <- to_classify |>
-  rowwise() |>
-  mutate(cls = list(classify_blurb(headline, body, impact, key_hit))) |>
-  ungroup() |>
-  unnest_wider(cls) |>
-  filter(flag) |>
-  mutate(flag_source = "llm", flag_type = paste0("role_change_", direction))
+# Explicit nrow(to_classify) == 0 branch (fixed 2026-09-09, same "empty
+# input loses expected columns" pattern as GitHub #1's fetch bugs, just
+# hit inside this script rather than an nflverse call): unnest_wider() on
+# a completely empty list-column has no example element to infer sub-
+# column names from, so it produces NONE of them -- the populated path's
+# filter(flag) then crashes with "object 'flag' not found" on a week
+# where every blurb was already caught by the depth-chart rule (or there
+# was simply nothing left after position/timing/dedup filtering). A
+# zero-blurbs-to-classify week is a completely normal, expected outcome,
+# not a failure.
+if (nrow(to_classify) > 0) {
+  llm_results <- to_classify |>
+    rowwise() |>
+    mutate(cls = list(classify_blurb(headline, body, impact, key_hit))) |>
+    ungroup() |>
+    unnest_wider(cls) |>
+    filter(flag) |>
+    mutate(flag_source = "llm", flag_type = paste0("role_change_", direction))
+} else {
+  llm_results <- to_classify |>
+    mutate(flag = FALSE, affected_player = NA_character_, direction = NA_character_,
+           confidence = NA_real_, reason = NA_character_,
+           flag_source = character(), flag_type = character()) |>
+    filter(flag)
+}
 
 # The override target is often NOT the blurb's own subject -- e.g. "Willis
 # waived... signals Kittle's return" should apply to Kittle, not Willis
@@ -333,20 +351,27 @@ llm_results <- to_classify |>
 # subject only when affected_player is null/unresolved (the common case
 # where a player's own move affects their own opportunity, e.g. Jacobs'
 # court date, Boutte's role clarity).
-if (nrow(llm_results) > 0) {
-  llm_results <- llm_results |>
-    mutate(affected_nm = normalize_player_name(coalesce(affected_player, ""))) |>
-    left_join(rosters |> rename(affected_gsis_id = gsis_id), by = c("affected_nm" = "nm")) |>
-    mutate(
-      final_gsis_id = coalesce(affected_gsis_id, gsis_id),
-      final_name    = if_else(!is.na(affected_gsis_id), affected_player, name_guess)
-    )
-  n_retargeted <- sum(!is.na(llm_results$affected_gsis_id) & llm_results$affected_gsis_id != llm_results$gsis_id)
-  n_unresolved <- sum(!is.na(llm_results$affected_player) & is.na(llm_results$affected_gsis_id))
-  cli_alert_info("LLM overrides: {n_retargeted} re-targeted to a named beneficiary, {n_unresolved} named a beneficiary that didn't crosswalk (kept on the blurb's own subject, flagged for review)")
-  llm_results <- llm_results |>
-    mutate(gsis_id = final_gsis_id, name_guess = final_name)
-}
+#
+# NOT gated on nrow(llm_results) > 0 (fixed 2026-09-09, GitHub #1 series,
+# hit on the actual pre-Week-1 production run): a zero-LLM-flags week is
+# a completely normal outcome (thin news volume early in the archive), but
+# the original code skipped this whole block when llm_results had zero
+# rows -- so affected_gsis_id never got created, and the output section
+# below crashed referencing it unconditionally. dplyr operations on an
+# empty tibble are safe and return the right columns with zero rows, so
+# there was never a real need to skip this on the empty case.
+llm_results <- llm_results |>
+  mutate(affected_nm = normalize_player_name(coalesce(affected_player, ""))) |>
+  left_join(rosters |> rename(affected_gsis_id = gsis_id), by = c("affected_nm" = "nm")) |>
+  mutate(
+    final_gsis_id = coalesce(affected_gsis_id, gsis_id),
+    final_name    = if_else(!is.na(affected_gsis_id), affected_player, name_guess)
+  )
+n_retargeted <- sum(!is.na(llm_results$affected_gsis_id) & llm_results$affected_gsis_id != llm_results$gsis_id)
+n_unresolved <- sum(!is.na(llm_results$affected_player) & is.na(llm_results$affected_gsis_id))
+cli_alert_info("LLM overrides: {n_retargeted} re-targeted to a named beneficiary, {n_unresolved} named a beneficiary that didn't crosswalk (kept on the blurb's own subject, flagged for review)")
+llm_results <- llm_results |>
+  mutate(gsis_id = final_gsis_id, name_guess = final_name)
 
 # ===========================================================================
 # 8. OUTPUT
