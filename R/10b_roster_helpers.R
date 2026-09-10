@@ -283,3 +283,45 @@ load_pbp_retry <- function(seasons, max_tries = 3, timeout_s = 300) {
   }
   out
 }
+
+# ---------------------------------------------------------------------------
+# Current depth-chart resolver (added 2026-09-10, RB/WR/TE role-signal
+# audit -- see R/archive/oneoff/depth_chart_role_audit.R). Used by the QB
+# depth-chart starter floor/ceiling in R/10c_weekly_score.R too eventually;
+# not yet retrofitted there since it never actually broke QB in practice
+# (see below).
+#
+# Resolves each team's CURRENT depth chart from nflreadr::load_depth_charts(),
+# point-in-time as of `as_of`. Filters to each team's OWN latest submission
+# date FIRST, then reads ranks from that one consistent snapshot -- NOT each
+# player's own latest appearance across all history. The latter (what the
+# QB fix in R/10c:509 does) can keep a since-released player's stale row
+# alive if he no longer appears in the team's current chart at all, or mix
+# one player's fresh row with a teammate's stale one if they were last
+# updated on different dates. Found auditing RB/WR (2026-09-10): KC showed
+# two "RB2"s from different snapshot dates (one player released, one
+# current); PHI carried a June A.J. Brown row next to a September DeVonta
+# Smith row. Every team happened to share one identical dt when the QB fix
+# was built (2026-09-09), so per-player-latest didn't visibly break it --
+# it will if teams desync in a later week, so this is built correctly here.
+#
+# position: nflverse pos_abb, e.g. "QB"/"RB"/"WR"/"TE".
+# Returns: tibble(gsis_id, team, pos_rank, pos_slot) -- one row per player on
+#   each team's CURRENT chart at that position, as of `as_of`. WR carries
+#   three simultaneous lanes via pos_slot (1=X, 2=Z, 8=slot); pos_rank
+#   interleaves them (rank 1 = all three slot-1s, rank 2 = all three
+#   slot-2s, ...), so "starter" at WR means pos_rank <= 3, not pos_rank==1.
+load_current_depth_chart <- function(season, position, as_of) {
+  dc <- nflreadr::load_depth_charts(season) |>
+    dplyr::filter(pos_abb == position) |>
+    dplyr::mutate(dt_parsed = as.POSIXct(dt, format = "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")) |>
+    dplyr::filter(!is.na(dt_parsed), dt_parsed <= as_of)
+  team_latest <- dc |>
+    dplyr::group_by(team) |>
+    dplyr::summarise(team_dt = max(dt_parsed), .groups = "drop")
+  dc |>
+    dplyr::inner_join(team_latest, by = "team") |>
+    dplyr::filter(dt_parsed == team_dt) |>
+    dplyr::select(gsis_id, team, pos_rank, pos_slot) |>
+    dplyr::distinct()
+}

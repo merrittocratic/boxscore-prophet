@@ -45,6 +45,7 @@ suppressPackageStartupMessages({
 # D27 star_platt ship: shared core for the RB trailing-FP star buckets
 # (one implementation, two call sites -- fit side is 18e).
 source("R/18e_star_bucket_fns.R")
+source("R/10b_roster_helpers.R")   # load_current_depth_chart() for WR/TE/QB role-signal fixes
 
 args <- commandArgs(trailingOnly = TRUE)
 TARGET_SEASON <- if (length(args) >= 1) as.integer(args[1]) else 2026L
@@ -417,8 +418,149 @@ if (MODEL_ARCH == "fp1") {
   rb_scored <- rb_scored |> mutate(position = "RB", .before = 1)
 }
 
+# WR/TE depth-chart role-signal floor/ceiling (2026-09-10 audit -- see
+# R/archive/oneoff/depth_chart_role_audit.R and the approved plan at
+# ~/.claude/plans/unified-painting-gosling.md). Same root cause as the QB
+# fix above but a smaller, two-population residual: the 2026-08-31
+# carryforward fix already gives RB/WR/TE a baseline_* fallback (QB's
+# db_vol never got one), so most players are fine -- but (a) cold-start
+# players (is_cold_start=1) still fall to a flat draft-tier constant with
+# zero player-specific role info, and (b) non-cold-start role-changers
+# (is_cold_start=0) carry their OWN prior-role share/efficiency forward,
+# which is actively wrong, not just missing, if their role changed. A
+# cold-start-only gate (like QB's) misses population (b) entirely.
+#
+# Corrects BOTH the volume-share features (baseline_target_share/
+# baseline_snap_share/baseline_air_yards_share) AND baseline_epa_per_opp
+# (the efficiency model's own fallback) together, for the same reason the
+# QB fix ended up needing both pass_eff and db_vol: WR/TE's twostage total
+# is also pred_eff * pred_vol, multiplicative, so flooring volume alone
+# while a flagged player's efficiency reads negative (e.g. Malik Washington
+# carries a real -0.151 prior_epa_per_opp from his smaller prior role) makes
+# the total WORSE, not better -- confirmed this trap BEFORE shipping this
+# time, not after, unlike the QB fix's first two attempts tonight.
+#
+# Uses load_current_depth_chart() (R/10b_roster_helpers.R) rather than the
+# QB fix's per-player-latest-snapshot approach -- unsafe for WR's 3-lane
+# depth chart (see that helper's own comment). WR starter = pos_rank <= 3
+# (three simultaneous lanes via pos_slot); TE starter = pos_rank == 1.
+# RB explicitly excluded: audited 2026-09-10, RB's real error is
+# over-ranked veteran handcuffs, a different problem, not this blind spot.
+#
+# Applied once, before the fp1/twostage branch below, since the corrected
+# baseline_* columns feed both architectures identically (confirmed: both
+# dp$wr$vol$features and dp_fp$wr$vol/point$features include the same
+# baseline_target_share/snap_share/air_yards_share names) -- so this
+# benefits the real (twostage, default) run AND the fp1 shadow pass with
+# one correction point.
+apply_role_signal_correction <- function(enc, position, starter_rank_max) {
+  dc <- tryCatch(
+    load_current_depth_chart(TARGET_SEASON, position, AS_OF) |>
+      dplyr::rename(player_id = gsis_id),
+    error = function(e) {
+      cli_alert_warning("{position} depth chart fetch failed ({conditionMessage(e)}) -- role-signal floor/ceiling skipped this run")
+      tibble(player_id = character(), pos_rank = integer())
+    })
+  if (nrow(dc) == 0) return(enc)
+
+  d <- enc |>
+    dplyr::left_join(dc |> dplyr::select(player_id, dc_rank = pos_rank), by = "player_id") |>
+    dplyr::mutate(starter = !is.na(dc_rank) & dc_rank <= starter_rank_max)
+
+  # Share floor stays at the confirmed-starter MEDIAN -- tested against a
+  # 30th-percentile share floor too (2026-09-10) and it visibly weakened the
+  # real under-ranked cases (Denzel Boston, Malik Washington) without a
+  # matching problem to justify it; share/role volume isn't the axis where
+  # "typical starter" broke down.
+  #
+  # Efficiency floor uses the 30th percentile instead (same bar as the
+  # under_flag threshold below) -- THIS one Steve's own football read on
+  # Charlie Kolar caught directly: TE starters are genuinely bimodal
+  # (receiving TE1s vs. run-blocking TE1s by scheme), so the "typical
+  # starter" EFFICIENCY median (0.306 EPA/opp for TE, pulled up by elite
+  # receiving TEs) is too generous a floor for a legitimately low-target
+  # blocking role -- it should only guarantee "at least as good as a
+  # below-average REAL starter's efficiency," not "typical starter's."
+  # The backup ceiling keeps using the backup median on both axes --
+  # over-crediting isn't the concern on that side, no adjustment needed.
+  share_cols <- c("baseline_target_share", "baseline_snap_share", "baseline_air_yards_share")
+  starter_ok <- !d$is_cold_start_int & d$starter
+  backup_ok  <- !d$is_cold_start_int & !d$starter
+  ref_starter <- setNames(sapply(share_cols, function(cn) median(d[[cn]][starter_ok], na.rm = TRUE)), share_cols)
+  ref_starter_q30 <- quantile(d$baseline_target_share[starter_ok], 0.30, na.rm = TRUE)
+  ref_backup  <- setNames(sapply(share_cols, function(cn) median(d[[cn]][backup_ok], na.rm = TRUE)), share_cols)
+  ref_starter_epa <- quantile(d$baseline_epa_per_opp[starter_ok], 0.30, na.rm = TRUE)
+  ref_backup_epa  <- median(d$baseline_epa_per_opp[backup_ok],  na.rm = TRUE)
+  if (any(is.na(ref_starter)) || is.na(ref_starter_q30) || any(is.na(ref_backup)) ||
+      is.na(ref_starter_epa) || is.na(ref_backup_epa)) return(enc)
+
+  under_flag <- (d$is_cold_start_int == 1 & d$starter) |
+    (d$is_cold_start_int == 0 & d$starter & d$baseline_target_share < ref_starter_q30)
+  over_flag  <- d$is_cold_start_int == 1 & !d$starter & d$baseline_target_share > ref_backup["baseline_target_share"]
+
+  # Efficiency shrinkage (added 2026-09-10, Steve's own football read on
+  # Charlie Kolar caught this): the share-column floor/ceiling above is
+  # correct to leave baseline_epa_per_opp untouched via a simple pmax/pmin
+  # for is_cold_start players (they have no real number to protect), but
+  # for the stale_baseline_starter/backup population -- players WITH a real
+  # prior_epa_per_opp -- pmax/pmin only ever RAISES a too-low number, never
+  # corrects a too-HIGH one built on a thin sample. Found exactly that:
+  # Kolar's 0.344 EPA/opp (elite-tier) comes from just 15 targets (barely
+  # clears MIN_PRIOR_OPP=10 in R/10b5_te_slate.R:32), 7 of them deep passes
+  # -- a couple of explosive plays, not demonstrated receiving talent (Steve:
+  # he's a run-blocking TE1 by scheme, not a pass-catching specialist).
+  # Checked the other 9 flagged TEs + 34 flagged WRs: this is systematic,
+  # not a one-off -- several other thin-sample efficiency numbers in the
+  # 0.6-0.8 EPA/opp range on n<50 opportunities. Empirical-Bayes shrinkage
+  # toward the reference (weight K "prior opportunities" of trust in the
+  # reference vs. the player's own n real opportunities) fixes this
+  # generally: a 15-target sample gets pulled hard toward the reference: a
+  # 77-target one (Evan Engram) barely moves.
+  K_SHRINK <- 20
+  plays_path <- sprintf("data/%s_plays.rds", tolower(position))
+  prior_opp <- if (file.exists(plays_path)) {
+    readRDS(plays_path) |>
+      dplyr::filter(season == TARGET_SEASON - 1L) |>
+      dplyr::group_by(player_id) |>
+      dplyr::summarise(n_opp = dplyr::n(), raw_epa_per_opp = sum(epa, na.rm = TRUE) / dplyr::n(), .groups = "drop")
+  } else {
+    tibble(player_id = character(), n_opp = integer(), raw_epa_per_opp = double())
+  }
+  d <- d |> dplyr::left_join(prior_opp, by = "player_id") |>
+    dplyr::mutate(n_opp = dplyr::coalesce(n_opp, 0L), raw_epa_per_opp = dplyr::coalesce(raw_epa_per_opp, 0))
+  shrink_toward <- function(n, raw, ref) (n * raw + K_SHRINK * ref) / (n + K_SHRINK)
+
+  # prior_epa_per_opp is a SEPARATE feature from baseline_epa_per_opp in
+  # both dp$wr/te$eff$features -- for a non-cold-start player the two start
+  # out identical (baseline_epa_per_opp = prior_epa_per_opp verbatim, see
+  # R/10b5_te_slate.R:176-182), so shrinking only baseline_epa_per_opp
+  # leaves the eff model still reading the player's raw, unshrunk number
+  # straight off prior_epa_per_opp. Caught this via Kolar's pred_eff barely
+  # moving (0.297, should have landed near 0.24) despite baseline_epa_per_opp
+  # shrinking correctly -- same "missed a duplicate feature" shape as the
+  # QB fix's own false starts tonight. Both must move together.
+  if (any(under_flag, na.rm = TRUE)) {
+    under_flag[is.na(under_flag)] <- FALSE
+    cli_alert_warning("{position} depth-chart starter floor: {sum(under_flag)} player(s) ({paste(enc$player_name[under_flag], collapse=', ')}) -- baseline share floored + efficiency shrunk toward confirmed-starter reference")
+    for (cn in share_cols) enc[[cn]][under_flag] <- pmax(enc[[cn]][under_flag], ref_starter[[cn]])
+    shrunk <- shrink_toward(d$n_opp[under_flag], d$raw_epa_per_opp[under_flag], ref_starter_epa)
+    enc$baseline_epa_per_opp[under_flag] <- shrunk
+    enc$prior_epa_per_opp[under_flag]    <- shrunk
+  }
+  if (any(over_flag, na.rm = TRUE)) {
+    over_flag[is.na(over_flag)] <- FALSE
+    cli_alert_warning("{position} depth-chart backup ceiling: {sum(over_flag)} player(s) ({paste(enc$player_name[over_flag], collapse=', ')}) -- baseline share capped + efficiency shrunk toward confirmed-backup reference")
+    for (cn in share_cols) enc[[cn]][over_flag] <- pmin(enc[[cn]][over_flag], ref_backup[[cn]])
+    shrunk <- shrink_toward(d$n_opp[over_flag], d$raw_epa_per_opp[over_flag], ref_backup_epa)
+    enc$baseline_epa_per_opp[over_flag] <- shrunk
+    enc$prior_epa_per_opp[over_flag]    <- shrunk
+  }
+  enc
+}
+
 # --- WR: asymmetric signed qsets + power-law (04c mechanism), OR fp1 ---
 wr_enc <- encode_features(wr_slate)
+wr_enc <- apply_role_signal_correction(wr_enc, "WR", starter_rank_max = 3L)
 if (MODEL_ARCH == "fp1") {
   wr_fp1 <- score_fp1(wr_enc, dp_fp$wr)
   wr_scored <- bind_cols(
@@ -448,6 +590,7 @@ if (MODEL_ARCH == "fp1") {
 
 # --- TE: asymmetric signed qsets + power-law (12c mechanism, WR clone) ---
 te_enc <- encode_features(te_slate)
+te_enc <- apply_role_signal_correction(te_enc, "TE", starter_rank_max = 1L)
 te_pred_eff <- predict_component(te_enc, dp$te$eff)
 te_pred_vol <- predict_component(te_enc, dp$te$vol)
 te_pred_tot <- te_pred_eff * te_pred_vol
