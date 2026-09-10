@@ -465,6 +465,76 @@ te_scored <- bind_cols(
 # --- QB: four symmetric components + const-additive combined (08c) ---
 qb_enc <- encode_features(qb_slate)
 qb_pred <- map(dp$qb$components, function(spec) predict_component(qb_enc, spec))
+
+# QB depth-chart starter floor -- official, structured, point-in-time
+# nflverse depth-chart data (NOT beat-reporter text -- same category
+# CLAUDE.md already allows training on, see R/11b's injury layer) closes a
+# real blind spot: db_vol's own features (wt_dropbacks/wt_team_total_plays/
+# wt_team_pass_rate) are ALL NA before a player's current-season debut, so
+# in a debut week BOTH db_vol and pass_eff collapse to draft_tier_int +
+# is_cold_start_int + opponent terms alone -- a backup who becomes the new
+# starter via free agency/trade (is_cold_start=1, zero current-season
+# games, often a low draft tier) reads exactly like a real scrub even
+# though the team's OWN depth chart lists him QB1. Found 2026-09-09 on
+# Malik Willis (MIA), model rank 79 of ~90 QBs, officially depth-chart QB1
+# since he signed months ago. apply_news_override's capped +/-10pp nudge
+# (built for injury-style corrections, see below) cannot fix a gap this
+# large.
+#
+# Must correct the ACTUAL components fed to simulate_qb() below, not a
+# derived summary -- two dead ends found first (2026-09-09):
+#   v1 floored db_vol alone, which made things WORSE for players whose
+#     pass_eff is negative (also driven by the same is_cold_start tier
+#     fallback) -- a bigger volume times a negative efficiency is a
+#     bigger negative total.
+#   v2 floored qb_pred_tot (the pass_eff*db_vol+rush_dir summary), which
+#     changed NOTHING: simulate_qb() never reads pred_tot -- it redraws
+#     eff/db/rush/carry independently from each component's OWN quantile
+#     matrix (pred_pass_eff, pred_db, ...) and recombines them inside the
+#     Monte Carlo. Flooring a column nothing downstream consumes is a
+#     silent no-op, not a fix.
+# The comparison population also has to be OTHER CONFIRMED STARTERS, not
+# just "not cold start" -- the QB slate carries every rostered QB2/QB3 too
+# (88 total vs. 36 real depth-chart starters this week), and most of those
+# backups clear is_cold_start on career mop-up-duty dropbacks without ever
+# being a real starter; a median over all 84 non-flagged QBs is dominated
+# by benchwarmers, not the 32 real starters among them.
+# Both pass_eff AND db_vol get replaced (not just floored) for flagged
+# players: their existing point estimates carry no real signal either way
+# (built entirely from draft-tier/cold-start proxies that don't apply to
+# this population), so pmax-floor vs. replace only matters when the
+# proxy happens to already beat the real-starter median, which isn't a
+# case worth preserving here.
+qb_depth_chart_starters <- tryCatch({
+  nflreadr::load_depth_charts(TARGET_SEASON) |>
+    filter(pos_abb == "QB") |>
+    mutate(dt_parsed = as.POSIXct(dt, format = "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")) |>
+    filter(!is.na(dt_parsed), dt_parsed <= AS_OF) |>
+    group_by(gsis_id) |>
+    slice_max(dt_parsed, n = 1, with_ties = FALSE) |>   # latest snapshot per player, ANY rank --
+    ungroup() |>                                        # must resolve "current rank" before filtering
+    filter(pos_rank == 1L) |>                            # on rank==1, or a stale "was #1 once" date wins
+    pull(gsis_id)                                        # (real bug, 2026-09-09: flagged Rudolph/O'Connell
+}, error = function(e) {                                  # as starters off a preseason camp-battle snapshot)
+  cli_alert_warning("QB depth chart fetch failed ({conditionMessage(e)}) -- starter-floor check skipped this run")
+  character(0)
+})
+
+qb_floor_flag <- qb_enc$player_id %in% qb_depth_chart_starters &
+  qb_enc$is_cold_start_int == 1 & qb_enc$games_played_so_far == 0
+
+if (any(qb_floor_flag)) {
+  established_starter_mask <- qb_enc$player_id %in% qb_depth_chart_starters &
+    qb_enc$is_cold_start_int == 0
+  pass_eff_repl <- median(qb_pred$pass_eff[established_starter_mask], na.rm = TRUE)
+  db_vol_repl   <- median(qb_pred$db_vol[established_starter_mask],   na.rm = TRUE)
+  if (!is.na(pass_eff_repl) && !is.na(db_vol_repl)) {
+    cli_alert_warning("QB depth-chart starter floor: {sum(qb_floor_flag)} player{?s} flagged as official QB1 with no usable role history ({paste(qb_enc$player_name[qb_floor_flag], collapse=', ')}) -- pass_eff/db_vol replaced with established-starter median ({round(pass_eff_repl,3)} EPA/db, {round(db_vol_repl,1)} db, n={sum(established_starter_mask)} real starters)")
+    qb_pred$pass_eff <- if_else(qb_floor_flag, pmax(qb_pred$pass_eff, pass_eff_repl), qb_pred$pass_eff)
+    qb_pred$db_vol   <- if_else(qb_floor_flag, pmax(qb_pred$db_vol,   db_vol_repl),   qb_pred$db_vol)
+  }
+}
+
 qb_pred_tot <- qb_pred$pass_eff * qb_pred$db_vol + qb_pred$rush_dir
 
 qb_scored <- bind_cols(
@@ -476,7 +546,8 @@ qb_scored <- bind_cols(
   sym_cols(qb_pred$rush_dir,  dp$qb$qs$rush,     "rush"),
   sym_cols(qb_pred$carry_vol, dp$qb$qs$carry,    "carry"),
   sym_cols(qb_pred_tot,       dp$qb$qs$tot,      "tot")
-) |> mutate(position = "QB", .before = 1)
+) |> mutate(position = "QB", .before = 1,
+            depth_chart_starter_floor = qb_floor_flag)
 
 rbwr_pred_col   <- if (MODEL_ARCH == "fp1") "pred_fp" else "pred_tot"
 rbwr_pred_label <- if (MODEL_ARCH == "fp1") "FP" else "EPA"
@@ -713,6 +784,54 @@ rb_scored <- apply_news_override(rb_scored, news_overrides)
 wr_scored <- apply_news_override(wr_scored, news_overrides)
 te_scored <- apply_news_override(te_scored, news_overrides)
 qb_scored <- apply_news_override(qb_scored, news_overrides)
+
+# QB starter-before-backup invariant (Steve, 2026-09-10): a confirmed
+# current-week backup (official depth chart rank 2+) must never outrank a
+# confirmed current-week starter (rank 1) in ANY published number -- a
+# bench QB gets ~0 real snaps this week barring injury, a starter gets a
+# full game, and no amount of individual-component modeling nuance changes
+# that. Applied as a final, explicit, easy-to-audit constraint AFTER
+# everything else (simulation, recal maps, news override) rather than
+# chased through the eff x vol x simulation chain: the depth-chart-starter-
+# floor block above already fixed db_vol/pass_eff for players like Malik
+# Willis, but that alone wasn't sufficient -- longtime backups (e.g. Mason
+# Rudolph) who cleared the historical dropback threshold from old spot
+# starts are NOT is_cold_start, so they keep their own (non-floored)
+# prediction, and the Monte Carlo's rush-tier residual-pool draw can still
+# put a lower-mean backup ahead of a higher-mean starter in the final
+# probability. Only touches an actual violation; everyone else is
+# untouched.
+qb_current_rank <- tryCatch({
+  nflreadr::load_depth_charts(TARGET_SEASON) |>
+    filter(pos_abb == "QB") |>
+    mutate(dt_parsed = as.POSIXct(dt, format = "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")) |>
+    filter(!is.na(dt_parsed), dt_parsed <= AS_OF) |>
+    group_by(gsis_id) |>
+    slice_max(dt_parsed, n = 1, with_ties = FALSE) |>
+    ungroup() |>
+    select(gsis_id, current_pos_rank = pos_rank)
+}, error = function(e) {
+  cli_alert_warning("QB depth chart fetch failed (starter-before-backup check) -- skipped this run")
+  tibble(gsis_id = character(), current_pos_rank = integer())
+})
+
+qb_scored <- qb_scored |> left_join(qb_current_rank, by = c("player_id" = "gsis_id"))
+starter_mask <- !is.na(qb_scored$current_pos_rank) & qb_scored$current_pos_rank == 1L
+backup_mask  <- !is.na(qb_scored$current_pos_rank) & qb_scored$current_pos_rank >= 2L
+
+if (any(starter_mask) && any(backup_mask)) {
+  min_starter_start <- min(qb_scored$p_start_recal[starter_mask], na.rm = TRUE)
+  min_starter_boom  <- min(qb_scored$p_boom_recal[starter_mask],  na.rm = TRUE)
+  violation <- backup_mask & (qb_scored$p_start_recal >= min_starter_start)
+  if (any(violation)) {
+    cli_alert_warning("QB starter-before-backup invariant: {sum(violation)} confirmed backup(s) ({paste(qb_scored$player_name[violation], collapse=', ')}) scored at/above the weakest confirmed starter -- capped below (a bench QB cannot outrank a starter)")
+    cap_start <- max(min_starter_start - 0.005, 0)
+    cap_boom  <- max(min_starter_boom  - 0.005, 0)
+    qb_scored$p_start_recal[violation] <- pmin(qb_scored$p_start_recal[violation], cap_start)
+    qb_scored$p_boom_recal[violation]  <- pmin(qb_scored$p_boom_recal[violation],  cap_boom, qb_scored$p_start_recal[violation])
+  }
+}
+qb_scored <- qb_scored |> select(-current_pos_rank)
 
 for (d in list(rb_scored, wr_scored, te_scored, qb_scored)) {
   stopifnot(!any(is.na(d$p_start_recal)), !any(is.na(d$p_boom_recal)),
