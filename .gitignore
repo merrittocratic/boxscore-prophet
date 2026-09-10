@@ -32,3 +32,10 @@ logs/*.log
 # file whose path itself reveals PFF as a source, even though PFF-derived
 # feature/column names inside other committed files are fine.
 pff_experimentation/
+
+# News-override candidates: same-run intermediate (10i writes, 10c reads
+# in the same weekly_run.sh pass) -- its effect (pre/post value, reason,
+# confidence) is already durably captured in the tracked ledger/scored
+# output, so the raw candidate file adds nothing kept and never needs to
+# sync between machines.
+data/news_overrides_*.csv
