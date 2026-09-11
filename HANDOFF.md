@@ -56,6 +56,148 @@ the first live season (launch = Week 1, September).
    match gates reproduce backtest logic at |diff| = 0 before
    anything ships.
 
+## Per-position model reference (added 2026-09-10/11)
+
+Detail behind layers 2-6 above, broken out per position -- what's
+actually deployed, what's shadow-only, and which raw features carry
+the weight. Feature plain-language labels match the dictionary in
+`R/21m_shap_explain.R`.
+
+**Real vs. shadow, stated plainly because a prior note overstated it:**
+`weekly_run.sh`'s REAL production pass (the one `10d`/content reads)
+runs `Rscript R/10c_weekly_score.R` with no env override, defaulting
+`MODEL_ARCH="twostage"` -- the OLD eff-x-vol architecture, for RB and
+WR too. `MODEL_ARCH=fp1` (the D29 single-stage rebuild) only runs as a
+separate, deliberately-isolated shadow pass at the end of
+`weekly_run.sh`, writing to `_fp1`-suffixed files nothing public reads.
+So despite "S1 pushed live" language elsewhere, RB/WR boards are NOT
+running single-stage right now -- fp1 is validated in shadow, not cut
+over. Don't assume otherwise without checking which invocation actually
+produced a given output file.
+
+### QB -- two-stage only, no single-stage alternative exists
+
+4 separate LightGBM components (`pass_eff`, `db_vol`, `carry_vol`,
+`rush_dir`), combined as `pass_eff x db_vol + rush_dir` -> Monte Carlo
+simulation (`simulate_qb()`) -> Platt/isotonic recal map -> news
+override (+/-10pp cap) -> depth-chart starter floor/ceiling + a hard
+starter-before-backup invariant (2026-09-09, see below).
+
+| Component | Top feature | Plain language | Gain |
+|---|---|---|---|
+| pass_eff | `implied_total` | Vegas implied team total | 51% |
+| | `prior_pass_epa_per_db` | prior-season per-dropback efficiency | 12% |
+| db_vol | `wt_dropbacks` | recent dropback volume (NA pre-debut) | 40% |
+| | `wt_team_pass_rate` | recent team pass-play rate | 14% |
+| carry_vol | `prior_carries_pg` | prior-season carries per game | 50% |
+| rush_dir | `prior_carries_pg` | prior-season carries per game | 36% |
+
+`db_vol` has NO prior-season fallback feature at all (unlike RB/WR/TE's
+`vol`, below) -- at a player's debut it collapses onto
+`draft_tier_int`/`is_cold_start_int` (~7.5% combined gain), which is
+the root cause of the 2026-09-09 fix (Malik Willis ranked 79th of ~90
+QBs despite being an official depth-chart starter for months).
+
+### RB -- real production is two-stage; single-stage (fp1) is shadow-only
+
+`eff` x `vol` -> power-law interval scaling -> asymmetric recal map ->
+news override. No depth-chart role-signal correction (audited
+2026-09-10 and scoped OUT -- RB's real error is over-ranked veteran
+handcuffs, a different problem, not the role-signal blind spot below).
+
+| Component | Top feature | Plain language | Gain |
+|---|---|---|---|
+| eff (twostage) | `prior_epa_per_opp` | prior-season per-opportunity efficiency | 78% |
+| vol (twostage) | `wt_carry_share` | recent carry share | 66% |
+| | `wt_snap_share` | recent snap share | 13% |
+
+RB's `vol` is unique among all four positions in also carrying the full
+injury-context layer (`own_q_int` = own injury designation,
+`weeks_missed`, `above_q_share` = share of higher-usage teammates
+questionable). In the shadow fp1 point model this layer actually
+dominates -- `weeks_missed` (19%) and `own_q_int` (17%) outrank
+`wt_carry_share` (5%) -- a meaningfully different feature story from
+what's actually live.
+
+### WR -- same real/shadow split as RB
+
+`eff` x `vol` -> asymmetric recal map -> news override -> depth-chart
+starter floor / backup ceiling on share features AND efficiency, with
+empirical-Bayes shrinkage on efficiency (2026-09-10, protects against
+thin-sample noise -- see below).
+
+| Component | Top feature | Plain language | Gain |
+|---|---|---|---|
+| eff (twostage) | `prior_epa_per_opp` | prior-season per-opportunity efficiency | 77% |
+| vol (twostage) | `wt_target_share` | recent target share | 46% |
+| | `baseline_target_share` | season target share | 15% |
+
+Shadow fp1's point model ranks features almost identically
+(`wt_target_share` 40%, `baseline_target_share` 13%) -- the rebuild
+changed how eff/vol combine, not what matters.
+
+### TE -- two-stage only, structurally a WR clone
+
+`eff` x `vol` -> asymmetric recal map -> news override -> same
+WR-style floor/ceiling + efficiency shrinkage (2026-09-10) -- this is
+where the Kolar limitation lives (see below).
+
+| Component | Top feature | Plain language | Gain |
+|---|---|---|---|
+| eff | `wt_snap_share` | recent snap share | 15% |
+| | `implied_total` | Vegas implied team total | 15% |
+| vol | `wt_target_share` | recent target share | 48% |
+
+TE's `eff` leans more on Vegas game-script context than RB/WR's does
+(RB/WR eff is 76-78% one feature, the player's own efficiency history;
+TE's is diffuse across snap share and matchup terms) -- consistent
+with TE efficiency being more matchup-sensitive and less individually
+driven, which is part of why the depth-chart fix below couldn't fully
+correct Charlie Kolar.
+
+### The depth-chart role-signal layer (new 2026-09-09/10)
+
+Both QB and WR/TE additions share a root cause: `wt_*` in-season
+rolling volume features are ALL NA before a player's current-season
+debut, so the volume model falls back to `draft_tier_int`/
+`is_cold_start_int` -- weak proxies that badly mis-rank anyone whose
+real role changed (backup-to-starter or vice versa) more than their
+box-score history reflects.
+
+- **QB** (`R/10c_weekly_score.R`, commit `48817ba`): `db_vol` had no
+  prior-season fallback, so this was severe. Fix floors
+  `pass_eff`/`db_vol` for official depth-chart starters with no usable
+  history (median of other confirmed starters), and separately hard-
+  enforces that a confirmed backup can never outrank a confirmed
+  starter in any published number -- caught 48 backups needing the
+  cap, not just the original 4 spotted by eye.
+- **WR/TE** (commit `1c7ef9c`): smaller residual -- the 2026-08-31
+  volume-carryforward fix already gives RB/WR/TE a real `baseline_*`
+  fallback QB's `db_vol` never got. Fix floors/caps both the share
+  features AND efficiency (`baseline_epa_per_opp` -- and the redundant
+  `prior_epa_per_opp`, which must move together or the model just
+  reads the raw number off the untouched duplicate) together, with
+  empirical-Bayes shrinkage on efficiency weighted by real prior-season
+  opportunity count.
+- **New shared helper**: `load_current_depth_chart()` in
+  `R/10b_roster_helpers.R` resolves each TEAM's own latest depth-chart
+  snapshot first, then reads ranks -- NOT per-player latest snapshot
+  (what the QB fix used), which is unsafe for WR's 3-lane depth chart
+  (can keep a since-released player's stale row alive, or mix snapshot
+  dates within one team).
+- **RB explicitly out of scope**, audited 2026-09-10 -- different
+  problem (over-ranked veteran handcuffs), not this blind spot.
+- **Known, disclosed limitation**: Charlie Kolar (LAC TE1 by a new
+  run-blocking scheme, not a receiving specialist) still ranks too
+  high. Verified against the deployed booster directly that his
+  efficiency inputs barely move his prediction -- the real driver is a
+  favorable matchup adjustment combined with his now-correctly-
+  unsuppressed volume. Depth-chart rank alone can't distinguish a
+  blocking-scheme starter from a receiving one; that needs a role-type
+  signal this pipeline doesn't have. Full trail:
+  `R/archive/oneoff/depth_chart_role_audit.R`,
+  `output/10c_depthchart_audit_2026_w01.csv`.
+
 ## The house discipline (why the numbers are trustable)
 
 - Every experiment pre-registered: expectation, decision rule, and
