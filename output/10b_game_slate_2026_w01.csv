@@ -1,17 +1,17 @@
 game_id,season,week,gameday,weekday,gametime,away_team,home_team,location,roof,stadium.x,stadium.y,lat,lon,roof_eff,is_indoor,is_neutral,temp_c,wind_kmh,gust_kmh,precip_mm,weather_src,flag_wind,flag_cold,temp_f,wind_mph,gust_mph
 2026_01_NE_SEA,2026,1,2026-09-09,Wednesday,20:20,NE,SEA,Home,outdoors,Lumen Field,Lumen Field,47.595,-122.332,outdoors,FALSE,FALSE,22.9,8.6,11.2,0,historical_forecast,FALSE,FALSE,73,5,7
 2026_01_SF_LA,2026,1,2026-09-10,Thursday,20:35,SF,LA,Neutral,dome,Melbourne Cricket Ground,SoFi Stadium,33.953,-118.339,dome,TRUE,TRUE,30.1,12.1,13,0,historical_forecast,FALSE,FALSE,86,8,8
-2026_01_CHI_CAR,2026,1,2026-09-13,Sunday,13:00,CHI,CAR,Home,outdoors,Bank of America Stadium,Bank of America Stadium,35.226,-80.853,outdoors,FALSE,FALSE,29.8,5.9,13,0,forecast,FALSE,FALSE,86,4,8
-2026_01_TB_CIN,2026,1,2026-09-13,Sunday,13:00,TB,CIN,Home,outdoors,Paycor Stadium,Paycor Stadium,39.095,-84.516,outdoors,FALSE,FALSE,30.6,10.8,19.4,0,forecast,FALSE,FALSE,87,7,12
-2026_01_NO_DET,2026,1,2026-09-13,Sunday,13:00,NO,DET,Home,dome,Ford Field,Ford Field,42.34,-83.046,dome,TRUE,FALSE,26.7,16.4,23.8,0,forecast,FALSE,FALSE,80,10,15
-2026_01_BUF_HOU,2026,1,2026-09-13,Sunday,13:00,BUF,HOU,Home,NA,Reliant Stadium,NRG Stadium,29.685,-95.411,retractable,FALSE,FALSE,35.1,6.6,10.4,0,forecast,FALSE,FALSE,95,4,6
-2026_01_BAL_IND,2026,1,2026-09-13,Sunday,13:00,BAL,IND,Home,NA,Lucas Oil Stadium,Lucas Oil Stadium,39.76,-86.164,retractable,FALSE,FALSE,26.8,9.6,16.9,0,forecast,FALSE,FALSE,80,6,11
-2026_01_CLE_JAX,2026,1,2026-09-13,Sunday,13:00,CLE,JAX,Home,outdoors,EverBank Stadium,EverBank Stadium,30.324,-81.637,outdoors,FALSE,FALSE,30.5,10.6,14,0,forecast,FALSE,FALSE,87,7,9
-2026_01_ATL_PIT,2026,1,2026-09-13,Sunday,13:00,ATL,PIT,Home,outdoors,Acrisure Stadium,Acrisure Stadium,40.447,-80.016,outdoors,FALSE,FALSE,26,8,13,0,forecast,FALSE,FALSE,79,5,8
-2026_01_NYJ_TEN,2026,1,2026-09-13,Sunday,13:00,NYJ,TEN,Home,outdoors,Nissan Stadium,Nissan Stadium,36.166,-86.771,outdoors,FALSE,FALSE,32.7,4.2,7.6,0,forecast,FALSE,FALSE,91,3,5
-2026_01_ARI_LAC,2026,1,2026-09-13,Sunday,16:25,ARI,LAC,Home,dome,SoFi Stadium,SoFi Stadium,33.953,-118.339,dome,TRUE,FALSE,27,14.3,16.6,0,forecast,FALSE,FALSE,81,9,10
-2026_01_MIA_LV,2026,1,2026-09-13,Sunday,16:25,MIA,LV,Home,dome,Allegiant Stadium,Allegiant Stadium,36.091,-115.184,dome,TRUE,FALSE,37.1,29.5,41,0,forecast,FALSE,FALSE,99,18,25
-2026_01_GB_MIN,2026,1,2026-09-13,Sunday,16:25,GB,MIN,Home,dome,U.S. Bank Stadium,U.S. Bank Stadium,44.974,-93.258,dome,TRUE,FALSE,21.8,14.1,27.4,0,forecast,FALSE,FALSE,71,9,17
-2026_01_WAS_PHI,2026,1,2026-09-13,Sunday,16:25,WAS,PHI,Home,outdoors,Lincoln Financial Field,Lincoln Financial Field,39.901,-75.168,outdoors,FALSE,FALSE,26.8,4.8,14.8,0,forecast,FALSE,FALSE,80,3,9
-2026_01_DAL_NYG,2026,1,2026-09-13,Sunday,20:20,DAL,NYG,Home,outdoors,MetLife Stadium,MetLife Stadium,40.813,-74.074,outdoors,FALSE,FALSE,23.3,6.5,10.8,0,forecast,FALSE,FALSE,74,4,7
-2026_01_DEN_KC,2026,1,2026-09-14,Monday,20:15,DEN,KC,Home,outdoors,GEHA Field at Arrowhead Stadium,GEHA Field at Arrowhead,39.049,-94.484,outdoors,FALSE,FALSE,32.9,23,50,0,forecast,FALSE,FALSE,91,14,31
+2026_01_CHI_CAR,2026,1,2026-09-13,Sunday,13:00,CHI,CAR,Home,outdoors,Bank of America Stadium,Bank of America Stadium,35.226,-80.853,outdoors,FALSE,FALSE,30.1,4.4,8.6,0,historical_forecast,FALSE,FALSE,86,3,5
+2026_01_TB_CIN,2026,1,2026-09-13,Sunday,13:00,TB,CIN,Home,outdoors,Paycor Stadium,Paycor Stadium,39.095,-84.516,outdoors,FALSE,FALSE,31.5,7.2,20.5,0,historical_forecast,FALSE,FALSE,89,4,13
+2026_01_NO_DET,2026,1,2026-09-13,Sunday,13:00,NO,DET,Home,dome,Ford Field,Ford Field,42.34,-83.046,dome,TRUE,FALSE,26.6,15,23.8,0,historical_forecast,FALSE,FALSE,80,9,15
+2026_01_BUF_HOU,2026,1,2026-09-13,Sunday,13:00,BUF,HOU,Home,closed,Reliant Stadium,NRG Stadium,29.685,-95.411,closed,TRUE,FALSE,32.3,17.8,21.2,0,historical_forecast,FALSE,FALSE,90,11,13
+2026_01_BAL_IND,2026,1,2026-09-13,Sunday,13:00,BAL,IND,Home,closed,Lucas Oil Stadium,Lucas Oil Stadium,39.76,-86.164,closed,TRUE,FALSE,27.5,4.7,7.6,0,historical_forecast,FALSE,FALSE,82,3,5
+2026_01_CLE_JAX,2026,1,2026-09-13,Sunday,13:00,CLE,JAX,Home,outdoors,EverBank Stadium,EverBank Stadium,30.324,-81.637,outdoors,FALSE,FALSE,31.7,9.6,14,0,historical_forecast,FALSE,FALSE,89,6,9
+2026_01_ATL_PIT,2026,1,2026-09-13,Sunday,13:00,ATL,PIT,Home,outdoors,Acrisure Stadium,Acrisure Stadium,40.447,-80.016,outdoors,FALSE,FALSE,26.3,10.6,14,0,historical_forecast,FALSE,FALSE,79,7,9
+2026_01_NYJ_TEN,2026,1,2026-09-13,Sunday,13:00,NYJ,TEN,Home,outdoors,Nissan Stadium,Nissan Stadium,36.166,-86.771,outdoors,FALSE,FALSE,33.4,4.4,9,0,historical_forecast,FALSE,FALSE,92,3,6
+2026_01_ARI_LAC,2026,1,2026-09-13,Sunday,16:25,ARI,LAC,Home,dome,SoFi Stadium,SoFi Stadium,33.953,-118.339,dome,TRUE,FALSE,26.6,11.2,12.2,0,historical_forecast,FALSE,FALSE,80,7,8
+2026_01_MIA_LV,2026,1,2026-09-13,Sunday,16:25,MIA,LV,Home,dome,Allegiant Stadium,Allegiant Stadium,36.091,-115.184,dome,TRUE,FALSE,37,20.9,36,0,historical_forecast,FALSE,FALSE,99,13,22
+2026_01_GB_MIN,2026,1,2026-09-13,Sunday,16:25,GB,MIN,Home,dome,U.S. Bank Stadium,U.S. Bank Stadium,44.974,-93.258,dome,TRUE,FALSE,21.6,12.7,20.5,0,historical_forecast,FALSE,FALSE,71,8,13
+2026_01_WAS_PHI,2026,1,2026-09-13,Sunday,16:25,WAS,PHI,Home,outdoors,Lincoln Financial Field,Lincoln Financial Field,39.901,-75.168,outdoors,FALSE,FALSE,27.2,5.8,16.2,0,historical_forecast,FALSE,FALSE,81,4,10
+2026_01_DAL_NYG,2026,1,2026-09-13,Sunday,20:20,DAL,NYG,Home,outdoors,MetLife Stadium,MetLife Stadium,40.813,-74.074,outdoors,FALSE,FALSE,24.9,1.1,4,0,historical_forecast,FALSE,FALSE,77,1,2
+2026_01_DEN_KC,2026,1,2026-09-14,Monday,20:15,DEN,KC,Home,outdoors,GEHA Field at Arrowhead Stadium,GEHA Field at Arrowhead,39.049,-94.484,outdoors,FALSE,FALSE,32.3,23.3,50,0,forecast,FALSE,FALSE,90,14,31
