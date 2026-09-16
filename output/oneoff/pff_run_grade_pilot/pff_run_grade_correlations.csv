@@ -1,0 +1,17 @@
+"metric","r","n"
+"rushing_epa",0.642,4727
+"success_rate",0.586,4727
+"rush_yards_over_expected",0.548,3707
+"rush_yards_over_expected_per_att",0.543,3707
+"rushing_yards",0.529,4727
+"first_down_rate",0.51,4727
+"rush_pct_over_expected",0.489,3707
+"explosive_rate",0.425,4727
+"efficiency",-0.307,4727
+"stuff_rate",-0.29,4727
+"rushing_tds",0.282,4727
+"fumble_rate",-0.28,4727
+"def_rush_epa_allowed",0.232,4727
+"carries",0.15,4727
+"pct_attempts_gte_8def",-0.031,4727
+"avg_time_to_los",0.024,4727
