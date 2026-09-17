@@ -89,8 +89,19 @@ cli_alert_info("Actuals: {nrow(stats)} stat rows, {nrow(snaps)} snap rows (0 = p
 # ---- 2. Ledger pre-kickoff probabilities (optional enrichment) -----------
 ledger_files <- list.files("output", sprintf("^10c_ledger_%d_w", TARGET_SEASON),
                            full.names = TRUE)
+# kickoff_et/run_ts/as_of are ISO timestamp strings, and report_status/
+# practice_status are almost-always-NA free-text columns -- readr guesses
+# each column's type per-file from a row sample, so one week's file can
+# guess datetime/logical where another guesses character, and list_rbind()
+# then fails on the type mismatch (this took down this script on the W2
+# run: kickoff_et character in one ledger file, datetime in another).
+# Force all four to character on every read; only p_start/p_boom survive
+# the transmute below anyway.
+ledger_col_types <- cols(kickoff_et = col_character(), run_ts = col_character(),
+                          as_of = col_character(), report_status = col_character(),
+                          practice_status = col_character(), .default = col_guess())
 ledger <- if (length(ledger_files) > 0) {
-  map(ledger_files, read_csv, show_col_types = FALSE) |>
+  map(ledger_files, read_csv, show_col_types = FALSE, col_types = ledger_col_types) |>
     list_rbind() |>
     group_by(player_id, week) |>
     slice_tail(n = 1) |>            # last append = latest pre-kickoff row

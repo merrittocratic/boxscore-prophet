@@ -1053,8 +1053,30 @@ ledger_rows <- scored_all |>
   mutate(run_ts = format(Sys.time(), "%Y-%m-%d %H:%M:%S", tz = "America/New_York"),
          as_of  = format(AS_OF, "%Y-%m-%d %H:%M:%S"),
          run_mode = RUN_MODE)
-readr::write_csv(ledger_rows, ledger_path, append = file.exists(ledger_path))
-cli_alert_success("{ledger_path} (+{nrow(ledger_rows)} rows, mode={RUN_MODE})")
+# Raw file-append (the old approach here) silently corrupts the ledger the
+# next time this script's own column set changes mid-week -- new rows land
+# under the stale header with no schema check, shifting every later column
+# by however many fields were added (this is exactly what happened when the
+# news-override columns landed 2026-09-09 mid-week-1, and 10e's kickoff_et
+# type-mismatch crash was the eventual symptom). Read-bind-rewrite instead:
+# bind_rows aligns by column NAME and NA-fills whatever either side lacks,
+# so a schema change just means old rows get NA in the new columns, and the
+# header written out always matches the data underneath it.
+ledger_rows <- if (file.exists(ledger_path)) {
+  existing <- readr::read_csv(ledger_path, show_col_types = FALSE,
+                               col_types = readr::cols(
+                                 kickoff_et = readr::col_character(),
+                                 run_ts = readr::col_character(),
+                                 as_of = readr::col_character(),
+                                 report_status = readr::col_character(),
+                                 practice_status = readr::col_character(),
+                                 .default = readr::col_guess()))
+  bind_rows(existing, ledger_rows)
+} else {
+  ledger_rows
+}
+readr::write_csv(ledger_rows, ledger_path)
+cli_alert_success("{ledger_path} ({nrow(ledger_rows)} rows total, mode={RUN_MODE})")
 
 # Full per-position detail (all interval columns) for downstream 10d use
 out_detail <- sprintf("output/10c_scored_detail_%s%s.csv", WTAG, OUT_SUFFIX)

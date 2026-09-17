@@ -68,17 +68,30 @@ stats <- load_season_or_empty(nflreadr::load_player_stats, TARGET_SEASON) |>
   filter(season_type == "REG") |>
   transmute(player_id, week, fp_ppr = fantasy_points_ppr, fp_std = fantasy_points)
 
-graded <- if (length(ledger_files) > 0 && nrow(stats) > 0) {
-  map(ledger_files, read_csv, show_col_types = FALSE) |>
-    list_rbind() |>
-    group_by(player_id, week) |>
-    slice_tail(n = 1) |>                      # latest pre-kickoff (append order)
-    ungroup() |>
-    inner_join(stats, by = c("player_id", "week")) |>
-    mutate(fp = if_else(position == "QB", fp_std, fp_ppr),
-           hit_start = as.numeric(fp >= thresh_start),
-           hit_boom  = as.numeric(fp >= thresh_boom))
-} else tibble()
+# kickoff_et/run_ts/as_of are ISO timestamp strings, and report_status/
+# practice_status are almost-always-NA free-text columns -- readr guesses
+# each column's type per-file from a row sample, so one week's file can
+# guess datetime/logical where another guesses character, and list_rbind()
+# then fails on the type mismatch (this is what took down
+# 10e_rookie_tracker.R -- kickoff_et character in one ledger file, datetime
+# in another). Force all four to character on every read.
+ledger_col_types <- cols(kickoff_et = col_character(), run_ts = col_character(),
+                          as_of = col_character(), report_status = col_character(),
+                          practice_status = col_character(), .default = col_guess())
+
+graded <- guard("graded set (ledger x actuals)", {
+  if (length(ledger_files) > 0 && nrow(stats) > 0) {
+    map(ledger_files, read_csv, show_col_types = FALSE, col_types = ledger_col_types) |>
+      list_rbind() |>
+      group_by(player_id, week) |>
+      slice_tail(n = 1) |>                      # latest pre-kickoff (append order)
+      ungroup() |>
+      inner_join(stats, by = c("player_id", "week")) |>
+      mutate(fp = if_else(position == "QB", fp_std, fp_ppr),
+             hit_start = as.numeric(fp >= thresh_start),
+             hit_boom  = as.numeric(fp >= thresh_boom))
+  } else tibble()
+}, default = tibble())
 
 completed_weeks <- if (nrow(graded) > 0) sort(unique(graded$week)) else integer(0)
 LATEST_W <- if (length(completed_weeks) > 0) max(completed_weeks) else 0L
@@ -108,6 +121,12 @@ DEPLOYED <- list(
             boom  = col_of("p_boom",  qb_maps[["QB_25+"]]$method))
 )
 
+# Unrelated pre-existing bug, surfaced 2026-09-16 (this guard previously had
+# no `default`, so a failure here returned NULL and crashed the left_joins
+# below instead of degrading like every other section -- fixed by adding
+# the default). The failure itself -- a DEPLOYED position's backtest source
+# file is missing the p_start_star_platt column it expects -- is a separate,
+# real gap in this measurement and is flagged to Steve, not fixed here.
 bands <- guard("backtest bands", {
   imap(DEPLOYED, function(cfg, pos) {
     df <- read_csv(cfg$file, show_col_types = FALSE)
@@ -126,7 +145,9 @@ bands <- guard("backtest bands", {
              climatology = mean(wk$base_rate), bt_brier = mean(wk$brier))
     }) |> list_rbind()
   }) |> list_rbind()
-})
+}, default = tibble(position = character(), threshold = character(),
+                     band_lo = double(), band_hi = double(),
+                     climatology = double(), bt_brier = double()))
 
 calib <- if (nrow(graded) > 0) {
   bind_rows(
@@ -330,7 +351,15 @@ if (nrow(calib) > 0) {
   if (nrow(a2) > 0) alarms <- c(alarms, sprintf(
     "STD-DELTA: %s %s at %+.1fpp (n=%d) >= 4pp bar",
     a2$position, a2$threshold, a2$delta_pp, a2$n))
-  if (nrow(calib_wk) > 0 && nrow(prior_ledger) > 0) {
+  # prior_ledger only gets "weekly_band" rows (and thus an out_of_band
+  # column) once this section has run with real graded data at least once
+  # -- the first week that ever has graded data (like this one) will have a
+  # prior_ledger that's pre-season "watch" rows only, missing the column
+  # entirely. Require it exists before filtering on it (2026-09-16 fix --
+  # this crashed hard here on the first-ever graded run).
+  needed_cols <- c("section", "week", "out_of_band", "position", "threshold")
+  if (nrow(calib_wk) > 0 && nrow(prior_ledger) > 0 &&
+      all(needed_cols %in% names(prior_ledger))) {
     prev <- prior_ledger |>
       filter(section == "weekly_band", week == LATEST_W - 1L, out_of_band == TRUE) |>
       select(position, threshold)
