@@ -49,10 +49,29 @@ stated (default to the most recently completed week).
 5. **If the data contradicts the proposed storyline, say so plainly**
    and lead with what the data actually shows instead of quietly
    dropping the point or forcing the original framing. A corrected
-   nugget is usually a BETTER nugget (see 2026-09-16 W1 packet: "Burrow
-   exceeded projections" wasn't true, but "the model was skeptical of
-   Burrow relative to ECR's #1 ranking, and that skepticism paid off
-   while the defense forced 4 turnovers" is a stronger, truer story).
+   nugget is usually a BETTER nugget. Two different shapes this takes --
+   don't reach for just one of them out of habit (see the 2026-09-18
+   Bills/Lions packet, where the model defaulted to inventing a
+   turnover/defense correction nobody had proposed, because that was
+   the shape of the only example on file at the time):
+   - *Model-vs-market correction* (2026-09-16 W1 packet): "Burrow
+     exceeded projections" wasn't true, but "the model was skeptical of
+     Burrow relative to ECR's #1 ranking, and that skepticism paid off
+     while the defense forced 4 turnovers" is a stronger, truer story.
+   - *Score-implied illusion correction, no model/ECR angle at all*
+     (2026-09-18 Bills 41, Lions 31): the scoreline invites "Allen
+     out-threw Goff since Buffalo won." False -- Goff's passing line
+     (327 yds, 4 TD, +18.58 EPA, +6.0 CPOE) was a 96th-percentile
+     single-game passing performance league-wide; Allen's (91st
+     percentile) was excellent but clearly second-best on the field.
+     Allen won on rushing TDs, third-down offense, and run efficiency
+     -- not by out-throwing the losing QB. The correction here has
+     nothing to do with turnovers, defense, or the model/ECR gap; it's
+     a plain stat comparison the final score obscures.
+   The generalizable move is: find what the *final score itself*
+   implies that the underlying box score/EPA/model data does not
+   support -- not a stock explanation (turnovers, defense) applied out
+   of habit regardless of whether this game's data backs it.
 6. **Across the packet as a whole, lean toward model hits but don't
    scrub out a miss.** The model-rank-gap nugget (step 3) is most
    valuable when it shows the model calling something right ahead of
