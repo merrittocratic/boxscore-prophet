@@ -101,13 +101,22 @@ def_saved   <- readRDS("data/def_rolling_final.rds")
 
 games <- nflreadr::load_schedules(seasons = TARGET_SEASON) |>
   filter(game_type == "REG", week == TARGET_WEEK) |>
-  select(game_id, season, week, home_team, away_team)
+  select(game_id, season, week, home_team, away_team, result)
 games_long <- bind_rows(
   games |> transmute(game_id, season, week, posteam = home_team, defteam = away_team),
   games |> transmute(game_id, season, week, posteam = away_team, defteam = home_team)
 )
 
-hindcast <- any(ft$season == TARGET_SEASON & ft$week == TARGET_WEEK)
+# Hindcast means "this whole week is already in the past" -- ALL games must
+# be final, not just one. The old `any(ft$...)` check went true the moment
+# a single game's real stats landed in the feature table mid-week (e.g. a
+# Thursday game, rebuilt Friday morning while the rest of the week hasn't
+# played), collapsing the roster to just that one game's players. `result`
+# is nflreadr's own final-score field (NA until the game posts a result),
+# so this is a deterministic read of actual completion, not a side effect
+# of feature-layer rebuild timing. Found + fixed 2026-09-18 (same incident
+# as the 10c ledger kickoff_et fix).
+hindcast <- all(!is.na(games$result))
 cli_alert_info("{nrow(games)} games | mode: {if (hindcast) 'HINDCAST (gate available)' else 'FUTURE'}")
 
 # History = strictly before the target week

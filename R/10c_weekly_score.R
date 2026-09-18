@@ -232,6 +232,14 @@ make_matrix <- function(df, features) {
 }
 
 predict_component <- function(df, spec) {
+  # LightGBM's own predict.lgb.Booster does `length(preds) %% num_row`
+  # internally -- with num_row = 0 that's NA, and the next `if(...)` on it
+  # throws "missing value where TRUE/FALSE needed" instead of just
+  # returning nothing. A 0-row slate is a real, if rare, state (e.g. a
+  # position with no unplayed games left on the target week's remaining
+  # slate) -- short-circuit before ever calling predict(). Found 2026-09-18
+  # alongside the hindcast roster bug that was producing 0-row slates.
+  if (nrow(df) == 0) return(numeric(0))
   mod <- lightgbm::lgb.load(spec$model_file)
   p   <- predict(mod, make_matrix(df, spec$features))
   stopifnot(all(is.finite(p)))
@@ -270,6 +278,15 @@ p_at_least <- function(Qmat, probs, t) {
 # not .25/.75), so lo/hi_50_fp is deliberately not produced; nothing
 # downstream needs it yet.
 score_fp1 <- function(enc, dpos) {
+  # Same 0-row guard as predict_component() -- see its comment. Keeps the
+  # exact return shape (same names) so downstream bind_cols() against a
+  # 0-row slate stays a clean 0-row result instead of crashing.
+  if (nrow(enc) == 0) {
+    return(list(pred_fp = numeric(0), pred_vol = numeric(0),
+                lo_80_fp = numeric(0), hi_80_fp = numeric(0),
+                lo_90_fp = numeric(0), hi_90_fp = numeric(0),
+                p_start = numeric(0), p_boom = numeric(0)))
+  }
   X_pt <- make_matrix(enc, dpos$point$features)
   X_vl <- make_matrix(enc, dpos$vol$features)
   m_pt <- lightgbm::lgb.load(dpos$point$model_file)

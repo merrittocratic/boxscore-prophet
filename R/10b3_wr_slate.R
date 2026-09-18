@@ -80,13 +80,18 @@ wr_outcomes_raw <- readRDS("data/wr_outcomes.rds")
 
 games <- nflreadr::load_schedules(seasons = TARGET_SEASON) |>
   filter(game_type == "REG", week == TARGET_WEEK) |>
-  select(game_id, season, week, home_team, away_team)
+  select(game_id, season, week, home_team, away_team, result)
 games_long <- bind_rows(
   games |> transmute(game_id, season, week, posteam = home_team, defteam = away_team),
   games |> transmute(game_id, season, week, posteam = away_team, defteam = home_team)
 )
 
-hindcast <- any(ft$season == TARGET_SEASON & ft$week == TARGET_WEEK)
+# hindcast = the WHOLE week is final (all games have a result), not just
+# any one game -- see R/10b2_player_slate.R's fuller comment on this same
+# line. Fixed 2026-09-18: the old `any(ft$...)` check flipped true off a
+# single already-played game mid-week, collapsing the roster to just that
+# game's players.
+hindcast <- all(!is.na(games$result))
 cli_alert_info("{nrow(games)} games | mode: {if (hindcast) 'HINDCAST (gate available)' else 'FUTURE'}")
 
 hist_outcomes <- wr_outcomes |>
