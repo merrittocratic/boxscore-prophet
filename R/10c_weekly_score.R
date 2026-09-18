@@ -1050,7 +1050,8 @@ cli_alert_success("{out_scored} ({nrow(scored_all)} rows)")
 ledger_path <- sprintf("output/10c_ledger_%s%s.csv", WTAG, OUT_SUFFIX)
 ledger_rows <- scored_all |>
   left_join(kickoffs, by = "game_id") |>
-  mutate(run_ts = format(Sys.time(), "%Y-%m-%d %H:%M:%S", tz = "America/New_York"),
+  mutate(kickoff_et = format(kickoff_et, "%Y-%m-%d %H:%M:%S", tz = "America/New_York"),
+         run_ts = format(Sys.time(), "%Y-%m-%d %H:%M:%S", tz = "America/New_York"),
          as_of  = format(AS_OF, "%Y-%m-%d %H:%M:%S"),
          run_mode = RUN_MODE)
 # Raw file-append (the old approach here) silently corrupts the ledger the
