@@ -450,3 +450,30 @@ Managed cron block that `earnest_setup.sh --arm` installs:
   Vegas, 14x-16x published nulls, 17a refit experiment).
 - `output/` -- every experiment's receipts as CSVs; `data/` --
   frozen tables, deployed models and maps.
+
+## Amendment: W2 Production Status — 2026-09-18
+
+**Repo is clean at `3df38d3`** (pulled morning of Sept 18).
+
+### Fixed crashes (Manfred)
+- Sept 15: `10e_rookie_tracker.R` — `kickoff_et` character/datetime mismatch → `16301f1`
+- Sept 16: `10c_weekly_score.R` ledger append — same type mismatch → `3df38d3`
+
+### NEW unfixed crash — full W2 run still blocked
+`10c_weekly_score.R` crashes on LightGBM predict with zero-row WR/TE/QB slates.
+Root cause: slate builder collapses 183+ active WRs to 6 (all DET/BUF), then WR=0/TE=0/QB=0
+after filtering the already-kicked DET_BUF game. `length(preds) %% 0` = NA → crash.
+
+Log signature:
+```
+✔ Slates: RB=116 WR=6 TE=2 QB=2
+! Skipping 1 already-kicked game: 2026_02_DET_BUF
+✔ Scoring: RB=110 WR=0 TE=0 QB=0
+Error in if (length(preds)%%num_row != 0L) { : missing value where TRUE/FALSE needed
+```
+
+**Two fixes needed:**
+1. Slate builder: why does `ex-ante: 187; cold adds: 59` → `Slate roster: 6 players`?
+2. Zero-row guard before LightGBM predict in `10c_weekly_score.R`.
+
+Saturday rescore at risk. Earnest's dirty-tree state: clean (git restore . run this morning).
