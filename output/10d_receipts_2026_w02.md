@@ -39,18 +39,17 @@ These statements are locked and will be graded as-is.
 | RB | Jonathan Taylor | IND | KC | 61% | 35% |
 | RB | Bijan Robinson | ATL | CAR | 61% | 36% |
 | RB | Ashton Jeanty | LV | LAC | 59% | 34% |
+| QB | Caleb Williams | CHI | MIN | 57% | 32% |
 | WR | Mike Evans | SF | MIA | 56% | 35% |
 | RB | Christian McCaffrey | SF | MIA | 54% | 31% |
 | RB | D'Andre Swift | CHI | MIN | 54% | 30% |
 | WR | CeeDee Lamb | DAL | WAS | 54% | 29% |
 | TE | Trey McBride | ARI | SEA | 54% | 31% |
-| QB | Caleb Williams | CHI | MIN | 54% | 30% |
 | QB | Brock Purdy | SF | MIA | 53% | 29% |
 | RB | Chase Brown | CIN | HOU | 53% | 30% |
 | TE | George Kittle | SF | MIA | 51% | 33% |
 | RB | Kyren Williams | LA | NYG | 51% | 27% |
 | WR | Puka Nacua | LA | NYG | 51% | 29% |
-| QB | Patrick Mahomes | KC | IND | 50% | 29% |
 | WR | Jaxon Smith-Njigba | SEA | ARI | 50% | 28% |
 | WR | Zay Flowers | BAL | NO | 50% | 29% |
 | RB | Bucky Irving | TB | CLE | 50% | 27% |
@@ -71,8 +70,8 @@ These statements are locked and will be graded as-is.
 | QB | Jaxson Dart | NYG | LA | 45% | 25% |
 | QB | Justin Herbert | LAC | LV | 44% | 25% |
 | WR | George Pickens | DAL | WAS | 44% | 22% |
-| QB | Drake Maye | NE | PIT | 44% | 28% |
 | WR | Kalif Raymond | CHI | MIN | 42% | 22% |
+| QB | Patrick Mahomes | KC | IND | 42% | 20% |
 | WR | Ja'Marr Chase | CIN | HOU | 42% | 22% |
 | TE | Michael Mayer | LV | LAC | 42% | 27% |
 | WR | Emeka Egbuka | TB | CLE | 42% | 22% |
@@ -80,19 +79,21 @@ These statements are locked and will be graded as-is.
 | WR | Garrett Wilson | NYJ | GB | 41% | 26% |
 | TE | Travis Kelce | KC | IND | 40% | 20% |
 | TE | Mark Andrews | BAL | NO | 40% | 21% |
+| RB | Breece Hall | NYJ | GB | 40% | 20% |
 | RB | Cam Skattebo | NYG | LA | 40% | 16% |
 | WR | Davante Adams | LA | NYG | 39% | 22% |
-| RB | J.K. Dobbins | DEN | JAX | 38% | 20% |
+| WR | Deebo Samuel Sr. | SF | MIA | 38% | 23% |
 | QB | Matthew Stafford | LA | NYG | 37% | 14% |
 | TE | Evan Engram | DEN | JAX | 37% | 19% |
 | TE | Mike Gesicki | CIN | HOU | 37% | 16% |
 | WR | A.J. Brown | NE | PIT | 37% | 21% |
-| TE | Juwan Johnson | NO | BAL | 37% | 22% |
 | WR | Rashee Rice | KC | IND | 37% | 22% |
+| TE | Juwan Johnson | NO | BAL | 36% | 21% |
 | WR | Jalen Coker | CAR | ATL | 36% | 18% |
 | WR | Xavier Worthy | KC | IND | 36% | 18% |
 | TE | Cade Otton | TB | CLE | 35% | 19% |
 | QB | C.J. Stroud | HOU | CIN | 35% | 22% |
+| QB | Drake Maye | NE | PIT | 35% | 20% |
 | WR | Stefon Diggs | WAS | DAL | 34% | 18% |
 | QB | Baker Mayfield | TB | CLE | 34% | 18% |
 | RB | David Montgomery | HOU | CIN | 34% | 21% |
@@ -102,24 +103,24 @@ These statements are locked and will be graded as-is.
 | WR | Devontez Walker | BAL | NO | 34% | 19% |
 | WR | DK Metcalf | PIT | NE | 33% | 18% |
 | QB | Jordan Love | GB | NYJ | 33% | 21% |
-| RB | Breece Hall | NYJ | GB | 33% | 13% |
 | TE | Brock Bowers | LV | LAC | 33% | 17% |
 | QB | Bo Nix | DEN | JAX | 33% | 15% |
 | WR | Ladd McConkey | LAC | LV | 33% | 22% |
 | TE | Isaiah Likely | NYG | LA | 32% | 17% |
 | WR | Luther Burden III | CHI | MIN | 32% | 17% |
 | TE | Dallas Goedert | PHI | TEN | 31% | 21% |
+| TE | T.J. Hockenson | MIN | CHI | 31% | 12% |
 | RB | Rhamondre Stevenson | NE | PIT | 31% | 9% |
 | RB | Jaylen Warren | PIT | NE | 31% | 17% |
 | WR | Wan'Dale Robinson | TEN | PHI | 31% | 18% |
-| TE | Colston Loveland | CHI | MIN | 31% | 15% |
+| TE | Colston Loveland | CHI | MIN | 31% | 16% |
 | WR | Kendrick Bourne | ARI | SEA | 30% | 17% |
-| TE | T.J. Hockenson | MIN | CHI | 30% | 12% |
-| WR | Deebo Samuel Sr. | SF | MIA | 30% | 14% |
+| RB | J.K. Dobbins | DEN | JAX | 30% | 13% |
 | WR | Quentin Johnston | LAC | LV | 30% | 17% |
 | TE | Tyler Warren | IND | KC | 30% | 15% |
 | WR | Tre Harris | LAC | LV | 30% | 17% |
 | TE | David Njoku | LAC | LV | 29% | 13% |
+| RB | Alvin Kamara | NO | BAL | 29% | 17% |
 | WR | Courtland Sutton | DEN | JAX | 29% | 14% |
 | WR | Michael Wilson | ARI | SEA | 29% | 14% |
 | WR | Parker Washington | JAX | DEN | 28% | 14% |
@@ -139,9 +140,11 @@ These statements are locked and will be graded as-is.
 | TE | Hunter Henry | NE | PIT | 25% | 12% |
 | QB | Joe Burrow | CIN | HOU | 25% | 13% |
 | QB | Trevor Lawrence | JAX | DEN | 25% | 10% |
+| RB | Travis Etienne | NO | BAL | 25% | 9% |
 | WR | Alec Pierce | IND | KC | 25% | 11% |
 | WR | Xavier Hutchinson | HOU | CIN | 25% | 10% |
 | WR | Devaughn Vele | NO | BAL | 25% | 10% |
+| TE | Terrance Ferguson | LA | NYG | 25% | 13% |
 | QB | Daniel Jones | IND | KC | 24% | 12% |
 | TE | Brenton Strange | JAX | DEN | 24% | 11% |
 | RB | MarShawn Lloyd | GB | NYJ | 24% | 11% |
@@ -156,21 +159,21 @@ These statements are locked and will be graded as-is.
 | WR | Ryan Flournoy | DAL | WAS | 23% | 10% |
 | RB | Bhayshul Tuten | JAX | DEN | 23% | 10% |
 | WR | Malachi Fields | NYG | LA | 23% | 9% |
+| TE | Josh Oliver | MIN | CHI | 22% | 8% |
 | WR | Terry McLaurin | WAS | DAL | 22% | 9% |
 | RB | Rico Dowdle | PIT | NE | 22% | 8% |
 | TE | Jake Ferguson | DAL | WAS | 22% | 6% |
+| RB | Kendre Miller | NO | BAL | 22% | 14% |
 | WR | Jalen McMillan | TB | CLE | 22% | 8% |
 | WR | Malik Washington | MIA | SF | 22% | 9% |
+| RB | Woody Marks | HOU | CIN | 22% | 13% |
 | TE | Mason Taylor | NYJ | GB | 22% | 8% |
-| RB | Alvin Kamara | NO | BAL | 21% | 9% |
-| TE | Josh Oliver | MIN | CHI | 21% | 8% |
 | WR | Michael Pittman | PIT | NE | 21% | 7% |
 | WR | Rashod Bateman | BAL | NO | 21% | 12% |
 | TE | Jake Tonges | SF | MIA | 21% | 7% |
 | RB | Tyler Allgeier | ARI | SEA | 21% | 9% |
 | TE | Chig Okonkwo | WAS | DAL | 21% | 9% |
 | WR | Tyquan Thornton | KC | IND | 21% | 8% |
-| RB | Kendre Miller | NO | BAL | 21% | 13% |
 | RB | Blake Corum | LA | NYG | 21% | 9% |
 | WR | Pat Bryant | DEN | JAX | 21% | 7% |
 | WR | De'Zhaun Stribling | SF | MIA | 21% | 13% |
@@ -180,8 +183,8 @@ These statements are locked and will be graded as-is.
 | WR | Cooper Kupp | SEA | ARI | 20% | 6% |
 | WR | Jakobi Meyers | JAX | DEN | 20% | 7% |
 | RB | Tony Pollard | TEN | PHI | 20% | 9% |
-| WR | Gary Jennings | LAC | LV | 20% | 12% |
-| RB | Jordan Mason | MIN | CHI | 20% | 8% |
+| WR | Gary Jennings | LAC | LV | 20% | 13% |
+| RB | Jordan Mason | MIN | CHI | 20% | 9% |
 | WR | Romeo Doubs | NE | PIT | 20% | 7% |
 | TE | Brayden Willis | SF | MIA | 20% | 7% |
 | TE | Jared Wiley | KC | IND | 20% | 7% |
@@ -201,27 +204,23 @@ These statements are locked and will be graded as-is.
 | WR | Jayden Reed | GB | NYJ | 19% | 8% |
 | RB | TreVeyon Henderson | NE | PIT | 19% | 6% |
 | WR | Makai Lemon | PHI | TEN | 19% | 7% |
-| WR | Ja'Kobi Lane | BAL | NO | 19% | 11% |
+| TE | Sam Roush | CHI | MIN | 19% | 7% |
 | TE | Darren Waller | CAR | ATL | 18% | 7% |
+| RB | Aaron Jones | MIN | CHI | 18% | 8% |
 | RB | Kenny Gainwell | TB | CLE | 18% | 6% |
 | WR | Josh Downs | IND | KC | 18% | 7% |
 | TE | Brevyn Spann-Ford | DAL | WAS | 18% | 6% |
 | WR | Brian Thomas Jr. | JAX | DEN | 18% | 7% |
-| TE | Terrance Ferguson | LA | NYG | 18% | 6% |
 | TE | Josh Cuevas | BAL | NO | 18% | 7% |
 | WR | Carnell Tate | TEN | PHI | 18% | 6% |
-| TE | Sam Roush | CHI | MIN | 18% | 7% |
-| RB | Aaron Jones | MIN | CHI | 17% | 7% |
 | TE | Noah Fant | NO | BAL | 17% | 6% |
 | TE | Adam Trautman | DEN | JAX | 17% | 5% |
 | QB | Feleipe Franks | CAR | ATL | 17% | 2% |
 | TE | Luke Farrell | SF | MIA | 17% | 5% |
-| RB | Travis Etienne | NO | BAL | 17% | 2% |
 | TE | Cameron Latu | NE | PIT | 17% | 6% |
 | TE | Ja'Tavion Sanders | CAR | ATL | 17% | 4% |
 | TE | AJ Barner | SEA | ARI | 17% | 8% |
 | TE | Ben Sinnott | WAS | DAL | 17% | 6% |
-| WR | Rome Odunze | CHI | MIN | 17% | 3% |
 | RB | Kyle Monangai | CHI | MIN | 17% | 7% |
 | TE | Mark Redman | GB | NYJ | 17% | 6% |
 | RB | RJ Harvey | DEN | JAX | 17% | 6% |
@@ -238,6 +237,8 @@ These statements are locked and will be graded as-is.
 | TE | Nate Adkins | DEN | JAX | 16% | 4% |
 | RB | Emanuel Wilson | SEA | ARI | 16% | 11% |
 | WR | Marvin Mims Jr. | DEN | JAX | 16% | 6% |
+| WR | Rome Odunze | CHI | MIN | 16% | 3% |
+| TE | Gavin Bartholomew | MIN | CHI | 16% | 5% |
 | WR | Elijah Sarratt | BAL | NO | 16% | 5% |
 | RB | Emmett Johnson | KC | IND | 16% | 7% |
 | TE | Kenyon Sadiq | NYJ | GB | 16% | 5% |
@@ -258,7 +259,6 @@ These statements are locked and will be graded as-is.
 | WR | Adonai Mitchell | NYJ | GB | 15% | 5% |
 | TE | Jake Briningstool | KC | IND | 15% | 5% |
 | RB | Jordan James | SF | MIA | 15% | 5% |
-| TE | Gavin Bartholomew | MIN | CHI | 15% | 6% |
 | TE | Thomas Fidone II | NYG | LA | 15% | 6% |
 | TE | Elijah Arroyo | SEA | ARI | 15% | 6% |
 | TE | Matthew Hibner | BAL | NO | 15% | 4% |
@@ -281,7 +281,6 @@ These statements are locked and will be graded as-is.
 | TE | E.J. Jenkins | PHI | TEN | 14% | 6% |
 | RB | Kimani Vidal | LAC | LV | 14% | 6% |
 | TE | Nick Kallerup | SEA | ARI | 14% | 5% |
-| RB | Woody Marks | HOU | CIN | 14% | 5% |
 | RB | Jadarian Price | SEA | ARI | 14% | 2% |
 | TE | Mo Alie-Cox | IND | KC | 13% | 4% |
 | TE | Foster Moreau | HOU | CIN | 13% | 4% |
@@ -307,6 +306,7 @@ These statements are locked and will be graded as-is.
 | TE | Robert Tonyan | PIT | NE | 12% | 6% |
 | TE | Ian Thomas | LV | LAC | 12% | 4% |
 | RB | Justice Hill | BAL | NO | 12% | 4% |
+| QB | Kyler Murray | MIN | CHI | 12% | 2% |
 | WR | Marquise Brown | PHI | TEN | 12% | 3% |
 | TE | Quintin Morris | JAX | DEN | 12% | 3% |
 | TE | Hunter Long | ARI | SEA | 12% | 4% |
@@ -357,12 +357,12 @@ These statements are locked and will be graded as-is.
 | WR | J. Michael Sturdivant | GB | NYJ | 11% | 3% |
 | WR | Zavion Thomas | CHI | MIN | 11% | 3% |
 | WR | Reggie Virgil | ARI | SEA | 11% | 3% |
+| RB | Max Bredeson | MIN | CHI | 11% | 3% |
 | TE | Carsen Ryan | CLE | TB | 11% | 6% |
 | WR | Brenen Thompson | LAC | LV | 11% | 4% |
 | RB | Samaje Perine | CIN | HOU | 10% | 3% |
 | QB | Sam Darnold | SEA | ARI | 10% | 2% |
 | RB | Alec Ingold | LAC | LV | 10% | 3% |
-| QB | Kyler Murray | MIN | CHI | 10% | 2% |
 | RB | Reggie Gilliam | NE | PIT | 10% | 4% |
 | RB | Najee Harris | NYG | LA | 10% | 4% |
 | WR | Britain Covey | PHI | TEN | 10% | 3% |
@@ -386,7 +386,6 @@ These statements are locked and will be graded as-is.
 | WR | Zachariah Branch | ATL | CAR | 10% | 3% |
 | WR | Bryce Lance | NO | BAL | 10% | 3% |
 | TE | Justin Joly | MIA | SF | 10% | 3% |
-| RB | Max Bredeson | MIN | CHI | 10% | 3% |
 | RB | Demond Claiborne | MIN | CHI | 10% | 4% |
 | WR | C.J. Williams | JAX | DEN | 10% | 3% |
 | QB | Miller Moss | CHI | MIN | 10% | 2% |
@@ -474,7 +473,6 @@ These statements are locked and will be graded as-is.
 | QB | Ty Simpson | LA | NYG | 9% | 2% |
 | RB | Michael Burton | CLE | TB | 8% | 3% |
 | RB | Ameer Abdullah | JAX | DEN | 8% | 2% |
-| WR | Laquon Treadwell | IND | KC | 8% | 2% |
 | WR | Ashton Dulin | IND | KC | 8% | 2% |
 | WR | Cody White | LV | LAC | 8% | 2% |
 | WR | Tylan Wallace | CLE | TB | 8% | 2% |
@@ -517,7 +515,9 @@ These statements are locked and will be graded as-is.
 | RB | Julius Chestnut | TEN | PHI | 5% | 2% |
 | RB | Seth McGowan | IND | KC | 5% | 2% |
 | RB | Tyler Goodson | DAL | WAS | 4% | 2% |
+| WR | Ja'Kobi Lane | BAL | NO | 3% | 2% |
+| WR | Omar Cooper Jr. | NYJ | GB | 3% | 2% |
 | WR | Odell Beckham Jr. | NYG | LA | 2% | 2% |
+| WR | Laquon Treadwell | IND | KC | 2% | 2% |
 | RB | Dylan Sampson | CLE | TB | 2% | 2% |
-| WR | Omar Cooper Jr. | NYJ | GB | 2% | 2% |
 
