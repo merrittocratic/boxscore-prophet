@@ -459,21 +459,36 @@ Managed cron block that `earnest_setup.sh --arm` installs:
 - Sept 15: `10e_rookie_tracker.R` — `kickoff_et` character/datetime mismatch → `16301f1`
 - Sept 16: `10c_weekly_score.R` ledger append — same type mismatch → `3df38d3`
 
-### NEW unfixed crash — full W2 run still blocked
-`10c_weekly_score.R` crashes on LightGBM predict with zero-row WR/TE/QB slates.
-Root cause: slate builder collapses 183+ active WRs to 6 (all DET/BUF), then WR=0/TE=0/QB=0
-after filtering the already-kicked DET_BUF game. `length(preds) %% 0` = NA → crash.
+### FIXED same day (Manfred) — the zero-row crash above
+Root cause, confirmed: all four slate scripts (`10b2`/`10b3`/`10b4`/`10b5`)
+detected `hindcast` (whole week already played, build roster from frozen
+real outcomes) via `any(ft$season==...&ft$week==...)` — true the instant
+ONE game's stats land in the feature table, which happens mid-week the
+moment any game in the target week finishes (here, Thursday's DET/BUF
+game, synced between the RB and WR/TE/QB feature-layer rebuild steps).
+Collapsed the roster to just that one game's players; 10c's own separate
+"skip already-kicked games" step then removed that same game, leaving
+0 rows and crashing LightGBM's predict.
 
-Log signature:
-```
-✔ Slates: RB=116 WR=6 TE=2 QB=2
-! Skipping 1 already-kicked game: 2026_02_DET_BUF
-✔ Scoring: RB=110 WR=0 TE=0 QB=0
-Error in if (length(preds)%%num_row != 0L) { : missing value where TRUE/FALSE needed
-```
+Fixed → `9bf3566`: `hindcast <- all(!is.na(games$result))` in all four
+slate scripts (reads the schedule's own completion field instead of
+feature-table side effects — deterministic, no dependency on rebuild
+timing). Verified against live 2026 W2 data: WR roster back to the
+correct 187. Also added a defensive 0-row guard in `10c_weekly_score.R`'s
+`predict_component()`/`score_fp1()` regardless, in case a slate is ever
+legitimately empty for some other reason.
 
-**Two fixes needed:**
-1. Slate builder: why does `ex-ante: 187; cold adds: 59` → `Slate roster: 6 players`?
-2. Zero-row guard before LightGBM predict in `10c_weekly_score.R`.
+### FIXED same day — fp1 shadow pass separately blocked
+`data/fp_recal_maps_fp1.rds` was built correctly on 2026-09-08 but never
+committed (deliberately kept local per the original S1 design, then
+just never shipped) — `weekly_run.sh` has no step that regenerates it
+either, so the MacMini had no path to ever have this file. Shipped in
+`b698158`, matching its committed production sibling
+`data/fp_recal_maps.rds`'s exact precedent (same build session, same
+vintage, not a weekly-regenerated artifact).
 
-Saturday rescore at risk. Earnest's dirty-tree state: clean (git restore . run this morning).
+**Status after `bdb9e14`:** all four crashes this cluster produced
+(Sept 15 `10e`, Sept 16 `10c` ledger write, Sept 18 hindcast/zero-row,
+Sept 18 fp1 recal maps) are fixed and pushed. Next MacMini run should
+be the first clean full run for W2 this season, including the first
+real fp1 shadow-mode output.
