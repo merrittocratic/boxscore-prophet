@@ -1,1 +1,26 @@
 rank,nfl_name,pos,draft_pick,draft_team,model_verdict,games,cum_fp_ppr,fp_pg,cum_opps,opps_pg,snap_share_avg,model_p_start_latest
+1,Denzel Boston,WR,39,CLE,Baseline,2,34.4,17.2,11,5.5,0.925,0.1835
+2,Antonio Williams,WR,71,WAS,Baseline,2,21.799999999999997,10.899999999999999,7,3.5,0.43,0.144
+3,Jeremiyah Love,RB,3,ARI,Baseline,2,20.5,10.25,27,13.5,0.41500000000000004,0.2585
+4,Caleb Douglas,WR,75,MIA,Baseline,2,18.3,9.15,10,5,0.885,0.208
+5,KC Concepcion,WR,24,CLE,Baseline,2,16,8,15,7.5,0.675,0.1945
+6,Kenyon Sadiq,TE,16,NYJ,Baseline,2,15.100000000000001,7.550000000000001,7,3.5,0.39,0.19
+7,Emmett Johnson,RB,161,KC,Baseline,2,14.3,7.15,14,7,0.27,0.1865
+8,Carnell Tate,WR,4,TEN,Upside,2,13.5,6.75,11,5.5,0.815,0.189
+9,Jadarian Price,RB,32,SEA,Baseline,2,12.8,6.4,27,13.5,0.41000000000000003,0.3025
+10,Ted Hurst III,WR,84,TB,Baseline,2,11.3,5.65,10,5,0.745,0.162
+11,Eli Raridon,TE,95,NE,Baseline,2,11.2,5.6,2,1,0.37,0.164
+12,Kaelon Black,RB,90,SF,Baseline,2,10.5,5.25,22,11,0.38,0.332
+13,Josh Cameron,WR,191,JAX,Baseline,2,10,5,2,1,0.25,0.111
+14,Malachi Fields,WR,74,NYG,Baseline,2,9.5,4.75,10,5,0.765,0.304
+15,Bryce Lance,WR,136,NO,Baseline,2,9,4.5,5,2.5,0.74,0.1215
+16,Germie Bernard,WR,47,PIT,Baseline,1,7.5,7.5,8,8,0.79,0.1005
+17,Makai Lemon,WR,20,PHI,Baseline,2,4.4,2.2,6,3,0.635,0.1895
+18,Chris Bell,WR,94,MIA,Baseline,2,3.5,1.75,3,1.5,0.46499999999999997,0.085
+19,Zachariah Branch,WR,79,ATL,Baseline,2,3.4000000000000004,1.7000000000000002,2,1,0.25,0.11
+20,Matthew Hibner,TE,133,BAL,Baseline,1,2.3,2.3,1,1,0.34,0.191
+21,Ja'Kobi Lane,WR,80,BAL,Baseline,1,2.1,2.1,3,3,0.4,0.2705
+22,Sam Roush,TE,69,CHI,Baseline,1,1.9,1.9,3,3,0.27,0.201
+23,Nate Boerkircher,TE,56,JAX,Baseline,1,1.9,1.9,1,1,0.67,0.2265
+24,Will Kacmarek,TE,87,MIA,Baseline,2,1.4,0.7,2,1,0.36,0.124
+25,Kevin Coleman Jr.,WR,177,MIA,Baseline,1,0,0,2,2,0.29,0.1175
