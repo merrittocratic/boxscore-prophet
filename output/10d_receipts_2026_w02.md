@@ -4,12 +4,14 @@ Every week we grade the probabilities we published before kickoff.
 
 ## Calibration by stated start odds
 
+Graded on players who took the field. 161 players with no stat line (inactive or scratched) are not counted.
+
 | Stated band | n | Avg stated | Actual hit rate |
 |---|---|---|---|
-| under 10% |  94 | 8% | 1% |
-| 10-25% | 290 | 15% | 3% |
-| 25-50% |  83 | 35% | 23% |
-| 50%+ |  24 | 58% | 50% |
+| under 10% |  67 | 8% | 1% |
+| 10-25% | 185 | 16% | 6% |
+| 25-50% |  88 | 35% | 25% |
+| 50%+ |  23 | 58% | 52% |
 
 ## The model's worst misses (highest stated odds that did not hit)
 
@@ -27,43 +29,57 @@ Every week we grade the probabilities we published before kickoff.
 | QB | Drew Lock | SEA | 11% | 21.4 FP |
 | QB | Cam Ward | TEN | 13% | 20.0 FP |
 
-## Still on the board (games not yet played)
+## Flex-tier receipts (the decisions that actually get made)
 
-These statements are locked and will be graded as-is.
+Players FantasyPros ECR ranked in the flex tier (RB/WR 20-39, QB/TE 10-19), plus players the model moved into that range from below it. Consensus auto-starts are excluded. Graded on players who took the field. 72 players.
 
-| Pos | Player | Team | Opp | Start | Boom |
-|---|---|---|---|---|---|
-| WR | Puka Nacua | LA | NYG | 59% | 36% |
-| RB | Kyren Williams | LA | NYG | 50% | 25% |
-| QB | Jaxson Dart | NYG | LA | 44% | 24% |
-| WR | Malik Nabers | NYG | LA | 43% | 26% |
-| WR | Davante Adams | LA | NYG | 40% | 22% |
-| RB | Cam Skattebo | NYG | LA | 40% | 17% |
-| RB | Blake Corum | LA | NYG | 38% | 16% |
-| QB | Matthew Stafford | LA | NYG | 35% | 14% |
-| QB | Stetson Bennett | LA | NYG | 34% | 14% |
-| QB | Ty Simpson | LA | NYG | 33% | 8% |
-| TE | Isaiah Likely | NYG | LA | 31% | 15% |
-| WR | Malachi Fields | NYG | LA | 30% | 14% |
-| RB | Ronnie Rivers | LA | NYG | 25% | 8% |
-| RB | Devin Singletary | NYG | LA | 23% | 8% |
-| RB | Najee Harris | NYG | LA | 22% | 6% |
-| TE | Max Klare | LA | NYG | 22% | 7% |
-| WR | Darnell Mooney | NYG | LA | 21% | 9% |
-| WR | Jordan Whittington | LA | NYG | 21% | 7% |
-| TE | Colby Parkinson | LA | NYG | 19% | 6% |
-| QB | Jameis Winston | NYG | LA | 18% | 4% |
-| TE | Tyler Higbee | LA | NYG | 18% | 6% |
-| RB | Patrick Ricard | NYG | LA | 18% | 5% |
-| TE | Terrance Ferguson | LA | NYG | 17% | 5% |
-| RB | Tyrone Tracy Jr. | NYG | LA | 16% | 5% |
-| TE | Davis Allen | LA | NYG | 15% | 4% |
-| TE | Theo Johnson | NYG | LA | 15% | 5% |
-| TE | Thomas Fidone II | NYG | LA | 15% | 6% |
-| TE | Chris Manhertz | NYG | LA | 14% | 4% |
-| WR | Xavier Smith | LA | NYG | 12% | 4% |
-| WR | CJ Daniels | LA | NYG | 12% | 4% |
-| WR | Tutu Atwell | LA | NYG | 11% | 4% |
-| WR | Konata Mumpfield | LA | NYG | 10% | 3% |
-| WR | Odell Beckham Jr. | NYG | LA | 2% | 2% |
+- Model ranked higher than consensus: 3 of 27 cleared the start bar.
+- Model ranked lower than consensus: 3 of 25 cleared the start bar.
+- Model and consensus within a few spots: 4 of 20 cleared the start bar.
+
+### Model higher than consensus
+
+| Pos | Player | Team | Model # | ECR # | Stated | Actual | Result |
+|---|---|---|---|---|---|---|---|
+| WR | Devontez Walker | BAL | 23 | 105 | 35% | 5.7 FP | miss |
+| RB | Najee Harris | NYG | 35 | 71 | 22% | 0.6 FP | miss |
+| WR | DeMario Douglas | NE | 29 | 64 | 34% | 1.9 FP | miss |
+| WR | Malachi Fields | NYG | 39 | 67 | 30% | 5.0 FP | miss |
+| WR | Matthew Golden | GB |  7 | 32 | 51% | 9.8 FP | miss |
+| WR | Xavier Worthy | KC | 26 | 49 | 35% | 13.5 FP | miss |
+| RB | Devin Singletary | NYG | 34 | 56 | 23% | 0.9 FP | miss |
+| WR | Tre Harris | LAC | 36 | 58 | 31% | 6.3 FP | miss |
+
+### Model lower than consensus
+
+| Pos | Player | Team | Model # | ECR # | Stated | Actual | Result |
+|---|---|---|---|---|---|---|---|
+| TE | Kyle Pitts | ATL | 114 | 17 | 11% | 2.5 FP | miss |
+| WR | Rome Odunze | CHI |  84 | 31 | 17% | 7.3 FP | miss |
+| WR | Josh Downs | IND |  73 | 36 | 19% | 14.2 FP | miss |
+| WR | Jakobi Meyers | JAX |  70 | 37 | 20% | 3.8 FP | miss |
+| WR | Terry McLaurin | WAS |  55 | 24 | 24% | 7.0 FP | miss |
+| WR | Romeo Doubs | NE |  67 | 38 | 20% | 12.6 FP | miss |
+| WR | Jaylen Waddle | DEN |  49 | 21 | 25% | 21.8 FP | HIT |
+| RB | Jadarian Price | SEA |  47 | 25 | 15% | 5.0 FP | miss |
+
+### Flex misses the model backed (highest stated chances that missed)
+
+| Pos | Player | Team | Model # | ECR # | Stated | Actual | Result |
+|---|---|---|---|---|---|---|---|
+| WR | Matthew Golden | GB |  7 | 32 | 51% | 9.8 FP | miss |
+| TE | Mark Andrews | BAL |  4 | 10 | 47% | 10.9 FP | miss |
+| QB | Jaxson Dart | NYG |  8 | 12 | 44% | 0.8 FP | miss |
+| WR | Jameson Williams | DET | 18 | 25 | 43% | 5.3 FP | miss |
+| TE | Michael Mayer | LV |  7 | 14 | 42% | 5.3 FP | miss |
+
+### Flex hits the model doubted (lowest stated chances that hit)
+
+| Pos | Player | Team | Model # | ECR # | Stated | Actual | Result |
+|---|---|---|---|---|---|---|---|
+| TE | Jake Ferguson | DAL | 32 | 16 | 21% | 20.3 FP | HIT |
+| QB | Tyler Shough | NO | 24 | 19 | 23% | 22.4 FP | HIT |
+| WR | Jaylen Waddle | DEN | 49 | 21 | 25% | 21.8 FP | HIT |
+| QB | Matthew Stafford | LA | 13 | 15 | 35% | 27.0 FP | HIT |
+| WR | Stefon Diggs | WAS | 25 | 28 | 35% | 21.7 FP | HIT |
 

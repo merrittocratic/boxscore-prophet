@@ -89,6 +89,13 @@ run R/10g_movers_table.R   "$SEASON" "$WEEK"   # movers vs trailing baseline; re
 if [ "$MODE" = "full" ]; then
   run R/10e_rookie_tracker.R "$SEASON"        # Tue only: prior week complete; content CSVs, no deploy surface
   run R/10f_weekly_eval.R    "$SEASON"        # Tue only: scorecard + watch cells + drift alarms; never aborts
+  # Tue only (2026-09-24): finalize the PRIOR week's receipts. The Monday
+  # 15:00 rescore is the last 10d run for that week and it fires before MNF
+  # kicks off, so without this the MNF game stays "still on the board"
+  # forever. Never blocks the real run.
+  if [ "$WEEK" -gt 1 ]; then
+    run R/10d_content_tables.R "$SEASON" "$((WEEK - 1))" || true
+  fi
 fi
 
 echo "[weekly_run] done: $MODE $SEASON w$WEEK (real production pipeline complete)"

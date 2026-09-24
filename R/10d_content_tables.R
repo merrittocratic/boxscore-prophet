@@ -61,6 +61,15 @@ CONTENT_MIN_BOOM  <- c(RB = 14L, WR = 14L, TE = 12L)
 CONTENT_EDGE_GAP  <- c(RB = 4L, WR = 4L, TE = 3L)
 CONTENT_FADE_GAP  <- c(RB = 4L, WR = 4L, TE = 3L)
 CONTENT_FADE_MAX_START <- c(RB = 52L, WR = 52L, TE = 50L)
+# Flex-tier receipts (Steve 2026-09-24): On the Record grades the
+# decision-relevant tier, not auto-starts or deep-roster longshots. Bands
+# match CONTENT_GUIDE.md's Decision-Relevant Tiers. Pool = ECR rank in
+# band, OR model rank in band while ECR has him below the band / unranked.
+# Consensus auto-starts (ECR above the band) are excluded even when the
+# model is low on them -- nobody benches them, so it is not a decision.
+FLEX_BAND_LO <- c(RB = 20L, WR = 20L, TE = 10L, QB = 10L)
+FLEX_BAND_HI <- c(RB = 39L, WR = 39L, TE = 19L, QB = 19L)
+FLEX_ECR_GAP <- c(RB = 4L, WR = 4L, TE = 3L, QB = 3L)   # "real disagreement"
 
 # Validated board accents (dataviz palette check, light surface #fcfcfb)
 ACCENT_START <- "#2F6DB3"
@@ -199,6 +208,40 @@ if (file.exists(ecr_path)) {
     select(position, player_name, posteam, model_rank = rank, ecr_rank,
            rank_gap, start_pct)
   readr::write_csv(ecr_gap, sprintf("output/10d_ecr_gap_%s.csv", WTAG))
+
+  # ECR LOCK: 10c rescores only score not-yet-kicked-off games, so the gap
+  # file above shrinks as the week plays out (by Monday it is MNF only).
+  # Upsert every player on the current (all pre-kickoff) slate into a
+  # per-week lock; players whose games already started keep the rank from
+  # their last pre-kickoff run. Receipts grade against this lock.
+  ecr_lock_path <- sprintf("output/10d_ecr_lock_%s.csv", WTAG)
+  # Guard: only players whose game has NOT kicked off may be (re)locked --
+  # the Tuesday prior-week receipts pass re-runs 10d on a finished week.
+  ledger_ko_path <- sprintf("output/10c_ledger_%s.csv", WTAG)
+  not_started <- if (file.exists(ledger_ko_path)) {
+    readr::read_csv(ledger_ko_path, show_col_types = FALSE,
+                    col_types = readr::cols(kickoff_et = readr::col_datetime(),
+                                            player_id = readr::col_character(),
+                                            .default = readr::col_guess())) |>
+      group_by(player_id) |>
+      slice_max(run_ts, n = 1, with_ties = FALSE) |>
+      ungroup() |>
+      filter(kickoff_et > Sys.time()) |>
+      pull(player_id)
+  } else character()
+  ecr_now <- joined |>
+    filter(!is.na(ecr_rank), player_id %in% not_started) |>
+    transmute(position, player_id, player_name, posteam, ecr_rank,
+              ecr_as_of = format(Sys.time(), "%Y-%m-%dT%H:%M:%S"))
+  ecr_lock <- if (file.exists(ecr_lock_path)) {
+    readr::read_csv(ecr_lock_path, show_col_types = FALSE,
+                    col_types = readr::cols(ecr_as_of = readr::col_character(),
+                                            player_id = readr::col_character())) |>
+      filter(!player_id %in% ecr_now$player_id) |>
+      bind_rows(ecr_now)
+  } else ecr_now
+  readr::write_csv(ecr_lock |> arrange(position, ecr_rank), ecr_lock_path)
+  cli_alert_success("ECR lock: {nrow(ecr_now)} upserted, {nrow(ecr_lock)} locked for the week")
   cli_alert_success("ECR gap: {nrow(ecr_gap)} matched | depth by pos: {paste(ecr_depth$position, ecr_depth$depth, collapse = ', ')}")
 } else {
   cli_alert_info("No ECR feed at {ecr_path} -- gap table skipped (drop a CSV or run 10d0 once the API key is active)")
@@ -312,10 +355,16 @@ if (file.exists(ledger_path)) {
       fp_actual  = coalesce(fp_played, 0)   # resolved w/o stat line = inactive
     )
 
+  # DNP rows (resolved, no stat line: inactives, late scratches, coach's-
+  # decision healthy scratches) stay in the receipts CSV for transparency
+  # but are NOT graded -- hit_* is NA and they are excluded from bands,
+  # misses, and longshots. Steve's call 2026-09-24: a player who never
+  # took the field is not a model miss (W2 had 161 of 524 resolved rows
+  # DNP, mostly deep-roster backups, dragging every band's hit rate down).
   receipts <- graded |>
     filter(resolved) |>
-    mutate(hit_start  = fp_actual >= thresh_start,
-           hit_boom   = fp_actual >= thresh_boom,
+    mutate(hit_start  = if_else(dnp, NA, fp_actual >= thresh_start),
+           hit_boom   = if_else(dnp, NA, fp_actual >= thresh_boom),
            band_start = cut(p_start_recal, RECEIPT_BANDS, labels = BAND_LABELS,
                             include.lowest = TRUE)) |>
     select(position, player_id, player_name, posteam, defteam, kickoff_et,
@@ -329,6 +378,7 @@ if (file.exists(ledger_path)) {
 
   if (nrow(receipts) > 0) {
     receipt_bands <- receipts |>
+      filter(!dnp) |>
       group_by(band_start) |>
       summarise(n = n(),
                 stated = mean(p_start_recal),
@@ -336,11 +386,53 @@ if (file.exists(ledger_path)) {
       mutate(delta_pp = round(100 * (hit_rate - stated), 1))
     readr::write_csv(receipts, sprintf("output/10d_receipts_%s.csv", WTAG))
     readr::write_csv(receipt_bands, sprintf("output/10d_receipt_bands_%s.csv", WTAG))
-    cli_alert_success("Receipts: {nrow(receipts)} graded ({sum(receipts$dnp)} DNP) | {nrow(pending)} pending | start hits: {sum(receipts$hit_start)} | booms: {sum(receipts$hit_boom)}")
+    cli_alert_success("Receipts: {nrow(receipts)} graded ({sum(receipts$dnp)} DNP) | {nrow(pending)} pending | start hits: {sum(receipts$hit_start, na.rm = TRUE)} | booms: {sum(receipts$hit_boom, na.rm = TRUE)}")
     print(receipt_bands, n = Inf)
   } else {
     cli_alert_info("Nothing resolved yet at as-of {format(RECEIPT_AS_OF, '%Y-%m-%d %H:%M')} -- {nrow(pending)} statements pending")
     receipts <- NULL
+  }
+
+  # FLEX-TIER RECEIPTS. Model rank = rank of the locked (graded) start
+  # chance within position across the WHOLE week's ledger, i.e. the board
+  # as it stood at each player's lock. ECR rank from the week's ECR lock.
+  flex <- NULL
+  if (!is.null(receipts)) {
+    model_ranks <- locked |>
+      group_by(position) |>
+      arrange(desc(p_start_recal), .by_group = TRUE) |>
+      mutate(model_rank = row_number()) |>
+      ungroup() |>
+      select(player_id, model_rank)
+    ecr_lock_path <- sprintf("output/10d_ecr_lock_%s.csv", WTAG)
+    ecr_locked <- if (file.exists(ecr_lock_path)) {
+      readr::read_csv(ecr_lock_path, show_col_types = FALSE,
+                      col_types = readr::cols(player_id = readr::col_character())) |>
+        select(player_id, ecr_rank)
+    } else tibble(player_id = character(), ecr_rank = integer())
+    if (nrow(ecr_locked) == 0) {
+      cli_alert_warning("No ECR lock at {ecr_lock_path} -- flex receipts use model rank only (no consensus comparison)")
+    }
+    in_band <- function(r, pos) !is.na(r) & r >= FLEX_BAND_LO[pos] & r <= FLEX_BAND_HI[pos]
+    flex <- receipts |>
+      filter(!dnp) |>
+      left_join(model_ranks, by = "player_id") |>
+      left_join(ecr_locked, by = "player_id") |>
+      filter(in_band(ecr_rank, position) |
+               (in_band(model_rank, position) &
+                  (is.na(ecr_rank) | ecr_rank > FLEX_BAND_HI[position]))) |>
+      mutate(rank_gap = ecr_rank - model_rank,   # positive = model higher than ECR
+             view = case_when(
+               !is.na(rank_gap) & rank_gap >=  FLEX_ECR_GAP[position] ~ "model_higher",
+               !is.na(rank_gap) & rank_gap <= -FLEX_ECR_GAP[position] ~ "model_lower",
+               is.na(ecr_rank) ~ "no_ecr",
+               TRUE ~ "agree")) |>
+      arrange(position, model_rank) |>
+      select(position, player_id, player_name, posteam, defteam, model_rank,
+             ecr_rank, rank_gap, view, start_pct, boom_pct, fp_actual,
+             thresh_start, hit_start, hit_boom)
+    readr::write_csv(flex, sprintf("output/10d_flex_receipts_%s.csv", WTAG))
+    cli_alert_success("Flex receipts: {nrow(flex)} flex-tier players graded | model higher than ECR: {sum(flex$view == 'model_higher')} | lower: {sum(flex$view == 'model_lower')}")
   }
 } else {
   cli_alert_info("No ledger at {ledger_path} -- run 10c for this week first; receipts skipped")
@@ -463,14 +555,18 @@ writeLines(paste(md, collapse = "\n"), sprintf("output/10d_boards_%s.md", WTAG))
 cli_alert_success("output/10d_boards_{WTAG}.md")
 
 if (!is.null(receipts)) {
-  worst_miss <- receipts |> filter(!hit_start) |> slice_max(p_start_recal, n = 3)
-  best_hit   <- receipts |> filter(hit_start)  |> slice_min(p_start_recal, n = 3)
+  played     <- receipts |> filter(!dnp)
+  n_dnp      <- sum(receipts$dnp)
+  worst_miss <- played |> filter(!hit_start) |> slice_max(p_start_recal, n = 3)
+  best_hit   <- played |> filter(hit_start)  |> slice_min(p_start_recal, n = 3)
   rmd <- c(
     sprintf("# BOXSCORE PROPHET -- %d Week %d receipts", TARGET_SEASON, TARGET_WEEK), "",
     "Every week we grade the probabilities we published before kickoff.", "",
     "## Calibration by stated start odds", "",
+    sprintf("Graded on players who took the field. %d player%s with no stat line (inactive or scratched) %s not counted.",
+            n_dnp, if (n_dnp == 1) "" else "s", if (n_dnp == 1) "is" else "are"), "",
     md_table({
-      rb <- receipts |> group_by(band_start) |>
+      rb <- played |> group_by(band_start) |>
         summarise(n = n(), stated = mean(p_start_recal),
                   hit = mean(hit_start), .groups = "drop")
       rb |> transmute(band_start, n,
@@ -487,6 +583,36 @@ if (!is.null(receipts)) {
                                    stated = paste0(start_pct, "%"),
                                    actual = sprintf("%.1f FP", fp_actual)),
              c("Pos", "Player", "Team", "Stated", "Actual")), "")
+  if (!is.null(flex) && nrow(flex) > 0) {
+    flex_tbl <- function(df) md_table(df |> transmute(
+        position, player_name, posteam,
+        model = model_rank, ecr = replace_na(as.character(ecr_rank), "--"),
+        stated = paste0(start_pct, "%"),
+        actual = sprintf("%.1f FP", fp_actual),
+        result = if_else(hit_start, "HIT", "miss")),
+      c("Pos", "Player", "Team", "Model #", "ECR #", "Stated", "Actual", "Result"))
+    rate <- function(df) if (nrow(df) == 0) "none" else
+      sprintf("%d of %d cleared the start bar", sum(df$hit_start), nrow(df))
+    hi <- flex |> filter(view == "model_higher") |> arrange(desc(rank_gap))
+    lo <- flex |> filter(view == "model_lower")  |> arrange(rank_gap)
+    rmd <- c(rmd,
+      "## Flex-tier receipts (the decisions that actually get made)", "",
+      sprintf("Players FantasyPros ECR ranked in the flex tier (RB/WR %d-%d, QB/TE %d-%d), plus players the model moved into that range from below it. Consensus auto-starts are excluded. Graded on players who took the field. %d players.",
+              FLEX_BAND_LO[["RB"]], FLEX_BAND_HI[["RB"]], FLEX_BAND_LO[["QB"]],
+              FLEX_BAND_HI[["QB"]], nrow(flex)), "",
+      sprintf("- Model ranked higher than consensus: %s.", rate(hi)),
+      sprintf("- Model ranked lower than consensus: %s.", rate(lo)),
+      sprintf("- Model and consensus within a few spots: %s.", rate(flex |> filter(view == "agree"))), "")
+    if (nrow(hi) > 0) rmd <- c(rmd,
+      "### Model higher than consensus", "", flex_tbl(slice_head(hi, n = 8)), "")
+    if (nrow(lo) > 0) rmd <- c(rmd,
+      "### Model lower than consensus", "", flex_tbl(slice_head(lo, n = 8)), "")
+    rmd <- c(rmd,
+      "### Flex misses the model backed (highest stated chances that missed)", "",
+      flex_tbl(flex |> filter(!hit_start) |> slice_max(start_pct, n = 5, with_ties = FALSE)), "",
+      "### Flex hits the model doubted (lowest stated chances that hit)", "",
+      flex_tbl(flex |> filter(hit_start) |> slice_min(start_pct, n = 5, with_ties = FALSE)), "")
+  }
   if (!is.null(pending) && nrow(pending) > 0) {
     rmd <- c(rmd,
       "## Still on the board (games not yet played)", "",

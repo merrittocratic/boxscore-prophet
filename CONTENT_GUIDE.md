@@ -39,23 +39,32 @@ Format: "the model was right here, wrong here, here's the receipt for
 both." Modeled on the sports-media right-or-wrong recap format, but with
 an actual stated probability on record instead of a vibe.
 
-**Why Wednesday:** the Tuesday 23:30 full production build is what
-writes the prior week's receipts, and by then Monday Night Football is
-final. Wednesday is the first day the full week's receipts are both
-honest and fresh.
+**Scope (Steve, 2026-09-24): the flex tier only.** Grade the players
+readers were actually deciding on (see Decision-Relevant Tiers), not
+auto-starts nobody benches or deep longshots nobody starts. The two
+questions: who did the model say belongs in lineups that consensus had
+on the bench, and did they deliver; and which flex players did the
+model miss on, either backing a flop or doubting a player who went off.
+Model-vs-ECR disagreement is the best content; agreement is not a story.
 
-**Shape:** headline grade -> one-sentence calibration read -> one named
-miss -> one named longshot hit -> optional ECR line -> optional teaser
-to Thursday. The miss is mandatory; the ECR line and teaser are what get
-cut for space.
+**Why Wednesday:** the Tuesday 23:30 full production build re-runs the
+prior week's receipts after Monday Night Football is final. Wednesday
+is the first day the full week's receipts are both honest and fresh.
 
-**Data:** `output/10d_receipts_<season>_w<prevweek>.md` (calibration by
-stated band, worst misses, longshots that hit) is the spine. Pull
-`output/10d_ecr_gap_<season>_w<prevweek>.csv` when it exists for the
-"here's how that compared to consensus" beat -- restate one comparison
-in prose, do not reproduce the table (boards stay scarce).
+**Shape:** headline flex-tier grade -> best above-consensus call that
+hit -> the miss (mandatory) -> one-line head-to-head tally vs consensus
+-> one sentence of overall calibration -> optional teaser to Thursday.
 
-**Do not skip a bad week.** A week with more misses than hits is a
+**Data:** the Flex-tier receipts section of
+`output/10d_receipts_<season>_w<prevweek>.md` and the pool behind it,
+`output/10d_flex_receipts_<season>_w<prevweek>.csv`. ECR ranks come from
+`output/10d_ecr_lock_<season>_w<prevweek>.csv`, each player's consensus
+rank as of his last run before kickoff. Grading counts only players who
+took the field. Restate comparisons in prose; never reproduce the tables
+(boards stay scarce).
+
+**Do not skip a bad week.** A week where consensus beat the model on
+flex disagreements, or with more misses than hits, is a
 BETTER On the Record note than a clean week, not a worse one -- it's
 the proof the grading is real. See Voice Guardrails below.
 
