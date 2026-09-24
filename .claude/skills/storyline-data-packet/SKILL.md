@@ -1,6 +1,6 @@
 ---
 name: storyline-data-packet
-description: Given a list of weekly NFL storylines (team/player narratives, e.g. "the Giants look strong"), pull nflverse box scores, the model's own weekly outputs, and (once built) the internal efficiency-proxy models to build a fact-based data packet for a write-up, formatted as a Cousin Claude handoff. Use when Steve gives a list of storylines for a wrap-up column and wants supporting stats pulled together.
+description: Given a list of NFL storylines (team/player narratives, e.g. "are the Raiders for real?"), build a fact-based data packet that looks BACK at every game so far this season, then AHEAD to the upcoming opponent, using nflverse, the model's own weekly outputs, and (once built) the internal efficiency-proxy models, formatted as a Cousin Claude handoff. Use when Steve gives storylines for the Thursday preview article (or any write-up) and wants supporting stats pulled together.
 ---
 
 # Storyline Data Packet
@@ -11,33 +11,60 @@ never write the actual column here; that is `/movers-column` or
 `/on-the-record`'s job, or Cousin Claude's, depending on which piece
 this feeds.
 
+Every packet has two halves, in this order: **Retrospective** (what the
+season so far actually shows) then **Look-ahead** (how that profile
+matches up with the upcoming opponent). The primary consumer is the
+Thursday next-week preview article. Example: "Are the Raiders for
+real?" -> pull every Raiders game this season (who they played, how
+they won/lost, whether the underlying efficiency backs the record),
+then this week's opponent and whether the Raiders' strengths line up
+against that opponent's weaknesses or run straight into its strengths.
+
 ## Inputs
 
-Steve gives a list of storylines, usually 3-5, tied to a specific week
--- e.g. "the Giants looked strong," "Cincinnati's defense can carry
-Burrow," "the Chargers looked lost at home." Confirm season/week if not
-stated (default to the most recently completed week).
+Steve gives a list of storylines, usually 3-5 -- e.g. "are the Raiders
+for real?", "Cincinnati's defense can carry Burrow," "the Chargers look
+lost." Default window: retrospective = every completed game this season
+through the most recently completed week; look-ahead = the next
+scheduled game. Confirm if Steve names a different window, and note a
+bye (look ahead to the game after it and say so).
 
 ## Process, per storyline
+
+### Part 1 -- Retrospective (season to date)
 
 1. **Identify the game(s) and players the storyline actually turns on.**
    A team-level claim ("Chiefs look scary") still needs a specific
    player or unit to ground it (QB box score, a featured back, a
    defensive unit) -- vague team-level color isn't a data point.
-2. **Pull the box score and game context from nflverse**
+2. **Pull every game so far, not just last week, from nflverse**
    (`nflreadr::load_schedules`, `load_player_stats`, `load_pbp`,
-   `load_nextgen_stats`). Favor EPA/success-rate/explosive-play framing
-   over raw counting stats where it's available -- it travels better
-   into "why," not just "what." A same-season or prior-season baseline
-   (e.g. team offensive EPA/play across all of last year) is what makes
-   "return to form" or "step back" claims concrete instead of vibes.
-3. **Check the model's own outputs for that week** --
+   `load_nextgen_stats`). Build a short game log (opponent, result,
+   score, off/def EPA per play, success rate) plus season-to-date
+   totals and league rank. Favor EPA/success-rate/explosive-play framing
+   over raw counting stats -- it travels better into "why," not just
+   "what." Two things make a "for real?" claim concrete instead of
+   vibes:
+   - **Trend:** is the good (or bad) stuff steady across games, or one
+     outlier game carrying the season line? Say which.
+   - **Who they did it against:** the quality of opponents faced so far
+     (those opponents' own season EPA/play ranks), and a prior-season
+     baseline (e.g. last year's team EPA/play) for "return to form" or
+     "step back" claims. A 3-0 record against three bottom-10 offenses
+     is a different story than 2-1 against contenders.
+   Also flag record-vs-underlying mismatches: close-game luck (one-score
+   wins), turnover margin, non-offensive TDs -- but only when this
+   team's data actually shows them, never as a stock explanation (see
+   step 5).
+3. **Check the model's own outputs for the completed weeks** --
    `output/10c_scored_slate_<season>_w<week>.csv` (pred_tot, thresholds,
    probabilities), `output/10d_ecr_gap_<season>_w<week>.csv`
    (model_rank vs ecr_rank -- the "model called this before the market
    did" or "the model was skeptical and got it right" nugget), and
-   `output/10d_receipts_<season>_w<week>.csv` if that week has been
-   graded (fp_actual, hit_start/hit_boom). This is the house's own
+   `output/10d_receipts_<season>_w<week>.csv` for graded weeks
+   (fp_actual, hit_start/hit_boom). Across multiple weeks, a
+   season-long pattern (the model has been higher than ECR on this
+   team's WR1 every week and been right) beats a one-week nugget. This is the house's own
    differentiated angle -- always check it, even if the storyline reads
    as purely a box-score story at first.
 4. **If a directional efficiency-proxy nugget applies** (once
@@ -86,6 +113,34 @@ stated (default to the most recently completed week).
    real hit with false hedging -- the ratio should reflect what
    actually happened, just don't suppress a miss that's already there.
 
+### Part 2 -- Look-ahead (the upcoming opponent)
+
+7. **Identify the next opponent and game context** from
+   `load_schedules` (opponent, home/away, rest days, `spread_line` /
+   `total_line` -> implied team points). The market line is the only
+   game-level expectation in this pipeline -- the model is player-level
+   fantasy, not a game-outcome model. Never fabricate a win probability
+   or projected score; report the market's number as the market's.
+8. **Profile the opponent season to date**, same method as step 2:
+   off/def EPA per play, success rate, pass-defense vs run-defense
+   splits, explosive plays allowed, quality of their own schedule.
+9. **Match strengths against weaknesses.** Line up what the
+   retrospective said this team does well/poorly against what the
+   opponent allows/takes away (e.g. "Raiders' offense lives on
+   explosive passes; this opponent allows the 3rd-fewest explosive
+   passes"). One or two sharp matchup points beat a full side-by-side
+   table. If the matchup is a genuine test of the storyline ("first
+   top-10 defense they've seen"), say that explicitly -- it's the hook
+   for the preview.
+10. **Model outputs for the upcoming week**, from the freshest
+    `output/10c_scored_slate_<season>_w<nextweek>.csv` (Tuesday full run,
+    or a later rescore if one has landed -- say which) and
+    `output/10g_movers_<season>_w<nextweek>.csv`: the storyline team's
+    key players' start/boom chances vs their own baseline, the
+    `opp_def_adj_*` matchup read, and the ECR gap if it's available for
+    that week. These are forward-looking chances, not results -- label
+    them as such.
+
 ## Hard rules
 
 - **PFF data/grades/stats never appear in the packet, directly or by
@@ -132,9 +187,17 @@ stated (default to the most recently completed week).
   use EPA/success rate instead rather than fabricating a DVOA-like
   number.
 
+- Look-ahead facts use the same no-gambling-language rule as the
+  columns: the spread/total is "the market expects," not odds, a price,
+  or a pick.
+
 ## Output
 
-Chat output, organized by storyline. Each storyline gets a short list
-of sourced bullets, not prose -- Steve or Cousin Claude does the
-writing. Close by naming anything that came back weaker or contrary to
-the proposed storyline, not just the supporting facts.
+Chat output, organized by storyline. Each storyline gets two labeled
+blocks -- **Looking back** then **Looking ahead: <opponent>** -- each a
+short list of sourced bullets, not prose; Steve or Cousin Claude does
+the writing. End each storyline with a one-line verdict on the
+retrospective question (e.g. "for real: efficiency backs the record" /
+"record is ahead of the underlying numbers") and the single matchup
+point most worth watching. Close the packet by naming anything that
+came back weaker or contrary to the proposed storylines.

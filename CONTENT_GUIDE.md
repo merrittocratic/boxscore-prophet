@@ -15,12 +15,23 @@ consensus here).
 
 ---
 
-## The Two Formats
+## The Weekly Lineup
 
-Two named, recurring pieces, on two different days, because they do
-different jobs and use different data:
+Updated 2026-09-24 (Steve's call). Three recurring model-driven pieces
+across the week, plus a Monday college football wrap-up that is outside
+this model and this repo (listed here only so the week reads whole):
 
-### On the Record (Tuesdays)
+| Day | Piece | Form | Skill |
+|---|---|---|---|
+| Wed | On the Record | Substack Note, 150-200 words | `/on-the-record` |
+| Thu | Next-week preview | Full article | `/storyline-data-packet` feeds it |
+| Sun AM | Start 'Em, Sit 'Em: The Movers | Substack Note, 150-200 words | `/movers-column` |
+| Mon | College football wrap-up | Full article | none (not this model) |
+
+The two grading/start-sit pieces are deliberately short Notes; the
+Thursday preview is the one long-form piece built from this model.
+
+### On the Record (Wednesdays, Note)
 
 **Job:** grade what we said in public last week. This is the
 differentiator -- most fantasy content never reckons with its own misses.
@@ -28,44 +39,66 @@ Format: "the model was right here, wrong here, here's the receipt for
 both." Modeled on the sports-media right-or-wrong recap format, but with
 an actual stated probability on record instead of a vibe.
 
-**Why Tuesday:** by Tuesday every game from the prior week (including
-Monday Night Football) is final, so it's the first moment the full
-week's receipts are honest. It also runs at the same cadence as the
-Tuesday full production build, so the receipts artifact is always fresh.
+**Why Wednesday:** the Tuesday 23:30 full production build is what
+writes the prior week's receipts, and by then Monday Night Football is
+final. Wednesday is the first day the full week's receipts are both
+honest and fresh.
+
+**Shape:** headline grade -> one-sentence calibration read -> one named
+miss -> one named longshot hit -> optional ECR line -> optional teaser
+to Thursday. The miss is mandatory; the ECR line and teaser are what get
+cut for space.
 
 **Data:** `output/10d_receipts_<season>_w<prevweek>.md` (calibration by
 stated band, worst misses, longshots that hit) is the spine. Pull
 `output/10d_ecr_gap_<season>_w<prevweek>.csv` when it exists for the
-"here's how that compared to consensus" beat -- restate specific
-comparisons in prose, do not reproduce the table (boards stay scarce,
-same rule as the movers column).
+"here's how that compared to consensus" beat -- restate one comparison
+in prose, do not reproduce the table (boards stay scarce).
 
 **Do not skip a bad week.** A week with more misses than hits is a
-BETTER On the Record column than a clean week, not a worse one -- it's
+BETTER On the Record note than a clean week, not a worse one -- it's
 the proof the grading is real. See Voice Guardrails below.
 
-### Start 'Em, Sit 'Em: The Movers (Saturdays)
+### Next-Week Preview (Thursdays, Article)
+
+**Job:** take the storylines of the moment ("are the Raiders for
+real?") and test them against the data: first the season so far (every
+game, who it came against, whether the efficiency backs the record),
+then the upcoming opponent (where the matchup plays to or against that
+profile, and what the model gives the key players this week).
+
+**Data:** the `/storyline-data-packet` skill builds the packet
+(retrospective first, then look-ahead) as chat output for Steve or
+Cousin Claude to write from. The article itself is never drafted into
+this repo. Game-level expectations come only from the market line
+(spread/total -> implied points), attributed as the market's; the model
+is player-level and never produces a win probability or a projected
+score.
+
+### Start 'Em, Sit 'Em: The Movers (Sunday AM, Note)
 
 **Job:** the actionable pick, timed to be the most current start/sit
-information available before Sunday's slate. Never leads with the top
+information available before the Sunday slate. Never leads with the top
 of the board -- leads with players whose own number moved most against
 their own trailing baseline.
 
-**Why Saturday, not Tuesday:** Thursday and Saturday practice-report
-rescores land between the Tuesday build and Sunday kickoff. A Saturday
-column reflects real injury-report information a Tuesday column
-structurally cannot have yet. Thursday Night Football is already
-final by Saturday, so this column is implicitly about the Sunday/Monday
+**Why Sunday morning:** the Sunday 08:00 rescore is the last run before
+kickoff and reflects every practice report and final injury
+designation from Thursday through Saturday. Thursday Night Football is
+already final, so this note is implicitly about the Sunday/Monday
 slate.
 
-**Data:** `output/10g_movers_<season>_w<week>.csv` from the Saturday
-rescore run (NOT the Tuesday full-run version -- the whole point is the
+**Shape:** one-line hook -> 2-4 movers (at least one start, one sit;
+2+2 default) with the single strongest why for each -> one-line close.
+
+**Data:** `output/10g_movers_<season>_w<week>.csv` from the Sunday 08:00
+rescore (NOT the Tuesday or Saturday version -- the whole point is the
 freshest number). Cross-check against `output/10d_boards_<season>_w<week>.md`
 for ranks and display values without reproducing them.
 
-Both formats share the voice guardrails below and both are Claude-drafted,
-Steve-edited -- the edit pass is part of the published product, not a
-formality.
+All three pieces share the voice guardrails below and all are
+Claude-drafted (or Claude-researched, for Thursday), Steve-edited --
+the edit pass is part of the published product, not a formality.
 
 ---
 
@@ -168,7 +201,7 @@ These are standing feedback, not per-column judgment calls.
 
 ## Vocabulary
 
-- **"On the Record"** -- branded term for the Tuesday grading segment.
+- **"On the Record"** -- branded term for the Wednesday grading Note.
   Capitalize when referring to the franchise.
 - **"Movers"** -- players whose P(start) or P(boom) moved most against
   their own trailing published baseline. Not a synonym for "top of the
@@ -194,15 +227,22 @@ These are standing feedback, not per-column judgment calls.
 ## Formatting
 
 - ASCII only -- no unicode dashes/quotes/arrows in any published draft
-  (matches the global output-encoding rule; use "--" for em-dash, "->"
-  for arrows if needed in methodology asides).
+  (matches the global output-encoding rule; use "->" for arrows if
+  needed in methodology asides).
+- No em-dashes, period -- not the unicode character, and not "--" as
+  an ASCII stand-in either. Confirmed 2026-09-21: Steve doesn't want
+  the em-dash construction (aside/interruption) at all, in any
+  encoding. Rewrite as two sentences, a comma, a colon, or parentheses
+  instead. A hyphen for ranges or compound words ("600-900 words,"
+  "week-two") is unaffected -- this only bans the dash-as-aside move.
 - Percentages: whole numbers in copy, no decimals ("43%" not "43.2%").
-- On the Record target length: 400-700 words -- shorter than the movers
-  column, built for a quick weekly reckoning, not a deep dive.
-- Movers column target length: 600-900 words (unchanged from the
-  existing skill contract).
-- Section headers may use pop-culture riffs in Steve's style; never
-  forced if nothing fits that week.
+- On the Record and Movers are Substack Notes: 150-200 words each,
+  plain short-form text -- no section headers, no tables, no
+  bullet-heavy layout (bolding a player name is fine). Changed
+  2026-09-24 from 400-700 / 600-900 word articles.
+- Thursday preview article: long-form, length at Steve's discretion.
+  Section headers there may use pop-culture riffs in Steve's style;
+  never forced if nothing fits that week.
 
 ---
 
