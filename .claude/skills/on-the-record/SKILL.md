@@ -50,8 +50,7 @@ Wednesday note grades a fully played week.
    start_pct, fp_actual, hit_start). Use it to pick names and to check
    position-level patterns (e.g. "zero flex RBs cleared the bar").
 3. Voice reference: read 2-3 recent pieces in `~/content/published/`
-   (and any prior `on_the_record` drafts in `~/content/draft/`) before
-   writing. Absorb tone, do not imitate structure verbatim.
+   before writing. Absorb tone, do not imitate structure verbatim.
 
 If the flex section says there was no ECR lock for the week, the
 consensus comparison is unavailable: grade the flex tier on model rank
@@ -118,9 +117,7 @@ Full list in `CONTENT_GUIDE.md`. The ones that bite hardest here:
 
 ## Output
 
-Print the note in chat for copy/paste AND write it to
-`~/content/draft/w<NN>_on_the_record.md` (zero-padded week, e.g.
-`~/content/draft/w03_on_the_record.md`). Steve's content folder,
-OUTSIDE this repo -- never write into `content/` here. Report word
-count. Surface proposed revisions in chat for approval before editing
-the file on any subsequent pass. Never commit or push; Steve handles git.
+CHAT OUTPUT ONLY (Steve, 2026-09-24). Print the note in chat for
+copy/paste and report the word count. Do not write a file anywhere --
+not `~/content/draft/`, not this repo's `content/`. Revisions are
+likewise printed in chat as a full updated note. Never commit or push.

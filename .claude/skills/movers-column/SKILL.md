@@ -37,8 +37,7 @@ draft off stale numbers.
    and display values. Do NOT reproduce boards in the note; the note
    shares names and reasoning, the boards stay scarce (paid tier).
 3. Voice reference: read 2-3 recent pieces in `~/content/published/`
-   (and any prior movers notes in `~/content/draft/`) before writing,
-   every time. Absorb tone, do not imitate structure verbatim.
+   before writing, every time. Absorb tone, do not imitate structure verbatim.
 
 ## Note contract
 
@@ -80,9 +79,7 @@ draft off stale numbers.
 
 ## Output
 
-Print the note in chat for copy/paste AND write it to
-`~/content/draft/w<NN>_movers_note.md` (zero-padded week, e.g.
-`~/content/draft/w04_movers_note.md`). Steve's content folder, OUTSIDE
-this repo -- never write into `content/` here. Report word count.
-Surface proposed revisions in chat for approval before editing the file
-on any subsequent pass. Never commit or push; Steve handles git.
+CHAT OUTPUT ONLY (Steve, 2026-09-24). Print the note in chat for
+copy/paste and report the word count. Do not write a file anywhere --
+not `~/content/draft/`, not this repo's `content/`. Revisions are
+likewise printed in chat as a full updated note. Never commit or push.

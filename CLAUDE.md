@@ -15,11 +15,16 @@ without his explicit yes.
 
 ## Content artifacts
 
-- Written prose meant for Substack/X (movers columns, On the Record
-  columns, lede-in posts, fact sheets) is NEVER a repo artifact. It
-  goes to `~/content/draft/` (Steve's personal workspace, outside this
-  repo), never into this repo's `content/` folder. Established
-  2026-08-23 after a cleanup found loose drafts sitting in `content/`.
+- Written prose meant for Substack/X (movers notes, On the Record
+  notes, preview articles, lede-in posts, fact sheets) is NEVER a repo
+  artifact and never goes into this repo's `content/` folder
+  (established 2026-08-23 after a cleanup found loose drafts there).
+- All content skills in this repo (`/movers-column`, `/on-the-record`,
+  `/storyline-data-packet`) are CHAT OUTPUT ONLY: print for copy/paste,
+  write no file anywhere -- not `~/content/draft/` either. Changed
+  2026-09-24 (previously the two note skills wrote to
+  `~/content/draft/`). Write a file only if Steve explicitly asks for
+  one in that session.
 - Material prepared for "Cousin Claude" (Steve's external writing-help
   Claude instance, no repo access) defaults to CHAT OUTPUT ONLY -- do
   not write a file for it, not even to `~/content/draft/`, unless Steve
