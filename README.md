@@ -937,6 +937,44 @@ running from Week 1 2026) is the designated path, graded in-season
 through the override ledger before any training seat in 2027. No WR
 edge claim ships; WR presents on calibration honesty.
 
+### D30. RB early-injury-exit usage correction: STOPPED AT STEP 0 (2026-09-27)
+
+PRE-REGISTERED (in session, bars approved by Steve before Step 0 ran).
+Trigger: Saquon Barkley 2026 W2 left early hurt (16% snaps, 4 carries);
+his W3 projection fell 21 -> 16 touches because 11b's injury layer only
+counts whole missed weeks -- a partial game enters the rolling share at
+full weight. Hypothesis: established RBs are underprojected on touches
+for several games after an early injury exit.
+
+FLAG (frozen before any model run): snap share < 0.5 x baseline (mean of
+prior 3 games played, may span seasons), baseline >= 40%, AND listed on
+the next game's Friday-lock-masked injury report (11b lock table). No
+play-by-play text: a descriptive count found it confirmed only 15 of 388
+snap collapses beyond the injury report. Counts 2014-2025: 192 flagged
+exits (~16/season, stable); ~64% miss the next game (already covered by
+weeks_missed / return_from_absence); returners come back at a median 74%
+of baseline snap share.
+
+STEP 0 (stop gate): pooled net touch bias (pred - actual, net of the
+model's all-row bias) on post-exit rows = the next 4 games played after
+a flagged exit. STOP if |net bias| < 1 touch. Arms A (drop exit games
+from rolling windows) and B (early_exit_recent + games_since_exit
+features) only run on PROCEED; bars for them (post-exit bias -50%,
+post-exit Brier improves, pooled RB Brier guard +0.0005, D29 in-band
+discrimination gate) were set but never reached.
+
+RESULT: STOP on both architectures, 204 folds, n=549 post-exit rows.
+Live twostage RB vol (11c_rb_injury_fold_predictions_volfix.csv): net
+-0.43 touches (95% CI -0.89 to +0.02). fp1 shadow (21d base): -0.46
+(CI -0.92 to 0.00). Same shape on both -- first game back slightly
+OVERprojected (+0.54), game 3 -1.33 (single-k, read as noise; not
+chased, per the pre-stated bar). The existing injury layer (own_q_int,
+own_practice_int, weeks_missed) appears to offset the depressed usage
+share on average. Barkley-type cases are individual misses, not a
+systematic gap. Do not rebuild without new evidence. Receipts:
+R/archive/oneoff/rb_early_exit_count.R (descriptive count),
+R/archive/oneoff/rb_early_exit_step0.R (Step 0, both architectures).
+
 ## Deployment runner (10-series) -- design, in progress 2026-07-17
 
 The backtest chain trains a model per fold; deployment is ONE MORE FOLD:
