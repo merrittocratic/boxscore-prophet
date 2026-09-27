@@ -44,6 +44,11 @@ BOARD_N       <- 12L    # rows on rendered X images
 STREAMER_CUT  <- c(RB = 10, WR = 5, TE = 4)   # 06c/12e exante_low upper bounds
 RECEIPT_BANDS <- c(0, 0.10, 0.25, 0.50, 1)
 BAND_LABELS   <- c("under 10%", "10-25%", "25-50%", "50%+")
+# Chances are conditional on playing (training rows are games played), so
+# Out/Doubtful players are pulled from every ranked board and listed as
+# "not ranked" instead (Steve 2026-09-27: Doubtful treated as Out). The
+# ledger keeps their conditional chance untouched.
+UNAVAILABLE   <- c("Out", "Doubtful")
 
 VOL_LABEL   <- c(RB = "proj touches", WR = "proj targets", TE = "proj targets",
                  QB = "proj dropbacks")
@@ -120,7 +125,10 @@ boards_base <- scored |>
     boom_pct   = cap_pct(p_boom_recal)
   )
 
-cli_alert_success("Scored slate: {nrow(boards_base)} players")
+not_ranked <- boards_base |> filter(report_status %in% UNAVAILABLE)
+boards_base <- boards_base |> filter(!report_status %in% UNAVAILABLE)
+
+cli_alert_success("Scored slate: {nrow(boards_base)} players ranked | {nrow(not_ranked)} Out/Doubtful not ranked")
 
 # ===========================================================================
 # 2. FORWARD BOARDS
@@ -330,7 +338,10 @@ if (file.exists(ledger_path)) {
       # A header-only ledger (0 data rows) makes read_csv's type-inference
       # guess kickoff_et as character instead of datetime -- pin it so the
       # game_over arithmetic below never sees a non-POSIXct column.
-      col_types = readr::cols(kickoff_et = readr::col_datetime())
+      col_types = readr::cols(kickoff_et = readr::col_datetime(),
+                              # early snapshots carry no statuses; readr's
+                              # guess would make this logical and NA them
+                              report_status = readr::col_character())
     ) |>
     group_by(player_id) |>
     slice_max(run_ts, n = 1, with_ties = FALSE) |>
@@ -398,7 +409,9 @@ if (file.exists(ledger_path)) {
   # as it stood at each player's lock. ECR rank from the week's ECR lock.
   flex <- NULL
   if (!is.null(receipts)) {
+    # Out/Doubtful at lock were not on the published board -> no model rank
     model_ranks <- locked |>
+      filter(!report_status %in% UNAVAILABLE) |>
       group_by(position) |>
       arrange(desc(p_start_recal), .by_group = TRUE) |>
       mutate(model_rank = row_number()) |>
@@ -460,6 +473,11 @@ for (pos in c("RB", "WR", "TE", "QB")) {
                             boom = paste0(boom_pct, "%"), disp_vol),
              c("#", "Player", "Team", "Opp", "Start", "Boom", VOL_LABEL[pos])),
     "")
+  nr <- not_ranked |> filter(position == pos) |> arrange(desc(p_start_recal))
+  if (nrow(nr) > 0) {
+    md <- c(md, paste0("Out/Doubtful, not ranked: ",
+                       paste(nr$player_disp, collapse = ", ")), "")
+  }
 }
 
 if (nrow(content_board) > 0) {

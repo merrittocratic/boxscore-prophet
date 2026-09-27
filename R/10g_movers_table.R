@@ -145,7 +145,10 @@ movers <- now |>
   left_join(ctx_now,   by = c("position", "player_id")) |>
   left_join(ctx_base,  by = c("position", "player_id")) |>
   left_join(pff_ctx,   by = "player_id") |>
-  filter(n_base_weeks >= MIN_BASE_WEEKS, p_start_base >= REL_FLOOR) |>
+  filter(n_base_weeks >= MIN_BASE_WEEKS, p_start_base >= REL_FLOOR,
+         # chances are conditional on playing; Out/Doubtful are not movers
+         # (same UNAVAILABLE rule as 10d's boards, Steve 2026-09-27)
+         !report_status %in% c("Out", "Doubtful")) |>
   mutate(delta_start_pp = 100 * (p_start - p_start_base),
          delta_boom_pp  = 100 * (p_boom  - p_boom_base),
          delta_vol      = pred_vol - pred_vol_base,
