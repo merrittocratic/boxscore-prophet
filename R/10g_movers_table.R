@@ -56,7 +56,13 @@ cli_h1("Step 10g: movers table for {TARGET_SEASON} week {TARGET_WEEK}")
 read_ledger_week <- function(wk) {
   f <- sprintf("output/10c_ledger_%d_w%02d.csv", TARGET_SEASON, wk)
   if (!file.exists(f)) return(NULL)
-  read_csv(f, show_col_types = FALSE) |>
+  # Explicit types: early snapshots carry no statuses, so readr's 1000-row
+  # guess makes report_status logical and silently NAs every later
+  # "Out"/"Questionable" (same guard 10c uses on its own ledger read).
+  read_csv(f, show_col_types = FALSE,
+           col_types = cols(report_status   = col_character(),
+                            practice_status = col_character(),
+                            .default        = col_guess())) |>
     group_by(position, player_id) |>
     slice_max(as_of, n = 1, with_ties = FALSE) |>   # latest snapshot only
     ungroup() |>
