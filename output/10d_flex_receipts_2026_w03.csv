@@ -1,6 +1,6 @@
 position,player_id,player_name,posteam,defteam,model_rank,ecr_rank,rank_gap,view,start_pct,boom_pct,fp_actual,thresh_start,hit_start,hit_boom
 QB,00-0036264,Jordan Love,GB,ATL,12,10,-2,agree,30,20,18.48,20,FALSE,FALSE
 QB,00-0039917,Michael Penix Jr.,ATL,GB,16,28,12,model_higher,26,17,14.040000000000001,20,FALSE,FALSE
-RB,00-0039811,MarShawn Lloyd,GB,ATL,36,42,6,model_higher,20,8,3.8,15,FALSE,FALSE
-TE,00-0036970,Kyle Pitts,ATL,GB,20,19,-1,agree,27,16,1.5,12,FALSE,FALSE
-WR,00-0040667,Matthew Golden,GB,ATL,5,22,17,model_higher,48,31,21,15,TRUE,TRUE
+RB,00-0039811,MarShawn Lloyd,GB,ATL,35,42,7,model_higher,20,8,3.8,15,FALSE,FALSE
+TE,00-0036970,Kyle Pitts,ATL,GB,19,19,0,agree,27,16,1.5,12,FALSE,FALSE
+WR,00-0040667,Matthew Golden,GB,ATL,7,22,15,model_higher,48,31,21,15,TRUE,TRUE
