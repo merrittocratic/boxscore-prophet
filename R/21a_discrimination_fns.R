@@ -1,6 +1,6 @@
 # R/21a_discrimination_fns.R
 # Discrimination (ranking-skill) metric library -- Stage A of the D29
-# single-stage rebuild. Sourced by R/21b_discrimination_baseline.R and by
+# single-stage rebuild. Sourced by R/archive/21b_discrimination_baseline.R and by
 # R/21f_fp_grade.R; not run directly.
 #
 # WHY THIS FILE EXISTS: no discrimination/ranking metric existed anywhere
