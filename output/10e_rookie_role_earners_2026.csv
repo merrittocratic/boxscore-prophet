@@ -1,21 +1,25 @@
 rank,nfl_name,pos,draft_pick,draft_team,tracker_status,last_week_active,latest_fp_ppr,latest_opportunities,latest_snap_share,snap_share_avg,model_p_start_latest
-1,Denzel Boston,WR,39,CLE,active,2,20.5,7,0.93,0.925,0.1835
-2,Caleb Douglas,WR,75,MIA,active,2,3.9000000000000004,3,0.86,0.885,0.208
-3,Malachi Fields,WR,74,NYG,active,2,5,6,0.81,0.765,0.304
-4,Germie Bernard,WR,47,PIT,active,2,7.5,8,0.79,0.79,0.1005
-5,Bryce Lance,WR,136,NO,active,2,1.8,1,0.79,0.74,0.1215
-6,Carnell Tate,WR,4,TEN,active,2,5.7,5,0.75,0.815,0.189
-7,Ted Hurst III,WR,84,TB,active,2,4.7,7,0.74,0.745,0.162
-8,Nate Boerkircher,TE,56,JAX,active,1,1.9,1,0.67,0.67,0.2265
-9,KC Concepcion,WR,24,CLE,active,2,8.2,7,0.66,0.675,0.1945
-10,Makai Lemon,WR,20,PHI,active,2,1.9,2,0.63,0.635,0.1895
-11,Antonio Williams,WR,71,WAS,active,2,5.4,3,0.49,0.43,0.144
-12,Will Kacmarek,TE,87,MIA,active,2,1.4,1,0.47,0.36,0.124
-13,Chris Bell,WR,94,MIA,active,2,0,1,0.41,0.46499999999999997,0.085
-14,Jonah Coleman,RB,108,DEN,limited_role,2,14.8,13,0.4,0.23,0.084
-15,Jeremiyah Love,RB,3,ARI,active,2,7.5,12,0.4,0.41500000000000004,0.2585
-16,Ja'Kobi Lane,WR,80,BAL,active,1,2.1,3,0.4,0.4,0.2705
-17,Kenyon Sadiq,TE,16,NYJ,active,2,3.7,3,0.36,0.39,0.19
-18,Jadarian Price,RB,32,SEA,active,2,5,15,0.34,0.41000000000000003,0.3025
-19,Kaelon Black,RB,90,SF,active,2,2.5,7,0.33,0.38,0.332
-20,Kaytron Allen,RB,187,WAS,limited_role,2,2.4000000000000004,5,0.08,0.09,0.096
+1,Denzel Boston,WR,39,CLE,active,3,8.100000000000001,4,0.89,0.9133333333333333,0.2785
+2,Carnell Tate,WR,4,TEN,active,3,11.8,9,0.88,0.8366666666666667,0.254
+3,KC Concepcion,WR,24,CLE,active,3,2.9,9,0.86,0.7366666666666667,0.2305
+4,Caleb Douglas,WR,75,MIA,active,2,3.9000000000000004,3,0.86,0.885,0.208
+5,Ted Hurst III,WR,84,TB,active,3,11,3,0.75,0.7466666666666667,0.1805
+6,Bryce Lance,WR,136,NO,active,3,0,3,0.72,0.7333333333333333,0.2065
+7,Chris Bell,WR,94,MIA,active,3,10.7,7,0.71,0.5466666666666666,0.1055
+8,Makai Lemon,WR,20,PHI,active,3,5.9,4,0.7,0.6566666666666666,0.1855
+9,Malachi Fields,WR,74,NYG,active,3,3.9000000000000004,2,0.69,0.74,0.2395
+10,Jeremiyah Love,RB,3,ARI,active,3,21.9,26,0.64,0.49,0.3205
+11,Kevin Coleman Jr.,WR,177,MIA,active,3,1.3,4,0.62,0.45499999999999996,0.072
+12,Kenyon Sadiq,TE,16,NYJ,active,3,23.5,8,0.58,0.4533333333333333,0.2195
+13,Matthew Hibner,TE,133,BAL,active,3,10.3,2,0.5,0.42000000000000004,0.1835
+14,Nate Boerkircher,TE,56,JAX,active,3,0,1,0.45,0.56,0.156
+15,Antonio Williams,WR,71,WAS,active,3,3.5,4,0.41,0.42333333333333334,0.113
+16,Will Kacmarek,TE,87,MIA,active,3,0,0,0.41,0.37666666666666665,0.1215
+17,Jonah Coleman,RB,108,DEN,limited_role,2,14.8,13,0.4,0.23,0.084
+18,Ja'Kobi Lane,WR,80,BAL,active,1,2.1,3,0.4,0.4,0.2705
+19,Josh Cameron,WR,191,JAX,active,3,8.2,2,0.37,0.29000000000000004,0.1225
+20,Jadarian Price,RB,32,SEA,active,3,1.2000000000000002,8,0.28,0.3666666666666667,0.3315
+21,Emmett Johnson,RB,161,KC,active,3,1.7000000000000002,6,0.27,0.27,0.122
+22,Mike Washington Jr.,RB,122,LV,limited_role,3,11.4,5,0.16,0.18,0.084
+23,Kaelon Black,RB,90,SF,active,3,1.7000000000000002,5,0.15,0.30333333333333334,0.2725
+24,Kaytron Allen,RB,187,WAS,limited_role,2,2.4000000000000004,5,0.08,0.09,0.096

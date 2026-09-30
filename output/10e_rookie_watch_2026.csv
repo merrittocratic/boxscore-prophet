@@ -8,7 +8,9 @@ rank,nfl_name,pos,draft_round,draft_pick,draft_team,tracker_status,games,last_we
 7,Marlin Klein,TE,2,59,HOU,limited_role,1,1,1,0.11,Baseline
 8,Max Klare,TE,2,61,LA,no_nfl_data_yet,0,NA,NA,NA,Baseline
 9,Carson Beck,QB,3,65,ARI,no_nfl_data_yet,0,NA,NA,NA,Baseline
-10,Oscar Delp,TE,3,73,NO,limited_role,1,2,1,0.13,Baseline
-11,Drew Allar,QB,3,76,PIT,no_nfl_data_yet,0,NA,NA,NA,Baseline
-12,Chris Brazzell II,WR,3,83,CAR,no_nfl_data_yet,0,NA,NA,NA,Baseline
-13,Zavion Thomas,WR,3,89,CHI,limited_role,1,2,0,0.03,Baseline
+10,Sam Roush,TE,3,69,CHI,limited_role,2,3,1,0.22,Baseline
+11,Oscar Delp,TE,3,73,NO,limited_role,1,2,1,0.13,Baseline
+12,Drew Allar,QB,3,76,PIT,no_nfl_data_yet,0,NA,NA,NA,Baseline
+13,Zachariah Branch,WR,3,79,ATL,limited_role,3,3,2,0.18,Baseline
+14,Chris Brazzell II,WR,3,83,CAR,no_nfl_data_yet,0,NA,NA,NA,Baseline
+15,Zavion Thomas,WR,3,89,CHI,limited_role,2,3,1,0.11,Baseline
