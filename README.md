@@ -796,7 +796,7 @@ this year regardless; a real fix is planned for 2027, not a number patch now.
 
 The CLAUDE.md bar ("real information beyond a market/consensus baseline")
 was unmeasurable -- FantasyPros' API serves live weeks only, no history.
-Broken open via the Wayback Machine: R/oneoff/ecr_wayback_harvest.R pulls
+Broken open via the Wayback Machine: R/archive/oneoff/ecr_wayback_harvest.R pulls
 ~1,000 in-season snapshots of the public rankings pages (12 URL variants,
 three page eras, all parsed; the page's own week label is authoritative)
 into data/ecr_history/ -- 141 season-weeks of point-in-time weekly ECR,
@@ -823,7 +823,7 @@ p 0.32-0.44 vs market-implied 0.62-0.77.
 
 ### D26. Star-bucket calibration check: DISCONFIRMED at top-24; real effect is RB top-12 (2026-09-05)
 
-PRE-REGISTERED (R/18c_star_bucket_check.R; star = trailing-FP top-24 per
+PRE-REGISTERED (R/archive/18c_star_bucket_check.R; star = trailing-FP top-24 per
 Steve's amendment, bar = 7pp gap): ALL graded cells DISCONFIRMED (RB star
 gaps +2.9/+2.5pp -- real but under the bar; WR CIs span 0). Bars locked,
 verdict stands. The pre-registered REPORTED gradient then localized the

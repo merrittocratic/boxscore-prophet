@@ -61,7 +61,7 @@ the first live season (launch = Week 1, September).
 Detail behind layers 2-6 above, broken out per position -- what's
 actually deployed, what's shadow-only, and which raw features carry
 the weight. Feature plain-language labels match the dictionary in
-`R/21m_shap_explain.R`.
+`R/archive/21m_shap_explain.R`.
 
 **Real vs. shadow, stated plainly because a prior note overstated it:**
 `weekly_run.sh`'s REAL production pass (the one `10d`/content reads)
