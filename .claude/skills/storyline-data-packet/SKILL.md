@@ -39,12 +39,19 @@ bye (look ahead to the game after it and say so).
    defensive unit) -- vague team-level color isn't a data point.
 2. **Pull every game so far, not just last week, from nflverse**
    (`nflreadr::load_schedules`, `load_player_stats`, `load_pbp`,
-   `load_nextgen_stats`). Build a short game log (opponent, result,
-   score, off/def EPA per play, success rate) plus season-to-date
-   totals and league rank. Favor EPA/success-rate/explosive-play framing
-   over raw counting stats -- it travels better into "why," not just
-   "what." Two things make a "for real?" claim concrete instead of
-   vibes:
+   `load_nextgen_stats`, `load_snap_counts`). Build a short game log
+   (opponent, result, score, off/def EPA per play, success rate) plus
+   season-to-date totals and league rank across the FULL stat menu
+   below -- not EPA alone. EPA is one lens among several, not the
+   default framing (changed 2026-10-01: Steve flagged articles going
+   stale from leaning on EPA in nearly every bullet). Pull every
+   family in the menu for each storyline team and opponent, then lead
+   each point with whichever stat tells it most clearly; rotate stat
+   families across bullets so no single metric carries the packet.
+   When two families disagree (e.g. a run defense 21st by EPA but 32nd
+   in rush yards allowed), that disagreement is itself a nugget --
+   report both. Two things make a "for real?" claim concrete instead
+   of vibes:
    - **Trend:** is the good (or bad) stuff steady across games, or one
      outlier game carrying the season line? Say which.
    - **Who they did it against:** the quality of opponents faced so far
@@ -56,6 +63,33 @@ bye (look ahead to the game after it and say so).
    wins), turnover margin, non-offensive TDs -- but only when this
    team's data actually shows them, never as a stock explanation (see
    step 5).
+
+   **Stat menu (pull all of these; rank each 1-32 or among qualifiers):**
+   - *Team scoring/volume:* points per game for and against, yards per
+     game, yards per play, drive scoring % and TD %, time of
+     possession, penalties per game.
+   - *Team passing (off and def):* completion %, yards per attempt,
+     ANY/A, passing yards per game, sacks / sack rate, INTs,
+     explosive passes (20+ yds).
+   - *Team rushing (off and def):* rushing yards per game, yards per
+     carry, stuff rate (carries for 0 or fewer yards), explosive runs
+     (10+ yds).
+   - *Situational:* 3rd-down conversion %, red-zone TD %, turnover
+     margin.
+   - *Efficiency:* EPA/play (overall, pass, rush), success rate.
+   - *QB (NGS passing):* CPOE, completion % vs expected completion %,
+     time to throw, intended air yards (aDOT), aggressiveness (share of
+     throws into tight windows), passer rating, TD/INT. Use the NGS
+     CPOE as the single reported CPOE -- nflfastR's pbp `cpoe` uses a
+     different expected-completion model and can disagree by several
+     points (W4 2026: Mahomes -0.1 NGS vs +3.2 pbp); never mix the two.
+   - *Pass-catchers:* targets, target share, air-yards share, WOPR,
+     catch rate, yards per target, first downs; NGS separation and YAC
+     over expected.
+   - *Rushers:* carries, yards per carry, NGS rush yards over expected
+     (per attempt and total), % of carries vs 8+ man boxes.
+   - *Role:* offensive snap share by week (from `load_snap_counts`) --
+     catches role changes before they show up in production.
 3. **Check the model's own outputs for the completed weeks** --
    `output/10c_scored_slate_<season>_w<week>.csv` (pred_tot, thresholds,
    probabilities), `output/10d_ecr_gap_<season>_w<week>.csv`
@@ -121,9 +155,12 @@ bye (look ahead to the game after it and say so).
    game-level expectation in this pipeline -- the model is player-level
    fantasy, not a game-outcome model. Never fabricate a win probability
    or projected score; report the market's number as the market's.
-8. **Profile the opponent season to date**, same method as step 2:
-   off/def EPA per play, success rate, pass-defense vs run-defense
-   splits, explosive plays allowed, quality of their own schedule.
+8. **Profile the opponent season to date**, same method and full stat
+   menu as step 2: pass defense (completion % allowed, yards per
+   attempt, ANY/A allowed, passing yards per game, sacks, takeaways)
+   and run defense (rushing yards per game, yards per carry allowed,
+   stuff rate), explosive plays allowed, EPA/success rate, and the
+   quality of their own schedule.
 9. **Match strengths against weaknesses.** Line up what the
    retrospective said this team does well/poorly against what the
    opponent allows/takes away (e.g. "Raiders' offense lives on
@@ -181,6 +218,22 @@ bye (look ahead to the game after it and say so).
 - **Rush yards over expected (NGS):** how many rushing yards a back
   gained beyond what's expected given the blockers and defenders in the
   box on that play, from player-tracking data.
+- **ANY/A (Adjusted Net Yards per Attempt):** passing yards per
+  dropback after subtracting sack yardage, with a bonus for TDs and a
+  penalty for interceptions -- one number for a passing game's total
+  value.
+- **Stuff rate:** the share of runs stopped at or behind the line of
+  scrimmage.
+- **Target share / air-yards share / WOPR:** a receiver's share of the
+  team's targets, and of the team's total downfield throwing distance;
+  WOPR blends the two into one opportunity score.
+- **Separation (NGS):** average distance in yards between the receiver
+  and the nearest defender when the ball arrives.
+- **YAC over expected (NGS):** yards after the catch beyond what
+  tracking data expected given where defenders were.
+- **Time to throw / aggressiveness (NGS):** seconds from snap to
+  release; share of throws into tight coverage (a defender within a
+  yard).
 - **DVOA:** a Football Outsiders efficiency metric adjusted for
   opponent, down, distance, and situation. NOT currently pulled anywhere
   in this pipeline -- if a storyline seems to call for it, say so and
