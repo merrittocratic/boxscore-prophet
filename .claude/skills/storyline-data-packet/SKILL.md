@@ -44,7 +44,10 @@ bye (look ahead to the game after it and say so).
    season-to-date totals and league rank across the FULL stat menu
    below -- not EPA alone. EPA is one lens among several, not the
    default framing (changed 2026-10-01: Steve flagged articles going
-   stale from leaning on EPA in nearly every bullet). Pull every
+   stale from leaning on EPA in nearly every bullet). EPA and success
+   rate remain core stats in every storyline -- the goal is a mix,
+   with EPA alongside box-score, tracking and role stats, not replaced
+   by them. Pull every
    family in the menu for each storyline team and opponent, then lead
    each point with whichever stat tells it most clearly; rotate stat
    families across bullets so no single metric carries the packet.
