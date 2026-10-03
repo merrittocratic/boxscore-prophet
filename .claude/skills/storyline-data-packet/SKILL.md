@@ -62,6 +62,18 @@ bye (look ahead to the game after it and say so).
      baseline (e.g. last year's team EPA/play) for "return to form" or
      "step back" claims. A 3-0 record against three bottom-10 offenses
      is a different story than 2-1 against contenders.
+   **Like-for-like comparisons (added 2026-10-03):** any comparison
+   across seasons, teams, or players uses the SAME stat, the SAME side
+   (offense / defense / net), and a stated qualifier pool on both
+   ends. Never pair last year's offensive EPA rank with this year's
+   net EPA rank (W4 2026 Raiders packet did exactly this: "32nd in
+   offensive EPA last year ... 4th in net EPA now" -- the honest pair
+   was offense 32nd -> 16th, net 30th -> 4th). For player ranks, name
+   the pool every time ("31st of 33 qualifiers last year, 10th of 27
+   this year") since pool cutoffs differ by season length. If the
+   like-for-like number isn't pulled, pull it before writing the
+   bullet.
+
    Also flag record-vs-underlying mismatches: close-game luck (one-score
    wins), turnover margin, non-offensive TDs -- but only when this
    team's data actually shows them, never as a stock explanation (see
