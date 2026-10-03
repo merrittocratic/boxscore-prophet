@@ -1,0 +1,5 @@
+position,player_id,player_name,posteam,defteam,model_rank,ecr_rank,rank_gap,view,start_pct,boom_pct,fp_actual,thresh_start,hit_start,hit_boom
+RB,00-0040784,Quinshon Judkins,CLE,PIT,32,23,-9,model_lower,23,7,21.6,15,TRUE,TRUE
+TE,00-0036894,Pat Freiermuth,PIT,CLE,36,19,-17,model_lower,19,7,10.7,12,FALSE,FALSE
+WR,00-0035640,DK Metcalf,PIT,CLE,17,30,13,model_higher,41,26,16.5,15,TRUE,FALSE
+WR,00-0041037,Denzel Boston,CLE,PIT,47,37,-10,model_lower,25,11,12.9,15,FALSE,FALSE
