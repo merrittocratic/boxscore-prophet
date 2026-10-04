@@ -38,6 +38,11 @@ draft off stale numbers.
    shares names and reasoning, the boards stay scarce (paid tier).
 3. Voice reference: read 2-3 recent pieces in `~/content/published/`
    before writing, every time. Absorb tone, do not imitate structure verbatim.
+4. Name log (added 2026-10-04): check the movers name log in memory
+   (`project_movers_name_log`) before picking. Skip anyone named in
+   the prior 2 weeks unless the reason is genuinely new, and mix
+   positions (WR/TE, not just RBs). Steve can override with a name he
+   wants in. After he posts, update the log with the final names.
 
 ## Note contract
 
