@@ -73,9 +73,19 @@ build_exante_roster <- function(pos, target_season, target_week,
   )
 
   roster_now <- NULL
+  # Current roster position per player, used below to keep each player on
+  # exactly ONE slate. known_ids / season_hist pull in position converts
+  # (old WR history, now listed TE), and without this the same player was
+  # scored by two position models with different probabilities (2026 W4:
+  # Waller/J.Johnson on both WR and TE slates; 10 cross-slate dupes total).
+  pos_now <- tibble::tibble(player_id = character(), roster_pos = character())
   if (!is.null(wk_rosters) && nrow(wk_rosters)) {
     wks <- sort(unique(wk_rosters$week))
     use_wk <- if (any(wks <= target_week)) max(wks[wks <= target_week]) else min(wks)
+    pos_now <- wk_rosters |>
+      filter(week == use_wk, !is.na(gsis_id)) |>
+      distinct(gsis_id, .keep_all = TRUE) |>
+      select(player_id = gsis_id, roster_pos = position)
     roster_now <- wk_rosters |>
       filter(week == use_wk, position == pos | gsis_id %in% known_ids,
              !is.na(gsis_id), status %in% c("ACT", "A01")) |>
@@ -116,6 +126,18 @@ build_exante_roster <- function(pos, target_season, target_week,
       )
     ) |>
     select(player_id, posteam, source)
+
+  # One slate per player: if this week's roster lists a player at a
+  # DIFFERENT modeled position, that position's slate owns him. Roster
+  # positions outside the four modeled ones (FB, etc.) keep the old
+  # known_ids/history behavior.
+  other_pos <- pos_now |>
+    filter(roster_pos %in% c("QB", "RB", "WR", "TE"), roster_pos != pos)
+  n_moved <- sum(combined$player_id %in% other_pos$player_id)
+  if (n_moved > 0) {
+    cli::cli_alert_info("{n_moved} {pos} row(s) dropped: current roster lists them at another modeled position (scored on that slate instead)")
+  }
+  combined <- combined |> filter(!player_id %in% other_pos$player_id)
 
   # Loud on unmatched codes. The inner_join below drops these rows; without
   # this warning that drop is invisible (the 2026 "AZ" regression cost a

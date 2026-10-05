@@ -156,12 +156,32 @@ kicks <- bind_rows(
 )
 first_kick <- min(sched$kick, na.rm = TRUE)
 
+# LOWER bound (added 2026-10-04): only news since that team's PREVIOUS
+# game counts as this week's news. Without it, any blurb ever published
+# before this week's kickoff was valid and dedup kept each player's latest
+# one -- which could be weeks old (W4 2026: Collins override still citing
+# "Week 2"; a DAL backfield reason citing stale personnel). Fallback when
+# the team has no earlier game (Week 1, unknown team): 7 days before kick.
+prev_kicks <- nflreadr::load_schedules(SEASON) |>
+  filter(game_type == "REG", week < WEEK) |>
+  mutate(kick = as.POSIXct(paste(gameday, coalesce(gametime, "13:00")),
+                           format = "%Y-%m-%d %H:%M", tz = "America/New_York"))
+prev_kicks <- bind_rows(
+  prev_kicks |> select(team = home_team, kick),
+  prev_kicks |> select(team = away_team, kick)
+) |>
+  group_by(team) |>
+  summarise(prev_kick = max(kick, na.rm = TRUE), .groups = "drop")
+
+n_before_window <- nrow(matched)
 matched <- matched |>
   left_join(kicks, by = "team") |>
-  mutate(kick_eff = coalesce(kick, first_kick)) |>
-  filter(!is.na(published_utc), published_utc < kick_eff)
+  left_join(prev_kicks, by = "team") |>
+  mutate(kick_eff = coalesce(kick, first_kick),
+         window_start = coalesce(prev_kick, kick_eff - as.difftime(7, units = "days"))) |>
+  filter(!is.na(published_utc), published_utc < kick_eff, published_utc >= window_start)
 
-cli_alert_info("{nrow(matched)} player-blurb rows valid (published before that player's own kickoff; fallback week's first kickoff {format(first_kick, tz='America/New_York')})")
+cli_alert_info("{nrow(matched)} player-blurb rows valid (published since that team's previous game and before its own kickoff; {n_before_window - nrow(matched)} dropped as stale or post-kickoff)")
 
 # ===========================================================================
 # 4. DEDUP -- latest VALID blurb per gsis_id (not per slug -- multiple
@@ -360,13 +380,33 @@ if (nrow(to_classify) > 0) {
 # below crashed referencing it unconditionally. dplyr operations on an
 # empty tibble are safe and return the right columns with zero rows, so
 # there was never a real need to skip this on the empty case.
+#
+# MULTI-NAME + NO-FALLBACK (fixed 2026-10-04, W4 2026 PHI): the LLM often
+# names several beneficiaries in one string ("Wicks and Lemon"). That
+# never crosswalked, and the old fallback then applied the beneficiaries'
+# "up" flag to the blurb's own subject -- i.e. to the INJURED player
+# (DeVonta Smith, Goedert, Marquise Brown all got role_change_up while
+# Out; Wicks/Lemon got nothing). Now: split multi-name strings into one
+# row per name, and fall back to the subject ONLY when no beneficiary was
+# named at all. A named-but-unresolved beneficiary is kept for review
+# with gsis_id = NA so 10c never applies it to anyone.
 llm_results <- llm_results |>
+  mutate(affected_player = na_if(str_trim(affected_player), ""),
+         affected_player = if_else(str_to_lower(coalesce(affected_player, "")) %in% c("null", "none", "n/a"),
+                                   NA_character_, affected_player)) |>
+  separate_longer_delim(affected_player, delim = regex("\\s*(?:,|&|\\band\\b)\\s*")) |>
+  mutate(affected_player = na_if(str_trim(affected_player), "")) |>
   mutate(affected_nm = normalize_player_name(coalesce(affected_player, ""))) |>
-  left_join(rosters |> rename(affected_gsis_id = gsis_id), by = c("affected_nm" = "nm")) |>
+  left_join(rosters |> select(nm, affected_gsis_id = gsis_id), by = c("affected_nm" = "nm")) |>
   mutate(
-    final_gsis_id = coalesce(affected_gsis_id, gsis_id),
-    final_name    = if_else(!is.na(affected_gsis_id), affected_player, name_guess)
-  )
+    final_gsis_id = case_when(
+      !is.na(affected_gsis_id) ~ affected_gsis_id,
+      is.na(affected_player)   ~ gsis_id,          # no beneficiary named: subject's own move
+      TRUE                     ~ NA_character_     # named but unresolved: review only, never applied
+    ),
+    final_name = if_else(!is.na(affected_gsis_id), affected_player, name_guess)
+  ) |>
+  distinct(news_id, final_gsis_id, affected_player, .keep_all = TRUE)
 n_retargeted <- sum(!is.na(llm_results$affected_gsis_id) & llm_results$affected_gsis_id != llm_results$gsis_id)
 n_unresolved <- sum(!is.na(llm_results$affected_player) & is.na(llm_results$affected_gsis_id))
 cli_alert_info("LLM overrides: {n_retargeted} re-targeted to a named beneficiary, {n_unresolved} named a beneficiary that didn't crosswalk (kept on the blurb's own subject, flagged for review)")
