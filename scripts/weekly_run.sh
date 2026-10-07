@@ -59,6 +59,11 @@ if [ "$MODE" = "full" ]; then
   run R/build_rb_feature_layer.R
   run R/04a_wr_feature_layer.R
   run R/12a_te_feature_layer.R
+  # D32: TE VOL trains on the floor-free table (all 1+ target weeks) --
+  # production input to 10a, so it runs here, not in the shadow block.
+  MIN_OPP=1 FT_RDS_OUT=data/te_feature_table_floorfree.rds \
+    FT_CSV_OUT=output/te_feature_table_floorfree.csv \
+    run R/12a_te_feature_layer.R
   run R/08a_qb_feature_layer.R          # also refreshes data/qb_def_adj.rds
   run R/11b_injury_state_layer.R        # injury states for new in-season rows; 10a stopifnot requires them
   run R/10a_deployment_models.R         # weekly retrain; frozen after tonight

@@ -211,7 +211,8 @@ probs <- readr::read_csv(PROBS_FILE, show_col_types = FALSE) |>
 # Opener Vegas covariates (2026-07-26 extension) via feature-table keys
 vegas_open <- readRDS("data/vegas_open_lines.rds")
 IT_CENTER  <- median(vegas_open$implied_total, na.rm = TRUE)
-vkeys <- readRDS("data/te_feature_table.rds") |> filter(!is.na(player_id)) |>
+# Key-table seam (2026-10-06, D31 floor-free TE), same as 12d's.
+vkeys <- readRDS(Sys.getenv("TE_KEY_TABLE", "data/te_feature_table.rds")) |> filter(!is.na(player_id)) |>
   distinct(player_id, season, week, game_id, posteam)
 probs <- probs |>
   left_join(vkeys, by = c("player_id", "season", "week")) |>

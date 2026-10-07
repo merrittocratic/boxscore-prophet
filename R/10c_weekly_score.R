@@ -1129,7 +1129,7 @@ if (n_skipped > 0) {
 # breach. The volfix backtest lives in the _volfix-prefixed files (D24
 # refit); the unsuffixed ones are the frozen rung-2 receipts.
 bt_rbwr_path <- "output/06c_volfix_recal_probabilities.csv"
-bt_te_path   <- "output/12e_te_volfix_recal_probabilities.csv"
+bt_te_path   <- "output/22a_floorfree_te_recal_probabilities.csv"   # D32 floor-free TE chain
 bt_qb_path   <- "output/09b_qb_recal_probabilities.csv"
 
 bt_col <- function(stem, method) {

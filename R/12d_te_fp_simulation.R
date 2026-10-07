@@ -132,7 +132,10 @@ cli_alert_info("TE predictions: {TE_PRED_FILE} | output prefix: {OUT_PREFIX}")
 te_preds <- readr::read_csv(TE_PRED_FILE, show_col_types = FALSE) |>
   filter(!is.na(player_id))
 
-te_key <- readRDS("data/te_feature_table.rds") |>
+# Key-table seam (2026-10-06, D31 floor-free TE): fold files that include
+# 1-2 target weeks need the floor-free table to resolve game_id/posteam.
+TE_KEY_TABLE <- Sys.getenv("TE_KEY_TABLE", "data/te_feature_table.rds")
+te_key <- readRDS(TE_KEY_TABLE) |>
   filter(!is.na(player_id)) |>
   distinct(player_id, season, week, game_id, posteam)
 te_preds <- te_preds |>

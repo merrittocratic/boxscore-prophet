@@ -404,17 +404,29 @@ te_ft <- readRDS("data/te_feature_table.rds") |> encode_features() |> join_vegas
 te_sp <- split_fit_cal(te_ft)
 cli_alert_info("TE rows: fit={nrow(te_sp$fit)} cal={nrow(te_sp$cal)}")
 
-te_eff <- train_component(te_sp$fit, te_sp$cal, TE_EFF_FEATURES, "epa_per_opp_obs", "te_eff")
-te_vol <- train_component(te_sp$fit, te_sp$cal, TE_VOL_FEATURES, "opportunities",   "te_vol")
+# D32 (2026-10-06): VOL trains on the floor-free table (every 1+ target
+# week). The 3-target floor exists only because epa_per_opp is undefined at
+# zero opportunities -- EFF needs it, VOL never did, and a VOL model that
+# never saw a 1-2 target week overprojected low-volume TEs by ~1.5 targets
+# (R/22a_te_floorfree_folds.R receipts). VOL conformal and the combined
+# tot conformal/alpha use the floor-free cal rows, matching the 22a
+# walk-forward chain the TE recal maps were refit on. Same season-week
+# split as the floored table (every week has TEs at both floors).
+te_ft_ff <- readRDS("data/te_feature_table_floorfree.rds") |> encode_features() |> join_vegas()
+te_sp_ff <- split_fit_cal(te_ft_ff)
+cli_alert_info("TE floor-free VOL rows: fit={nrow(te_sp_ff$fit)} cal={nrow(te_sp_ff$cal)}")
+
+te_eff <- train_component(te_sp$fit,    te_sp$cal,    TE_EFF_FEATURES, "epa_per_opp_obs", "te_eff")
+te_vol <- train_component(te_sp_ff$fit, te_sp_ff$cal, TE_VOL_FEATURES, "opportunities",   "te_vol")
 tune_rows <- c(tune_rows, list(te_eff$tune, te_vol$tune))
 
 # Asymmetric signed-residual conformal (12c)
 te_qset_eff <- signed_quantile_set(te_sp$cal$epa_per_opp_obs - te_eff$pred_cal)
-te_qset_vol <- signed_quantile_set(as.numeric(te_sp$cal$opportunities) - te_vol$pred_cal)
+te_qset_vol <- signed_quantile_set(as.numeric(te_sp_ff$cal$opportunities) - te_vol$pred_cal)
 
-te_pred_cal_tot <- te_eff$pred_cal * te_vol$pred_cal
-te_resid_tot    <- te_sp$cal$total_epa - te_pred_cal_tot
-te_cal_opp      <- as.numeric(te_sp$cal$opportunities)
+te_pred_cal_tot <- predict(te_eff$model, make_matrix(te_sp_ff$cal, TE_EFF_FEATURES)) * te_vol$pred_cal
+te_resid_tot    <- te_sp_ff$cal$total_epa - te_pred_cal_tot
+te_cal_opp      <- as.numeric(te_sp_ff$cal$opportunities)
 te_alpha        <- fit_power_alpha(te_cal_opp, abs(te_resid_tot))
 te_qset_tot     <- signed_quantile_set(te_resid_tot / te_cal_opp^te_alpha)
 
@@ -517,7 +529,7 @@ cli_alert_success("output/10a_deploy_tune_log.csv")
 cli_h1("Verification: fresh reload + sanity scoring")
 
 dp <- readRDS("data/deployment_params.rds")
-cal_sets <- list(rb = rb_sp$cal, wr = wr_sp$cal, te = te_sp$cal)
+cal_sets <- list(rb = rb_sp$cal, wr = wr_sp$cal, te = te_sp_ff$cal)  # D32: TE floor-free superset
 for (pos in c("rb", "wr", "te")) {
   for (cmp in c("eff", "vol")) {
     m <- lightgbm::lgb.load(dp[[pos]][[cmp]]$model_file)

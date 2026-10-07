@@ -975,6 +975,58 @@ systematic gap. Do not rebuild without new evidence. Receipts:
 R/archive/oneoff/rb_early_exit_count.R (descriptive count),
 R/archive/oneoff/rb_early_exit_step0.R (Step 0, both architectures).
 
+### D32. TE floor-free volume retrain: SHIPPED on signed override (2026-10-07)
+
+Found chasing the AJ Barner W4 movers miss. The first hypothesis -- one
+spike week over-inflates projected targets -- was tested and REJECTED
+(post-spike the model moved 39% of the way to the spike vs 34% in
+reality, CI spans 0; ideal last-game weight 0.37 vs the 0.85 decay's
+~0.39). Real cause: 10a trained te_vol on te_feature_table.rds, which
+keeps only 3+ target weeks (12a MIN_OPPORTUNITIES; the floor exists
+because epa_per_opp is undefined at zero, which binds EFF, never VOL).
+Live 2026 W1-4: TE pred 4.89 tgts vs actual 2.89; mean P(start) 24.5% vs
+13.4% hit.
+
+FIX: te_vol (and its conformal + the combined tot conformal/alpha) now
+trains on data/te_feature_table_floorfree.rds (MIN_OPP=1); te_eff
+unchanged on the floored table. Walk-forward chain rebuilt by
+R/22a_te_floorfree_folds.R (both arms on today's tables, shared EFF
+model -- the Aug-31 canonical 13e cannot be bit-reproduced: its 13b
+outputs postdate the last committed table, and the weekly table carries a
+constant +0.001 def_*_epa_adj anchor shift), then 12d0 -> 12d -> 12e
+(new TE_KEY_TABLE seam in 12d/12e). te_outcomes was already floor-free,
+so the translation layer only refit, not redesigned.
+
+BARS (pre-registered in the 22a header): B1 volume bias on all 1+ rows
+PASS (-0.08, old -1.50; RMSE 2.18 vs 2.75). B2 (3+ realized rows) FAIL
+(+1.05 bias, RMSE +12%) and the B3 Brier-on-3+ clause FAIL (+0.0046):
+both subset on the realized outcome, which favors the model fit to that
+truncated sample. Post-hoc ex-ante role split (labeled post-hoc, not a
+replacement bar): new >= old in every cohort, trailing 5+ tgt/g RMSE 2.98
+both. B3 calibration on the full population PASS (-0.17pp, deciles
+tight). B4 live hindcast 2026 W1-4 PASS: P(start) 12.8% vs 13.5% hit
+(live 24.6%), Brier 0.0941 vs 0.1077, better every week. Boom looked
+worse live (3.9% vs 7.7% hit) -- diagnosed as 2026 TE TD luck: W1-4 boom
+rate 7.9% is the highest since 2016, TE TD rate 6.7/100 targets (base
+5.4), 23 of 25 booms had a TD; with TDs re-drawn at the base rate, boom
+Brier ties (0.0503 vs 0.0504) and start Brier is better in 100% of sims.
+No train/serve skew (live vs backtest intervals and raw sim match by
+pred_vol bin). Steve signed the override on the two outcome-conditioned
+clauses 2026-10-07 ("more closely matches reality").
+
+SHIP PASS: TE-only splice into Earnest's 2026-10-06 deployment_params
+(RB/WR/QB entries and te_eff byte-identical to HEAD; only te_vol.txt
+changed among model files). New te recal maps (TE_12+ platt_vol, TE_17+
+platt), translation fit, resid pools, sim params. weekly_run.sh full mode
+now rebuilds the floor-free TE table before 10a (production block, not
+shadow). 10c hindcast recon and 10f backtest bands repointed to
+output/22a_floorfree_te_recal_probabilities.csv. Live W5 identity gate:
+RB/WR/QB scores identical to Earnest's Tuesday run (TE-sims-last RNG
+contract holds); TE mean P(start) 22.5% -> 10.3%, top of board stable
+(McBride 63% -> 58%). 10g movers: TE baselines are old-chain numbers
+until they roll off, so 10g holds TE out of movers (csv + md note)
+through 2026 W8 (TE_HOLD_THROUGH; Steve's call).
+
 ## Deployment runner (10-series) -- design, in progress 2026-07-17
 
 The backtest chain trains a model per fold; deployment is ONE MORE FOLD:

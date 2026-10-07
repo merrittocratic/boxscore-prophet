@@ -113,7 +113,7 @@ DEPLOYED <- list(
   WR = list(file = "output/06c_recal_probabilities.csv", pos = "WR",
             start = col_of("p_start", fp_maps[["WR_15+"]]$method),
             boom  = col_of("p_boom",  fp_maps[["WR_20+"]]$method)),
-  TE = list(file = "output/12e_te_recal_probabilities.csv", pos = "TE",
+  TE = list(file = "output/22a_floorfree_te_recal_probabilities.csv", pos = "TE",   # D32 floor-free TE chain
             start = col_of("p_start", te_maps[["TE_12+"]]$method),
             boom  = col_of("p_boom",  te_maps[["TE_17+"]]$method)),
   QB = list(file = "output/09b_qb_recal_probabilities.csv", pos = NA,

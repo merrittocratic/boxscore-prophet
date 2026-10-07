@@ -42,6 +42,15 @@ TOP_N          <- 5L      # risers/fallers shown per position in the md
 DISPLAY_FLOOR  <- 0.02    # same editorial caps as 10d
 DISPLAY_CEIL   <- 0.95
 
+# D32 hold (Steve, 2026-10-07): the TE floor-free retrain shipped mid-season,
+# so TE baselines through ~W8 are old-chain published numbers and every TE
+# would read as a large faller from the architecture change, not news. TE
+# is held out of movers (csv and md) until the trailing window is all
+# new-chain weeks.
+TE_HOLD_SEASON  <- 2026L
+TE_HOLD_THROUGH <- 8L
+te_held <- TARGET_SEASON == TE_HOLD_SEASON && TARGET_WEEK <= TE_HOLD_THROUGH
+
 SLATE_FILE <- c(RB = "10b2_rb_slate", WR = "10b3_wr_slate",
                 QB = "10b4_qb_slate", TE = "10b5_te_slate")
 VOL_LABEL  <- c(RB = "touches", WR = "targets", TE = "targets",
@@ -155,6 +164,11 @@ movers <- now |>
          injury_flag    = !is.na(report_status)) |>
   arrange(desc(abs(delta_start_pp)))
 
+if (te_held) {
+  movers <- movers |> filter(position != "TE")
+  cli_alert_info("TE held out of movers through {TE_HOLD_SEASON} W{TE_HOLD_THROUGH} (D32 baseline roll-off)")
+}
+
 readr::write_csv(movers, sprintf("output/10g_movers_%s.csv", WTAG))
 cli_alert_success("{nrow(movers)} eligible players -> 10g_movers_{WTAG}.csv")
 
@@ -203,7 +217,11 @@ md <- c(sprintf("# BOXSCORE PROPHET -- %d Week %d movers", TARGET_SEASON,
                        "%d-week published baseline (n >= %d weeks, baseline ",
                        ">= %d%%). Context columns are raw component shifts, ",
                        "not an attribution."),
-                BASE_WINDOW, MIN_BASE_WEEKS, round(100 * REL_FLOOR)), "")
+                BASE_WINDOW, MIN_BASE_WEEKS, round(100 * REL_FLOOR)), "",
+        if (te_held) c(sprintf(paste0("TE held out through Week %d: the TE ",
+                                      "model was retrained in Week 5 (D32), so ",
+                                      "TE baselines are not comparable yet."),
+                               TE_HOLD_THROUGH), ""))
 
 for (pos in c("RB", "WR", "QB", "TE")) {
   pm <- movers |> filter(position == pos)
