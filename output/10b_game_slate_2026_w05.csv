@@ -1,16 +1,16 @@
 game_id,season,week,gameday,weekday,gametime,away_team,home_team,location,roof,stadium.x,stadium.y,lat,lon,roof_eff,is_indoor,is_neutral,temp_c,wind_kmh,gust_kmh,precip_mm,weather_src,flag_wind,flag_cold,temp_f,wind_mph,gust_mph
-2026_05_TB_DAL,2026,5,2026-10-08,Thursday,20:15,TB,DAL,Home,NA,AT&T Stadium,AT&T Stadium,32.748,-97.093,retractable,FALSE,FALSE,28.5,8.2,15.1,0,forecast,FALSE,FALSE,83,5,9
-2026_05_PHI_JAX,2026,5,2026-10-11,Sunday,09:30,PHI,JAX,Home,outdoors,Tottenham Hotspur Stadium,EverBank Stadium,30.324,-81.637,outdoors,FALSE,FALSE,25.6,11.4,31,0,forecast,FALSE,FALSE,78,7,19
-2026_05_CHI_GB,2026,5,2026-10-11,Sunday,13:00,CHI,GB,Home,outdoors,Lambeau Field,Lambeau Field,44.501,-88.062,outdoors,FALSE,FALSE,23.8,21.3,26.3,0,forecast,FALSE,FALSE,75,13,16
-2026_05_CIN_MIA,2026,5,2026-10-11,Sunday,13:00,CIN,MIA,Home,outdoors,Hard Rock Stadium,Hard Rock Stadium,25.958,-80.239,outdoors,FALSE,FALSE,32.6,19.1,19.1,0,forecast,FALSE,FALSE,91,12,12
-2026_05_LV_NE,2026,5,2026-10-11,Sunday,13:00,LV,NE,Home,outdoors,Gillette Stadium,Gillette Stadium,42.091,-71.264,outdoors,FALSE,FALSE,16.9,12.4,21.2,0,forecast,FALSE,FALSE,62,8,13
-2026_05_MIN_NO,2026,5,2026-10-11,Sunday,13:00,MIN,NO,Home,dome,Caesars Superdome,Caesars Superdome,29.951,-90.081,dome,TRUE,FALSE,26.7,9.2,12.6,0,forecast,FALSE,FALSE,80,6,8
-2026_05_CLE_NYJ,2026,5,2026-10-11,Sunday,13:00,CLE,NYJ,Home,outdoors,MetLife Stadium,MetLife Stadium,40.813,-74.074,outdoors,FALSE,FALSE,17.4,13,28.8,0.2,forecast,FALSE,FALSE,63,8,18
-2026_05_IND_PIT,2026,5,2026-10-11,Sunday,13:00,IND,PIT,Home,outdoors,Acrisure Stadium,Acrisure Stadium,40.447,-80.016,outdoors,FALSE,FALSE,14.5,13.8,52.9,0.4,forecast,FALSE,FALSE,58,9,33
-2026_05_HOU_TEN,2026,5,2026-10-11,Sunday,13:00,HOU,TEN,Home,outdoors,Nissan Stadium,Nissan Stadium,36.166,-86.771,outdoors,FALSE,FALSE,17.8,10,30.6,0,forecast,FALSE,FALSE,64,6,19
-2026_05_NYG_WAS,2026,5,2026-10-11,Sunday,13:00,NYG,WAS,Home,outdoors,Northwest Stadium,Northwest Stadium,38.908,-76.864,outdoors,FALSE,FALSE,16.9,27.5,55.4,6.1,forecast,TRUE,FALSE,62,17,34
-2026_05_DEN_LAC,2026,5,2026-10-11,Sunday,16:05,DEN,LAC,Home,dome,SoFi Stadium,SoFi Stadium,33.953,-118.339,dome,TRUE,FALSE,20.6,22.8,39.2,0,forecast,FALSE,FALSE,69,14,24
-2026_05_DET_ARI,2026,5,2026-10-11,Sunday,16:25,DET,ARI,Home,NA,State Farm Stadium,State Farm Stadium,33.528,-112.263,retractable,FALSE,FALSE,29.2,40.8,47.9,0,forecast,TRUE,FALSE,85,25,30
-2026_05_SF_SEA,2026,5,2026-10-11,Sunday,16:25,SF,SEA,Home,outdoors,Lumen Field,Lumen Field,47.595,-122.332,outdoors,FALSE,FALSE,14.5,13.2,15.1,0,forecast,FALSE,FALSE,58,8,9
-2026_05_BAL_ATL,2026,5,2026-10-11,Sunday,20:20,BAL,ATL,Home,NA,Mercedes-Benz Stadium,Mercedes-Benz Stadium,33.755,-84.401,retractable,FALSE,FALSE,18.1,14,34.2,0,forecast,FALSE,FALSE,65,9,21
-2026_05_BUF_LA,2026,5,2026-10-12,Monday,20:15,BUF,LA,Home,dome,SoFi Stadium,SoFi Stadium,33.953,-118.339,dome,TRUE,FALSE,18.7,11.8,15.1,0,forecast,FALSE,FALSE,66,7,9
+2026_05_TB_DAL,2026,5,2026-10-08,Thursday,20:15,TB,DAL,Home,closed,AT&T Stadium,AT&T Stadium,32.748,-97.093,closed,TRUE,FALSE,29.7,7.2,15.1,0,historical_forecast,FALSE,FALSE,85,4,9
+2026_05_PHI_JAX,2026,5,2026-10-11,Sunday,09:30,PHI,JAX,Home,outdoors,Tottenham Hotspur Stadium,EverBank Stadium,30.324,-81.637,outdoors,FALSE,FALSE,24.7,14.3,28.4,1.1,forecast,FALSE,FALSE,76,9,18
+2026_05_CHI_GB,2026,5,2026-10-11,Sunday,13:00,CHI,GB,Home,outdoors,Lambeau Field,Lambeau Field,44.501,-88.062,outdoors,FALSE,FALSE,23.3,22.3,42.1,0,forecast,FALSE,FALSE,74,14,26
+2026_05_CIN_MIA,2026,5,2026-10-11,Sunday,13:00,CIN,MIA,Home,outdoors,Hard Rock Stadium,Hard Rock Stadium,25.958,-80.239,outdoors,FALSE,FALSE,32,15.7,20.5,0,forecast,FALSE,FALSE,90,10,13
+2026_05_LV_NE,2026,5,2026-10-11,Sunday,13:00,LV,NE,Home,outdoors,Gillette Stadium,Gillette Stadium,42.091,-71.264,outdoors,FALSE,FALSE,18.1,15.6,24.1,0,forecast,FALSE,FALSE,65,10,15
+2026_05_MIN_NO,2026,5,2026-10-11,Sunday,13:00,MIN,NO,Home,dome,Caesars Superdome,Caesars Superdome,29.951,-90.081,dome,TRUE,FALSE,27.3,8.3,16.2,0,forecast,FALSE,FALSE,81,5,10
+2026_05_CLE_NYJ,2026,5,2026-10-11,Sunday,13:00,CLE,NYJ,Home,outdoors,MetLife Stadium,MetLife Stadium,40.813,-74.074,outdoors,FALSE,FALSE,18.8,16.6,37.1,1.8,forecast,FALSE,FALSE,66,10,23
+2026_05_IND_PIT,2026,5,2026-10-11,Sunday,13:00,IND,PIT,Home,outdoors,Acrisure Stadium,Acrisure Stadium,40.447,-80.016,outdoors,FALSE,FALSE,18,25.2,58,0,forecast,TRUE,FALSE,64,16,36
+2026_05_HOU_TEN,2026,5,2026-10-11,Sunday,13:00,HOU,TEN,Home,outdoors,Nissan Stadium,Nissan Stadium,36.166,-86.771,outdoors,FALSE,FALSE,18.9,13.5,24.8,0,forecast,FALSE,FALSE,66,8,15
+2026_05_NYG_WAS,2026,5,2026-10-11,Sunday,13:00,NYG,WAS,Home,outdoors,Northwest Stadium,Northwest Stadium,38.908,-76.864,outdoors,FALSE,FALSE,20.2,12.8,26.3,0,forecast,FALSE,FALSE,68,8,16
+2026_05_DEN_LAC,2026,5,2026-10-11,Sunday,16:05,DEN,LAC,Home,dome,SoFi Stadium,SoFi Stadium,33.953,-118.339,dome,TRUE,FALSE,19.1,13.8,22,0,forecast,FALSE,FALSE,66,9,14
+2026_05_DET_ARI,2026,5,2026-10-11,Sunday,16:25,DET,ARI,Home,NA,State Farm Stadium,State Farm Stadium,33.528,-112.263,retractable,FALSE,FALSE,27.5,26.1,40.3,0,forecast,TRUE,FALSE,82,16,25
+2026_05_SF_SEA,2026,5,2026-10-11,Sunday,16:25,SF,SEA,Home,outdoors,Lumen Field,Lumen Field,47.595,-122.332,outdoors,FALSE,FALSE,15,14.2,23,0,forecast,FALSE,FALSE,59,9,14
+2026_05_BAL_ATL,2026,5,2026-10-11,Sunday,20:20,BAL,ATL,Home,NA,Mercedes-Benz Stadium,Mercedes-Benz Stadium,33.755,-84.401,retractable,FALSE,FALSE,18.3,16.6,38.9,0,forecast,FALSE,FALSE,65,10,24
+2026_05_BUF_LA,2026,5,2026-10-12,Monday,20:15,BUF,LA,Home,dome,SoFi Stadium,SoFi Stadium,33.953,-118.339,dome,TRUE,FALSE,18.9,7.6,10.8,0,forecast,FALSE,FALSE,66,5,7

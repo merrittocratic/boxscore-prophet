@@ -1,0 +1,6 @@
+position,player_id,player_name,posteam,defteam,model_rank,ecr_rank,rank_gap,view,start_pct,boom_pct,fp_actual,thresh_start,hit_start,hit_boom
+RB,00-0039361,Bucky Irving,TB,DAL,17,21,4,model_higher,34,14,31.5,15,TRUE,TRUE
+TE,00-0038129,Cade Otton,TB,DAL,15,23,8,model_higher,30,12,5.5,12,FALSE,FALSE
+TE,00-0038041,Jake Ferguson,DAL,TB,19,17,-2,agree,25,11,4.9,12,FALSE,FALSE
+WR,00-0039410,Ryan Flournoy,DAL,TB,30,52,22,model_higher,31,14,12,15,FALSE,FALSE
+WR,00-0040129,Emeka Egbuka,TB,DAL,42,39,-3,agree,27,14,17.2,15,TRUE,FALSE
