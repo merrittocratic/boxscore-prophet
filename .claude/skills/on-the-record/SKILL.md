@@ -80,6 +80,34 @@ Sunday movers note (whether or not they are in the flex pool). Never name a cons
 (the pool already excludes them) or a deep-roster longshot outside the
 pool, no matter how big the hit or miss.
 
+Selection rules (Steve, 2026-10-14):
+
+- **No stars as wins.** Never feature a player of established star
+  status as a model hit, even if one week's ECR put him in the flex
+  tier (W5 2026: Justin Jefferson at ECR WR30). Nobody benches him,
+  so "the model was higher" is not a decision anyone made. When in
+  doubt whether someone counts as a star, skip him and take the next
+  name.
+- **No TEs through 2026 Week 8.** The TE volume fix (D32, ca9f3ec,
+  shipped 2026-10-07) corrected a 1-2 target/game over-estimate; TEs
+  stay out of featured hits and misses until it has a track record,
+  same hold as the movers note. Receipt tallies and calibration still
+  include TEs as published -- don't recompute them. Revisit with
+  Steve after Week 8.
+- **One player per team.** Never grade two players from the same team
+  in one note, movers players included. If two candidates share a
+  team, keep the one the note can't drop (movers grades and the miss
+  win ties) and take the next name for the other slot.
+- **Check for injury exits before naming a miss.** A player who left
+  early (e.g. W5 2026 Hockenson: concussion after 2 snaps) is graded
+  as "played" in the receipts but is not a fair model miss. Check his
+  offensive snap share (`nflreadr::load_snap_counts`), and if it
+  collapsed versus his recent weeks, confirm the reason before using
+  him. Pick the next model-backed flop as the miss; mentioning the
+  injured player in one clause is fine. Do NOT alter the receipts'
+  tallies or calibration numbers to remove him -- they are what was
+  published.
+
 ## Note contract
 
 - 150-200 words, hard range. ASCII only. No em-dashes in any form (not
