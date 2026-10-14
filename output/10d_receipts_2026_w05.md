@@ -4,14 +4,14 @@ Every week we grade the probabilities we published before kickoff.
 
 ## Calibration by stated start odds
 
-Graded on players who took the field. 166 players with no stat line (inactive or scratched) are not counted.
+Graded on players who took the field. 178 players with no stat line (inactive or scratched) are not counted.
 
 | Stated band | n | Avg stated | Actual hit rate |
 |---|---|---|---|
-| under 10% | 124 | 7% | 2% |
-| 10-25% | 106 | 17% | 10% |
-| 25-50% |  70 | 34% | 37% |
-| 50%+ |  22 | 57% | 50% |
+| under 10% | 129 | 6% | 2% |
+| 10-25% | 116 | 16% | 10% |
+| 25-50% |  75 | 34% | 39% |
+| 50%+ |  26 | 58% | 58% |
 
 ## The model's worst misses (highest stated odds that did not hit)
 
@@ -31,10 +31,10 @@ Graded on players who took the field. 166 players with no stat line (inactive or
 
 ## Flex-tier receipts (the decisions that actually get made)
 
-Players FantasyPros ECR ranked in the flex tier (RB/WR 20-39, QB/TE 10-19), plus players the model moved into that range from below it. Consensus auto-starts are excluded. Graded on players who took the field. 62 players.
+Players FantasyPros ECR ranked in the flex tier (RB/WR 20-39, QB/TE 10-19), plus players the model moved into that range from below it. Consensus auto-starts are excluded. Graded on players who took the field. 66 players.
 
-- Model ranked higher than consensus: 4 of 20 cleared the start bar.
-- Model ranked lower than consensus: 5 of 29 cleared the start bar.
+- Model ranked higher than consensus: 5 of 22 cleared the start bar.
+- Model ranked lower than consensus: 5 of 31 cleared the start bar.
 - Model and consensus within a few spots: 5 of 13 cleared the start bar.
 
 ### Model higher than consensus
@@ -43,12 +43,12 @@ Players FantasyPros ECR ranked in the flex tier (RB/WR 20-39, QB/TE 10-19), plus
 |---|---|---|---|---|---|---|---|
 | WR | Ryan Flournoy | DAL | 31 | 52 | 31% | 12.0 FP | miss |
 | WR | Justin Jefferson | MIN | 10 | 30 | 48% | 18.8 FP | HIT |
+| RB | Blake Corum | LA | 21 | 37 | 29% | 16.2 FP | HIT |
+| RB | Ty Johnson | BUF | 36 | 52 | 20% | 11.2 FP | miss |
 | WR | Rome Odunze | CHI | 19 | 33 | 38% | 5.0 FP | miss |
 | WR | Roman Wilson | PIT | 29 | 43 | 31% | 0.0 FP | miss |
 | WR | Tre Harris | LAC | 25 | 38 | 33% | 3.6 FP | miss |
 | TE | Brenton Strange | JAX |  7 | 19 | 43% | 13.8 FP | HIT |
-| QB | Daniel Jones | IND | 19 | 28 | 25% | 11.1 FP | miss |
-| RB | Mike Washington Jr. | LV | 31 | 40 | 22% | 2.0 FP | miss |
 
 ### Model lower than consensus
 
@@ -82,47 +82,4 @@ Players FantasyPros ECR ranked in the flex tier (RB/WR 20-39, QB/TE 10-19), plus
 | RB | Rhamondre Stevenson | NE | 30 | 21 | 23% | 17.5 FP | HIT |
 | QB | Aaron Rodgers | PIT | 20 | 18 | 24% | 22.0 FP | HIT |
 | QB | C.J. Stroud | HOU | 18 | 14 | 25% | 20.9 FP | HIT |
-
-## Still on the board (games not yet played)
-
-These statements are locked and will be graded as-is.
-
-| Pos | Player | Team | Opp | Start | Boom |
-|---|---|---|---|---|---|
-| RB | Kyren Williams | LA | BUF | 79% | 55% |
-| RB | James Cook | BUF | LA | 65% | 40% |
-| WR | Puka Nacua | LA | BUF | 59% | 42% |
-| QB | Josh Allen | BUF | LA | 56% | 24% |
-| WR | Davante Adams | LA | BUF | 50% | 29% |
-| QB | Matthew Stafford | LA | BUF | 48% | 21% |
-| QB | Ty Simpson | LA | BUF | 41% | 8% |
-| QB | Stetson Bennett | LA | BUF | 40% | 9% |
-| TE | Dalton Kincaid | BUF | LA | 35% | 17% |
-| WR | Khalil Shakir | BUF | LA | 31% | 17% |
-| RB | Blake Corum | LA | BUF | 29% | 7% |
-| QB | Kyle Allen | BUF | LA | 27% | 4% |
-| WR | DJ Moore | BUF | LA | 26% | 11% |
-| RB | Ronnie Rivers | LA | BUF | 23% | 8% |
-| WR | Keon Coleman | BUF | LA | 22% | 8% |
-| RB | Ty Johnson | BUF | LA | 20% | 6% |
-| TE | Tyler Higbee | LA | BUF | 17% | 5% |
-| WR | Jordan Whittington | LA | BUF | 17% | 6% |
-| WR | CJ Daniels | LA | BUF | 16% | 5% |
-| TE | Terrance Ferguson | LA | BUF | 15% | 4% |
-| RB | Ray Davis | BUF | LA | 14% | 5% |
-| WR | Skyler Bell | BUF | LA | 14% | 3% |
-| WR | Alex Bachman | LA | BUF | 12% | 4% |
-| WR | Josh Palmer | BUF | LA | 12% | 4% |
-| WR | Konata Mumpfield | LA | BUF | 12% | 3% |
-| WR | Greg Dortch | BUF | LA | 11% | 4% |
-| WR | Xavier Smith | LA | BUF | 11% | 3% |
-| RB | Dean Connors | LA | BUF | 11% | 4% |
-| WR | Tutu Atwell | LA | BUF | 10% | 3% |
-| RB | Frank Gore Jr. | BUF | LA | 9% | 2% |
-| TE | Colby Parkinson | LA | BUF | 8% | 3% |
-| TE | Dawson Knox | BUF | LA | 6% | 2% |
-| TE | Davis Allen | LA | BUF | 5% | 2% |
-| TE | Jackson Hawes | BUF | LA | 4% | 2% |
-| TE | Keleki Latu | BUF | LA | 3% | 2% |
-| TE | Max Klare | LA | BUF | 3% | 2% |
 

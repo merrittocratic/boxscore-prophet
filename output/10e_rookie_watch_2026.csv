@@ -1,5 +1,5 @@
 rank,nfl_name,pos,draft_round,draft_pick,draft_team,tracker_status,games,last_week_active,latest_opportunities,latest_snap_share,model_verdict
-1,Fernando Mendoza,QB,1,1,LV,no_nfl_data_yet,0,NA,NA,NA,Baseline
+1,Fernando Mendoza,QB,1,1,LV,limited_role,1,5,9,0.17,Baseline
 2,Jordyn Tyson,WR,1,8,NO,no_nfl_data_yet,0,NA,NA,NA,Baseline
 3,Ty Simpson,QB,1,13,LA,no_nfl_data_yet,0,NA,NA,NA,Baseline
 4,Omar Cooper Jr.,WR,1,30,NYJ,limited_role,1,1,1,0.07,Baseline
@@ -8,9 +8,8 @@ rank,nfl_name,pos,draft_round,draft_pick,draft_team,tracker_status,games,last_we
 7,Marlin Klein,TE,2,59,HOU,limited_role,1,1,1,0.11,Baseline
 8,Max Klare,TE,2,61,LA,no_nfl_data_yet,0,NA,NA,NA,Baseline
 9,Carson Beck,QB,3,65,ARI,no_nfl_data_yet,0,NA,NA,NA,Baseline
-10,Sam Roush,TE,3,69,CHI,limited_role,3,4,1,0.25,Baseline
-11,Oscar Delp,TE,3,73,NO,limited_role,2,4,0,0.32,Baseline
-12,Drew Allar,QB,3,76,PIT,no_nfl_data_yet,0,NA,NA,NA,Baseline
-13,Zachariah Branch,WR,3,79,ATL,limited_role,4,4,2,0.23,Baseline
-14,Chris Brazzell II,WR,3,83,CAR,no_nfl_data_yet,0,NA,NA,NA,Baseline
-15,Zavion Thomas,WR,3,89,CHI,limited_role,3,4,0,0.1,Baseline
+10,Sam Roush,TE,3,69,CHI,limited_role,4,5,0,0.07,Baseline
+11,Drew Allar,QB,3,76,PIT,no_nfl_data_yet,0,NA,NA,NA,Baseline
+12,Zachariah Branch,WR,3,79,ATL,limited_role,5,5,2,0.19,Baseline
+13,Chris Brazzell II,WR,3,83,CAR,no_nfl_data_yet,0,NA,NA,NA,Baseline
+14,Zavion Thomas,WR,3,89,CHI,limited_role,4,5,2,0.22,Baseline
