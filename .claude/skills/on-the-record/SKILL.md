@@ -49,7 +49,19 @@ Wednesday note grades a fully played week.
    pool behind those tables (model_rank, ecr_rank, rank_gap, view,
    start_pct, fp_actual, hit_start). Use it to pick names and to check
    position-level patterns (e.g. "zero flex RBs cleared the bar").
-3. Voice reference: read 2-3 recent pieces in `~/content/published/`
+3. **The prior Sunday movers note's players** -- REQUIRED (Steve,
+   2026-10-14: the movers note ends "See ya on Wednesday for the
+   grades!", so this note owes those grades). Get the names from the
+   movers name log memory (`project_movers_name_log.md`, the row for
+   `<prevweek>`). If that row is missing or still marked DRAFT, ask
+   Steve to paste the posted note -- never guess the names, and never
+   substitute the 10g candidate table (it lists every mover, not the
+   ones Steve picked). Grade each one from
+   `output/10d_receipts_<season>_w<prevweek>.csv` (start_pct,
+   thresh_start, fp_actual, hit_start). A "struggle bus" (sit) call is
+   RIGHT when the player missed the bar and WRONG when he cleared it.
+   After grading, mark the log row POSTED with the results.
+4. Voice reference: read 2-3 recent pieces in `~/content/published/`
    before writing. Absorb tone, do not imitate structure verbatim.
 
 If the flex section says there was no ECR lock for the week, the
@@ -63,7 +75,8 @@ note for Week 1. Flag this to Steve and stop.
 
 ## Who can be named
 
-Only players in the flex receipts. Never name a consensus auto-start
+Players in the flex receipts, plus every player named in the prior
+Sunday movers note (whether or not they are in the flex pool). Never name a consensus auto-start
 (the pool already excludes them) or a deep-roster longshot outside the
 pool, no matter how big the hit or miss.
 
@@ -84,12 +97,18 @@ pool, no matter how big the hit or miss.
      flopped, preferably one the model ranked above consensus. If room
      allows, add the most notable flex player the model doubted who
      went off.
-  4. The head-to-head in one line: how the model's above-consensus
+  4. Sunday's movers, graded (MANDATORY): every player named in the
+     movers note, each with the call (start or sit), the chance, and
+     what he scored, plus the tally ("3 of 4 calls right"). The misses
+     get named as plainly as the hits. If a movers player is also the
+     best hit or the miss in 2-3, grade him once, not twice.
+  5. The head-to-head in one line: how the model's above-consensus
      flex calls did vs its below-consensus ones (hits of total, each).
-  5. One sentence of overall calibration (the band table, players who
+  6. One sentence of overall calibration (the band table, players who
      played only) -- keep it, especially while bands run off.
-  6. Optional one-line teaser to Thursday's preview.
-  Cut 6, then the second half of 3, for space. Never cut the miss.
+  7. Optional one-line teaser to Thursday's preview.
+  Cut 7, then the second half of 3, then the secondary hit in 2, for
+  space. Never cut the miss or the movers grades.
 - A week where consensus did better than the model on flex
   disagreements is stated as plainly as one where the model did better.
   The short format is not an excuse to drop it.
@@ -99,8 +118,8 @@ pool, no matter how big the hit or miss.
   edge over the market ships until it's real and reproducible.
 - When the whole flex tier had a low-scoring week, say so: if both
   sides hit about equally rarely, the honest read is "a wash," not a win.
-- Every number stated must trace to a row in the receipts md or flex
-  CSV. Never round a miss into looking closer than it was.
+- Every number stated must trace to a row in the receipts md, flex
+  CSV, or (for movers players) the receipts CSV. Never round a miss into looking closer than it was.
 - Percentages: whole numbers. Translate chances into plain English
   ("about a coin flip," "one in four").
 
