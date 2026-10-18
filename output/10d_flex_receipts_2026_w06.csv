@@ -1,5 +1,6 @@
 position,player_id,player_name,posteam,defteam,model_rank,ecr_rank,rank_gap,view,start_pct,boom_pct,fp_actual,thresh_start,hit_start,hit_boom
-RB,00-0036158,J.K. Dobbins,DEN,SEA,27,29,2,agree,20,9,13.600000000000001,15,FALSE,FALSE
-RB,00-0040730,RJ Harvey,DEN,SEA,39,26,-13,model_lower,13,4,14.600000000000001,15,FALSE,FALSE
-RB,00-0039299,George Holani,SEA,DEN,84,38,-46,model_lower,8,3,8,15,FALSE,FALSE
-WR,00-0036613,Jaylen Waddle,DEN,SEA,33,25,-8,model_lower,31,18,6.4,15,FALSE,FALSE
+RB,00-0036158,J.K. Dobbins,DEN,SEA,28,29,1,agree,20,9,13.600000000000001,15,FALSE,FALSE
+RB,00-0040730,RJ Harvey,DEN,SEA,40,26,-14,model_lower,13,4,14.600000000000001,15,FALSE,FALSE
+RB,00-0039299,George Holani,SEA,DEN,88,38,-50,model_lower,8,3,8,15,FALSE,FALSE
+TE,00-0039793,AJ Barner,SEA,DEN,19,23,4,model_higher,24,9,4.6,12,FALSE,FALSE
+WR,00-0036613,Jaylen Waddle,DEN,SEA,30,25,-5,model_lower,31,18,6.4,15,FALSE,FALSE
