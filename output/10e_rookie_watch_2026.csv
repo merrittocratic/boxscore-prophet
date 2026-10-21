@@ -2,14 +2,13 @@ rank,nfl_name,pos,draft_round,draft_pick,draft_team,tracker_status,games,last_we
 1,Fernando Mendoza,QB,1,1,LV,limited_role,1,5,9,0.17,Baseline
 2,Jordyn Tyson,WR,1,8,NO,no_nfl_data_yet,0,NA,NA,NA,Baseline
 3,Ty Simpson,QB,1,13,LA,no_nfl_data_yet,0,NA,NA,NA,Baseline
-4,Omar Cooper Jr.,WR,1,30,NYJ,limited_role,1,1,1,0.07,Baseline
-5,De'Zhaun Stribling,WR,2,33,SF,no_nfl_data_yet,0,NA,NA,NA,Baseline
-6,Eli Stowers,TE,2,54,PHI,no_nfl_data_yet,0,NA,NA,NA,Baseline
-7,Marlin Klein,TE,2,59,HOU,limited_role,1,1,1,0.11,Baseline
-8,Max Klare,TE,2,61,LA,no_nfl_data_yet,0,NA,NA,NA,Baseline
-9,Carson Beck,QB,3,65,ARI,no_nfl_data_yet,0,NA,NA,NA,Baseline
-10,Sam Roush,TE,3,69,CHI,limited_role,4,5,0,0.07,Baseline
-11,Drew Allar,QB,3,76,PIT,no_nfl_data_yet,0,NA,NA,NA,Baseline
-12,Zachariah Branch,WR,3,79,ATL,limited_role,5,5,2,0.19,Baseline
-13,Chris Brazzell II,WR,3,83,CAR,no_nfl_data_yet,0,NA,NA,NA,Baseline
-14,Zavion Thomas,WR,3,89,CHI,limited_role,4,5,2,0.22,Baseline
+4,De'Zhaun Stribling,WR,2,33,SF,no_nfl_data_yet,0,NA,NA,NA,Baseline
+5,Eli Stowers,TE,2,54,PHI,no_nfl_data_yet,0,NA,NA,NA,Baseline
+6,Marlin Klein,TE,2,59,HOU,limited_role,1,1,1,0.11,Baseline
+7,Max Klare,TE,2,61,LA,no_nfl_data_yet,0,NA,NA,NA,Baseline
+8,Carson Beck,QB,3,65,ARI,no_nfl_data_yet,0,NA,NA,NA,Baseline
+9,Sam Roush,TE,3,69,CHI,limited_role,5,6,0,0.31,Baseline
+10,Drew Allar,QB,3,76,PIT,no_nfl_data_yet,0,NA,NA,NA,Baseline
+11,Zachariah Branch,WR,3,79,ATL,limited_role,6,6,2,0.35,Baseline
+12,Chris Brazzell II,WR,3,83,CAR,no_nfl_data_yet,0,NA,NA,NA,Baseline
+13,Zavion Thomas,WR,3,89,CHI,limited_role,5,6,3,0.13,Baseline
