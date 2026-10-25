@@ -155,8 +155,9 @@ Selection rules (Steve, 2026-10-14):
 
 Full list in `CONTENT_GUIDE.md`. The ones that bite hardest here:
 
-- No gambling language ("odds," "fade," "price," "sharp," "lock").
-  Probabilities are "chances." ECR is "consensus" or "the experts,"
+- Market language ("odds," "price," "market") is allowed as of
+  2026-10-25. Still no certainty words ("lock") and no claim the model
+  beats the market until proven. ECR is "consensus" or "the experts,"
   attributed as FantasyPros ECR on first use.
 - The model is "the model," third person -- not "our model."
 - Never claim more skill than the receipts show. A doubted player who

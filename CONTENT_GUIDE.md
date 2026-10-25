@@ -177,9 +177,13 @@ IS a probability, and that's the whole pitch (see `MODEL_BRIDGE.md`,
 
 These are standing feedback, not per-column judgment calls.
 
-- **No gambling language, ever.** No "odds," "fade," "price," "sharp,"
-  "the house," "lock." Fantasy vernacular (boom, flex, waiver wire,
-  streamer) is fine and encouraged. Probabilities are "chances."
+- **Market language is allowed (changed 2026-10-25, Steve).** "Odds,"
+  "price," "market," "line," "implied probability" are fine, and leaning
+  toward prediction-market framing is wanted. Fantasy vernacular (boom,
+  flex, waiver wire, streamer) is still fine and encouraged. Two limits
+  stay: no certainty words ("lock," "guaranteed"), since probabilities
+  are not promises; and never claim the model beats the market or has
+  an edge until that is proven (CLAUDE.md's bar).
 - **The model is "the model," third person.** Established voice from the
   first published piece (`content/2025_w15_movers_column.md`) refers to
   "the model" doing things ("the model does not care how his name

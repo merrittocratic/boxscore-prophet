@@ -255,9 +255,9 @@ bye (look ahead to the game after it and say so).
   use EPA/success rate instead rather than fabricating a DVOA-like
   number.
 
-- Look-ahead facts use the same no-gambling-language rule as the
-  columns: the spread/total is "the market expects," not odds, a price,
-  or a pick.
+- Look-ahead facts follow the columns' market-language rule (allowed
+  as of 2026-10-25): spreads/totals can be framed as odds or the market
+  price, but never as a pick or a "lock".
 
 ## Output
 
