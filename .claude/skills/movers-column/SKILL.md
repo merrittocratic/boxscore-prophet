@@ -1,6 +1,6 @@
 ---
 name: movers-column
-description: Draft the Sunday-morning start/sit movers Substack Note (150-200 words) from the freshest (Sunday 08:00 rescore) 10g movers table. Use when Steve asks for the weekly movers note, start/sit note, or movers column.
+description: Draft the Sunday-morning start/sit movers Substack Note (100-150 words) from the freshest (Sunday 08:00 rescore) 10g movers table. Use when Steve asks for the weekly movers note, start/sit note, or movers column.
 ---
 
 # Start 'Em, Sit 'Em: The Movers (Sunday AM Note)
@@ -46,7 +46,7 @@ draft off stale numbers.
 
 ## Note contract
 
-- 150-200 words, hard range. ASCII only. No em-dashes in any form (not
+- 100-150 words, hard range (Steve, 2026-11-01; was 150-200). ASCII only. No em-dashes in any form (not
   the unicode character, not "--" as a stand-in); use a period, comma,
   colon, or parentheses instead.
 - Substack Notes render as plain short-form text: no markdown headers,
@@ -107,6 +107,18 @@ draft off stale numbers.
 - First-person asides in Steve's voice are fine and wanted when the
   data supports them ("I need to see it from the Chargers offense
   before trusting anyone on their roster").
+- Game-day forecast check (Steve, 2026-11-01, after Godwin W8 in a
+  Tampa downpour): the model takes NO weather input; weather only
+  reaches it through the projected total, which can lag the forecast.
+  Before finalizing, check the game-day forecast for every outdoor
+  game with a named pick (indoor/closed-roof games are exempt). If a
+  start pick (especially a QB or pass-catcher) faces heavy rain or
+  sustained wind of 15+ mph, flag it to Steve with the forecast and
+  suggest a swap; don't drop it silently. A sit pick in bad weather is
+  fine to keep. This is an editor's check, not a model input: do not
+  cite weather as the model's reason, and do not claim a measured
+  weather effect (the wind watch cells are still open, sample too
+  small).
 
 ## Voice guardrails (Steve's standing feedback)
 
