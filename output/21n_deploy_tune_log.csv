@@ -1,5 +1,5 @@
 position,component,num_leaves,lr,min_data_in_leaf,rounds,inner_rmse
-RB,point,15,0.02,100,243,5.9158
-RB,vol,15,0.05,10,76,4.3489
-WR,point,7,0.05,100,132,6.9531
-WR,vol,15,0.02,50,187,2.6168
+RB,point,15,0.02,100,300,5.943
+RB,vol,15,0.02,50,212,4.3726
+WR,point,31,0.02,100,188,6.9388
+WR,vol,7,0.02,100,311,2.5927
