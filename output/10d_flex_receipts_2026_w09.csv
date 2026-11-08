@@ -1,7 +1,7 @@
 position,player_id,player_name,posteam,defteam,model_rank,ecr_rank,rank_gap,view,start_pct,boom_pct,fp_actual,thresh_start,hit_start,hit_boom
-RB,00-0038611,Chris Rodriguez Jr.,JAX,BAL,32,39,7,model_higher,24,14,11.2,15,FALSE,FALSE
-RB,00-0040719,Bhayshul Tuten,JAX,BAL,34,22,-12,model_lower,23,10,8.9,15,FALSE,FALSE
+RB,00-0038611,Chris Rodriguez Jr.,JAX,BAL,31,39,8,model_higher,24,14,11.2,15,FALSE,FALSE
+RB,00-0040719,Bhayshul Tuten,JAX,BAL,32,22,-10,model_lower,23,10,8.9,15,FALSE,FALSE
 TE,00-0038935,Brenton Strange,JAX,BAL,12,14,2,agree,37,18,4.2,12,FALSE,FALSE
 TE,00-0034753,Mark Andrews,BAL,JAX,17,27,10,model_higher,28,13,3.9000000000000004,12,FALSE,FALSE
-WR,00-0034960,Jakobi Meyers,JAX,BAL,27,45,18,model_higher,33,18,10.5,15,FALSE,FALSE
-WR,00-0039064,Zay Flowers,BAL,JAX,37,21,-16,model_lower,28,14,5.300000000000001,15,FALSE,FALSE
+WR,00-0034960,Jakobi Meyers,JAX,BAL,24,45,21,model_higher,33,18,10.5,15,FALSE,FALSE
+WR,00-0039064,Zay Flowers,BAL,JAX,40,21,-19,model_lower,28,14,5.300000000000001,15,FALSE,FALSE
