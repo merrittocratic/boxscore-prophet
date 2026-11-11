@@ -4,14 +4,14 @@ Every week we grade the probabilities we published before kickoff.
 
 ## Calibration by stated start odds
 
-Graded on players who took the field. 204 players with no stat line (inactive or scratched) are not counted.
+Graded on players who took the field. 215 players with no stat line (inactive or scratched) are not counted.
 
 | Stated band | n | Avg stated | Actual hit rate |
 |---|---|---|---|
-| under 10% |  92 | 6% | 3% |
-| 10-25% | 121 | 16% | 8% |
-| 25-50% |  76 | 35% | 28% |
-| 50%+ |  21 | 59% | 43% |
+| under 10% |  97 | 6% | 3% |
+| 10-25% | 129 | 16% | 8% |
+| 25-50% |  85 | 35% | 25% |
+| 50%+ |  22 | 59% | 45% |
 
 ## The model's worst misses (highest stated odds that did not hit)
 
@@ -31,24 +31,24 @@ Graded on players who took the field. 204 players with no stat line (inactive or
 
 ## Flex-tier receipts (the decisions that actually get made)
 
-Players FantasyPros ECR ranked in the flex tier (RB/WR 20-39, QB/TE 10-19), plus players the model moved into that range from below it. Consensus auto-starts are excluded. Graded on players who took the field. 64 players.
+Players FantasyPros ECR ranked in the flex tier (RB/WR 20-39, QB/TE 10-19), plus players the model moved into that range from below it. Consensus auto-starts are excluded. Graded on players who took the field. 71 players.
 
-- Model ranked higher than consensus: 3 of 22 cleared the start bar.
-- Model ranked lower than consensus: 3 of 25 cleared the start bar.
-- Model and consensus within a few spots: 4 of 17 cleared the start bar.
+- Model ranked higher than consensus: 3 of 27 cleared the start bar.
+- Model ranked lower than consensus: 3 of 26 cleared the start bar.
+- Model and consensus within a few spots: 4 of 18 cleared the start bar.
 
 ### Model higher than consensus
 
 | Pos | Player | Team | Model # | ECR # | Stated | Actual | Result |
 |---|---|---|---|---|---|---|---|
+| RB | DeeJay Dallas | MIN | 26 | 82 | 27% | 1.2 FP | miss |
 | WR | Chris Bell | MIA | 35 | 69 | 29% | 0.0 FP | miss |
 | WR | Xavier Worthy | KC | 25 | 48 | 33% | 10.8 FP | miss |
+| RB | Aaron Jones | MIN | 11 | 32 | 49% | 3.1 FP | miss |
 | WR | Rome Odunze | CHI | 13 | 34 | 42% | 16.0 FP | HIT |
 | WR | Jakobi Meyers | JAX | 24 | 45 | 33% | 10.5 FP | miss |
 | WR | Emeka Egbuka | TB | 19 | 39 | 39% | 6.9 FP | miss |
 | TE | Hunter Henry | NE | 16 | 35 | 31% | 6.5 FP | miss |
-| WR | Adonai Mitchell | NYJ | 27 | 44 | 31% | 0.0 FP | miss |
-| WR | Makai Lemon | PHI | 22 | 37 | 37% | 12.1 FP | miss |
 
 ### Model lower than consensus
 
@@ -67,11 +67,11 @@ Players FantasyPros ECR ranked in the flex tier (RB/WR 20-39, QB/TE 10-19), plus
 
 | Pos | Player | Team | Model # | ECR # | Stated | Actual | Result |
 |---|---|---|---|---|---|---|---|
+| RB | Aaron Jones | MIN | 11 | 32 | 49% | 3.1 FP | miss |
 | TE | Kyle Pitts | ATL |  7 | 12 | 47% | 5.3 FP | miss |
 | TE | Greg Dulcich | MIA |  8 | 17 | 43% | 3.4 FP | miss |
+| RB | Jordan Mason | MIN | 16 | 33 | 41% | 6.2 FP | miss |
 | WR | Jaylen Waddle | DEN | 18 | 25 | 40% | 3.2 FP | miss |
-| WR | Emeka Egbuka | TB | 19 | 39 | 39% | 6.9 FP | miss |
-| RB | Woody Marks | HOU | 18 | 23 | 38% | 8.4 FP | miss |
 
 ### Flex hits the model doubted (lowest stated chances that hit)
 
@@ -82,45 +82,4 @@ Players FantasyPros ECR ranked in the flex tier (RB/WR 20-39, QB/TE 10-19), plus
 | WR | KC Concepcion | CLE | 47 | 28 | 24% | 18.8 FP | HIT |
 | QB | C.J. Stroud | HOU | 17 | 15 | 28% | 35.4 FP | HIT |
 | WR | Courtland Sutton | DEN | 36 | 49 | 29% | 15.5 FP | HIT |
-
-## Still on the board (games not yet played)
-
-These statements are locked and will be graded as-is.
-
-| Pos | Player | Team | Opp | Start | Boom |
-|---|---|---|---|---|---|
-| RB | James Cook | BUF | MIN | 56% | 29% |
-| RB | Aaron Jones | MIN | BUF | 49% | 25% |
-| WR | Justin Jefferson | MIN | BUF | 44% | 22% |
-| QB | Josh Allen | BUF | MIN | 41% | 17% |
-| RB | Jordan Mason | MIN | BUF | 41% | 20% |
-| WR | Jordan Addison | MIN | BUF | 35% | 18% |
-| TE | Dalton Kincaid | BUF | MIN | 32% | 13% |
-| WR | DJ Moore | BUF | MIN | 30% | 14% |
-| WR | Keon Coleman | BUF | MIN | 28% | 14% |
-| RB | DeeJay Dallas | MIN | BUF | 27% | 14% |
-| QB | Carson Wentz | MIN | BUF | 25% | 11% |
-| QB | Kyler Murray | MIN | BUF | 25% | 11% |
-| TE | T.J. Hockenson | MIN | BUF | 23% | 9% |
-| WR | Jauan Jennings | MIN | BUF | 21% | 12% |
-| WR | Khalil Shakir | BUF | MIN | 21% | 9% |
-| RB | Ty Johnson | BUF | MIN | 20% | 7% |
-| RB | Ray Davis | BUF | MIN | 19% | 6% |
-| QB | Kyle Allen | BUF | MIN | 15% | 2% |
-| WR | Josh Palmer | BUF | MIN | 12% | 4% |
-| QB | Max Brosmer | MIN | BUF | 12% | 2% |
-| WR | Skyler Bell | BUF | MIN | 12% | 4% |
-| WR | Greg Dortch | BUF | MIN | 11% | 4% |
-| WR | Jeshaun Jones | MIN | BUF | 10% | 3% |
-| WR | Tai Felton | MIN | BUF | 10% | 3% |
-| TE | Dawson Knox | BUF | MIN | 8% | 3% |
-| WR | Myles Price | MIN | BUF | 8% | 2% |
-| RB | Frank Gore Jr. | BUF | MIN | 7% | 3% |
-| RB | Max Bredeson | MIN | BUF | 7% | 3% |
-| RB | Demond Claiborne | MIN | BUF | 7% | 2% |
-| TE | Josh Oliver | MIN | BUF | 5% | 2% |
-| TE | Gavin Bartholomew | MIN | BUF | 4% | 2% |
-| TE | Jackson Hawes | BUF | MIN | 3% | 2% |
-| TE | Ben Yurosek | MIN | BUF | 3% | 2% |
-| TE | Keleki Latu | BUF | MIN | 2% | 2% |
 

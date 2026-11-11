@@ -1,0 +1,15 @@
+game_id,season,week,gameday,weekday,gametime,away_team,home_team,location,roof,stadium.x,stadium.y,lat,lon,roof_eff,is_indoor,is_neutral,temp_c,wind_kmh,gust_kmh,precip_mm,weather_src,flag_wind,flag_cold,temp_f,wind_mph,gust_mph
+2026_10_WAS_NYG,2026,10,2026-11-12,Thursday,20:15,WAS,NYG,Home,outdoors,MetLife Stadium,MetLife Stadium,40.813,-74.074,outdoors,FALSE,FALSE,11,14,22.7,0,forecast,FALSE,FALSE,52,9,14
+2026_10_NE_DET,2026,10,2026-11-15,Sunday,09:30,NE,DET,Neutral,dome,FC Bayern Munich Stadium,Ford Field,42.34,-83.046,dome,TRUE,TRUE,5.7,8.4,13.7,0,forecast,FALSE,FALSE,42,5,9
+2026_10_KC_ATL,2026,10,2026-11-15,Sunday,13:00,KC,ATL,Home,NA,Mercedes-Benz Stadium,Mercedes-Benz Stadium,33.755,-84.401,retractable,FALSE,FALSE,10.4,10.6,13,0,forecast,FALSE,FALSE,51,7,8
+2026_10_HOU_CLE,2026,10,2026-11-15,Sunday,13:00,HOU,CLE,Home,outdoors,Huntington Bank Field,Huntington Bank Field,41.506,-81.7,outdoors,FALSE,FALSE,8.2,14.4,14,0,forecast,FALSE,FALSE,47,9,9
+2026_10_MIN_GB,2026,10,2026-11-15,Sunday,13:00,MIN,GB,Home,outdoors,Lambeau Field,Lambeau Field,44.501,-88.062,outdoors,FALSE,FALSE,6.5,11.5,12.2,0,forecast,FALSE,FALSE,44,7,8
+2026_10_MIA_IND,2026,10,2026-11-15,Sunday,13:00,MIA,IND,Home,NA,Lucas Oil Stadium,Lucas Oil Stadium,39.76,-86.164,retractable,FALSE,FALSE,9,10,15.5,0,forecast,FALSE,FALSE,48,6,10
+2026_10_CAR_NO,2026,10,2026-11-15,Sunday,13:00,CAR,NO,Home,dome,Caesars Superdome,Caesars Superdome,29.951,-90.081,dome,TRUE,FALSE,17,32.2,43.9,0,forecast,FALSE,FALSE,63,20,27
+2026_10_BUF_NYJ,2026,10,2026-11-15,Sunday,13:00,BUF,NYJ,Home,outdoors,MetLife Stadium,MetLife Stadium,40.813,-74.074,outdoors,FALSE,FALSE,10.3,9.4,14.4,0,forecast,FALSE,FALSE,51,6,9
+2026_10_JAX_TEN,2026,10,2026-11-15,Sunday,13:00,JAX,TEN,Home,outdoors,Nissan Stadium,Nissan Stadium,36.166,-86.771,outdoors,FALSE,FALSE,10.3,10.6,15.5,0,forecast,FALSE,FALSE,51,7,10
+2026_10_LA_ARI,2026,10,2026-11-15,Sunday,16:05,LA,ARI,Home,NA,State Farm Stadium,State Farm Stadium,33.528,-112.263,retractable,FALSE,FALSE,21.2,4.4,5.4,0,forecast,FALSE,FALSE,70,3,3
+2026_10_SEA_LV,2026,10,2026-11-15,Sunday,16:05,SEA,LV,Home,dome,Allegiant Stadium,Allegiant Stadium,36.091,-115.184,dome,TRUE,FALSE,16.6,6.6,4.7,0,forecast,FALSE,FALSE,62,4,3
+2026_10_SF_DAL,2026,10,2026-11-15,Sunday,16:25,SF,DAL,Home,NA,AT&T Stadium,AT&T Stadium,32.748,-97.093,retractable,FALSE,FALSE,15.7,18.8,27,0,forecast,FALSE,FALSE,60,12,17
+2026_10_PIT_CIN,2026,10,2026-11-15,Sunday,20:20,PIT,CIN,Home,outdoors,Paycor Stadium,Paycor Stadium,39.095,-84.516,outdoors,FALSE,FALSE,4.4,5.7,8.3,0,forecast,FALSE,FALSE,40,4,5
+2026_10_LAC_BAL,2026,10,2026-11-16,Monday,20:15,LAC,BAL,Home,outdoors,M&T Bank Stadium,M&T Bank Stadium,39.278,-76.623,outdoors,FALSE,FALSE,8.8,5.9,14,0,forecast,FALSE,FALSE,48,4,9
