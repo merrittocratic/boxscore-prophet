@@ -1,0 +1,7 @@
+position,player_id,player_name,posteam,defteam,model_rank,ecr_rank,rank_gap,view,start_pct,boom_pct,fp_actual,thresh_start,hit_start,hit_boom
+QB,00-0039923,J.J. McCarthy,NYG,WAS,62,18,-44,model_lower,12,2,17.12,20,FALSE,FALSE
+RB,00-0040715,Cam Skattebo,NYG,WAS,23,20,-3,agree,27,11,27.200000000000003,15,TRUE,TRUE
+RB,00-0037256,Rachaad White,WAS,NYG,29,24,-5,model_lower,24,14,6.2,15,FALSE,FALSE
+RB,00-0035250,Devin Singletary,NYG,WAS,42,35,-7,model_lower,16,6,0.30000000000000004,15,FALSE,FALSE
+TE,00-0037809,Chig Okonkwo,WAS,NYG,18,16,-2,agree,27,12,6.4,12,FALSE,FALSE
+WR,00-0031588,Stefon Diggs,WAS,NYG,53,26,-27,model_lower,20,7,20.3,15,TRUE,TRUE
