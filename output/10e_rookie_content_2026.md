@@ -6,52 +6,52 @@ Latest completed rookie week in the tracker: Week 11.
 
 | # | Player | Pos | Team | Verdict | G | FP | FP/G | Opp/G | Snap | Model start |
 |---|---|---|---|---|---|---|---|---|---|---|
-|  1 | Denzel Boston | WR | CLE | Baseline | 10 | 105.3 | 10.5 | 6.2 | 90% | 29% |
-|  2 | KC Concepcion | WR | CLE | Baseline | 10 | 100.1 | 10.0 | 7.4 | 74% | 22% |
-|  3 | Emmett Johnson | RB | KC | Baseline |  9 | 95.9 | 10.7 | 7.9 | 33% | 22% |
-|  4 | Carnell Tate | WR | TEN | Upside |  7 | 77.3 | 11.0 | 7.3 | 82% | 28% |
-|  5 | Makai Lemon | WR | PHI | Baseline |  9 | 73.7 | 8.2 | 6.1 | 79% | 28% |
-|  6 | Antonio Williams | WR | WAS | Baseline |  9 | 72.6 | 8.1 | 4.6 | 65% | 23% |
-|  7 | Caleb Douglas | WR | MIA | Baseline |  6 | 70.7 | 11.8 | 5.8 | 82% | 23% |
-|  8 | Germie Bernard | WR | PIT | Baseline |  8 | 67.8 | 8.5 | 5.9 | 75% | 29% |
-|  9 | Malachi Fields | WR | NYG | Baseline |  9 | 63.0 | 7.0 | 4.3 | 78% | 19% |
-| 10 | Jonah Coleman | RB | DEN | Baseline |  5 | 62.9 | 12.6 | 12.2 | 48% | 30% |
+|  1 | Emmett Johnson | RB | KC | Baseline | 10 | 120.2 | 12.0 | 9.8 | 38% | 43% |
+|  2 | Denzel Boston | WR | CLE | Baseline | 10 | 105.3 | 10.5 | 6.2 | 90% | 29% |
+|  3 | KC Concepcion | WR | CLE | Baseline | 10 | 100.1 | 10.0 | 7.4 | 74% | 22% |
+|  4 | Jonah Coleman | RB | DEN | Baseline |  6 | 97.8 | 16.3 | 15.0 | 54% | 38% |
+|  5 | Antonio Williams | WR | WAS | Baseline | 10 | 93.8 | 9.4 | 5.2 | 67% | 24% |
+|  6 | Carnell Tate | WR | TEN | Upside |  8 | 91.1 | 11.4 | 7.0 | 83% | 35% |
+|  7 | Germie Bernard | WR | PIT | Baseline |  9 | 77.8 | 8.6 | 6.3 | 77% | 22% |
+|  8 | Caleb Douglas | WR | MIA | Baseline |  7 | 75.7 | 10.8 | 6.4 | 81% | 19% |
+|  9 | Makai Lemon | WR | PHI | Baseline | 10 | 75.0 | 7.5 | 5.8 | 79% | 24% |
+| 10 | Malachi Fields | WR | NYG | Baseline | 10 | 67.5 | 6.8 | 4.4 | 79% | 19% |
 | 11 | Omar Cooper Jr. | WR | NYJ | Baseline |  4 | 62.6 | 15.6 | 6.0 | 60% | 28% |
-| 12 | Kenyon Sadiq | TE | NYJ | Baseline | 10 | 56.1 | 5.6 | 3.4 | 44% | 6% |
+| 12 | Kenyon Sadiq | TE | NYJ | Baseline | 11 | 62.1 | 5.6 | 3.4 | 45% | 4% |
 
 ## Role earners -- latest usage is getting real
 
 | # | Player | Pos | Team | Wk | Latest FP | Latest opps | Latest snap | Avg snap | Model start |
 |---|---|---|---|---|---|---|---|---|---|
-|  1 | Fernando Mendoza | QB | LV | 10 | 13.9 | 35.0 | 100% | 58% | 9% |
+|  1 | Fernando Mendoza | QB | LV | 11 | 22.9 | 41.0 | 100% | 72% | 8% |
 |  2 | Joe Fagnano | QB | BAL | 9 | -0.3 | 21.0 | 100% | 70% | 7% |
 |  3 | Carson Beck | QB | ARI | 10 | 0.4 | 19.0 | 100% | 100% | 6% |
-|  4 | Germie Bernard | WR | PIT | 10 | 1.0 | 4.0 | 95% | 75% | 29% |
-|  5 | Makai Lemon | WR | PHI | 9 | 12.1 | 9.0 | 93% | 79% | 28% |
-|  6 | Carnell Tate | WR | TEN | 7 | 9.9 | 7.0 | 89% | 82% | 28% |
-|  7 | Malachi Fields | WR | NYG | 10 | 9.2 | 4.0 | 89% | 78% | 19% |
-|  8 | Emmett Johnson | RB | KC | 10 | 35.1 | 29.0 | 88% | 33% | 22% |
-|  9 | Omar Cooper Jr. | WR | NYJ | 9 | 13.8 | 11.0 | 86% | 60% | 28% |
-| 10 | Antonio Williams | WR | WAS | 10 | 12.2 | 2.0 | 86% | 65% | 23% |
-| 11 | Denzel Boston | WR | CLE | 10 | 2.6 | 2.0 | 85% | 90% | 29% |
-| 12 | Athan Kaliakmanis | QB | WAS | 4 | 11.0 | 36.0 | 84% | 84% | 11% |
+|  4 | Germie Bernard | WR | PIT | 11 | 10.0 | 10.0 | 94% | 77% | 22% |
+|  5 | Carnell Tate | WR | TEN | 11 | 13.8 | 5.0 | 90% | 83% | 35% |
+|  6 | Malachi Fields | WR | NYG | 11 | 4.5 | 5.0 | 87% | 79% | 19% |
+|  7 | Omar Cooper Jr. | WR | NYJ | 9 | 13.8 | 11.0 | 86% | 60% | 28% |
+|  8 | Jonah Coleman | RB | DEN | 11 | 34.9 | 29.0 | 85% | 54% | 38% |
+|  9 | Denzel Boston | WR | CLE | 10 | 2.6 | 2.0 | 85% | 90% | 29% |
+| 10 | Athan Kaliakmanis | QB | WAS | 4 | 11.0 | 36.0 | 84% | 84% | 11% |
+| 11 | Antonio Williams | WR | WAS | 11 | 21.2 | 11.0 | 84% | 67% | 24% |
+| 12 | Makai Lemon | WR | PHI | 11 | 1.3 | 3.0 | 83% | 79% | 24% |
 
 ## Efficiency flashes -- when they touch it, it matters
 
 | # | Player | Pos | Team | Verdict | G | Opps | FP/opp | Latest opps | Latest snap | Model boom |
 |---|---|---|---|---|---|---|---|---|---|---|
-|  1 | Josh Cameron | WR | JAX | Baseline |  9 | 17 | 2.9 | 3.0 | 33% | 4% |
-|  2 | Nate Boerkircher | TE | JAX | Baseline |  8 | 14 | 2.7 | 2.0 | 49% | 1% |
-|  3 | Omar Cooper Jr. | WR | NYJ | Baseline |  4 | 24 | 2.6 | 11.0 | 86% | 10% |
-|  4 | Josh Cuevas | TE | BAL | Baseline |  8 | 16 | 2.3 | 3.0 | 16% | 1% |
-|  5 | Caleb Douglas | WR | MIA | Baseline |  6 | 35 | 2.0 | 8.0 | 84% | 9% |
-|  6 | Eli Raridon | TE | NE | Baseline |  9 | 27 | 1.9 | 1.0 | 63% | 3% |
-|  7 | Antonio Williams | WR | WAS | Baseline |  9 | 41 | 1.8 | 2.0 | 86% | 8% |
-|  8 | Cyrus Allen | WR | KC | Baseline |  7 | 14 | 1.7 | 4.0 | 35% | 3% |
-|  9 | Denzel Boston | WR | CLE | Baseline | 10 | 62 | 1.7 | 2.0 | 85% | 11% |
-| 10 | Kenyon Sadiq | TE | NYJ | Baseline | 10 | 34 | 1.7 | 2.0 | 41% | 1% |
-| 11 | Malachi Fields | WR | NYG | Baseline |  9 | 39 | 1.6 | 4.0 | 89% | 6% |
-| 12 | Carnell Tate | WR | TEN | Upside |  7 | 51 | 1.5 | 7.0 | 89% | 11% |
+|  1 | Nate Boerkircher | TE | JAX | Baseline |  8 | 14 | 2.7 | 2.0 | 49% | 1% |
+|  2 | Omar Cooper Jr. | WR | NYJ | Baseline |  4 | 24 | 2.6 | 11.0 | 86% | 10% |
+|  3 | Josh Cameron | WR | JAX | Baseline | 10 | 24 | 2.4 | 7.0 | 39% | 3% |
+|  4 | Josh Cuevas | TE | BAL | Baseline |  9 | 19 | 2.0 | 3.0 | 23% | 0% |
+|  5 | Eli Raridon | TE | NE | Baseline |  9 | 27 | 1.9 | 1.0 | 63% | 3% |
+|  6 | Antonio Williams | WR | WAS | Baseline | 10 | 52 | 1.8 | 11.0 | 84% | 8% |
+|  7 | Ted Hurst III | WR | TB | Baseline |  9 | 32 | 1.8 | 7.0 | 64% | 2% |
+|  8 | Denzel Boston | WR | CLE | Baseline | 10 | 62 | 1.7 | 2.0 | 85% | 11% |
+|  9 | Caleb Douglas | WR | MIA | Baseline |  7 | 45 | 1.7 | 10.0 | 75% | 6% |
+| 10 | Kenyon Sadiq | TE | NYJ | Baseline | 11 | 37 | 1.7 | 3.0 | 58% | 0% |
+| 11 | Cyrus Allen | WR | KC | Baseline |  8 | 18 | 1.7 | 4.0 | 22% | 3% |
+| 12 | Carnell Tate | WR | TEN | Upside |  8 | 56 | 1.6 | 5.0 | 90% | 13% |
 
 ## Still waiting on runway -- not a bust list
 
@@ -67,7 +67,7 @@ These are drafted rookies without a real role yet or with no usable NFL sample y
 | 6 | Drew Allar | QB | R3-76 | PIT | no_nfl_data_yet | 0 | -- | -- | -- | Baseline |
 | 7 | Zachariah Branch | WR | R3-79 | ATL | limited_role | 8 | 8 | 0.0 | 9% | Baseline |
 | 8 | Chris Brazzell II | WR | R3-83 | CAR | no_nfl_data_yet | 0 | -- | -- | -- | Baseline |
-| 9 | Zavion Thomas | WR | R3-89 | CHI | limited_role | 8 | 9 | 2.0 | 8% | Baseline |
+| 9 | Zavion Thomas | WR | R3-89 | CHI | limited_role | 9 | 11 | 4.0 | 25% | Baseline |
 
 ---
 *Tracker status separates role from efficiency. Opportunity and efficiency stay split on purpose: no NFL data yet is not the same as limited-role underperformance.*

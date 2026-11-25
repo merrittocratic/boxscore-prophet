@@ -7,4 +7,4 @@ rank,nfl_name,pos,draft_round,draft_pick,draft_team,tracker_status,games,last_we
 6,Drew Allar,QB,3,76,PIT,no_nfl_data_yet,0,NA,NA,NA,Baseline
 7,Zachariah Branch,WR,3,79,ATL,limited_role,8,8,0,0.09,Baseline
 8,Chris Brazzell II,WR,3,83,CAR,no_nfl_data_yet,0,NA,NA,NA,Baseline
-9,Zavion Thomas,WR,3,89,CHI,limited_role,8,9,2,0.08,Baseline
+9,Zavion Thomas,WR,3,89,CHI,limited_role,9,11,4,0.25,Baseline
