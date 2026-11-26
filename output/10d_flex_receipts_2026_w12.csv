@@ -1,0 +1,5 @@
+position,player_id,player_name,posteam,defteam,model_rank,ecr_rank,rank_gap,view,start_pct,boom_pct,fp_actual,thresh_start,hit_start,hit_boom
+QB,00-0036264,Jordan Love,GB,LA,18,11,-7,model_lower,21,9,8.62,20,FALSE,FALSE
+QB,00-0026498,Matthew Stafford,LA,GB,19,15,-4,model_lower,20,7,3.6000000000000005,20,FALSE,FALSE
+RB,00-0039738,Blake Corum,LA,GB,47,20,-27,model_lower,14,4,28.5,15,TRUE,TRUE
+TE,00-0038996,Tucker Kraft,GB,LA,17,11,-6,model_lower,25,9,3.4000000000000004,12,FALSE,FALSE
